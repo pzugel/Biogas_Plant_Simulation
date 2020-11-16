@@ -1,0 +1,6 @@
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/rebuild_cache.dir
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/edit_cache.dir
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/FileFunctions.dir
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/OutputReader.dir
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/SimulationControl.dir
+/home/paul/Schreibtisch/Biogas_plant_setup/build/CMakeFiles/SpecValiReader.dir

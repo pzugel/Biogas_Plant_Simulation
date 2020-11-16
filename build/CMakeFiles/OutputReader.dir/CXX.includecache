@@ -1,0 +1,40 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/biogas_output_reader_wrapper.cpp
+output_reader/biogas_output_reader.cpp
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/biogas_output_reader.cpp
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/biogas_output_reader.cpp
+biogas_output_reader.h
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/biogas_output_reader.h
+string
+-
+vector
+-
+fstream
+-
+regex
+-
+boost/algorithm/string.hpp
+-
+iostream
+-
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/biogas_output_reader.h
+string
+-
+vector
+-
+output_entry.h
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/output_entry.h
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/output_reader/output_entry.h
+string
+-
+

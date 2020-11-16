@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/biogas_file_functions_wrapper.cpp
+string
+-
+vector
+-
+fstream
+-
+regex
+-
+boost/algorithm/string.hpp
+-
+
