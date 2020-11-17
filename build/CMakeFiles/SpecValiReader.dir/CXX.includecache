@@ -27,6 +27,8 @@ regex
 -
 boost/algorithm/string.hpp
 -
+stdexcept
+-
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_spec_vali_reader.cpp
 biogas_spec_vali_reader.h

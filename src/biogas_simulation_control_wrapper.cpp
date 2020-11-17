@@ -14,135 +14,141 @@
 #include <regex>
 #include <boost/algorithm/string.hpp>
  
-#include "simulation_control/simulation_control.h"
+static std::string active_element;
+static std::string plant_structure;
+static std::string sim_log;
+static int iteration;
 
-static BiogasSimulationControl* simulationControl;
+static std::string simulation_file;
+static std::string validation_file;
+static std::string specification_file;
+static std::string working_directory;
+
+static double sim_starttime;
+static double sim_endtime;
+static double sim_currenttime;
 
 extern "C"{
-	
-void simulationControlInit(){
-	simulationControl = new BiogasSimulationControl();
-}
 
 const char* get_sim_log()
 {
-	return simulationControl->sim_log.c_str();
+	return sim_log.c_str();
 }
 
 void set_sim_log(const char* log)
 {
-	simulationControl->sim_log = (std::string) log;
+	sim_log = (std::string) log;
 }
 
 void add_to_sim_log(const char* log)
 {
-	simulationControl->sim_log += ((std::string) log);
+	sim_log += ((std::string) log);
 }
 
 const char* get_plant_structure()
 {
-	return simulationControl->plant_structure.c_str();
+	return plant_structure.c_str();
 }
 
 void set_plant_structure(const char* structure)
 {
-	simulationControl->plant_structure = (std::string) structure;
+	plant_structure = (std::string) structure;
 }
 
 const char* get_active_element()
 {
-	return simulationControl->active_element.c_str();
+	return active_element.c_str();
 }
 
 void set_active_element(const char* elem)
 {
-	simulationControl->active_element = (std::string) elem;
+	active_element = (std::string) elem;
 }
 
 int get_iteration()
 {
-	return simulationControl->iteration;
+	return iteration;
 }
 
 void set_iteration(int iter)
 {
-	simulationControl->iteration = iter;
+	iteration = iter;
 }
 
 void set_interation_log(int iter)
 {
-	simulationControl->iteration = iter;
-	simulationControl->sim_log += "Iteration: " + std::to_string(iter) + "\n";
+	iteration = iter;
+	sim_log += "Iteration: " + std::to_string(iter) + "\n";
 }
 
 void set_simulation_file(const char* sim_file)
 {
-	simulationControl->simulation_file = (std::string) sim_file;
+	simulation_file = (std::string) sim_file;
 }
 
 const char* get_simulation_file()
 {
-	return simulationControl->simulation_file.c_str();
+	return simulation_file.c_str();
 }
 
 void set_validation_file(const char* val_file)
 {
-	simulationControl->validation_file = (std::string) val_file;
+	validation_file = (std::string) val_file;
 }
 
 const char* get_validation_file()
 {
-	return simulationControl->validation_file.c_str();
+	return validation_file.c_str();
 }
 
 void set_specification_file(const char* spec_file)
 {
-	simulationControl->specification_file = (std::string) spec_file;
+	specification_file = (std::string) spec_file;
 }
 
 const char* get_specification_file()
 {
-	return simulationControl->specification_file.c_str();
+	return specification_file.c_str();
 }
 
 void set_working_directory(const char* dir)
 {
-	simulationControl->working_directory = (std::string) dir;
+	working_directory = (std::string) dir;
 }
 
 const char* get_working_directory()
 {
-	return simulationControl->working_directory.c_str();
+	return working_directory.c_str();
 }
 
 void set_sim_starttime(double time)
 {
-	simulationControl->sim_starttime = time;
+	sim_starttime = time;
 }
 
 double get_sim_starttime()
 {
-	return simulationControl->sim_starttime;
+	return sim_starttime;
 }
 
 void set_sim_endtime(double time)
 {
-	simulationControl->sim_endtime = time;
+	sim_endtime = time;
 }
 
 double get_sim_endtime()
 {
-	return simulationControl->sim_endtime;
+	return sim_endtime;
 }
 
 void set_sim_currenttime(double time)
 {
-	simulationControl->sim_currenttime = time;
+	sim_currenttime = time;
 }
 
 double get_sim_currenttime()
 {
-	return simulationControl->sim_currenttime;
+	return sim_currenttime;
 }
 
 } //end extern "C"

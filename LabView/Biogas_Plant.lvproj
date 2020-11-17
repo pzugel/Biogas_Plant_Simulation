@@ -27,34 +27,41 @@
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
-					<Item Name="highlight_validation.vi" Type="VI" URL="../subVI/highlight_validation.vi"/>
-					<Item Name="init_panel.vi" Type="VI" URL="../subVI/init_panel.vi"/>
-					<Item Name="load_specification_file.vi" Type="VI" URL="../subVI/load_specification_file.vi"/>
-					<Item Name="load_validation_file.vi" Type="VI" URL="../subVI/load_validation_file.vi"/>
-					<Item Name="save_spec_file.vi" Type="VI" URL="../subVI/save_spec_file.vi"/>
-					<Item Name="tree_control_parameters.vi" Type="VI" URL="../subVI/tree_control_parameters.vi"/>
-					<Item Name="validate_specs.vi" Type="VI" URL="../subVI/validate_specs.vi"/>
+					<Item Name="initializer_close.vi" Type="VI" URL="../subVI/initializer_close.vi"/>
+					<Item Name="initializer_highlight_validation.vi" Type="VI" URL="../subVI/initializer_highlight_validation.vi"/>
+					<Item Name="initializer_init_controls.vi" Type="VI" URL="../subVI/initializer_init_controls.vi"/>
+					<Item Name="initializer_init_panel.vi" Type="VI" URL="../subVI/initializer_init_panel.vi"/>
+					<Item Name="initializer_load_sim.vi" Type="VI" URL="../subVI/initializer_load_sim.vi"/>
+					<Item Name="initializer_load_spec.vi" Type="VI" URL="../subVI/initializer_load_spec.vi"/>
+					<Item Name="initializer_load_vali.vi" Type="VI" URL="../subVI/initializer_load_vali.vi"/>
+					<Item Name="initializer_output.vi" Type="VI" URL="../subVI/initializer_output.vi"/>
+					<Item Name="initializer_run.vi" Type="VI" URL="../subVI/initializer_run.vi"/>
+					<Item Name="initializer_save_spec.vi" Type="VI" URL="../subVI/initializer_save_spec.vi"/>
+					<Item Name="initializer_tree_control.vi" Type="VI" URL="../subVI/initializer_tree_control.vi"/>
+					<Item Name="initializer_validate_specs.vi" Type="VI" URL="../subVI/initializer_validate_specs.vi"/>
 				</Item>
 				<Item Name="Main Panel" Type="Folder">
-					<Item Name="impressum.vi" Type="VI" URL="../subVI/impressum.vi"/>
-					<Item Name="init_main_panel.vi" Type="VI" URL="../subVI/init_main_panel.vi"/>
-					<Item Name="reset_main_panel.vi" Type="VI" URL="../subVI/reset_main_panel.vi"/>
-					<Item Name="run_main_panel.vi" Type="VI" URL="../subVI/run_main_panel.vi"/>
-					<Item Name="set_main_panel.vi" Type="VI" URL="../subVI/set_main_panel.vi"/>
-					<Item Name="simulation_log_uncoupled.vi" Type="VI" URL="../subVI/simulation_log_uncoupled.vi"/>
+					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
+					<Item Name="main_impressum.vi" Type="VI" URL="../subVI/main_impressum.vi"/>
+					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>
+					<Item Name="main_reset_panel.vi" Type="VI" URL="../subVI/main_reset_panel.vi"/>
+					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
+					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
+					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
 				</Item>
 				<Item Name="Plot" Type="Folder">
 					<Item Name="Tree Control" Type="Folder">
-						<Item Name="clear_plot_selection.vi" Type="VI" URL="../subVI/clear_plot_selection.vi"/>
-						<Item Name="tree_control_plot.vi" Type="VI" URL="../subVI/tree_control_plot.vi"/>
+						<Item Name="plot_tree_clear.vi" Type="VI" URL="../subVI/plot_tree_clear.vi"/>
+						<Item Name="plot_tree_control.vi" Type="VI" URL="../subVI/plot_tree_control.vi"/>
 					</Item>
-					<Item Name="display_plot.vi" Type="VI" URL="../subVI/display_plot.vi"/>
-					<Item Name="init_plotter.vi" Type="VI" URL="../subVI/init_plotter.vi"/>
-					<Item Name="load_output_from_simulation.vi" Type="VI" URL="../subVI/load_output_from_simulation.vi"/>
-					<Item Name="open_plotter.vi" Type="VI" URL="../subVI/open_plotter.vi"/>
-					<Item Name="read_csv.vi" Type="VI" URL="../subVI/read_csv.vi"/>
-					<Item Name="read_output_file.vi" Type="VI" URL="../subVI/read_output_file.vi"/>
-					<Item Name="run_plot_graph.vi" Type="VI" URL="../subVI/run_plot_graph.vi"/>
+					<Item Name="plot_close.vi" Type="VI" URL="../subVI/plot_close.vi"/>
+					<Item Name="plot_display.vi" Type="VI" URL="../subVI/plot_display.vi"/>
+					<Item Name="plot_init_panel.vi" Type="VI" URL="../subVI/plot_init_panel.vi"/>
+					<Item Name="plot_load_sim_output.vi" Type="VI" URL="../subVI/plot_load_sim_output.vi"/>
+					<Item Name="plot_main.vi" Type="VI" URL="../subVI/plot_main.vi"/>
+					<Item Name="plot_read_csv.vi" Type="VI" URL="../subVI/plot_read_csv.vi"/>
+					<Item Name="plot_read_output_file.vi" Type="VI" URL="../subVI/plot_read_output_file.vi"/>
+					<Item Name="plot_run.vi" Type="VI" URL="../subVI/plot_run.vi"/>
 				</Item>
 				<Item Name="control_stepsize.vi" Type="VI" URL="../subVI/control_stepsize.vi"/>
 			</Item>
@@ -75,6 +82,7 @@
 				<Item Name="ErrWarn.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/ErrWarn.ctl"/>
 				<Item Name="Error Cluster From Error Code.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Cluster From Error Code.vi"/>
 				<Item Name="Error Code Database.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Code Database.vi"/>
+				<Item Name="Escape Characters for HTTP.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Escape Characters for HTTP.vi"/>
 				<Item Name="Find Tag.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Find Tag.vi"/>
 				<Item Name="Format Message String.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Format Message String.vi"/>
 				<Item Name="General Error Handler Core CORE.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/General Error Handler Core CORE.vi"/>
@@ -94,8 +102,17 @@
 				<Item Name="NI_Matrix.lvlib" Type="Library" URL="/&lt;vilib&gt;/Analysis/Matrix/NI_Matrix.lvlib"/>
 				<Item Name="NI_PackedLibraryUtility.lvlib" Type="Library" URL="/&lt;vilib&gt;/Utility/LVLibp/NI_PackedLibraryUtility.lvlib"/>
 				<Item Name="Not Found Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Not Found Dialog.vi"/>
+				<Item Name="Open URL in Default Browser (path).vi" Type="VI" URL="/&lt;vilib&gt;/Platform/browser.llb/Open URL in Default Browser (path).vi"/>
+				<Item Name="Open URL in Default Browser (string).vi" Type="VI" URL="/&lt;vilib&gt;/Platform/browser.llb/Open URL in Default Browser (string).vi"/>
+				<Item Name="Open URL in Default Browser core.vi" Type="VI" URL="/&lt;vilib&gt;/Platform/browser.llb/Open URL in Default Browser core.vi"/>
+				<Item Name="Open URL in Default Browser.vi" Type="VI" URL="/&lt;vilib&gt;/Platform/browser.llb/Open URL in Default Browser.vi"/>
+				<Item Name="Path to URL inner.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Path to URL inner.vi"/>
+				<Item Name="Path to URL.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Path to URL.vi"/>
 				<Item Name="Search and Replace Pattern.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Search and Replace Pattern.vi"/>
 				<Item Name="Set Bold Text.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Set Bold Text.vi"/>
+				<Item Name="Set Cursor (Cursor ID).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor (Cursor ID).vi"/>
+				<Item Name="Set Cursor (Icon Pict).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor (Icon Pict).vi"/>
+				<Item Name="Set Cursor.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor.vi"/>
 				<Item Name="Set String Value.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Set String Value.vi"/>
 				<Item Name="Space Constant.vi" Type="VI" URL="/&lt;vilib&gt;/dlg_ctls.llb/Space Constant.vi"/>
 				<Item Name="System Directory Type.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/sysdir.llb/System Directory Type.ctl"/>

@@ -56,8 +56,7 @@ init_Spec(const char* filepath_spec)
 	if(this->readInput((std::string) filepath_spec))
 	{
 		this->transformSpecInput();
-		this->generateSpecs();
-		return true;
+		return this->generateSpecs();
 	}
 
 	return false;

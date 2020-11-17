@@ -34,5 +34,3 @@ void set_sim_currenttime(double time);
 double get_sim_currenttime();
 
 const char* load_outputFiles(const char* filepath);
-
-void simulationControlInit();

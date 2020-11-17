@@ -34,5 +34,4 @@
 		<Item Name="set working directory.vi" Type="VI" URL="../VIs/set working directory.vi"/>
 	</Item>
 	<Item Name="libSimulationControl.so" Type="Document" URL="../libSimulationControl.so"/>
-	<Item Name="simulation Control Init.vi" Type="VI" URL="../VIs/simulation Control Init.vi"/>
 </Library>

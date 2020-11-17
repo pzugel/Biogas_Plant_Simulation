@@ -26,7 +26,7 @@
  * @param validationMessage: Message to display in LabView
  * @param outputSpecs: String to write into specification file (after editing in LabView)
  *
- * Following parameters are internal:
+ * Following parameters are private:
  *
  * @param input: Input specification/validation file
  * @param input_valiModified: Modified validation input for easier parsing
@@ -63,6 +63,7 @@ class BiogasSpecValiReader {
 		void generateIndents();
 		void generateGlyphs();
 		void generateValues();
-		void generateSpecs();	
+		bool generateSpecs();
+		bool testValidationMatch();
 };
 
