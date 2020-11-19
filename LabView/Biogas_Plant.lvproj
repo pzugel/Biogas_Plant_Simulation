@@ -21,9 +21,15 @@
 				</Item>
 				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
 				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
-				<Item Name="pause.vi" Type="VI" URL="../elements/pause.vi"/>
-				<Item Name="stop.vi" Type="VI" URL="../elements/stop.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
+			</Item>
+			<Item Name="Structures" Type="Folder">
+				<Item Name="1_STAGE.vi" Type="VI" URL="../structures/1_STAGE.vi"/>
+				<Item Name="3_STAGE.vi" Type="VI" URL="../structures/3_STAGE.vi"/>
+				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../structures/3_STAGE_DUMMY.vi"/>
+				<Item Name="3_STAGE_DUMMY2.vi" Type="VI" URL="../structures/3_STAGE_DUMMY2.vi"/>
+				<Item Name="MY_NEW_STRUCTURE.vi" Type="VI" URL="../structures/MY_NEW_STRUCTURE.vi"/>
+				<Item Name="STRUCT.vit" Type="VI" URL="../structures/STRUCT.vit"/>
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
@@ -44,10 +50,16 @@
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
 					<Item Name="main_impressum.vi" Type="VI" URL="../subVI/main_impressum.vi"/>
 					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>
+					<Item Name="main_reactor_display.vi" Type="VI" URL="../subVI/main_reactor_display.vi"/>
 					<Item Name="main_reset_panel.vi" Type="VI" URL="../subVI/main_reset_panel.vi"/>
 					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
 					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
 					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
+				</Item>
+				<Item Name="Plant" Type="Folder">
+					<Item Name="plant_pause.vi" Type="VI" URL="../subVI/plant_pause.vi"/>
+					<Item Name="plant_stop.vi" Type="VI" URL="../subVI/plant_stop.vi"/>
+					<Item Name="plant_structure.vi" Type="VI" URL="../plant_structure.vi"/>
 				</Item>
 				<Item Name="Plot" Type="Folder">
 					<Item Name="Tree Control" Type="Folder">
@@ -68,7 +80,6 @@
 		</Item>
 		<Item Name="initializer.vi" Type="VI" URL="../subVI/initializer.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
-		<Item Name="plant_structure.vi" Type="VI" URL="../plant_structure.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="BuildHelpPath.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/BuildHelpPath.vi"/>
@@ -79,12 +90,15 @@
 				<Item Name="Details Display Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Details Display Dialog.vi"/>
 				<Item Name="DialogType.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/DialogType.ctl"/>
 				<Item Name="DialogTypeEnum.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/DialogTypeEnum.ctl"/>
+				<Item Name="Draw Flattened Pixmap.vi" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/Draw Flattened Pixmap.vi"/>
 				<Item Name="ErrWarn.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/ErrWarn.ctl"/>
 				<Item Name="Error Cluster From Error Code.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Cluster From Error Code.vi"/>
 				<Item Name="Error Code Database.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Error Code Database.vi"/>
 				<Item Name="Escape Characters for HTTP.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Escape Characters for HTTP.vi"/>
 				<Item Name="Find Tag.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Find Tag.vi"/>
+				<Item Name="FixBadRect.vi" Type="VI" URL="/&lt;vilib&gt;/picture/pictutil.llb/FixBadRect.vi"/>
 				<Item Name="Format Message String.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Format Message String.vi"/>
+				<Item Name="FormatTime String.vi" Type="VI" URL="/&lt;vilib&gt;/express/express execution control/ElapsedTimeBlock.llb/FormatTime String.vi"/>
 				<Item Name="General Error Handler Core CORE.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/General Error Handler Core CORE.vi"/>
 				<Item Name="General Error Handler.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/General Error Handler.vi"/>
 				<Item Name="Get File Extension.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/Get File Extension.vi"/>
@@ -123,7 +137,9 @@
 				<Item Name="Trim Whitespace.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Trim Whitespace.vi"/>
 				<Item Name="eventvkey.ctl" Type="VI" URL="/&lt;vilib&gt;/event_ctls.llb/eventvkey.ctl"/>
 				<Item Name="ex_CorrectErrorChain.vi" Type="VI" URL="/&lt;vilib&gt;/express/express shared/ex_CorrectErrorChain.vi"/>
+				<Item Name="imagedata.ctl" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/imagedata.ctl"/>
 				<Item Name="subDisplayMessage.vi" Type="VI" URL="/&lt;vilib&gt;/express/express output/DisplayMessageBlock.llb/subDisplayMessage.vi"/>
+				<Item Name="subElapsedTime.vi" Type="VI" URL="/&lt;vilib&gt;/express/express execution control/ElapsedTimeBlock.llb/subElapsedTime.vi"/>
 				<Item Name="subFile Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/express/express input/FileDialogBlock.llb/subFile Dialog.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
 			</Item>
