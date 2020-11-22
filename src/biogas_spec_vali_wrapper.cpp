@@ -21,7 +21,8 @@ extern "C" {
 /**
  * Creates a new BiogasSpecValiReader object
  */
-void readLUATableInit(){
+void readLUATableInit()
+{
 	biogasReader = new BiogasSpecValiReader();
 }
 
