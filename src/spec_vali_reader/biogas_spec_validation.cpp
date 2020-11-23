@@ -50,84 +50,99 @@ validateSpecs(std::string specs)
 	bool isValid = true;
 	for(int i=0; i<this->number_of_entries; i++)
 	{
-		if(this->entries[i].type == "Boolean")
+		std::string type = this->entries[i].type;
+		std::for_each(type.begin(), type.end(), [](char & c) {
+        	c = ::tolower(c);
+    	});
+    	
+		if(this->entries[i].glyph != 15)
 		{
-			if(!std::regex_match(inputSpecs[i], isBool))
+			if(type == "boolean")
 			{
-				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  this->entries[i].type + "\n";
-				this->validationErrorParams += std::to_string(i) + "\n";
-				isValid = false;
-			}
-		}
-
-		if(this->entries[i].type == "Double")
-		{
-			if(!std::regex_match(inputSpecs[i], isDouble) &&
-					!std::regex_match(inputSpecs[i], isDoubleTimestamp))
-			{
-				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  this->entries[i].type + "\n";
-				this->validationErrorParams += std::to_string(i) + "\n";
-				isValid = false;
-			}
-			if(!this->entries[i].rangeMin.empty() && !this->entries[i].rangeMax.empty())
-			{ 
-				if(std::regex_match(inputSpecs[i], isDouble) 
-						&& (std::stod(inputSpecs[i])<std::stod(this->entries[i].rangeMin) || std::stod(inputSpecs[i])>std::stod(this->entries[i].rangeMax)))
+				if(!std::regex_match(inputSpecs[i], isBool))
 				{
-					this->validationMessage += "Range ERROR: "
-						+ this->entries[i].leftCell
-						+ " should be in Range {" 
-						+ this->entries[i].rangeMin + "," 
-						+ this->entries[i].rangeMax + "}\n";
+					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
 					this->validationErrorParams += std::to_string(i) + "\n";
 					isValid = false;
 				}
 			}
-		}
 
-		if(this->entries[i].type == "Integer")
-		{
-			if(!std::regex_match(inputSpecs[i], isInt) &&
-					!std::regex_match(inputSpecs[i], isIntTimestamp))
+			else if(type == "double" || type == "number")
 			{
-				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  this->entries[i].type + "\n";
-				this->validationErrorParams += std::to_string(i) + "\n";
-				isValid = false;
-			}
-			if(!this->entries[i].rangeMin.empty() && !this->entries[i].rangeMax.empty())
-			{ 
-				if(std::regex_match(inputSpecs[i], isInt) 
-						&& (std::stoi(inputSpecs[i])<std::stoi(this->entries[i].rangeMin) || std::stoi(inputSpecs[i])>std::stoi(this->entries[i].rangeMax)))
+				if(!std::regex_match(inputSpecs[i], isDouble) &&
+						!std::regex_match(inputSpecs[i], isDoubleTimestamp))
 				{
-					this->validationMessage += "Range ERROR: "
-						+ this->entries[i].leftCell
-						+ " should be in Range {" 
-						+ this->entries[i].rangeMin + "," 
-						+ this->entries[i].rangeMax + "}\n";
+					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
+					this->validationErrorParams += std::to_string(i) + "\n";
+					isValid = false;
+				}
+				if(!this->entries[i].rangeMin.empty() && !this->entries[i].rangeMax.empty())
+				{ 
+					if(std::regex_match(inputSpecs[i], isDouble) 
+							&& (std::stod(inputSpecs[i])<std::stod(this->entries[i].rangeMin) || std::stod(inputSpecs[i])>std::stod(this->entries[i].rangeMax)))
+					{
+						this->validationMessage += "Range ERROR: "
+							+ this->entries[i].leftCell
+							+ " should be in Range {" 
+							+ this->entries[i].rangeMin + "," 
+							+ this->entries[i].rangeMax + "}\n";
+						this->validationErrorParams += std::to_string(i) + "\n";
+						isValid = false;
+					}
+				}
+			}
+
+			else if(type == "integer")
+			{
+				if(!std::regex_match(inputSpecs[i], isInt) &&
+						!std::regex_match(inputSpecs[i], isIntTimestamp))
+				{
+					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
+					this->validationErrorParams += std::to_string(i) + "\n";
+					isValid = false;
+				}
+				if(!this->entries[i].rangeMin.empty() && !this->entries[i].rangeMax.empty())
+				{ 
+					if(std::regex_match(inputSpecs[i], isInt) 
+							&& (std::stoi(inputSpecs[i])<std::stoi(this->entries[i].rangeMin) || std::stoi(inputSpecs[i])>std::stoi(this->entries[i].rangeMax)))
+					{
+						this->validationMessage += "Range ERROR: "
+							+ this->entries[i].leftCell
+							+ " should be in Range {" 
+							+ this->entries[i].rangeMin + "," 
+							+ this->entries[i].rangeMax + "}\n";
+						this->validationErrorParams += std::to_string(i) + "\n";
+						isValid = false;
+					}
+				}
+			}
+
+			else if(type == "string")
+			{
+				if(!std::regex_match(inputSpecs[i], isString))
+				{
+					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
 					this->validationErrorParams += std::to_string(i) + "\n";
 					isValid = false;
 				}
 			}
-		}
 
-		if(this->entries[i].type == "String")
-		{
-			if(!std::regex_match(inputSpecs[i], isString))
+			else if(type == "string[]")
 			{
-				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  this->entries[i].type + "\n";
-				this->validationErrorParams += std::to_string(i) + "\n";
-				isValid = false;
+				if(!std::regex_match(inputSpecs[i], isStringArr))
+				{
+					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
+					this->validationErrorParams += std::to_string(i) + "\n";
+					isValid = false;
+				}
 			}
-		}
 
-		if(this->entries[i].type == "String[]")
-		{
-			if(!std::regex_match(inputSpecs[i], isStringArr))
+			else
 			{
-				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  this->entries[i].type + "\n";
+				this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" has unknown type " +  type + "\n";
 				this->validationErrorParams += std::to_string(i) + "\n";
-				isValid = false;
-			}
+				isValid = false;	
+			}	
 		}
 	}
 	
