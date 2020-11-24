@@ -14,22 +14,19 @@
 		<Property Name="server.vi.propertiesEnabled" Type="Bool">true</Property>
 		<Property Name="specify.custom.address" Type="Bool">false</Property>
 		<Item Name="Biogas_plant_setup" Type="Folder">
-			<Item Name="Elements" Type="Folder">
-				<Item Name="Element SubVI" Type="Folder">
-					<Item Name="methane_reactor_run.vi" Type="VI" URL="../subVI/methane_reactor_run.vi"/>
-					<Item Name="write_checkpoint_specfile.vi" Type="VI" URL="../subVI/write_checkpoint_specfile.vi"/>
-				</Item>
-				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
-				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
-				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
-			</Item>
-			<Item Name="Structures" Type="Folder">
-				<Item Name="1_STAGE.vi" Type="VI" URL="../structures/1_STAGE.vi"/>
-				<Item Name="3_STAGE.vi" Type="VI" URL="../structures/3_STAGE.vi"/>
-				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../structures/3_STAGE_DUMMY.vi"/>
-				<Item Name="3_STAGE_DUMMY2.vi" Type="VI" URL="../structures/3_STAGE_DUMMY2.vi"/>
-				<Item Name="MY_NEW_STRUCTURE.vi" Type="VI" URL="../structures/MY_NEW_STRUCTURE.vi"/>
-				<Item Name="STRUCT.vit" Type="VI" URL="../structures/STRUCT.vit"/>
+			<Item Name="Controls" Type="Folder">
+				<Item Name="help_button.ctl" Type="VI" URL="../controls/help_button.ctl"/>
+				<Item Name="load_button.ctl" Type="VI" URL="../controls/load_button.ctl"/>
+				<Item Name="open_button.ctl" Type="VI" URL="../controls/open_button.ctl"/>
+				<Item Name="pause_button.ctl" Type="VI" URL="../controls/pause_button.ctl"/>
+				<Item Name="plot_button.ctl" Type="VI" URL="../controls/plot_button.ctl"/>
+				<Item Name="refresh_button.ctl" Type="VI" URL="../controls/refresh_button.ctl"/>
+				<Item Name="run_button.ctl" Type="VI" URL="../controls/run_button.ctl"/>
+				<Item Name="save_button.ctl" Type="VI" URL="../controls/save_button.ctl"/>
+				<Item Name="stop_button.ctl" Type="VI" URL="../controls/stop_button.ctl"/>
+				<Item Name="stop_sim_button.ctl" Type="VI" URL="../controls/stop_sim_button.ctl"/>
+				<Item Name="uncouple_button.ctl" Type="VI" URL="../controls/uncouple_button.ctl"/>
+				<Item Name="validate_button.ctl" Type="VI" URL="../controls/validate_button.ctl"/>
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
@@ -43,6 +40,7 @@
 					<Item Name="initializer_output.vi" Type="VI" URL="../subVI/initializer_output.vi"/>
 					<Item Name="initializer_run.vi" Type="VI" URL="../subVI/initializer_run.vi"/>
 					<Item Name="initializer_save_spec.vi" Type="VI" URL="../subVI/initializer_save_spec.vi"/>
+					<Item Name="initializer_set_time.vi" Type="VI" URL="../subVI/initializer_set_time.vi"/>
 					<Item Name="initializer_tree_control.vi" Type="VI" URL="../subVI/initializer_tree_control.vi"/>
 					<Item Name="initializer_validate_specs.vi" Type="VI" URL="../subVI/initializer_validate_specs.vi"/>
 				</Item>
@@ -104,7 +102,6 @@
 				<Item Name="General Error Handler.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/General Error Handler.vi"/>
 				<Item Name="Get File Extension.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/Get File Extension.vi"/>
 				<Item Name="Get String Text Bounds.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Get String Text Bounds.vi"/>
-				<Item Name="Get System Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/sysdir.llb/Get System Directory.vi"/>
 				<Item Name="Get Text Rect.vi" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/Get Text Rect.vi"/>
 				<Item Name="GetHelpDir.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/GetHelpDir.vi"/>
 				<Item Name="GetRTHostConnectedProp.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/GetRTHostConnectedProp.vi"/>
@@ -131,7 +128,6 @@
 				<Item Name="Set Cursor.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor.vi"/>
 				<Item Name="Set String Value.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Set String Value.vi"/>
 				<Item Name="Space Constant.vi" Type="VI" URL="/&lt;vilib&gt;/dlg_ctls.llb/Space Constant.vi"/>
-				<Item Name="System Directory Type.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/sysdir.llb/System Directory Type.ctl"/>
 				<Item Name="System Exec.vi" Type="VI" URL="/&lt;vilib&gt;/Platform/system.llb/System Exec.vi"/>
 				<Item Name="TagReturnType.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/TagReturnType.ctl"/>
 				<Item Name="Three Button Dialog CORE.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Three Button Dialog CORE.vi"/>
