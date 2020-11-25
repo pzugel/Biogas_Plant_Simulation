@@ -83,7 +83,7 @@ transformValiInput()
 /**
  * Generate indentations
  *
- * Parse all paranthesis to assign the correct indentation.
+ * Parse all parenthesis to assign the correct indentation.
  * This method also creates the TableEntry Objects. 
  * Therefor it has to be called first!
  */
@@ -113,7 +113,7 @@ generateIndents()
  * Generate glyphs 
  *
  * Sets a visual symbol in LabView. If the entry is not a parameter, 
- * we set a folder symbol (15). Otherwise we keep the defaul (0).
+ * we set a folder symbol (15). Otherwise we keep the default (0).
  */
 void BiogasSpecValiReader::
 generateGlyphs()

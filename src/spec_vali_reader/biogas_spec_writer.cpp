@@ -18,7 +18,7 @@
  * Write a new specification file
  *
  * Validates the given specification first. If they are valid
- * the method wirtes a new specification file into the
+ * the method writes a new specification file into the
  * "outputSpecs" String.
  *
  * @param specs: Specifications committed by LabView

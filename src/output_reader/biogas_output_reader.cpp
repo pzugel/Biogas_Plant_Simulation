@@ -26,7 +26,7 @@
  * LabView. 
  * 
  * @param output_path: The absolute path to the outputFiles.lua
- * @return Bool if the method was succesfull
+ * @return Bool if the method was successful
  */
 bool BiogasOutputReader::
 init(const char* output_path)

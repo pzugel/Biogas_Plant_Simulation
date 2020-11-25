@@ -35,7 +35,7 @@ void readLUATableInit()
  * 
  * @param vali_or_spec: Chooses between validation files or specifications
  * @param filename: The absolute path to the file
- * @return Bool if the method was succesfull
+ * @return Bool if the method was successful
  */
 bool readLUATable(const char* filename, const char* vali_or_spec)
 {
@@ -95,7 +95,7 @@ bool getValidation(const char* specs)
  * 
  * The validateSpecs() method needs to be called first.
  * 
- * @return Promt message for all errors in the validation
+ * @return Prompt message for all errors in the validation
  */
 const char* getValidationMessage()
 {

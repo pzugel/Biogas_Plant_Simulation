@@ -18,13 +18,13 @@
  * file concerning one parameter.
  *
  * @param indent: The indentation in the tree structure
- * @param glyph: Visual symbol in the tree strucutre (e.g. a folder symbol)
+ * @param glyph: Visual symbol in the tree structure (e.g. a folder symbol)
  * @param leftCell: Name of the parameter
  * @param type: Data type of the parameter (e.g. int, string)
  * @param defaultVal: Default value given by the validation file
  * @param specVal: Specification of the parameter
- * @param rangeMin: Optional range minimum (onyl for validation)
- * @param rangeMax: Optional range maximum (onyl for validation)
+ * @param rangeMin: Optional range minimum (only for validation)
+ * @param rangeMax: Optional range maximum (only for validation)
  */
 class TableEntry { 
 	public:

@@ -18,7 +18,7 @@
 /**
  * Validates specifications
  *
- * Verifies if given specificaions are the correct data
+ * Verifies if given specifications are the correct data
  * type and if they suit the range restrictions.
  * Parameters where the validation failed are added into the
  * "validationErrorParams" and a corresponding "validationMessage"
