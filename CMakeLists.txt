@@ -26,7 +26,7 @@ cmake_minimum_required(VERSION 2.6)
 
 project(UG_PLUGIN_${wrapperName})
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/../LabView/lib)
 
 add_library(${SpecValiReader} SHARED src/biogas_spec_vali_wrapper.cpp)
 add_library(${OutputReader} SHARED src/biogas_output_reader_wrapper.cpp)

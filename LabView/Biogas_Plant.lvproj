@@ -28,6 +28,13 @@
 				<Item Name="uncouple_button.ctl" Type="VI" URL="../controls/uncouple_button.ctl"/>
 				<Item Name="validate_button.ctl" Type="VI" URL="../controls/validate_button.ctl"/>
 			</Item>
+			<Item Name="Elements" Type="Folder">
+				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
+				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
+				<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
+				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
+				<Item Name="write_checkpoint_specfile.vi" Type="VI" URL="../elements/write_checkpoint_specfile.vi"/>
+			</Item>
 			<Item Name="Libraries" Type="Folder">
 				<Item Name="libFileFunctions.lvlib" Type="Library" URL="../lib/libFileFunctions/libFileFunctions.lvlib"/>
 				<Item Name="libOutputReader.lvlib" Type="Library" URL="../lib/libOutputReader/libOutputReader.lvlib"/>
@@ -36,6 +43,7 @@
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
+					<Item Name="initializer.vi" Type="VI" URL="../subVI/initializer.vi"/>
 					<Item Name="initializer_close.vi" Type="VI" URL="../subVI/initializer_close.vi"/>
 					<Item Name="initializer_highlight_validation.vi" Type="VI" URL="../subVI/initializer_highlight_validation.vi"/>
 					<Item Name="initializer_init_controls.vi" Type="VI" URL="../subVI/initializer_init_controls.vi"/>
@@ -83,7 +91,6 @@
 				</Item>
 			</Item>
 		</Item>
-		<Item Name="initializer.vi" Type="VI" URL="../subVI/initializer.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
@@ -113,6 +120,7 @@
 				<Item Name="General Error Handler.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/General Error Handler.vi"/>
 				<Item Name="Get File Extension.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/Get File Extension.vi"/>
 				<Item Name="Get String Text Bounds.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Get String Text Bounds.vi"/>
+				<Item Name="Get System Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/sysdir.llb/Get System Directory.vi"/>
 				<Item Name="Get Text Rect.vi" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/Get Text Rect.vi"/>
 				<Item Name="GetHelpDir.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/GetHelpDir.vi"/>
 				<Item Name="GetRTHostConnectedProp.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/GetRTHostConnectedProp.vi"/>
@@ -140,6 +148,7 @@
 				<Item Name="Set Cursor.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor.vi"/>
 				<Item Name="Set String Value.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Set String Value.vi"/>
 				<Item Name="Space Constant.vi" Type="VI" URL="/&lt;vilib&gt;/dlg_ctls.llb/Space Constant.vi"/>
+				<Item Name="System Directory Type.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/sysdir.llb/System Directory Type.ctl"/>
 				<Item Name="System Exec.vi" Type="VI" URL="/&lt;vilib&gt;/Platform/system.llb/System Exec.vi"/>
 				<Item Name="TagReturnType.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/TagReturnType.ctl"/>
 				<Item Name="Three Button Dialog CORE.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Three Button Dialog CORE.vi"/>
