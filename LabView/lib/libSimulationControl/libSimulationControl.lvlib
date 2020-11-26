@@ -1,36 +1,40 @@
 ﻿<?xml version='1.0' encoding='UTF-8'?>
 <Library LVVersion="19008000">
-	<Property Name="NI.Lib.Icon" Type="Bin">'1#!!!!!!!)!"1!&amp;!!!-!%!!!@````]!!!!"!!%!!!-Y!!!*Q(C=\:;`;V2"%-@((["N`A)FR.*K`I8]#UFF0;XQ5K3-JP%1)&gt;JIJDKY9*&amp;=97(RB*$9+4F'\BH1,K3UE1AJ*#4(H:`&gt;WU14-&amp;&amp;1M($XT&gt;\O&gt;X:H0G`@XO/*Z(*&gt;Z+K-,CJS8DH!0X6\&gt;7K+ZP:Q-(A[&gt;;N&amp;GQ:U8[Z]30\.@FX8GXV_8D6V&lt;WM];,&lt;KT@&gt;PTPAX'[[.0/ARN8@;0WS'_(LPGQU'7\W.JH&gt;W@&gt;X5K&gt;ME0RH/^&gt;?^_NA`&lt;*KN($^".=UY0B.\&lt;\&lt;R6ZW@F_V]`SOJMA@D?U_^5KLM0VSJKG469GJ_,*XCJQZ9ONCPUMT$\K$\@.#FV`FQYO^8M[P6`?(($PVXV3*8ZZ2`N:LLJN8^.%LJTPDT_KK;\:\S@TS60T7&gt;\`[Z14`\KZ_7-@^``V`V(ZR``A[WTSO`]P?_&gt;_'EPVR%,EF[%7'"/7;93H+.!DX1!TX1!TX1(&gt;X2(&gt;X2(&gt;X2$&gt;X1$&gt;X1$&gt;X1&amp;6X2&amp;6X2&amp;6X2=U58&gt;%%8&gt;(9F3"YE#I)'!9,*I%D1"$Q"4]!4]$#5A#@A#8A#HI#(+2,Q"$Q"4]!4],"-!J[!*_!*?!)?1G73S"5&gt;HI#(]/,Q/$Q/D]0D]*"3("Y(Q%HG"(;#A#'/U_EY0![0QU.8("[(R_&amp;R?"Q?X/,Q/$Q/D]0D],!E\YJHGF42Y3'-'$Q'D]&amp;D]"A]B";$R_!R?!Q?AY&gt;U9P!90!;%E&gt;!)$I)9CYQ*RM$A-8DY%90(Y$&amp;Y$"[$"V&gt;_1J:X*N'ECA[0QK0Q+$Q+D]*$#&amp;&amp;Y&amp;"[&amp;2_&amp;2?!AL#I`#I`!I0!I0K54B58A5(A6%35J[59)J#Z6*CK$Q=/84IPEJ?3&lt;28%8+Y:6S++5=.CG(3-LBE0,1J4R-+1^*SO:,W61JGS6F%[4=H"2I+4"3EEB:H#&lt;+(OU/NI[N93VM(JP"JL&amp;*&lt;#)N`=-4^`&lt;W:'&gt;H2^&lt;8VW6N&lt;5V;L:&lt;-T]`,T-S-4%^0S_4EJ%R-4*R]4NSEDMOFY`@30@KN/^83]P\&lt;X?7PHX;8BQODZ@U&lt;S6[UB[/F.H-?0LBZR2`*N@&lt;HB&gt;XWM[/&amp;^B0M-@&lt;F[#\LL`W/J8CP4^Z,`]+\53\,[)@0-0&lt;I'_U=#?Q!!!!!</Property>
+	<Property Name="NI.Lib.Icon" Type="Bin">'1#!!!!!!!)!"1!&amp;!!!-!%!!!@````]!!!!"!!%!!!-V!!!*Q(C=\:9R4V2"%-=(.&gt;'74[!B7&amp;L.6_!L=*8VN#;0AB+E]7*-V%;:[J)D&amp;H#&amp;Z4-B9+@B-O:?[*&amp;3#Y/'QE,O/(_\N[+1C*J)9O(OG\X&gt;`_T/`.[_P:=HEMMVE3MS`F72]UI,`_SN^&gt;F:GFODY@$*\-UW&lt;2L1@&lt;PW+@GX"X6&gt;&lt;Q`Y?&gt;(5`:X*I.GJN^_`/O0@&lt;LCW]K$0V0ZJ`[A:Y?O`&lt;\99\03XGP\:^864JW[4`'1YVV`X[W`_5&gt;0MZ0A*KGEG]:H9@\7,P_L_P/TG_V^,F4W9X(PKF6*F`Z?VKEJ7L;4GR^)N@OK1J3O$+MX]UBPWHAV\^,K@4PS$KL6?X2U&gt;&gt;OG`K6;YOK@][^6#,[U?J&amp;&amp;+&gt;];@VV&gt;6KX@+@XAK@WK[X`U,QU(W6T]N%`\``APVN]Y`@[X&gt;]]LP`,W8@THJAIP)F+18%2;99Y;J*.=YU!-^U!-^U!0&gt;U2X&gt;U2X&gt;U2X&gt;U!X&gt;U!X&gt;U!V&gt;U26&gt;U26&gt;U25^6X2"&amp;X2":V?#Z%'C)'A1)*A-CA2.Q"0Q"$Q"$U-*?!+?A#@A#8C9)A&amp;0Q"0Q"$Q"$]MEY!FY!J[!*_!B6#;*8.(B#8A),Q[0Q_0Q/$Q/$SH&amp;Y8%!H'2/9#=)'/)YH9\$Y`!Y0(4&amp;Y8&amp;Y("[(R_(",1[0Q_0Q/$Q/$UPSLHCG325&gt;(M+)Q70Q'$Q'D]&amp;$;$&amp;Y$"[$R_!R?%AH"I`"9U!9#9XA))CRS*BA$!Q?AY=@-8A-(I0(Y$&amp;Y=/5H:(FH%EWK[0!I0!K0QK0Q+$S%%)6(Y6&amp;Y&amp;"[&amp;B\#C]#A]#I`#I`#13B1?B5@B55#5J+18*:CS5*GE#!I06TYNGJ_3:R,.6;1=8CG(5MJBEX+)J"Q/+1^&gt;SM/5]J#E&lt;,[54:7S76)W1=L.39'7!C-FC:4&amp;;;)=U/ZBG^A'VM97M8FM$JP"JN03PTTRY/"!^P&lt;W:(.T5T9W.K4&gt;&lt;MPCYK,-T]`,X.S=T-T-S04U^-HHR!XKJ%R^?S]NUW`@LB[O(L\?8`X]&lt;H`V?'G]?HA^W@0/]@BBBTHX\^WY\!`E;O@$UH\H[&gt;&amp;3ZT(W#0NY&gt;)@V6``%5LS8*__F@_(&gt;+*&gt;E`-.H'(PU&amp;2/&gt;#:]!!!!!</Property>
+	<Property Name="NI.Lib.SourceVersion" Type="Int">419463168</Property>
 	<Property Name="NI.Lib.Version" Type="Str">1.0.0.0</Property>
-	<Item Name="Getters" Type="Folder">
-		<Item Name="get active element.vi" Type="VI" URL="../VIs/get active element.vi"/>
-		<Item Name="get iteration.vi" Type="VI" URL="../VIs/get iteration.vi"/>
-		<Item Name="get plant structure.vi" Type="VI" URL="../VIs/get plant structure.vi"/>
-		<Item Name="get sim currenttime.vi" Type="VI" URL="../VIs/get sim currenttime.vi"/>
-		<Item Name="get sim endtime.vi" Type="VI" URL="../VIs/get sim endtime.vi"/>
-		<Item Name="get sim starttime.vi" Type="VI" URL="../VIs/get sim starttime.vi"/>
-		<Item Name="get simulation file.vi" Type="VI" URL="../VIs/get simulation file.vi"/>
-		<Item Name="get specification file.vi" Type="VI" URL="../VIs/get specification file.vi"/>
-		<Item Name="get validation file.vi" Type="VI" URL="../VIs/get validation file.vi"/>
-		<Item Name="get working directory.vi" Type="VI" URL="../VIs/get working directory.vi"/>
+	<Item Name="VI" Type="Folder">
+		<Item Name="Getters" Type="Folder">
+			<Item Name="get active element.vi" Type="VI" URL="../VIs/get active element.vi"/>
+			<Item Name="get iteration.vi" Type="VI" URL="../VIs/get iteration.vi"/>
+			<Item Name="get plant structure.vi" Type="VI" URL="../VIs/get plant structure.vi"/>
+			<Item Name="get sim currenttime.vi" Type="VI" URL="../VIs/get sim currenttime.vi"/>
+			<Item Name="get sim endtime.vi" Type="VI" URL="../VIs/get sim endtime.vi"/>
+			<Item Name="get sim starttime.vi" Type="VI" URL="../VIs/get sim starttime.vi"/>
+			<Item Name="get simulation file.vi" Type="VI" URL="../VIs/get simulation file.vi"/>
+			<Item Name="get specification file.vi" Type="VI" URL="../VIs/get specification file.vi"/>
+			<Item Name="get validation file.vi" Type="VI" URL="../VIs/get validation file.vi"/>
+			<Item Name="get working directory.vi" Type="VI" URL="../VIs/get working directory.vi"/>
+		</Item>
+		<Item Name="Log" Type="Folder">
+			<Item Name="add to sim log.vi" Type="VI" URL="../VIs/add to sim log.vi"/>
+			<Item Name="get sim log.vi" Type="VI" URL="../VIs/get sim log.vi"/>
+			<Item Name="set sim log.vi" Type="VI" URL="../VIs/set sim log.vi"/>
+		</Item>
+		<Item Name="Setters" Type="Folder">
+			<Item Name="set active element.vi" Type="VI" URL="../VIs/set active element.vi"/>
+			<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>
+			<Item Name="set iteration.vi" Type="VI" URL="../VIs/set iteration.vi"/>
+			<Item Name="set plant structure.vi" Type="VI" URL="../VIs/set plant structure.vi"/>
+			<Item Name="set sim currenttime.vi" Type="VI" URL="../VIs/set sim currenttime.vi"/>
+			<Item Name="set sim endtime.vi" Type="VI" URL="../VIs/set sim endtime.vi"/>
+			<Item Name="set sim starttime.vi" Type="VI" URL="../VIs/set sim starttime.vi"/>
+			<Item Name="set simulation file.vi" Type="VI" URL="../VIs/set simulation file.vi"/>
+			<Item Name="set specification file.vi" Type="VI" URL="../VIs/set specification file.vi"/>
+			<Item Name="set validation file.vi" Type="VI" URL="../VIs/set validation file.vi"/>
+			<Item Name="set working directory.vi" Type="VI" URL="../VIs/set working directory.vi"/>
+		</Item>
 	</Item>
-	<Item Name="Log" Type="Folder">
-		<Item Name="add to sim log.vi" Type="VI" URL="../VIs/add to sim log.vi"/>
-		<Item Name="get sim log.vi" Type="VI" URL="../VIs/get sim log.vi"/>
-		<Item Name="set sim log.vi" Type="VI" URL="../VIs/set sim log.vi"/>
-	</Item>
-	<Item Name="Setters" Type="Folder">
-		<Item Name="set active element.vi" Type="VI" URL="../VIs/set active element.vi"/>
-		<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>
-		<Item Name="set iteration.vi" Type="VI" URL="../VIs/set iteration.vi"/>
-		<Item Name="set plant structure.vi" Type="VI" URL="../VIs/set plant structure.vi"/>
-		<Item Name="set sim currenttime.vi" Type="VI" URL="../VIs/set sim currenttime.vi"/>
-		<Item Name="set sim endtime.vi" Type="VI" URL="../VIs/set sim endtime.vi"/>
-		<Item Name="set sim starttime.vi" Type="VI" URL="../VIs/set sim starttime.vi"/>
-		<Item Name="set simulation file.vi" Type="VI" URL="../VIs/set simulation file.vi"/>
-		<Item Name="set specification file.vi" Type="VI" URL="../VIs/set specification file.vi"/>
-		<Item Name="set validation file.vi" Type="VI" URL="../VIs/set validation file.vi"/>
-		<Item Name="set working directory.vi" Type="VI" URL="../VIs/set working directory.vi"/>
-	</Item>
-	<Item Name="libSimulationControl.so" Type="Document" URL="../libSimulationControl.so"/>
+	<Item Name="libSimulationControl.so" Type="Document" URL="../../libSimulationControl.so"/>
+	<Item Name="simulation_control.dll" Type="Document" URL="../../simulation_control.dll"/>
 </Library>

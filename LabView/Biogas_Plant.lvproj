@@ -28,6 +28,12 @@
 				<Item Name="uncouple_button.ctl" Type="VI" URL="../controls/uncouple_button.ctl"/>
 				<Item Name="validate_button.ctl" Type="VI" URL="../controls/validate_button.ctl"/>
 			</Item>
+			<Item Name="Libraries" Type="Folder">
+				<Item Name="libFileFunctions.lvlib" Type="Library" URL="../lib/libFileFunctions/libFileFunctions.lvlib"/>
+				<Item Name="libOutputReader.lvlib" Type="Library" URL="../lib/libOutputReader/libOutputReader.lvlib"/>
+				<Item Name="libSimulationControl.lvlib" Type="Library" URL="../lib/libSimulationControl/libSimulationControl.lvlib"/>
+				<Item Name="libSpecValiReader.lvlib" Type="Library" URL="../lib/libSpecValiReader/libSpecValiReader.lvlib"/>
+			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
 					<Item Name="initializer_close.vi" Type="VI" URL="../subVI/initializer_close.vi"/>
@@ -38,6 +44,7 @@
 					<Item Name="initializer_load_spec.vi" Type="VI" URL="../subVI/initializer_load_spec.vi"/>
 					<Item Name="initializer_load_vali.vi" Type="VI" URL="../subVI/initializer_load_vali.vi"/>
 					<Item Name="initializer_output.vi" Type="VI" URL="../subVI/initializer_output.vi"/>
+					<Item Name="initializer_prepare_specfile.vi" Type="VI" URL="../subVI/initializer_prepare_specfile.vi"/>
 					<Item Name="initializer_run.vi" Type="VI" URL="../subVI/initializer_run.vi"/>
 					<Item Name="initializer_save_spec.vi" Type="VI" URL="../subVI/initializer_save_spec.vi"/>
 					<Item Name="initializer_set_time.vi" Type="VI" URL="../subVI/initializer_set_time.vi"/>
@@ -74,13 +81,13 @@
 					<Item Name="plot_read_output_file.vi" Type="VI" URL="../subVI/plot_read_output_file.vi"/>
 					<Item Name="plot_run.vi" Type="VI" URL="../subVI/plot_run.vi"/>
 				</Item>
-				<Item Name="control_stepsize.vi" Type="VI" URL="../subVI/control_stepsize.vi"/>
 			</Item>
 		</Item>
 		<Item Name="initializer.vi" Type="VI" URL="../subVI/initializer.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
+				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>
 				<Item Name="BuildHelpPath.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/BuildHelpPath.vi"/>
 				<Item Name="Check Special Tags.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Check Special Tags.vi"/>
 				<Item Name="Check if File or Folder Exists.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/Check if File or Folder Exists.vi"/>
@@ -141,10 +148,6 @@
 				<Item Name="subFile Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/express/express input/FileDialogBlock.llb/subFile Dialog.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
 			</Item>
-			<Item Name="libFileFunctions.lvlib" Type="Library" URL="../lib/libFileFunctions/libFileFunctions.lvlib"/>
-			<Item Name="libOutputReader.lvlib" Type="Library" URL="../lib/libOutputReader/libOutputReader.lvlib"/>
-			<Item Name="libSimulationControl.lvlib" Type="Library" URL="../lib/libSimulationControl/libSimulationControl.lvlib"/>
-			<Item Name="libSpecValiReader.lvlib" Type="Library" URL="../lib/libSpecValiReader/libSpecValiReader.lvlib"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build"/>
 	</Item>
