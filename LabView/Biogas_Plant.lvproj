@@ -33,13 +33,18 @@
 				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
 				<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
-				<Item Name="write_checkpoint_specfile.vi" Type="VI" URL="../elements/write_checkpoint_specfile.vi"/>
 			</Item>
 			<Item Name="Libraries" Type="Folder">
 				<Item Name="libFileFunctions.lvlib" Type="Library" URL="../lib/libFileFunctions/libFileFunctions.lvlib"/>
 				<Item Name="libOutputReader.lvlib" Type="Library" URL="../lib/libOutputReader/libOutputReader.lvlib"/>
 				<Item Name="libSimulationControl.lvlib" Type="Library" URL="../lib/libSimulationControl/libSimulationControl.lvlib"/>
 				<Item Name="libSpecValiReader.lvlib" Type="Library" URL="../lib/libSpecValiReader/libSpecValiReader.lvlib"/>
+			</Item>
+			<Item Name="Structures" Type="Folder">
+				<Item Name="1_STAGE.vi" Type="VI" URL="../structures/1_STAGE.vi"/>
+				<Item Name="2_STAGE.vi" Type="VI" URL="../structures/2_STAGE.vi"/>
+				<Item Name="3_STAGE.vi" Type="VI" URL="../structures/3_STAGE.vi"/>
+				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../structures/3_STAGE_DUMMY.vi"/>
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Initializer" Type="Folder">
@@ -74,6 +79,7 @@
 					<Item Name="plant_pause.vi" Type="VI" URL="../subVI/plant_pause.vi"/>
 					<Item Name="plant_stop.vi" Type="VI" URL="../subVI/plant_stop.vi"/>
 					<Item Name="plant_structure.vi" Type="VI" URL="../subVI/plant_structure.vi"/>
+					<Item Name="plant_write_checkpoint_spec.vi" Type="VI" URL="../subVI/plant_write_checkpoint_spec.vi"/>
 				</Item>
 				<Item Name="Plot" Type="Folder">
 					<Item Name="Tree Control" Type="Folder">

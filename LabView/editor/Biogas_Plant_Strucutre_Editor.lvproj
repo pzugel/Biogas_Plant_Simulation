@@ -16,16 +16,13 @@
 				<Item Name="methane_reactor.vi" Type="VI" URL="../../elements/methane_reactor.vi"/>
 				<Item Name="methane_reactor_run.vi" Type="VI" URL="../../elements/methane_reactor_run.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../../elements/storage.vi"/>
-				<Item Name="write_checkpoint_specfile.vi" Type="VI" URL="../../elements/write_checkpoint_specfile.vi"/>
 			</Item>
 			<Item Name="Structures" Type="Folder">
 				<Item Name="1_STAGE.vi" Type="VI" URL="../../structures/1_STAGE.vi"/>
+				<Item Name="2_STAGE.vi" Type="VI" URL="../../structures/2_STAGE.vi"/>
 				<Item Name="3_STAGE.vi" Type="VI" URL="../../structures/3_STAGE.vi"/>
 				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../../structures/3_STAGE_DUMMY.vi"/>
-				<Item Name="3_STAGE_DUMMY2.vi" Type="VI" URL="../../structures/3_STAGE_DUMMY2.vi"/>
-				<Item Name="MY_NEW_STRUCTURE.vi" Type="VI" URL="../../structures/MY_NEW_STRUCTURE.vi"/>
 				<Item Name="STRUCT.vit" Type="VI" URL="../../structures/STRUCT.vit"/>
-				<Item Name="TEST_DUMMY.vi" Type="VI" URL="../../structures/TEST_DUMMY.vi"/>
 			</Item>
 		</Item>
 		<Item Name="write_png.vi" Type="VI" URL="../write_png.vi"/>
