@@ -15,6 +15,7 @@
 		<Property Name="specify.custom.address" Type="Bool">false</Property>
 		<Item Name="Biogas_plant_setup" Type="Folder">
 			<Item Name="Controls" Type="Folder">
+				<Item Name="add_button.ctl" Type="VI" URL="../controls/add_button.ctl"/>
 				<Item Name="help_button.ctl" Type="VI" URL="../controls/help_button.ctl"/>
 				<Item Name="load_button.ctl" Type="VI" URL="../controls/load_button.ctl"/>
 				<Item Name="open_button.ctl" Type="VI" URL="../controls/open_button.ctl"/>
@@ -132,7 +133,6 @@
 				<Item Name="GetRTHostConnectedProp.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/GetRTHostConnectedProp.vi"/>
 				<Item Name="Is Path and Not Empty.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Is Path and Not Empty.vi"/>
 				<Item Name="LVBoundsTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVBoundsTypeDef.ctl"/>
-				<Item Name="LVForegroundBackgroundColorsTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVForegroundBackgroundColorsTypeDef.ctl"/>
 				<Item Name="LVPositionTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVPositionTypeDef.ctl"/>
 				<Item Name="LVRectTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVRectTypeDef.ctl"/>
 				<Item Name="Longest Line Length in Pixels.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Longest Line Length in Pixels.vi"/>
