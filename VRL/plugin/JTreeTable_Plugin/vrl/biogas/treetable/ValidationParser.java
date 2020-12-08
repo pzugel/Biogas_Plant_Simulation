@@ -10,9 +10,10 @@ import java.util.regex.Pattern;
 
 public class ValidationParser {
 	static String text = "";
-	static List<ValiTableEntry> data = new ArrayList<ValiTableEntry>();
+	List<ValiTableEntry> data;
 	
-	public ValidationParser(File path) throws FileNotFoundException {
+	public ValidationParser(File path, List<ValiTableEntry> specData) throws FileNotFoundException {
+		this.data = specData;
 		readFile(path);
 		modifyInput();
 		generateIndents();
@@ -34,8 +35,8 @@ public class ValidationParser {
 			   text += line + "\n";
 			  
 		   }
-		   
 		}
+		scanner.close();
 	}
 	
 	private void modifyInput() {
@@ -139,6 +140,7 @@ public class ValidationParser {
 				{
 					((ValiTableEntry) data.get(index)).setType(last_type);	
 					((ValiTableEntry) data.get(index)).setDefaultVal(last_default);
+					((ValiTableEntry) data.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -163,6 +165,7 @@ public class ValidationParser {
 				last_default = tmpline.substring(8);
 				if(((ValiTableEntry) data.get(index)).isValueField()) {
 					((ValiTableEntry) data.get(index)).setDefaultVal(last_default);
+					((ValiTableEntry) data.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -177,6 +180,7 @@ public class ValidationParser {
 				((ValiTableEntry) data.get(index)).setRangeMin(line.substring(max_pos+1,end_pos));
 			}
 		}
+		scanner.close();
 	}
 
 	private void generateStates() {

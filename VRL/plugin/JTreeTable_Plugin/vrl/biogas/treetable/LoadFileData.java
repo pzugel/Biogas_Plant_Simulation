@@ -44,7 +44,7 @@ public class LoadFileData extends JFrame implements Serializable{
 			children.add(new MyDataNode(
 					((ValiTableEntry) listData.get(index)).getName(), 
 					((ValiTableEntry) listData.get(index)).getType(), 
-					((ValiTableEntry) listData.get(index)).getDefaultVal(), 
+					((ValiTableEntry) listData.get(index)).getSpecVal(), 
 					null));
 		}
 		else
