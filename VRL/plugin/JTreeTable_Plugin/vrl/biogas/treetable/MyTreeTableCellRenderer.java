@@ -2,7 +2,6 @@ package vrl.biogas.treetable;
  
 import java.awt.Component;
 import java.awt.Graphics;
- 
 import javax.swing.JTable;
 import javax.swing.JTree;
 import javax.swing.table.TableCellRenderer;
@@ -57,12 +56,14 @@ public class MyTreeTableCellRenderer extends JTree implements TableCellRenderer 
     /**
      * Liefert den Renderer mit der passenden Hintergrundfarbe zurueck.
      */
-    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-        if (isSelected)
-            setBackground(table.getSelectionBackground());
-        else
-            setBackground(table.getBackground());
- 
+    public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {	     
+    	if (isSelected) {
+    		setBackground(table.getSelectionBackground());		
+    	}
+        else {
+        	setBackground(table.getBackground());
+        }
+
         visibleRow = row;
         return this;
     }

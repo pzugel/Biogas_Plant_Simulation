@@ -2,23 +2,22 @@ package vrl.biogas.treetable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
-
 import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
-
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 
@@ -56,12 +55,13 @@ public class JTreeTablePlugin implements Serializable{
 		new SpecificationParser(dataFilePath, parameters);
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
-		
+		for(ValiTableEntry entry: parameters)
+			System.out.println(entry.getName() + " " + entry.getSpecVal());
 		frame.dispose();
 		updateFrame();
 	}
 	
-	private void updateFrame() {
+	private static void updateFrame() {
 		frame = new JFrame();
 		frame.setTitle("Initializer"); 
 		frame.setSize(800, 600);
@@ -84,12 +84,31 @@ public class JTreeTablePlugin implements Serializable{
         btnPanel.add(saveButton);
         btnPanel.add(valButton);
         btnPanel.add(closeButton);
+        //myTreeTable.getModel()
         
-        frame.setVisible(true);      
+        AbstractAction action = new AbstractAction()
+        {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e)
+            {
+                TableCellListener tcl = (TableCellListener)e.getSource();
+                parameters.get(tcl.getRow()).setSpecVal((String) tcl.getNewValue());
+                System.out.println("Row   : " + tcl.getRow());
+                System.out.println("Column: " + tcl.getColumn());
+                System.out.println("Old   : " + tcl.getOldValue());
+                System.out.println("New   : " + tcl.getNewValue());
+            }
+        };
+
+        new TableCellListener(myTreeTable, action);
+
+        frame.setVisible(true);    
 
         saveButton.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
+	        	
 	        	JFileChooser fileChooser = new JFileChooser();
 	            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 	            JFrame parent = new JFrame();
@@ -102,6 +121,11 @@ public class JTreeTablePlugin implements Serializable{
 	            int result = fileChooser.showSaveDialog(parent);
 	            if (result == JFileChooser.APPROVE_OPTION) {
 	                File selectedFile = fileChooser.getSelectedFile();
+	                try {
+						new SpecificationFileWriter(selectedFile, parameters);
+					} catch (IOException e1) {
+						e1.printStackTrace();
+					}
 	                System.out.println("Selected file: " + selectedFile.getAbsolutePath());;
 	            }
 	        }
@@ -113,23 +137,54 @@ public class JTreeTablePlugin implements Serializable{
         		frame.dispose();
         	}
         });
+        
+        valButton.addActionListener(new ActionListener() {
+        	@Override
+        	public void actionPerformed(ActionEvent e) {
+        		SpecValidation specVal = new SpecValidation(parameters);
+        		if(specVal.isValid()) {
+        			JOptionPane.showMessageDialog(null, "Specification is valid!", "Validation", 
+        					JOptionPane.INFORMATION_MESSAGE);
+        			myTreeTable.setErrorParams(new ArrayList<Integer>());
+        			frame.repaint();
+        		}
+        		else {
+        			JOptionPane.showMessageDialog(null, specVal.getValMessage(), "Validation", 
+        					JOptionPane.ERROR_MESSAGE);
+        			myTreeTable.setErrorParams(specVal.getErrorParams());
+        			frame.repaint();
+        		}
+        	}
+        });
 	}
-	/*
-	public static void main(String args[]) throws FileNotFoundException{
+	
+	public static void main(String args[]) throws IOException{
+
 		System.out.println("Main:");
-		java.io.File valiPath = new java.io.File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test_vali.lua");
-		java.io.File specPath = new java.io.File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test.lua");
-		ValidationParser valiparser = new ValidationParser(valiPath);
-		List<ValiTableEntry> newList = valiparser.getOutput();
-		System.out.println("#Lines: " + newList.size());
-		SpecificationParser specparser = new SpecificationParser(specPath, newList);
 		
-		int index = 0;
-		for(ValiTableEntry entry : newList) {
-			System.out.println(index + " Name: " + entry.getName() 
-			+ " Type: " + entry.getType() 
-			+ " Default: " + entry.getDefaultVal() + " Spec:" + entry.getSpecVal());
-			++index;
-		}
-	}*/
+		File valiPath = new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test_vali.lua");
+		File specPath = new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test.lua");
+		
+		parameters = (new ValidationParser(valiPath, new ArrayList<ValiTableEntry>())).getOutput();
+		LoadFileData data = new LoadFileData(parameters);
+		myTreeTable = data.getTreeTable();
+		
+		new SpecificationParser(specPath, parameters);
+		LoadFileData newData = new LoadFileData(parameters);
+		myTreeTable = newData.getTreeTable();
+		System.out.println("myTreeTable.getValueAt(3, 2): " + myTreeTable.getValueAt(3, 2));
+
+		updateFrame();
+		
+		System.out.println(parameters.get(2).getName());
+		parameters.get(2).setSpecVal("500.12");
+		System.out.println("Spec: " + parameters.get(2).getSpecVal());
+		System.out.println("Min: " + parameters.get(2).getRangeMin());
+		System.out.println("Max: " + parameters.get(2).getRangeMax());
+		
+		SpecValidation specVal = new SpecValidation(parameters);
+		System.out.println("Is valid?: " + specVal.isValid());
+		System.out.println(specVal.getValMessage());
+	}
+	
 }

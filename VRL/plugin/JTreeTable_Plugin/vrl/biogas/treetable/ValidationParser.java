@@ -2,7 +2,6 @@ package vrl.biogas.treetable;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Matcher;
@@ -10,10 +9,10 @@ import java.util.regex.Pattern;
 
 public class ValidationParser {
 	static String text = "";
-	List<ValiTableEntry> data;
+	private List<ValiTableEntry> parameters;
 	
-	public ValidationParser(File path, List<ValiTableEntry> specData) throws FileNotFoundException {
-		this.data = specData;
+	public ValidationParser(File path, List<ValiTableEntry> inputParams) throws FileNotFoundException {
+		parameters = inputParams;
 		readFile(path);
 		modifyInput();
 		generateIndents();
@@ -98,7 +97,7 @@ public class ValidationParser {
 		for (int i = 0; i < text.length(); i++) {
 			if(text.charAt(i) == '{') {
 				ind += 1;
-				data.add(new ValiTableEntry(ind));
+				parameters.add(new ValiTableEntry(ind));
 			}
 			else if(text.charAt(i) == '}') {
 				ind -= 1;
@@ -134,13 +133,13 @@ public class ValidationParser {
 			if(m.find())
 			{
 				++index;
-				((ValiTableEntry) data.get(index)).setName(line.substring(0, line.length()-2));
+				((ValiTableEntry) parameters.get(index)).setName(line.substring(0, line.length()-2));
 				Matcher m_table = Pattern.compile(table_entry).matcher(line);
 				if(m_table.find())
 				{
-					((ValiTableEntry) data.get(index)).setType(last_type);	
-					((ValiTableEntry) data.get(index)).setDefaultVal(last_default);
-					((ValiTableEntry) data.get(index)).setSpecVal(last_default);
+					((ValiTableEntry) parameters.get(index)).setType(last_type);	
+					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
+					((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -149,11 +148,9 @@ public class ValidationParser {
 			{
 				last_type = line.substring(6);
 				last_type = last_type.replaceAll("\"", "");
-				if(index < data.size()-1) {				
-					if(((ValiTableEntry) data.get(index)).isValueField()) {
-						((ValiTableEntry) data.get(index)).setType(last_type);
-					}
 					
+				if(((ValiTableEntry) parameters.get(index)).isValueField()) {
+					((ValiTableEntry) parameters.get(index)).setType(last_type);
 				}
 			}
 			
@@ -163,9 +160,9 @@ public class ValidationParser {
 				String tmpline = line;
 				tmpline = tmpline.replaceAll("\"", "");
 				last_default = tmpline.substring(8);
-				if(((ValiTableEntry) data.get(index)).isValueField()) {
-					((ValiTableEntry) data.get(index)).setDefaultVal(last_default);
-					((ValiTableEntry) data.get(index)).setSpecVal(last_default);
+				if(((ValiTableEntry) parameters.get(index)).isValueField()) {
+					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
+					((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -176,31 +173,31 @@ public class ValidationParser {
 				int max_pos = line.indexOf('-');
 				int end_pos = line.indexOf(']');
 				
-				((ValiTableEntry) data.get(index)).setRangeMin(line.substring(min_pos+1,max_pos));
-				((ValiTableEntry) data.get(index)).setRangeMin(line.substring(max_pos+1,end_pos));
+				((ValiTableEntry) parameters.get(index)).setRangeMin(line.substring(min_pos+1,max_pos));
+				((ValiTableEntry) parameters.get(index)).setRangeMax(line.substring(max_pos+1,end_pos));
 			}
 		}
 		scanner.close();
 	}
 
 	private void generateStates() {
-		((ValiTableEntry) data.get(data.size()-1)).setValueField(true);
+		((ValiTableEntry) parameters.get(parameters.size()-1)).setValueField(true);
 		
-		for(int i=0; i<data.size()-1; i++)
+		for(int i=0; i<parameters.size()-1; i++)
 		{
-			int thisIndent = ((ValiTableEntry) data.get(i)).getIndent();
-			int nextIndent = ((ValiTableEntry) data.get(i+1)).getIndent();
+			int thisIndent = ((ValiTableEntry) parameters.get(i)).getIndent();
+			int nextIndent = ((ValiTableEntry) parameters.get(i+1)).getIndent();
 			if(thisIndent<nextIndent)
 			{
-				((ValiTableEntry) data.get(i)).setValueField(false);
+				((ValiTableEntry) parameters.get(i)).setValueField(false);
 			}
 			else {
-				((ValiTableEntry) data.get(i)).setValueField(true);
+				((ValiTableEntry) parameters.get(i)).setValueField(true);
 			}
 		}	
 	}
 	
 	public List<ValiTableEntry> getOutput(){
-		return data;
+		return parameters;
 	}
 }

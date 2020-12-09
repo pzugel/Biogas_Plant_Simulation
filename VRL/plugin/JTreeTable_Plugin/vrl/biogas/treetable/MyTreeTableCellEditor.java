@@ -20,7 +20,8 @@ public class MyTreeTableCellEditor extends AbstractCellEditor implements TableCe
     }
  
     public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
-        return tree;
+        System.out.println("getTableCellEditorComponent");
+    	return tree;
     }
  
     public boolean isCellEditable(EventObject e) {
