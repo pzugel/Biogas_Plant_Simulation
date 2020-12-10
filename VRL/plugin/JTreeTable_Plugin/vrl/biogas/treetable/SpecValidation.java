@@ -4,15 +4,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
 
+import javax.swing.tree.TreePath;
+
 public class SpecValidation {
 	
 	private String validationMessage = "";
-	private List<Integer> validationErrorParams;
+	//private List<Integer> validationErrorParams;
+	private List<TreePath> validationErrorParams;
 	private boolean isValid = true;
 	
 	public SpecValidation(List<ValiTableEntry> parameters) {
 		
-		validationErrorParams = new ArrayList<Integer>();
+		validationErrorParams = new ArrayList<TreePath>();
 		
 		String isBool = "true|false";
 		String isString = "\"[a-zA-Z0-9_.]+\"";
@@ -22,7 +25,6 @@ public class SpecValidation {
 		String isDoubleTimestamp = "\\{[0-9E.\\*\\-]+,[0-9E.\\*\\-]+\\}";
 		String isIntTimestamp = "\\{[0-9\\*]+,[0-9\\*]+\\}";
 		
-		int index = 0;
 		for(ValiTableEntry entry : parameters)
 		{
 			String type = entry.getType();
@@ -34,7 +36,7 @@ public class SpecValidation {
 					if(!Pattern.compile(isBool).matcher(entry.getSpecVal()).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
-						validationErrorParams.add(index);
+						validationErrorParams.add(entry.getPath());
 						isValid = false;
 					}
 				}
@@ -45,7 +47,7 @@ public class SpecValidation {
 							!Pattern.compile(isDoubleTimestamp).matcher(entry.getSpecVal()).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
-						validationErrorParams.add(index);
+						validationErrorParams.add(entry.getPath());
 						isValid = false;
 					}
 					if(!entry.getRangeMin().isEmpty() && !entry.getRangeMax().isEmpty())
@@ -59,7 +61,7 @@ public class SpecValidation {
 								+ " should be in Range {" 
 								+ entry.getRangeMin() + "," 
 								+ entry.getRangeMax() + "}\n";
-							validationErrorParams.add(index);
+							validationErrorParams.add(entry.getPath());
 							isValid = false;
 						}
 					}
@@ -71,7 +73,7 @@ public class SpecValidation {
 							!Pattern.compile(isIntTimestamp).matcher(entry.getSpecVal()).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
-						validationErrorParams.add(index);
+						validationErrorParams.add(entry.getPath());
 						isValid = false;
 					}
 					if(!entry.getRangeMin().isEmpty() && !entry.getRangeMax().isEmpty())
@@ -85,7 +87,7 @@ public class SpecValidation {
 								+ " should be in Range {" 
 								+ entry.getRangeMin() + "," 
 								+ entry.getRangeMax() + "}\n";
-							validationErrorParams.add(index);
+							validationErrorParams.add(entry.getPath());
 							isValid = false;
 						}
 					}
@@ -96,7 +98,7 @@ public class SpecValidation {
 					if(!Pattern.compile(isString).matcher(entry.getSpecVal()).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
-						validationErrorParams.add(index);
+						validationErrorParams.add(entry.getPath());
 						isValid = false;
 					}
 				}
@@ -106,7 +108,7 @@ public class SpecValidation {
 					if(!Pattern.compile(isStringArr).matcher(entry.getSpecVal()).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
-						validationErrorParams.add(index);
+						validationErrorParams.add(entry.getPath());
 						isValid = false;
 					}
 				}
@@ -114,11 +116,10 @@ public class SpecValidation {
 				else
 				{
 					validationMessage += "Type ERROR: \"" + entry.getName() + "\" has unknown type " +  type + "\n";
-					validationErrorParams.add(index);
+					validationErrorParams.add(entry.getPath());
 					isValid = false;	
 				}	
 			}
-			++index;
 		}
 	}
 	
@@ -130,7 +131,7 @@ public class SpecValidation {
 		return validationMessage;
 	}
 	
-	public List<Integer> getErrorParams(){
+	public List<TreePath> getErrorParams(){
 		return validationErrorParams;
 	}
 }

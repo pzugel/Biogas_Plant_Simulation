@@ -1,5 +1,7 @@
 package vrl.biogas.treetable;
 
+import javax.swing.tree.TreePath;
+
 public class ValiTableEntry {
 	int indent = 0;
 	String name = "";
@@ -8,6 +10,7 @@ public class ValiTableEntry {
 	String specVal = "";
 	String rangeMin = "";
 	String rangeMax = "";
+	TreePath path;
 	boolean isValueField;
 	
 	public ValiTableEntry(int indent, String name, String type, String defaultVal, String specVal,
@@ -19,6 +22,7 @@ public class ValiTableEntry {
 		this.specVal = specVal;
 		this.rangeMin = rangeMin;
 		this.rangeMax = rangeMax;
+		this.path = null;
 	};
 	
 	public ValiTableEntry(int indent){
@@ -29,6 +33,7 @@ public class ValiTableEntry {
 		this.specVal = "";
 		this.rangeMin = "";
 		this.rangeMax = "";
+		this.path = null;
 	}
 	
 	public void setIndent(int indent) {
@@ -59,6 +64,10 @@ public class ValiTableEntry {
 		this.rangeMax = rangeMax;
 	}
 	
+	public void setPath(TreePath path) {
+		this.path = path;
+	}
+	
 	public int getIndent() {
 		return indent;
 	}
@@ -85,6 +94,10 @@ public class ValiTableEntry {
 	
 	public String getRangeMax() {
 		return rangeMax;
+	}
+	
+	public TreePath getPath() {
+		return path;
 	}
 	
 	public void setValueField(boolean isVal) {

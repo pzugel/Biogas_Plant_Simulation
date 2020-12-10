@@ -20,6 +20,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.tree.TreePath;
 
 @ComponentInfo(name="JTreeTablePlugin", 
 category="JTreeTablePlugin", 
@@ -33,7 +34,7 @@ public class JTreeTablePlugin implements Serializable{
 	static JFrame frame;
 	static MyTreeTable myTreeTable;
 	
-	public void loadValidation(
+	public static void loadValidation(
 			@ParamInfo(name = "Validation File:",
 		      nullIsValid = true,
 		      style = "load-dialog",
@@ -43,10 +44,14 @@ public class JTreeTablePlugin implements Serializable{
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
 		
+		MyTreeTableCellRenderer render = myTreeTable.getTreeTableRenderer();
+		for(int i=0; i<render.getRowCount(); i++)
+			parameters.get(i).setPath(render.getPathForRow(i));
+		
 		updateFrame();
 	}
 	
-	public void loadSpecification(
+	public static void loadSpecification(
 			@ParamInfo(name = "Specification File:",
 		      nullIsValid = true,
 		      style = "load-dialog",
@@ -55,8 +60,11 @@ public class JTreeTablePlugin implements Serializable{
 		new SpecificationParser(dataFilePath, parameters);
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
-		for(ValiTableEntry entry: parameters)
-			System.out.println(entry.getName() + " " + entry.getSpecVal());
+
+		MyTreeTableCellRenderer render = myTreeTable.getTreeTableRenderer();
+		for(int i=0; i<render.getRowCount(); i++)
+			parameters.get(i).setPath(render.getPathForRow(i));
+
 		frame.dispose();
 		updateFrame();
 	}
@@ -145,7 +153,7 @@ public class JTreeTablePlugin implements Serializable{
         		if(specVal.isValid()) {
         			JOptionPane.showMessageDialog(null, "Specification is valid!", "Validation", 
         					JOptionPane.INFORMATION_MESSAGE);
-        			myTreeTable.setErrorParams(new ArrayList<Integer>());
+        			myTreeTable.setErrorParams(new ArrayList<TreePath>());
         			frame.repaint();
         		}
         		else {
@@ -157,7 +165,7 @@ public class JTreeTablePlugin implements Serializable{
         	}
         });
 	}
-	
+	/*
 	public static void main(String args[]) throws IOException{
 
 		System.out.println("Main:");
@@ -165,26 +173,21 @@ public class JTreeTablePlugin implements Serializable{
 		File valiPath = new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test_vali.lua");
 		File specPath = new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Test.lua");
 		
-		parameters = (new ValidationParser(valiPath, new ArrayList<ValiTableEntry>())).getOutput();
-		LoadFileData data = new LoadFileData(parameters);
-		myTreeTable = data.getTreeTable();
-		
-		new SpecificationParser(specPath, parameters);
-		LoadFileData newData = new LoadFileData(parameters);
-		myTreeTable = newData.getTreeTable();
-		System.out.println("myTreeTable.getValueAt(3, 2): " + myTreeTable.getValueAt(3, 2));
-
-		updateFrame();
+		loadValidation(valiPath);
+		loadSpecification(specPath);
 		
 		System.out.println(parameters.get(2).getName());
 		parameters.get(2).setSpecVal("500.12");
 		System.out.println("Spec: " + parameters.get(2).getSpecVal());
 		System.out.println("Min: " + parameters.get(2).getRangeMin());
 		System.out.println("Max: " + parameters.get(2).getRangeMax());
-		
+
 		SpecValidation specVal = new SpecValidation(parameters);
+		TreePath p = specVal.getErrorParams().get(0);
+		System.out.println("Error Path: " + p.toString());
+		System.out.println("Error Line: " + myTreeTable.getTreeTableRenderer().getRowForPath(p));
 		System.out.println("Is valid?: " + specVal.isValid());
 		System.out.println(specVal.getValMessage());
 	}
-	
+	*/
 }

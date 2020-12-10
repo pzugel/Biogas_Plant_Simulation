@@ -8,15 +8,16 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.tree.TreePath;
  
 public class MyTreeTable extends JTable {
 	private static final long serialVersionUID = 1L;
     private MyTreeTableCellRenderer tree;
-    private List<Integer> errorParams;
+    private List<TreePath> errorParams;
  
     public MyTreeTable(MyAbstractTreeTableModel treeTableModel, int numEntries) {
         super();
-        errorParams = new ArrayList<Integer>();
+        errorParams = new ArrayList<TreePath>();
         // JTree erstellen.
         tree = new MyTreeTableCellRenderer(this, treeTableModel);
         for(int i=0; i<numEntries; i++) {
@@ -44,29 +45,34 @@ public class MyTreeTable extends JTable {
  
     }
     
-    public void setErrorParams(List<Integer> params) {
+    public void setErrorParams(List<TreePath> params) {
     	errorParams = params;
+    }
+    
+    public MyTreeTableCellRenderer getTreeTableRenderer() {
+    	return tree;
     }
      
     @Override
     public Component prepareRenderer(TableCellRenderer renderer, int row, int col) {
     	final Color VERY_LIGHT_RED = new Color(255,102,102);
         Component comp = super.prepareRenderer(renderer, row, col);
-        
-        Object value = getModel().getValueAt(row, 0);
-        System.out.println(value);
+
+        List<Integer> errorRows = new ArrayList<Integer>();   
+        for(TreePath p : errorParams)
+        	errorRows.add(tree.getRowForPath(p));
+
+        //Object value = getModel().getValueAt(row, 0);
         if (getSelectedRow() == row) {
-        	if (errorParams.contains(row) && col == 2) {
+        	if (errorRows.contains(row) && col == 2) {
                 comp.setBackground(VERY_LIGHT_RED);
         	} else {
         		comp.setBackground(getSelectionBackground());
             }
         }
         else {
-            if (errorParams.contains(row) && col == 2) {
+            if (errorRows.contains(row) && col == 2) {
                 comp.setBackground(VERY_LIGHT_RED);
-            } else if(value.equals("sim_endtime") && col == 2 ){ //THIS MIGHT BE SAFER
-            	comp.setBackground(VERY_LIGHT_RED);
             } else {
                 comp.setBackground(Color.white);
             }
