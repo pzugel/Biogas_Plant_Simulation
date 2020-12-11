@@ -1,6 +1,7 @@
 package vrl.biogas.treetable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -22,8 +23,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.tree.TreePath;
 
-@ComponentInfo(name="JTreeTablePlugin", 
-category="JTreeTablePlugin", 
+@ComponentInfo(name="Initializer", 
+category="Biogas", 
 description="JTreeTable Component")
 public class JTreeTablePlugin implements Serializable{
 	private static final long serialVersionUID = 1L;
@@ -34,12 +35,13 @@ public class JTreeTablePlugin implements Serializable{
 	static JFrame frame;
 	static MyTreeTable myTreeTable;
 	
+	@MethodInfo(name="Valdation Editor", hide=false, 
+			hideCloseIcon=true, num=1)
 	public static void loadValidation(
 			@ParamInfo(name = "Validation File:",
-		      nullIsValid = true,
-		      style = "load-dialog",
-		      options = "endings=[\"lua\"]; invokeOnChange=false") File dataFilePath) throws FileNotFoundException {
+		      nullIsValid = false) String file) throws FileNotFoundException {
 		
+		File dataFilePath = new File(file);
 		parameters = (new ValidationParser(dataFilePath, new ArrayList<ValiTableEntry>())).getOutput();
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
@@ -51,12 +53,13 @@ public class JTreeTablePlugin implements Serializable{
 		updateFrame();
 	}
 	
+	@MethodInfo(name="Specification Editor", hide=false, 
+			hideCloseIcon=true, num=1)
 	public static void loadSpecification(
 			@ParamInfo(name = "Specification File:",
-		      nullIsValid = true,
-		      style = "load-dialog",
-		      options = "endings=[\"lua\"]; invokeOnChange=false") File dataFilePath) throws FileNotFoundException {
+		      nullIsValid = false) String file) throws FileNotFoundException {
 		
+		File dataFilePath = new File(file);
 		new SpecificationParser(dataFilePath, parameters);
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
