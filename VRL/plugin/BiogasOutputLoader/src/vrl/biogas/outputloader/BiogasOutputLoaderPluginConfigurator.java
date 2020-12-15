@@ -28,6 +28,8 @@ public class BiogasOutputLoaderPluginConfigurator extends VPluginConfigurator{
 	   if (api instanceof VPluginAPI) {
 	       VPluginAPI vapi = (VPluginAPI) api;
 	       vapi.addComponent(BiogasOutputLoaderPlugin.class);
+	       vapi.addTypeRepresentation(OutputContainerType.class);
+
 	       }
 	}
 

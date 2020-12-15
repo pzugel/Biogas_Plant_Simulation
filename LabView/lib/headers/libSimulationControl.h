@@ -1,3 +1,7 @@
+const char* get_console_output();
+void set_console_output(const char* cmd);
+void add_console_output(const char* cmd);
+
 const char* get_sim_log();
 void set_sim_log(const char* log);
 void add_to_sim_log(const char* log);

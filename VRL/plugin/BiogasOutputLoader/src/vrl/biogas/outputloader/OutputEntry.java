@@ -15,6 +15,9 @@ public class OutputEntry {
 	private String xValueUnit = ""; 
 	private int xValueColumn = -1;
 	
+	public String toString() {
+		return this.name;	
+	}
 	
 	public int getIndent() {
 		return this.indent;

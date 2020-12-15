@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "../lib/libSimulationControl.pdb"
-  "../lib/libSimulationControl.so"
+  "../LabView/lib/libSimulationControl.pdb"
+  "../LabView/lib/libSimulationControl.so"
   "CMakeFiles/SimulationControl.dir/src/biogas_simulation_control_wrapper.cpp.o"
 )
 

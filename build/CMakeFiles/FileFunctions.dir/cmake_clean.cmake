@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "../lib/libFileFunctions.pdb"
-  "../lib/libFileFunctions.so"
+  "../LabView/lib/libFileFunctions.pdb"
+  "../LabView/lib/libFileFunctions.so"
   "CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o"
 )
 

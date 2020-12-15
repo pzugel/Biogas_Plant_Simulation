@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "../lib/libSpecValiReader.pdb"
-  "../lib/libSpecValiReader.so"
+  "../LabView/lib/libSpecValiReader.pdb"
+  "../LabView/lib/libSpecValiReader.so"
   "CMakeFiles/SpecValiReader.dir/src/biogas_spec_vali_wrapper.cpp.o"
 )
 

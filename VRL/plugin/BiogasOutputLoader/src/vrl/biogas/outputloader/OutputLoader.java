@@ -56,7 +56,7 @@ public class OutputLoader {
 			match = match.replaceAll("\\{", "");
 			
 			int col_pos = match.indexOf(",col=");
-			int new_col = Integer.parseInt(match.substring(col_pos+5));
+			int new_col = Integer.parseInt(match.substring(col_pos+5)) -1;
 			x_Cols.add(new_col);
 			
 			int unit_pos = match.indexOf("unit=");

@@ -39,9 +39,8 @@ public class JTreeTablePlugin implements Serializable{
 			hideCloseIcon=true, num=1)
 	public static void loadValidation(
 			@ParamInfo(name = "Validation File:",
-		      nullIsValid = false) String file) throws FileNotFoundException {
-		
-		File dataFilePath = new File(file);
+		      nullIsValid = false) File dataFilePath) throws FileNotFoundException {
+
 		parameters = (new ValidationParser(dataFilePath, new ArrayList<ValiTableEntry>())).getOutput();
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
@@ -57,9 +56,8 @@ public class JTreeTablePlugin implements Serializable{
 			hideCloseIcon=true, num=1)
 	public static void loadSpecification(
 			@ParamInfo(name = "Specification File:",
-		      nullIsValid = false) String file) throws FileNotFoundException {
+		      nullIsValid = false) File dataFilePath) throws FileNotFoundException {
 		
-		File dataFilePath = new File(file);
 		new SpecificationParser(dataFilePath, parameters);
 		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
@@ -168,6 +166,11 @@ public class JTreeTablePlugin implements Serializable{
         	}
         });
 	}
+	
+	public int start() {
+		return 2;
+	}
+	
 	/*
 	public static void main(String args[]) throws IOException{
 

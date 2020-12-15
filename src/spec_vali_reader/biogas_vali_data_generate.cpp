@@ -139,7 +139,7 @@ generateGlyphs()
  */
 void BiogasSpecValiReader::
 generateValues()
-{
+{	
 	std::string line_input = this->input_valiModified; 
 	boost::replace_all(line_input, "{", "{\n");
 	boost::replace_all(line_input, "}", "\n}\n");
@@ -165,6 +165,8 @@ generateValues()
 			{
 				this->entries[index].type = last_type;	
 				this->entries[index].defaultVal = last_default;
+			} else {
+				last_default = "";
 			}
 		}
 

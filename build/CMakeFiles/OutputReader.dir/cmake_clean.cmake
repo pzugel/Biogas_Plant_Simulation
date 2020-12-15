@@ -1,6 +1,6 @@
 file(REMOVE_RECURSE
-  "../lib/libOutputReader.pdb"
-  "../lib/libOutputReader.so"
+  "../LabView/lib/libOutputReader.pdb"
+  "../LabView/lib/libOutputReader.so"
   "CMakeFiles/OutputReader.dir/src/biogas_output_reader_wrapper.cpp.o"
 )
 

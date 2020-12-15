@@ -23,6 +23,7 @@
 				<Item Name="3_STAGE.vi" Type="VI" URL="../../structures/3_STAGE.vi"/>
 				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../../structures/3_STAGE_DUMMY.vi"/>
 				<Item Name="STRUCT.vit" Type="VI" URL="../../structures/STRUCT.vit"/>
+				<Item Name="STRUCT_NEW.vi" Type="VI" URL="../../structures/STRUCT_NEW.vi"/>
 			</Item>
 		</Item>
 		<Item Name="write_png.vi" Type="VI" URL="../write_png.vi"/>

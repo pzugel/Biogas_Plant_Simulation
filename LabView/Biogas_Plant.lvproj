@@ -67,6 +67,7 @@
 				</Item>
 				<Item Name="Main Panel" Type="Folder">
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
+					<Item Name="main_console_output.vi" Type="VI" URL="../subVI/main_console_output.vi"/>
 					<Item Name="main_impressum.vi" Type="VI" URL="../subVI/main_impressum.vi"/>
 					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>
 					<Item Name="main_kill_ugshell.vi" Type="VI" URL="../subVI/main_kill_ugshell.vi"/>

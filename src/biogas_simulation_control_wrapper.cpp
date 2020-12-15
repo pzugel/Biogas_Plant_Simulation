@@ -18,6 +18,7 @@ static std::string active_element;
 static std::string plant_structure;
 static std::string sim_log;
 static int iteration;
+static std::string console_output;
 
 static std::string simulation_file;
 static std::string validation_file;
@@ -201,6 +202,24 @@ void set_interation_log(int iter)
 {
 	iteration = iter;
 	sim_log += "Iteration: " + std::to_string(iter) + "\n";
+}
+
+/**
+ * Getter/setter for the the console output
+ */
+void set_console_output(const char* cmd)
+{
+	console_output = (std::string) cmd;
+}
+
+void add_console_output(const char* cmd)
+{
+	console_output += ((std::string) cmd);
+}
+
+const char* get_console_output()
+{
+	return console_output.c_str();
 }
 
 } //end extern "C"

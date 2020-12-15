@@ -1,9 +1,6 @@
 problem = {
     reactorSetup = {
         operatingTemperature = {
-		range = {
-                    values = {0, 400.12}
-                },
             type = "Double",
         },
         reactorType = {
@@ -19,7 +16,7 @@ problem = {
         activeReactions = {
             type = "String[]",
             style = "default",
-            default = "aTest"
+            default = "bTest"
         }
     },
     numericalSetup = {
@@ -74,6 +71,7 @@ problem = {
         analysis = {
             type = "Double",
             style = "default",
+			default = 12.0,
             tableContent = {
                 values = {"Carbohydrates","Lipids","Proteins","MS","LCFA","AA","Lignin","Acetic","Propionic","Butyric","Valeric","Methane","Carbondioxide","Hydrogen","Nitrogen","MO_acetoM","MO_hydroM","MO_Propionic","MO_ButyricValeric","MO_AcidoMS","MO_AcidoLCFA","MO_AcidoAA"}
             }
