@@ -7,11 +7,18 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.nio.file.FileSystems;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.WatchEvent;
+import java.nio.file.WatchKey;
+import java.nio.file.WatchService;
+
+import static java.nio.file.StandardWatchEventKinds.*;
 import java.util.List;
 
 import javax.swing.JButton;
-import javax.swing.JFrame;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
@@ -34,9 +41,9 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 	static File filepath;
 	
 	@MethodInfo(name="Load", hide=false, 
-			hideCloseIcon=true, num=1)
-	public static void load(
-			@ParamInfo(name = " ",
+			hideCloseIcon=true, interactive=false, num=1)
+	public static JComponent load(
+			@ParamInfo(name = "outputFiles.lua",
 				      nullIsValid = false,
 				      style = "load-dialog",
 				      options = "endings=[\"lua\"]; invokeOnChange=true") File path) 
@@ -45,12 +52,12 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 		OutputLoader loader = new OutputLoader(path);
 		loader.load();
 		List<OutputEntry> data = loader.getData();
-		
+		/*
 		for(OutputEntry entry: data)
 			System.out.println(entry.getIndent() + " " 
 					+ entry.getName() + entry.getUnit() + " "
 					+ entry.getFilename() + " " + entry.getColumn() + " xCol:" + entry.getXValueColumn());
-		
+		*/
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("Parameters");
 		DefaultMutableTreeNode lastParent = null;
 		
@@ -66,17 +73,15 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 			}
 		}
 		
-		JFrame frame = new JFrame();
-		frame.setTitle("Plotter"); 
-		frame.setLocationRelativeTo(null);
-		frame.setSize(300, 450);
+		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel.setSize(300, 450);
 		
 		JPanel topPanel = new JPanel();
 	    JPanel btnPanel = new JPanel();
 	    
 	    topPanel.setLayout(new BorderLayout());
-        frame.add(topPanel, BorderLayout.CENTER);
-        frame.add(btnPanel, BorderLayout.SOUTH);
+        mainPanel.add(topPanel, BorderLayout.CENTER);
+        mainPanel.add(btnPanel, BorderLayout.SOUTH);
 		
         tree = new JTree(root);
 		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
@@ -88,7 +93,11 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 	    JButton plotButton = new JButton("Plot");
 	    btnPanel.add(plotButton);
 	    
-	    trajectories = new ArrayList<Trajectory>();
+	    OutputContainerType cont = new OutputContainerType();
+	    cont.setViewValue(mainPanel);
+	    
+	    //trajectories = new ArrayList<Trajectory>();
+	    
 		plotButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -98,6 +107,7 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
+				
 				/*
 				trajectories.clear();
 				TreePath[] paths = tree.getSelectionPaths();
@@ -116,8 +126,10 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 				*/
 			}
 	    });
+	    
 
-		frame.setVisible(true);
+		//frame.setVisible(true);
+		return cont;
 	}
 	
 	@MethodInfo(name="Plot", hide=false,
@@ -132,8 +144,8 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 		OutputEntry entry = (OutputEntry) node.getUserObject();
 
 		trajectory.setTitle(entry.getFilename());
-		trajectory.setxAxisLabel(entry.getName() + entry.getUnit());
-		trajectory.setyAxisLabel(entry.getXValueName() + entry.getXValueUnit());
+		trajectory.setyAxisLabel(entry.getName() + entry.getUnit());
+		trajectory.setxAxisLabel(entry.getXValueName() + entry.getXValueUnit());
 		
 		File path = new File(filepath.getParent() + "/" + entry.getFilename());
 		
@@ -156,31 +168,29 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 		return trajectory;
 	}
 	
+	/*
 	public Trajectory[] returnTrajectories() {
 		Trajectory[] t = new Trajectory[trajectories.size()];
 		for(int i=0; i<trajectories.size(); i++)
 			t[i] = trajectories.get(i);
 		return t;
 	}
-	
-	public JFrame test(JFrame a) {
-		//final JFrame f = new JFrame();	
-		a = new JFrame();
-		return a;
+	*/
+	/*
+	public JComponent test() {
+        String data[][]={ {"101","Amit","670000"},    
+                {"102","Jai","780000"},    
+                {"101","Sachin","700000"}};    
+		String column[]={"ID","NAME","SALARY"};         
+		JTable jt=new JTable(data,column);  
+		OutputContainerType cont = new OutputContainerType();
+		cont.setViewValue(jt);
+		return cont;
 	}
+	*/
 	
-	public JFrame test2() {
-		JFrame f = new JFrame();	
-		JButton plotButton = new JButton("ASDASDASDAS");
-		f.add(plotButton);
-		return f;
-	}
 	
-	public JFrame test3(JFrame a) {
-		return a;
-	}
-	
-	public static void main(String args[]) throws IOException{
+	public static void main(String args[]) throws IOException, InterruptedException{
 		/*
 		File path = new File("/home/paul/Schreibtisch/outputFiles.lua");
 		OutputLoader loader = new OutputLoader(path);
@@ -206,8 +216,8 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 			}
 		}
 		JFrame frame = new JFrame();
-		frame.setTitle("Plotter"); 
-		frame.setLocationRelativeTo(null);
+		//frame.setTitle("Plotter"); 
+		//frame.setLocationRelativeTo(null);
 		frame.setSize(300, 450);
 		
 		JPanel topPanel = new JPanel();
@@ -238,8 +248,8 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 					System.out.println(p.toString());
 			}
 	    });
-	    */
-		/*
+	    
+		
 		CSVReader reader = new CSVReader(new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Sample_Output/dbg_density.txt"));
 		List<Double> a = reader.getCol(2);
 		System.out.println(reader.getColumnSize());
@@ -247,11 +257,32 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 			System.out.println(d);
 		File testfile = new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Sample_Output/output_Files.lua");
 		System.out.println(testfile.getParent() + "/dbg_density.txt");
-		*/
-		load(new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Sample_Output/outputFiles.lua"));
-		tree.expandRow(1);
-		tree.setSelectionRow(5);
-		getValues();
+		
+		//load(new File("/home/paul/Schreibtisch/Biogas_plant_setup/example/Sample_Output/outputFiles.lua"));
+		//tree.expandRow(1);
+		//tree.setSelectionRow(5);
+		//getValues();
+		 * */
+		final Path path = Paths.get("/home/paul/Schreibtisch/Run_Folder");
+		System.out.println(path);
+		WatchService watchService = FileSystems.getDefault().newWatchService();
+	    path.register(watchService, ENTRY_MODIFY, ENTRY_CREATE);
+	    while (true) {
+	        final WatchKey wk = watchService.take();
+	        for (WatchEvent<?> event : wk.pollEvents()) {
+	            final Path changed = (Path) event.context();	            
+	            if (changed.endsWith("valveGasFlow.txt")) {
+	                System.out.println("My file has changed");
+	            }
+	        }
+	        // reset the key
+	        boolean valid = wk.reset();
+	        if (!valid) {
+	        	System.out.println("Key has been unregisterede");
+	        	break; 
+	        }
+	    }
+	
 	}
 	
 }

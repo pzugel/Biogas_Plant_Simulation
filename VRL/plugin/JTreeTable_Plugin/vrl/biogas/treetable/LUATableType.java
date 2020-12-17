@@ -1,4 +1,4 @@
-package vrl.biogas.outputloader;
+package vrl.biogas.treetable;
 
 import eu.mihosoft.vrl.annotation.TypeInfo;
 import eu.mihosoft.vrl.reflection.TypeRepresentationBase;
@@ -21,18 +21,18 @@ import javax.swing.JComponent;
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 @TypeInfo(type = JComponent.class, input = true, output = true, style = "default")
-public class OutputContainerType extends TypeRepresentationBase implements java.io.Serializable {
+public class LUATableType extends TypeRepresentationBase implements java.io.Serializable {
 
     private static final long serialVersionUID = 1;
     private JPanel componentContainer;
     private JComponent jComponent;
     
-    public OutputContainerType() {
+    public LUATableType() {
     	setValueName(""); // name of the visualization
 
         // Set layout
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        this.setPreferredSize(new Dimension(300, 450));
+        //this.setPreferredSize(new Dimension(300, 300));
         this.setMinimumSize(new Dimension(200, 120));
 
         // Get the panel from the xychart
