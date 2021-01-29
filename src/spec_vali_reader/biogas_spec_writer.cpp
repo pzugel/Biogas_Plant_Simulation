@@ -13,60 +13,54 @@
 #include <string>
 #include <vector>
 #include <fstream>	
+#include <iostream>
 
 /**
  * Write a new specification file
  *
- * Validates the given specification first. If they are valid
- * the method writes a new specification file into the
+ * Method writes a new specification file into the
  * "outputSpecs" String.
  *
  * @param specs: Specifications committed by LabView
  * @return Bool whether the specs are valid
  */
-bool BiogasSpecValiReader::
+void BiogasSpecValiReader::
 writeOutputSpecs(std::string specs)
 {
+	std::cout << "writeOutputSpecs" << std::endl;
 	this->outputSpecs = "";
-	if(validateSpecs(specs))
+	std::vector<std::string> inputSpecs = {};
+	std::istringstream lineIter(specs);
+	for (std::string line; std::getline(lineIter, line); )
 	{
-		std::vector<std::string> inputSpecs = {};
-		std::istringstream lineIter(specs);
-		for (std::string line; std::getline(lineIter, line); )
-		{
-			inputSpecs.push_back(line);
-		}
-		for(int i=0; i<this->number_of_entries-1; i++)
-		{
-			this->outputSpecs += std::string(this->entries[i].indent, '\t');
-			if(this->entries[i].glyph == 15)
-				this->outputSpecs += this->entries[i].leftCell + "={\n";
-			else
-			{
-				if (this->entries[i].leftCell.rfind("\"", 0) == 0)
-					this->outputSpecs += "[" + this->entries[i].leftCell + "]=" + inputSpecs[i] + ",\n";
-				else if(this->entries[i].leftCell == "timeTableContent")
-					this->outputSpecs += inputSpecs[i] + ",\n";
-				else
-					this->outputSpecs += this->entries[i].leftCell + "=" + inputSpecs[i] + ",\n";
-			}
-
-			if(this->entries[i].indent>this->entries[i+1].indent)
-			{
-				int num_closing_par = (this->entries[i].indent)-(this->entries[i+1].indent);
-				for(int j=0; j<num_closing_par; j++)
-					this->outputSpecs += std::string(this->entries[i].indent-j-1,'\t') + "},\n";
-			}
-		}
-
-		int num_closing_par_end = this->entries[this->number_of_entries-1].indent;
-		for(int i=0; i<num_closing_par_end-1; i++)
-			this->outputSpecs += std::string(num_closing_par_end-i-1,'\t') + "},\n";		
-		this->outputSpecs += "}";
+		inputSpecs.push_back(line);
 	}
-	else
-		return false;
+	for(int i=0; i<this->number_of_entries-1; i++)
+	{
+		this->outputSpecs += std::string(this->entries[i].indent, '\t');
+		if(this->entries[i].glyph == 15)
+			this->outputSpecs += this->entries[i].leftCell + "={\n";
+		else
+		{
+			if (this->entries[i].leftCell.rfind("\"", 0) == 0)
+				this->outputSpecs += "[" + this->entries[i].leftCell + "]=" + inputSpecs[i] + ",\n";
+			else if(this->entries[i].leftCell == "timeStamp")
+				this->outputSpecs += inputSpecs[i] + ",\n";
+			else
+				this->outputSpecs += this->entries[i].leftCell + "=" + inputSpecs[i] + ",\n";
+		}
 
-	return true;
+		if(this->entries[i].indent>this->entries[i+1].indent)
+		{
+			int num_closing_par = (this->entries[i].indent)-(this->entries[i+1].indent);
+			for(int j=0; j<num_closing_par; j++)
+				this->outputSpecs += std::string(this->entries[i].indent-j-1,'\t') + "},\n";
+		}
+	}
+
+	int num_closing_par_end = this->entries[this->number_of_entries-1].indent;
+	for(int i=0; i<num_closing_par_end-1; i++)
+		this->outputSpecs += std::string(num_closing_par_end-i-1,'\t') + "},\n";		
+	this->outputSpecs += "}";
 }
 

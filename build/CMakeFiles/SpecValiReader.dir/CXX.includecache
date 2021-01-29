@@ -29,6 +29,8 @@ boost/algorithm/string.hpp
 -
 stdexcept
 -
+iostream
+-
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_spec_vali_reader.cpp
 biogas_spec_vali_reader.h
@@ -47,6 +49,8 @@ biogas_vali_data_generate.cpp
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_vali_data_generate.cpp
 biogas_spec_data_generate.cpp
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_spec_data_generate.cpp
+iostream
+-
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_spec_vali_reader.h
 table_entry.h
@@ -77,6 +81,8 @@ vector
 -
 fstream
 -
+iostream
+-
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/biogas_vali_data_generate.cpp
 biogas_spec_vali_reader.h
@@ -90,6 +96,8 @@ fstream
 regex
 -
 boost/algorithm/string.hpp
+-
+iostream
 -
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/spec_vali_reader/table_entry.h

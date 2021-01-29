@@ -19,11 +19,11 @@ void set_interation_log(int iter);
 void set_simulation_file(const char* sim_file);
 const char* get_simulation_file();
 
-void set_validation_file(const char* val_file);
-const char* get_validation_file();
+void set_hydrolyse_specification(const char* hydrolyse_spec_file);
+const char* get_hydrolyse_specification();
 
-void set_specification_file(const char* spec_file);
-const char* get_specification_file();
+void set_methane_specification(const char* methane_spec_file);
+const char* get_methane_specification();
 
 void set_working_directory(const char* dir);
 const char* get_working_directory();

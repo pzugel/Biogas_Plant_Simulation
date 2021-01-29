@@ -11,14 +11,14 @@
 		</Item>
 		<Item Name="Getters" Type="Folder">
 			<Item Name="get active element.vi" Type="VI" URL="../VIs/get active element.vi"/>
+			<Item Name="get hydrolyse specification.vi" Type="VI" URL="../VIs/get hydrolyse specification.vi"/>
 			<Item Name="get iteration.vi" Type="VI" URL="../VIs/get iteration.vi"/>
+			<Item Name="get methane specification.vi" Type="VI" URL="../VIs/get methane specification.vi"/>
 			<Item Name="get plant structure.vi" Type="VI" URL="../VIs/get plant structure.vi"/>
 			<Item Name="get sim currenttime.vi" Type="VI" URL="../VIs/get sim currenttime.vi"/>
 			<Item Name="get sim endtime.vi" Type="VI" URL="../VIs/get sim endtime.vi"/>
 			<Item Name="get sim starttime.vi" Type="VI" URL="../VIs/get sim starttime.vi"/>
 			<Item Name="get simulation file.vi" Type="VI" URL="../VIs/get simulation file.vi"/>
-			<Item Name="get specification file.vi" Type="VI" URL="../VIs/get specification file.vi"/>
-			<Item Name="get validation file.vi" Type="VI" URL="../VIs/get validation file.vi"/>
 			<Item Name="get working directory.vi" Type="VI" URL="../VIs/get working directory.vi"/>
 		</Item>
 		<Item Name="Log" Type="Folder">
@@ -28,15 +28,15 @@
 		</Item>
 		<Item Name="Setters" Type="Folder">
 			<Item Name="set active element.vi" Type="VI" URL="../VIs/set active element.vi"/>
+			<Item Name="set hydrolyse specification.vi" Type="VI" URL="../VIs/set hydrolyse specification.vi"/>
 			<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>
 			<Item Name="set iteration.vi" Type="VI" URL="../VIs/set iteration.vi"/>
+			<Item Name="set methane specification.vi" Type="VI" URL="../VIs/set methane specification.vi"/>
 			<Item Name="set plant structure.vi" Type="VI" URL="../VIs/set plant structure.vi"/>
 			<Item Name="set sim currenttime.vi" Type="VI" URL="../VIs/set sim currenttime.vi"/>
 			<Item Name="set sim endtime.vi" Type="VI" URL="../VIs/set sim endtime.vi"/>
 			<Item Name="set sim starttime.vi" Type="VI" URL="../VIs/set sim starttime.vi"/>
 			<Item Name="set simulation file.vi" Type="VI" URL="../VIs/set simulation file.vi"/>
-			<Item Name="set specification file.vi" Type="VI" URL="../VIs/set specification file.vi"/>
-			<Item Name="set validation file.vi" Type="VI" URL="../VIs/set validation file.vi"/>
 			<Item Name="set working directory.vi" Type="VI" URL="../VIs/set working directory.vi"/>
 		</Item>
 	</Item>

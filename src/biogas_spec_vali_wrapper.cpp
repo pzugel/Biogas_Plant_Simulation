@@ -122,11 +122,12 @@ const char* getValidationErrorParams()
  * a new specification file will be written.
  * 
  * @param specs: Current specification from the LabView Tree (string formatted)
- * @return Bool if the specs are valid
+ * @return Output String
  */
-bool getOutputSpecs(const char* specs)
+const char* getOutputSpecs(const char* specs)
 {
-	return biogasReader->writeOutputSpecs((std::string) specs);
+	biogasReader->writeOutputSpecs((std::string) specs);
+	return biogasReader->outputSpecs.c_str();
 }
 
 /**

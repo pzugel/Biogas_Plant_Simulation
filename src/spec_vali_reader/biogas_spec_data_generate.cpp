@@ -15,6 +15,44 @@
 #include <regex>
 #include <boost/algorithm/string.hpp>
 #include <stdexcept>
+#include <iostream>
+
+void BiogasSpecValiReader::
+generateSpecIndents(std::string input){
+	std::cout << "generateSpecIndents()" << std::endl;
+	
+	std::regex param_open ("\\{");
+	std::regex param_close ("\\}$");
+	std::regex param_close_comma ("\\},$");
+	std::regex comma (",");
+	std::regex eq ("=$");
+
+	input = std::regex_replace(input, param_open, "{\n");
+	input = std::regex_replace(input, comma, "\n");
+	
+	//std::cout << input << std::endl;
+	
+	this->entries = {};
+	std::istringstream lineIter(input);
+	int ind = 0;
+	for(std::string line; std::getline(lineIter, line); )
+	{
+		if (line.find('=') != std::string::npos || line.rfind("$", 0) == 0)
+		{
+			//std::cout << ind << std::endl;
+			TableEntry* newEntry = new TableEntry();
+			newEntry->indent = ind;
+			this->entries.push_back(*newEntry);
+		}
+		if (line.find('{') != std::string::npos)
+			ind += 1;
+		if (line.find('}') != std::string::npos)
+			ind -= 1;	
+	}
+	
+	this->number_of_entries = this->entries.size();
+	std::cout << "INDENTS SPEC: " << this->entries.size() << std::endl;
+}
 
 /**
  * Transform the specification input
@@ -26,11 +64,14 @@
 void BiogasSpecValiReader::
 transformSpecInput()
 {
+	std::cout << "transformSpecInput()" << std::endl;
+	//std::cout << std::endl;
+	//std::cout << std::endl;
 	this->input_specModified= this->input;
 
 	this->input_specModified.erase(remove_if(this->input_specModified.begin(), this->input_specModified.end(), isspace), this->input_specModified.end());
 	std::regex str_arr ("\\{\"[a-zA-Z0-9_]+\"\\}");
-	std::regex timestamp ("\\{[0-9E.\\-\\*]+,[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}");
 
 	std::smatch match_strArr; //Match types Str[]
 	while (regex_search(this->input_specModified, match_strArr, str_arr)) 
@@ -42,9 +83,14 @@ transformSpecInput()
 	std::smatch match_timeStamps; //Match timestamps
 	while (regex_search(this->input_specModified, match_timeStamps, timestamp)) 
 	{
-		std::string::size_type pos = match_timeStamps.str(0).find(",");
-		std::string::size_type pos_end = match_timeStamps.str(0).find("}");
-		std::string replacement = "$" + match_timeStamps.str(0).substr(1, pos-1) + "#" + match_timeStamps.str(0).substr(pos+1,pos_end-(pos+1)) + "?";
+		std::cout << "match_timeStamps.str(0): " << match_timeStamps.str(0) << std::endl;
+		std::string replacement = match_timeStamps.str(0);
+		boost::replace_all(replacement, "{", "$");
+		boost::replace_all(replacement, "}", "?");
+		boost::replace_all(replacement, ",", "#");
+		//std::string::size_type pos = match_timeStamps.str(0).find(",");
+		//std::string::size_type pos_end = match_timeStamps.str(0).find("}");
+		//std::string replacement = "$" + match_timeStamps.str(0).substr(1, pos-1) + "#" + match_timeStamps.str(0).substr(pos+1,pos_end-(pos+1)) + "?";
 		boost::replace_all(this->input_specModified, match_timeStamps.str(0), replacement);  
 	} 
 	
@@ -53,6 +99,8 @@ transformSpecInput()
 	std::regex param_close_comma ("\\},$");
 	std::regex comma (",");
 	std::regex eq ("=$");
+	
+	generateSpecIndents(this->input_specModified);
 
 	this->input_specModified = std::regex_replace(this->input_specModified, param_open, "\n");
 	this->input_specModified = std::regex_replace(this->input_specModified, comma, "\n");
@@ -69,77 +117,12 @@ transformSpecInput()
 		if(!line.empty())
 			tmp += line + "\n";
 	}
+	
 	this->input_specModified = tmp;
+	
 	boost::replace_all(this->input_specModified, "$", "{");
 	boost::replace_all(this->input_specModified, "?", "}");
 	boost::replace_all(this->input_specModified, "#", ",");
-}
-
-/**
- * Test if specification file matches with parameters from validation file
- *
- * Checks whether the number of parameters from the specification file
- * is equal to the number of parameters in the validation file. If true
- * we also check if all parameters have the same name.
- * 
- * If the files do not match we wont load the specification into LabView
- * and write an error message into "validationMessage".
- * 
- * @return Bool whether match is successful
- */
-bool BiogasSpecValiReader::
-testValidationMatch()
-{
-	std::istringstream lineIterCount(this->input_specModified);
-	int num_lines_count = 0;
-	for(std::string line; std::getline(lineIterCount, line); )
-		++num_lines_count;
-		
-	if(num_lines_count!=this->number_of_entries)
-	{
-		this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
-		this->validationMessage += "--> #parameters in the validation file: " + std::to_string(this->number_of_entries) +"\n";
-		this->validationMessage += "--> #parameters in the specification file: " + std::to_string(num_lines_count) +"\n";
-		return false; //Different number of parameters
-	}
-
-	std::regex timestamp ("\\{[0-9E.\\-\\*]+,[0-9E.\\-\\*]+\\}");
-	std::istringstream lineIter(this->input_specModified);
-	
-	int num_lines_test = 0;
-	for(std::string line; std::getline(lineIter, line); )
-	{
-		size_t valuePos = line.find("="); 
-		if(!std::regex_search(line, timestamp))
-		{
-			if (valuePos == std::string::npos)
-			{
-				if(line!=this->entries[num_lines_test].leftCell)
-				{
-					this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
-					this->validationMessage += "--> " + line +"\n";
-					this->validationMessage += "--> " + entries[num_lines_test].leftCell +"\n";
-					return false; //Name does not match the validation file
-				}
-			}
-			else
-			{
-				std::string specName = line.substr(0,valuePos);
-				boost::replace_all(specName, "[", "");
-				boost::replace_all(specName, "]", "");
-				if(specName!=this->entries[num_lines_test].leftCell)
-				{
-					this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
-					this->validationMessage += "--> " + specName +"\n";
-					this->validationMessage += "--> " + entries[num_lines_test].leftCell +"\n";
-					return false; //Name does not match the validation file
-				}
-			}
-		}
-		++num_lines_test;
-	}
-	
-	return true;
 }
 
 /**
@@ -157,10 +140,7 @@ testValidationMatch()
 bool BiogasSpecValiReader::
 generateSpecs()
 {	
-	if(!testValidationMatch())
-		return false;
-		
-	std::regex timestamp ("\\{[0-9E.\\-\\*]+,[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}");
 	
 	std::istringstream lineIter(this->input_specModified);
 	int index = 0;
@@ -171,18 +151,39 @@ generateSpecs()
 		{
 			if(std::regex_search(line, timestamp))
 			{
+				std::cout << "timeStamp: " << line << std::endl;
 				this->entries[index].specVal = line;
+				this->entries[index].leftCell = "timeStamp";
+				this->entries[index].type = "NULL";
+				this->entries[index].glyph = 0;
+			}
+			else
+			{
+				this->entries[index].leftCell = line;
+				this->entries[index].glyph = 15;
+				this->entries[index].type = " ";
 			}
 		}
 		else
 		{
+			this->entries[index].glyph = 0;
+			this->entries[index].type = "NULL";
 			this->entries[index].specVal = line.substr(valuePos+1);
+			this->entries[index].leftCell = line.substr(0, valuePos);
 		}
 		++index;
 	}
 
 	for(int i=0; i<this->number_of_entries; i++)
-		this->specString += entries[i].specVal + "\n";
-		
+	{
+		this->specString += 
+		std::to_string(this->entries[i].indent) + " " +
+		std::to_string(this->entries[i].glyph) + " " +
+		this->entries[i].leftCell + " " +
+		this->entries[i].type + " " +
+		this->entries[i].specVal + "\n";
+	}
+	
+	std::cout << this->specString << std::endl;
 	return true;
 }

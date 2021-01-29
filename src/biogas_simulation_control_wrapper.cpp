@@ -21,8 +21,8 @@ static int iteration;
 static std::string console_output;
 
 static std::string simulation_file;
-static std::string validation_file;
-static std::string specification_file;
+static std::string hydrolyse_specification;
+static std::string methane_specification;
 static std::string working_directory;
 
 static double sim_starttime;
@@ -93,29 +93,29 @@ const char* get_simulation_file()
 }
 
 /**
- * Getter/setter for the path to the validation file
+ * Getter/setter for the path to the hydrolyse specification file
  */
-void set_validation_file(const char* val_file)
+void set_hydrolyse_specification(const char* hydrolyse_spec_file)
 {
-	validation_file = (std::string) val_file;
+	hydrolyse_specification = (std::string) hydrolyse_spec_file;
 }
 
-const char* get_validation_file()
+const char* get_hydrolyse_specification()
 {
-	return validation_file.c_str();
+	return hydrolyse_specification.c_str();
 }
 
 /**
- * Getter/setter for the path to the specification file
+ * Getter/setter for the path to the methane specification file
  */
-void set_specification_file(const char* spec_file)
+void set_methane_specification(const char* methane_spec_file)
 {
-	specification_file = (std::string) spec_file;
+	methane_specification = (std::string) methane_spec_file;
 }
 
-const char* get_specification_file()
+const char* get_methane_specification()
 {
-	return specification_file.c_str();
+	return methane_specification.c_str();
 }
 
 /**

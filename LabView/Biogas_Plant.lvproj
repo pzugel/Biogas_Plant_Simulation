@@ -30,9 +30,15 @@
 				<Item Name="validate_button.ctl" Type="VI" URL="../controls/validate_button.ctl"/>
 			</Item>
 			<Item Name="Elements" Type="Folder">
+				<Item Name="SubVI" Type="Folder">
+					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
+					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
+					<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
+					<Item Name="methane_reactor_setup.vi" Type="VI" URL="../subVI/methane_reactor_setup.vi"/>
+					<Item Name="storage_run.vi" Type="VI" URL="../subVI/storage_run.vi"/>
+				</Item>
 				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
 				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
-				<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
 			</Item>
 			<Item Name="Libraries" Type="Folder">
@@ -48,40 +54,40 @@
 				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../structures/3_STAGE_DUMMY.vi"/>
 			</Item>
 			<Item Name="SubVI" Type="Folder">
-				<Item Name="Initializer" Type="Folder">
-					<Item Name="initializer.vi" Type="VI" URL="../subVI/initializer.vi"/>
-					<Item Name="initializer_close.vi" Type="VI" URL="../subVI/initializer_close.vi"/>
-					<Item Name="initializer_highlight_validation.vi" Type="VI" URL="../subVI/initializer_highlight_validation.vi"/>
-					<Item Name="initializer_init_controls.vi" Type="VI" URL="../subVI/initializer_init_controls.vi"/>
-					<Item Name="initializer_init_panel.vi" Type="VI" URL="../subVI/initializer_init_panel.vi"/>
-					<Item Name="initializer_load_sim.vi" Type="VI" URL="../subVI/initializer_load_sim.vi"/>
-					<Item Name="initializer_load_spec.vi" Type="VI" URL="../subVI/initializer_load_spec.vi"/>
-					<Item Name="initializer_load_vali.vi" Type="VI" URL="../subVI/initializer_load_vali.vi"/>
-					<Item Name="initializer_output.vi" Type="VI" URL="../subVI/initializer_output.vi"/>
-					<Item Name="initializer_prepare_specfile.vi" Type="VI" URL="../subVI/initializer_prepare_specfile.vi"/>
-					<Item Name="initializer_run.vi" Type="VI" URL="../subVI/initializer_run.vi"/>
-					<Item Name="initializer_save_spec.vi" Type="VI" URL="../subVI/initializer_save_spec.vi"/>
-					<Item Name="initializer_set_time.vi" Type="VI" URL="../subVI/initializer_set_time.vi"/>
-					<Item Name="initializer_tree_control.vi" Type="VI" URL="../subVI/initializer_tree_control.vi"/>
-					<Item Name="initializer_validate_specs.vi" Type="VI" URL="../subVI/initializer_validate_specs.vi"/>
+				<Item Name="Element Editor" Type="Folder">
+					<Item Name="element_editor.vi" Type="VI" URL="../subVI/element_editor.vi"/>
+					<Item Name="element_editor_close.vi" Type="VI" URL="../subVI/element_editor_close.vi"/>
+					<Item Name="element_editor_highlight_validation.vi" Type="VI" URL="../subVI/element_editor_highlight_validation.vi"/>
+					<Item Name="element_editor_hydroyse_run.vi" Type="VI" URL="../subVI/element_editor_hydroyse_run.vi"/>
+					<Item Name="element_editor_init_tree.vi" Type="VI" URL="../subVI/element_editor_init_tree.vi"/>
+					<Item Name="element_editor_list_hydrolyse.vi" Type="VI" URL="../subVI/element_editor_list_hydrolyse.vi"/>
+					<Item Name="element_editor_load_spec.vi" Type="VI" URL="../subVI/element_editor_load_spec.vi"/>
+					<Item Name="element_editor_load_vali.vi" Type="VI" URL="../subVI/element_editor_load_vali.vi"/>
+					<Item Name="element_editor_methane_run.vi" Type="VI" URL="../subVI/element_editor_methane_run.vi"/>
+					<Item Name="element_editor_save.vi" Type="VI" URL="../subVI/element_editor_save.vi"/>
+					<Item Name="element_editor_save_as.vi" Type="VI" URL="../subVI/element_editor_save_as.vi"/>
+					<Item Name="element_editor_tree_control.vi" Type="VI" URL="../subVI/element_editor_tree_control.vi"/>
+					<Item Name="element_editor_validate_specs.vi" Type="VI" URL="../subVI/element_editor_validate_specs.vi"/>
 				</Item>
 				<Item Name="Main Panel" Type="Folder">
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
 					<Item Name="main_console_output.vi" Type="VI" URL="../subVI/main_console_output.vi"/>
 					<Item Name="main_impressum.vi" Type="VI" URL="../subVI/main_impressum.vi"/>
+					<Item Name="main_init_element_specs.vi" Type="VI" URL="../subVI/main_init_element_specs.vi"/>
 					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>
 					<Item Name="main_kill_ugshell.vi" Type="VI" URL="../subVI/main_kill_ugshell.vi"/>
+					<Item Name="main_panel_run_init.vi" Type="VI" URL="../subVI/main_panel_run_init.vi"/>
 					<Item Name="main_reactor_display.vi" Type="VI" URL="../subVI/main_reactor_display.vi"/>
 					<Item Name="main_reset_panel.vi" Type="VI" URL="../subVI/main_reset_panel.vi"/>
 					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
 					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
 					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
+					<Item Name="main_time_control.vi" Type="VI" URL="../subVI/main_time_control.vi"/>
 				</Item>
 				<Item Name="Plant" Type="Folder">
 					<Item Name="plant_pause.vi" Type="VI" URL="../subVI/plant_pause.vi"/>
 					<Item Name="plant_stop.vi" Type="VI" URL="../subVI/plant_stop.vi"/>
 					<Item Name="plant_structure.vi" Type="VI" URL="../subVI/plant_structure.vi"/>
-					<Item Name="plant_write_checkpoint_spec.vi" Type="VI" URL="../subVI/plant_write_checkpoint_spec.vi"/>
 				</Item>
 				<Item Name="Plot" Type="Folder">
 					<Item Name="Tree Control" Type="Folder">
@@ -164,7 +170,6 @@
 				<Item Name="eventvkey.ctl" Type="VI" URL="/&lt;vilib&gt;/event_ctls.llb/eventvkey.ctl"/>
 				<Item Name="ex_CorrectErrorChain.vi" Type="VI" URL="/&lt;vilib&gt;/express/express shared/ex_CorrectErrorChain.vi"/>
 				<Item Name="imagedata.ctl" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/imagedata.ctl"/>
-				<Item Name="subDisplayMessage.vi" Type="VI" URL="/&lt;vilib&gt;/express/express output/DisplayMessageBlock.llb/subDisplayMessage.vi"/>
 				<Item Name="subElapsedTime.vi" Type="VI" URL="/&lt;vilib&gt;/express/express execution control/ElapsedTimeBlock.llb/subElapsedTime.vi"/>
 				<Item Name="subFile Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/express/express input/FileDialogBlock.llb/subFile Dialog.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>

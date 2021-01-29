@@ -15,6 +15,9 @@
 #include <fstream>	
 #include <regex>
 #include <boost/algorithm/string.hpp>
+#include <iostream>
+
+static int number_of_validation_entries;
 
 /**
  * Transform the validation input
@@ -106,7 +109,7 @@ generateIndents()
 			ind -= 1;
 	}
 
-	this->number_of_entries = this->entries.size();
+	number_of_validation_entries = this->entries.size();
 }
 
 /**
@@ -118,7 +121,7 @@ generateIndents()
 void BiogasSpecValiReader::
 generateGlyphs()
 {
-	for(int i=0; i<this->number_of_entries-1; i++)
+	for(int i=0; i<number_of_validation_entries-1; i++)
 	{
 		if(this->entries[i].indent<this->entries[i+1].indent)
 		{
@@ -137,7 +140,7 @@ generateGlyphs()
  * been prepared by the "transformValiInput()" method for 
  * easier parsing.
  */
-void BiogasSpecValiReader::
+bool BiogasSpecValiReader::
 generateValues()
 {	
 	std::string line_input = this->input_valiModified; 
@@ -196,7 +199,7 @@ generateValues()
 	}
 
 	this->valiString = "";
-	for(int i=0; i<this->number_of_entries; i++)
+	for(int i=0; i<number_of_validation_entries; i++)
 	{
 		this->valiString += std::to_string(this->entries[i].indent) + " " + 
 			std::to_string(this->entries[i].glyph) + " " + 
@@ -205,4 +208,82 @@ generateValues()
 			this->entries[i].defaultVal + "\n";		
 	}
 	this->valiString.resize(this->valiString.size() - 1);
+	//std::cout << std::endl;
+	//std::cout << this->valiString << std::endl;
+	
+	return testValidationMatch();
+}
+
+/**
+ * Test if specification file matches with parameters from validation file
+ *
+ * Checks whether the number of parameters from the specification file
+ * is equal to the number of parameters in the validation file. If true
+ * we also check if all parameters have the same name.
+ * 
+ * If the files do not match we wont load the specification into LabView
+ * and write an error message into "validationMessage".
+ * 
+ * @return Bool whether match is successful
+ */
+bool BiogasSpecValiReader::
+testValidationMatch()
+{
+	std::cout << "testValidationMatch" << std::endl;
+	std::istringstream lineIterCount(this->valiString);
+	//int num_lines_count = 0;
+	//for(std::string line; std::getline(lineIterCount, line); )
+	//	++num_lines_count;
+	//std::cout << "num_lines_count: " << num_lines_count << std::endl;
+	std::cout << "number_of_validation_entries: " << number_of_validation_entries << std::endl;
+	std::cout << "this->number_of_entries: " << this->number_of_entries << std::endl;	
+	if(number_of_validation_entries!=this->number_of_entries)
+	{
+		this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
+		this->validationMessage += "--> #parameters in the validation file: " + std::to_string(this->number_of_entries) +"\n";
+		this->validationMessage += "--> #parameters in the specification file: " + std::to_string(number_of_validation_entries) +"\n";
+		std::cout << this->validationMessage << std::endl;
+		return false; //Different number of parameters
+	}
+
+	std::regex timestamp ("\\{[0-9E.\\-\\*]+,[0-9E.\\-\\*]+\\}");
+	std::istringstream lineIter(this->input_specModified);
+	
+	int num_lines_test = 0;
+	for(std::string line; std::getline(lineIter, line); )
+	{
+		size_t valuePos = line.find("="); 
+		if(!std::regex_search(line, timestamp))
+		{
+			if (valuePos == std::string::npos)
+			{
+				if(line!=this->entries[num_lines_test].leftCell)
+				{
+					this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
+					this->validationMessage += "--> " + line +"\n";
+					this->validationMessage += "--> " + entries[num_lines_test].leftCell +"\n";
+					std::cout << this->validationMessage << std::endl;
+					return false; //Name does not match the validation file
+				}
+			}
+			else
+			{
+				std::string specName = line.substr(0,valuePos);
+				boost::replace_all(specName, "[", "");
+				boost::replace_all(specName, "]", "");
+				if(specName!=this->entries[num_lines_test].leftCell)
+				{
+					this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
+					this->validationMessage += "--> " + specName +"\n";
+					this->validationMessage += "--> " + entries[num_lines_test].leftCell +"\n";
+					std::cout << this->validationMessage << std::endl;
+					return false; //Name does not match the validation file
+				}
+			}
+		}
+		++num_lines_test;
+	}
+	
+	std::cout << this->validationMessage << std::endl;
+	return true;
 }

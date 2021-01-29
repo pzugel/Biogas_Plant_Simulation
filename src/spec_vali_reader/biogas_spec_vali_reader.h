@@ -55,14 +55,15 @@ class BiogasSpecValiReader {
 		bool init_Vali(const char* filepath_vali);
 		bool init_Spec(const char* filepath_spec);
 		bool validateSpecs(std::string);
-		bool writeOutputSpecs(std::string);
+		void writeOutputSpecs(std::string);
+		void generateSpecIndents(std::string);
 	private:
 		bool readInput(std::string);	
 		void transformValiInput();
 		void transformSpecInput();
 		void generateIndents();
 		void generateGlyphs();
-		void generateValues();
+		bool generateValues();
 		bool generateSpecs();
 		bool testValidationMatch();
 };

@@ -19,13 +19,15 @@
 #include "biogas_vali_data_generate.cpp"
 #include "biogas_spec_data_generate.cpp"
 
+#include <iostream>
+
 /**
  * Initialize validation input
  *
  * Main method for validation files. Loads the
  * file and calls all methods to read in the data.
  *
- * @return Bool if file could be read
+ * @return Bool if file could be read and matched to the specification
  */
 bool BiogasSpecValiReader::
 init_Vali(const char* filepath_vali)
@@ -35,8 +37,7 @@ init_Vali(const char* filepath_vali)
 		this->transformValiInput();
 		this->generateIndents();
 		this->generateGlyphs();
-		this->generateValues();
-		return true;
+		return this->generateValues();
 	}
 	
 	return false;
@@ -55,6 +56,7 @@ init_Spec(const char* filepath_spec)
 {
 	if(this->readInput((std::string) filepath_spec))
 	{
+		std::cout << "init_Spec()" << std::endl;
 		this->transformSpecInput();
 		return this->generateSpecs();
 	}
