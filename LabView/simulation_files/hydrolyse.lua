@@ -1,7 +1,7 @@
 problem={
 	reactorSetup={
 		operatingTemperature=311.15,
-		reactorType="CSTR",
+		reactorType="Downflow",
 		realReactorVolume=34.5,
 	},
 	reactionSetup={

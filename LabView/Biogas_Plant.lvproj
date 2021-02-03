@@ -18,7 +18,9 @@
 				<Item Name="add_button.ctl" Type="VI" URL="../controls/add_button.ctl"/>
 				<Item Name="help_button.ctl" Type="VI" URL="../controls/help_button.ctl"/>
 				<Item Name="load_button.ctl" Type="VI" URL="../controls/load_button.ctl"/>
+				<Item Name="methane_picButton.ctl" Type="VI" URL="../controls/methane_picButton.ctl"/>
 				<Item Name="open_button.ctl" Type="VI" URL="../controls/open_button.ctl"/>
+				<Item Name="open_picButton.ctl" Type="VI" URL="../controls/open_picButton.ctl"/>
 				<Item Name="pause_button.ctl" Type="VI" URL="../controls/pause_button.ctl"/>
 				<Item Name="plot_button.ctl" Type="VI" URL="../controls/plot_button.ctl"/>
 				<Item Name="refresh_button.ctl" Type="VI" URL="../controls/refresh_button.ctl"/>
@@ -26,6 +28,7 @@
 				<Item Name="save_button.ctl" Type="VI" URL="../controls/save_button.ctl"/>
 				<Item Name="stop_button.ctl" Type="VI" URL="../controls/stop_button.ctl"/>
 				<Item Name="stop_sim_button.ctl" Type="VI" URL="../controls/stop_sim_button.ctl"/>
+				<Item Name="storage_picButton.ctl" Type="VI" URL="../controls/storage_picButton.ctl"/>
 				<Item Name="uncouple_button.ctl" Type="VI" URL="../controls/uncouple_button.ctl"/>
 				<Item Name="validate_button.ctl" Type="VI" URL="../controls/validate_button.ctl"/>
 			</Item>
@@ -105,6 +108,7 @@
 				</Item>
 			</Item>
 		</Item>
+		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
@@ -174,6 +178,7 @@
 				<Item Name="subFile Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/express/express input/FileDialogBlock.llb/subFile Dialog.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
 			</Item>
+			<Item Name="hydrolyse_picButton.ctl" Type="VI" URL="../controls/hydrolyse_picButton.ctl"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build"/>
 	</Item>
