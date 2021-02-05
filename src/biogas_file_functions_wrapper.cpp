@@ -66,6 +66,25 @@ const char* remove_header(const char* path)
 }
 
 /**
+ *  Removes all header lines from a .txt file as string
+ * 
+ * @param path: *.txt file as string
+ * @return The plain text without header lines
+ */
+const char* remove_header_from_string(const char* file_as_string)
+{
+	data_string = "";
+	std::regex header ("(^#)|(^[a-zA-Z])");
+	std::stringstream STRInput(file_as_string);
+	for(std::string line; getline(STRInput,line);)
+	{
+		if(!(std::regex_search(line, header)))
+			data_string += line + "\n";
+	}
+	return data_string.c_str();
+}
+
+/**
  * Loads a CSV-style *.txt file and extracts all header lines 
  * 
  * @param path: Path pointing to a *.txt file
@@ -144,7 +163,7 @@ void merge_all_hydrolysis(
 		is_first_timestep = true;
 		
 	std::string storage_dir = (std::string) working_dir + "/storage_hydrolyse";
-	std::cout << "storage_dir: " << storage_dir << std::endl;
+	std::cout << "storage_dir: " << storage_dir << "\n" << std::endl;
 	
 	//Merge hydrolysis files (no integration)
 	for(const auto& f: hydrolyse_files) {
@@ -154,16 +173,16 @@ void merge_all_hydrolysis(
 			current_starttime,
 			reactors);
 		std::ofstream output_file;
-		std::string new_file = storage_dir + "/" + f;
-		std::cout << new_file << std::endl;
+		std::string output_file_name = storage_dir + "/" + f;
+		std::cout << output_file_name << std::endl;
 		
 		if(is_first_timestep){
-			output_file.open(new_file);
+			output_file.open(output_file_name);
 			output_file << header_string;
 			output_file << output_file_string;
 		}
 		else{
-			output_file.open(new_file, std::ios_base::app);
+			output_file.open(output_file_name, std::ios_base::app);
 			output_file << output_file_string;
 		}
 			
@@ -171,7 +190,7 @@ void merge_all_hydrolysis(
 		std::cout << output_file_string << std::endl;
 	}
 	
-	testString = "testString:\n";
+	std::cout << "Integrating files ...." << std::endl;
 	
 	//Merge hydrolysis files with integration
 	for(const auto& f: hydrolyse_files_integration) {
@@ -184,34 +203,40 @@ void merge_all_hydrolysis(
 			if(i!=num_reactors-1)
 				output_names += "\n";
 		}
-		testString += output_names + "\n";
-		std::cout << std::endl;
-		std::cout << output_names << std::endl;
-		
-		std::string output_file_name = storage_dir + "/" + f;
-		std::cout << "Output Dir:" << output_file_name << std::endl;
-		testString += "Output Dir:" + output_file_name + "\n";
-		
-		merge_hydrolysis_files_integration(
-			output_file_name,
+
+		std::string output_file_string = merge_hydrolysis_files_integration(
 			current_starttime, 
 			num_reactors,
 			output_names);
+		std::ofstream output_file;
+		std::string output_file_name = storage_dir + "/" + f;
+		std::cout << output_file_name << std::endl;
+	
+		if(is_first_timestep){
+			output_file.open(output_file_name);
+			output_file << output_file_string;
+		}
+		else{
+			output_file.open(output_file_name, std::ios_base::app);
+			remove_header_from_string(output_file_string.c_str());
+			output_file << data_string;
+		}
+		
+		output_file.close();
+		std::cout << output_file_string << std::endl;
 	}
-}
-
-const char* getTestString(){
-	return testString.c_str();
 }
 
 } //end extern "C"
 
 int main(){
+	const char* reactors = "hydrolyse_0\nhydrolyse_1\nhydrolyse_2";
+	
 	merge_all_hydrolysis(
 		"/home/paul/Schreibtisch/smalltest/tmp",
-		"hydrolyse_0\nhydrolyse_1\nhydrolyse_2",
+		reactors,
 		0,
 		0);
-		std::cout << testString << std::endl;
+		//std::cout << testString << std::endl;
 	return 0;
 }
