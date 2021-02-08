@@ -4,12 +4,13 @@
 	<Property Name="NI.Lib.SourceVersion" Type="Int">419463168</Property>
 	<Property Name="NI.Lib.Version" Type="Str">1.0.0.0</Property>
 	<Item Name="VI" Type="Folder">
+		<Item Name="get header.vi" Type="VI" URL="../VIs/get header.vi"/>
+		<Item Name="merge all hydrolysis.vi" Type="VI" URL="../VIs/merge all hydrolysis.vi"/>
+		<Item Name="merge hydrolysis files.vi" Type="VI" URL="../VIs/merge hydrolysis files.vi"/>
 		<Item Name="read filenames.vi" Type="VI" URL="../VIs/read filenames.vi"/>
 		<Item Name="remove header.vi" Type="VI" URL="../VIs/remove header.vi"/>
 	</Item>
 	<Item Name="file_functions.dll" Type="Document" URL="../../file_functions.dll"/>
-	<Item Name="get header.vi" Type="VI" URL="../VIs/get header.vi"/>
 	<Item Name="libFileFunctions.so" Type="Document" URL="../libFileFunctions.so"/>
-	<Item Name="merge all hydrolysis.vi" Type="VI" URL="../VIs/merge all hydrolysis.vi"/>
-	<Item Name="merge hydrolysis files.vi" Type="VI" URL="../VIs/merge hydrolysis files.vi"/>
+	<Item Name="merge one hydrolysis reactor.vi" Type="VI" URL="../VIs/merge one hydrolysis reactor.vi"/>
 </Library>

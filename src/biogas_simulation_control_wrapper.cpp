@@ -28,6 +28,7 @@ static std::string working_directory;
 static double sim_starttime;
 static double sim_endtime;
 static double sim_currenttime;
+static double paused_time;
 
 /**
  * This library only consists of getter/setter parameters to control
@@ -168,6 +169,24 @@ void set_sim_currenttime(double time)
 double get_sim_currenttime()
 {
 	return sim_currenttime;
+}
+
+/**
+ * Getter/setter for the paused time of the simulation
+ */
+void reset_paused_time()
+{
+	paused_time = 0;
+}
+
+void add_paused_time(double time)
+{
+	paused_time += time;
+}
+
+double get_paused_time()
+{
+	return paused_time;
 }
 
 /**

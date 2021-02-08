@@ -14,6 +14,7 @@
 			<Item Name="get hydrolyse specification.vi" Type="VI" URL="../VIs/get hydrolyse specification.vi"/>
 			<Item Name="get iteration.vi" Type="VI" URL="../VIs/get iteration.vi"/>
 			<Item Name="get methane specification.vi" Type="VI" URL="../VIs/get methane specification.vi"/>
+			<Item Name="get paused time.vi" Type="VI" URL="../VIs/get paused time.vi"/>
 			<Item Name="get plant structure.vi" Type="VI" URL="../VIs/get plant structure.vi"/>
 			<Item Name="get sim currenttime.vi" Type="VI" URL="../VIs/get sim currenttime.vi"/>
 			<Item Name="get sim endtime.vi" Type="VI" URL="../VIs/get sim endtime.vi"/>
@@ -27,6 +28,8 @@
 			<Item Name="set sim log.vi" Type="VI" URL="../VIs/set sim log.vi"/>
 		</Item>
 		<Item Name="Setters" Type="Folder">
+			<Item Name="add paused time.vi" Type="VI" URL="../VIs/add paused time.vi"/>
+			<Item Name="reset paused time.vi" Type="VI" URL="../VIs/reset paused time.vi"/>
 			<Item Name="set active element.vi" Type="VI" URL="../VIs/set active element.vi"/>
 			<Item Name="set hydrolyse specification.vi" Type="VI" URL="../VIs/set hydrolyse specification.vi"/>
 			<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>

@@ -227,9 +227,66 @@ void merge_all_hydrolysis(
 	}
 }
 
+/**
+ * Only concatenates files from one hydrolysis reactor. 
+ * No summation,integration or modification of any sort. 
+ * This function will only be used to plot the outputs of a single reactor.
+ * 
+ * @param working_dir: Path pointing to a hydrolyse foldes
+ * @param simulation_starttime: Starttime of the whole simulation
+ * @param current_starttime: Current timestep in the simulation
+ */
+void merge_one_hydrolysis_reactor(
+	const char* working_dir,
+	int simulation_starttime,
+	int current_starttime)
+{	
+	std::vector<std::string> all_hydrolyse_files = hydrolyse_files;
+	all_hydrolyse_files.insert(all_hydrolyse_files.end(), 
+		hydrolyse_files_integration.begin(), 
+		hydrolyse_files_integration.end());
+	
+	std::string timestep_dir = (std::string) working_dir + "/" + to_string(current_starttime);
+	
+	bool is_first_timestep = false;
+	if(simulation_starttime == current_starttime)
+	{
+		is_first_timestep = true;
+		//Copy outputFiles.lua
+		std::ifstream output_files_lua;
+		output_files_lua.open(timestep_dir + "/outputFiles.lua");
+		std::ofstream copy_file;
+		copy_file.open((std::string) working_dir + "/outputFiles.lua");
+		copy_file << output_files_lua.rdbuf();
+		copy_file.close();
+	}
+	
+	for(const auto& f: all_hydrolyse_files) {
+		std::ofstream output_file;
+		std::string input_file_name = (std::string) timestep_dir + "/" + f;
+		std::string output_file_name = (std::string) working_dir + "/" + f;
+		
+		std::ifstream input_file_stream(input_file_name);
+		if(input_file_stream.good())
+		{	
+			if(is_first_timestep){
+				output_file.open(output_file_name);
+				output_file << input_file_stream.rdbuf();
+			}
+			else{
+				output_file.open(output_file_name, std::ios_base::app);
+				remove_header(input_file_name.c_str());
+				output_file << data_string;
+			}
+		}
+		output_file.close();
+	}
+}
+
 } //end extern "C"
 
 int main(){
+	/*
 	const char* reactors = "hydrolyse_0\nhydrolyse_1\nhydrolyse_2";
 	
 	merge_all_hydrolysis(
@@ -238,5 +295,11 @@ int main(){
 		0,
 		0);
 		//std::cout << testString << std::endl;
+	*/
+	merge_one_hydrolysis_reactor(
+		"/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0",
+		0,
+		0
+	);
 	return 0;
 }

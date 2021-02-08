@@ -37,4 +37,8 @@ double get_sim_endtime();
 void set_sim_currenttime(double time);
 double get_sim_currenttime();
 
+void reset_paused_time();
+void add_paused_time(double time);
+double get_paused_time();
+
 const char* load_outputFiles(const char* filepath);

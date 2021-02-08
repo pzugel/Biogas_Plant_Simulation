@@ -17,6 +17,7 @@
 			<Item Name="Controls" Type="Folder">
 				<Item Name="add_button.ctl" Type="VI" URL="../controls/add_button.ctl"/>
 				<Item Name="help_button.ctl" Type="VI" URL="../controls/help_button.ctl"/>
+				<Item Name="hydrolyse_picButton.ctl" Type="VI" URL="../controls/hydrolyse_picButton.ctl"/>
 				<Item Name="load_button.ctl" Type="VI" URL="../controls/load_button.ctl"/>
 				<Item Name="methane_picButton.ctl" Type="VI" URL="../controls/methane_picButton.ctl"/>
 				<Item Name="open_button.ctl" Type="VI" URL="../controls/open_button.ctl"/>
@@ -34,6 +35,7 @@
 			</Item>
 			<Item Name="Elements" Type="Folder">
 				<Item Name="SubVI" Type="Folder">
+					<Item Name="hydrolyse_reactor_merge.vi" Type="VI" URL="../subVI/hydrolyse_reactor_merge.vi"/>
 					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
 					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
 					<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
@@ -110,6 +112,7 @@
 		</Item>
 		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
+		<Item Name="main_runtime_display.vi" Type="VI" URL="../subVI/main_runtime_display.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>
@@ -178,7 +181,6 @@
 				<Item Name="subFile Dialog.vi" Type="VI" URL="/&lt;vilib&gt;/express/express input/FileDialogBlock.llb/subFile Dialog.vi"/>
 				<Item Name="whitespace.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/whitespace.ctl"/>
 			</Item>
-			<Item Name="hydrolyse_picButton.ctl" Type="VI" URL="../controls/hydrolyse_picButton.ctl"/>
 		</Item>
 		<Item Name="Build Specifications" Type="Build"/>
 	</Item>
