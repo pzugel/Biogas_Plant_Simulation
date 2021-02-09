@@ -85,6 +85,7 @@
 					<Item Name="main_reactor_display.vi" Type="VI" URL="../subVI/main_reactor_display.vi"/>
 					<Item Name="main_reset_panel.vi" Type="VI" URL="../subVI/main_reset_panel.vi"/>
 					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
+					<Item Name="main_runtime_display.vi" Type="VI" URL="../subVI/main_runtime_display.vi"/>
 					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
 					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
 					<Item Name="main_time_control.vi" Type="VI" URL="../subVI/main_time_control.vi"/>
@@ -112,7 +113,6 @@
 		</Item>
 		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
-		<Item Name="main_runtime_display.vi" Type="VI" URL="../subVI/main_runtime_display.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>

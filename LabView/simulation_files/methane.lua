@@ -53,8 +53,6 @@ problem = {
 	inflow = {
 		data = {"Acetic"},	-- options are substance massfractions (e.g. Acetic, Propionic) in [g/L]
 		timetable = {	-- Pairs with time of inflow [hours] and amount of overall inflow (hydrolysate) [L/h] and additional data: {time, amount overall, additional data}							
-			{0, 10.417, 0.457},
-			{24, 6.250, 0.548}
 		},
 	},
 	

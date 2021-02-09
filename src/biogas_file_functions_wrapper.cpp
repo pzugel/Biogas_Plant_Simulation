@@ -16,14 +16,16 @@
 #include <boost/algorithm/string.hpp>
 #include <iostream>
 #include <iomanip>
+#include <algorithm>
 
 
-#include "storage_functions/storage.h"
-#include "storage_functions/merge_hydrolysis.cpp"
-#include "storage_functions/merge_hydrolysis_integration.cpp"
+#include "file_functions/functions.h"
+#include "file_functions/merge_hydrolysis.cpp"
+#include "file_functions/merge_hydrolysis_integration.cpp"
+#include "file_functions/methane_update_inflow.cpp"
 
-static std::string data_string;
-static std::string header_string;
+//static std::string data_string;
+//static std::string header_string;
 
 static const std::vector<std::string> hydrolyse_files{
 	"digestateConcentrations.txt",
@@ -74,12 +76,15 @@ const char* remove_header(const char* path)
 const char* remove_header_from_string(const char* file_as_string)
 {
 	data_string = "";
+	header_string = "";
 	std::regex header ("(^#)|(^[a-zA-Z])");
 	std::stringstream STRInput(file_as_string);
 	for(std::string line; getline(STRInput,line);)
 	{
 		if(!(std::regex_search(line, header)))
 			data_string += line + "\n";
+		else
+			header_string += line + "\n";
 	}
 	return data_string.c_str();
 }
@@ -283,23 +288,47 @@ void merge_one_hydrolysis_reactor(
 	}
 }
 
+/**
+ * Updates the specification file for the methane reacor with the current
+ * outflow from the hydrolysis reactors (placed in storage)
+ * 
+ * @param outflow_infile: Path pointing the outflow.txt
+ * @param methane_specfile: Path pointing the methane spec file 
+ */
+void update_outflow(
+	const char* outflow_infile,
+	const char* methane_specfile)
+{
+	write_outflow(outflow_infile, methane_specfile);
+}
+
 } //end extern "C"
 
+/**
+ * Only to test functionality
+ */
 int main(){
 	/*
 	const char* reactors = "hydrolyse_0\nhydrolyse_1\nhydrolyse_2";
-	
 	merge_all_hydrolysis(
 		"/home/paul/Schreibtisch/smalltest/tmp",
 		reactors,
 		0,
 		0);
-		//std::cout << testString << std::endl;
 	*/
+	
+	/*
 	merge_one_hydrolysis_reactor(
 		"/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0",
 		0,
 		0
 	);
+	*/
+	
+	
+	const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outflow.txt";
+	const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/tmp/methane/0/methane_checkpoint.lua";
+	update_outflow(outflow_infile, methane_specfile);
+	
 	return 0;
 }

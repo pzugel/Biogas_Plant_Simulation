@@ -3,6 +3,7 @@
 
 CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o
  /home/paul/Schreibtisch/Biogas_plant_setup/src/biogas_file_functions_wrapper.cpp
- /home/paul/Schreibtisch/Biogas_plant_setup/src/storage_functions/merge_hydrolysis.cpp
- /home/paul/Schreibtisch/Biogas_plant_setup/src/storage_functions/merge_hydrolysis_integration.cpp
- /home/paul/Schreibtisch/Biogas_plant_setup/src/storage_functions/storage.h
+ /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/functions.h
+ /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/merge_hydrolysis.cpp
+ /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/merge_hydrolysis_integration.cpp
+ /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/methane_update_inflow.cpp

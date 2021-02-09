@@ -9,8 +9,9 @@
  * GNU Lesser General Public License for more details.
  */
 
+#include "functions.h"
+
 #include <sstream>
-#include "storage.h"
 #include <regex>
 #include <boost/algorithm/string.hpp>
 
@@ -28,7 +29,6 @@ long double dot_conversion_regex(std::string s){
 
 using namespace std;
 
-static std::string testString;
 static string gesamtdatei_string;
 
 static const int timestep = 1; //hourly
