@@ -42,3 +42,7 @@ void add_paused_time(double time);
 double get_paused_time();
 
 const char* load_outputFiles(const char* filepath);
+
+void set_num_hydrolysis_reactors(int num);
+int get_num_hydrolysis_reactors();
+

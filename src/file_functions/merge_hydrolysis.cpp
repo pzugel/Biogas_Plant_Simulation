@@ -37,6 +37,7 @@ double dot_conversion(std::string s){
  */
 bool read_values_from_reactor(std::string dir){
 		std::vector<std::vector<std::string>> hydrofile;
+		std::cout << "read_values_from_reactor: "  << dir << std::endl;
 		std::ifstream f(dir.c_str());
 		if(f.good()){
 			const char* vals = remove_header(dir.c_str());
@@ -84,68 +85,76 @@ std::string merge_hydrolysis_files(
 	std::string output_file_string = "";
 	
 	//Write data into "values" vector
+	bool fileExists = false;
 	values = {};
 	for(const auto& d: reactors) {
 		std::string file_direction = working_dir + "/" 
 			+ d + "/" 
 			+ std::to_string(current_starttime) + "/" 
 			+ (std::string) filename;
-		read_values_from_reactor(file_direction);
+		fileExists = read_values_from_reactor(file_direction);
 	}	
 	
-	std::string dir_for_header = working_dir + "/" + reactors.at(0) 
-		+ "/" + std::to_string(current_starttime) + "/" + filename;
+	if(fileExists)
+	{
+		std::cout << "Adding:" << std::endl;
 
-	get_header(dir_for_header.c_str()); 
-	
-	int num_entries_line = values.at(0).at(0).size(); //Entries per line
-	
-	//line_counter to keep track of the timesteps
-	std::vector<int> line_counter;
-	for(int i=0; i<num_reactors; i++)
-		line_counter.push_back(0);
-	
-	double current_time = current_starttime;
-	double endtime = current_starttime + 1;
-	std::stringstream output_stream;
-	
-	while(current_time < endtime){
-		//Get current max
-		double max_time = 0;
-		for(int j=0; j<num_reactors; j++){
-			int c = line_counter.at(j);
-			double time = dot_conversion(values.at(j).at(c).at(0));
-			if(time>max_time)
-				max_time = time;
-		}
-			
-		//Increase line counter
-		for(int j=0; j<num_reactors; j++){
-
-			while(dot_conversion(values.at(j).at(line_counter.at(j)).at(0)) <= max_time){
-				if(dot_conversion(values.at(j).at(line_counter.at(j)).at(0)) == endtime){
-					line_counter.at(j) += 1;
-					break;
-				}
-					
-				line_counter.at(j) += 1;
-			}
-		}
-	
-		//Combine current timestep
-		output_stream << std::fixed << std::setprecision(p) << max_time << "\t";
-			
-		for(int i=1; i<num_entries_line; i++){
-			double sum = 0;
+		std::string dir_for_header = working_dir + "/" + reactors.at(0) 
+			+ "/" + std::to_string(current_starttime) + "/" + filename;
+		
+		get_header(dir_for_header.c_str()); 
+		
+		int num_entries_line = values.at(0).at(0).size(); //Entries per line
+		
+		//line_counter to keep track of the timesteps
+		std::vector<int> line_counter;
+		for(int i=0; i<num_reactors; i++)
+			line_counter.push_back(0);
+		
+		double current_time = current_starttime;
+		double endtime = current_starttime + 1;
+		std::stringstream output_stream;
+		
+		while(current_time < endtime){
+			//Get current max
+			double max_time = 0;
 			for(int j=0; j<num_reactors; j++){
-				sum += dot_conversion(values.at(j).at(line_counter.at(j)-1).at(i));
+				int c = line_counter.at(j);
+				double time = dot_conversion(values.at(j).at(c).at(0));
+				if(time>max_time)
+					max_time = time;
 			}
-			output_stream << std::fixed << std::setprecision(p) << sum << "\t";
+				
+			//Increase line counter
+			for(int j=0; j<num_reactors; j++){
+
+				while(dot_conversion(values.at(j).at(line_counter.at(j)).at(0)) <= max_time){
+					if(dot_conversion(values.at(j).at(line_counter.at(j)).at(0)) == endtime){
+						line_counter.at(j) += 1;
+						break;
+					}
+						
+					line_counter.at(j) += 1;
+				}
+			}
+		
+			//Combine current timestep
+			output_stream << std::fixed << std::setprecision(p) << max_time << "\t";
+				
+			for(int i=1; i<num_entries_line; i++){
+				double sum = 0;
+				for(int j=0; j<num_reactors; j++){
+					sum += dot_conversion(values.at(j).at(line_counter.at(j)-1).at(i));
+				}
+				output_stream << std::fixed << std::setprecision(p) << sum << "\t";
+			}
+			output_stream << "\n";
+			current_time = max_time;
 		}
-		output_stream << "\n";
-		current_time = max_time;
+		
+		output_file_string += output_stream.str();
 	}
-	
-	output_file_string += output_stream.str();
+	else
+		std::cout << "Nothing to add up!" << std::endl;
 	return output_file_string;
 }

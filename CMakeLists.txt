@@ -18,6 +18,7 @@ set(SpecValiReader			SpecValiReader)
 set(OutputReader			OutputReader)
 set(SimulationControl		SimulationControl)
 set(FileFunctions			FileFunctions)
+set(CheckpointUpdate		CheckpointUpdate)
 
 ################################################################################
 # The code below doesn't have to be changed (usually)
@@ -32,3 +33,4 @@ add_library(${SpecValiReader} SHARED src/biogas_spec_vali_wrapper.cpp)
 add_library(${OutputReader} SHARED src/biogas_output_reader_wrapper.cpp)
 add_library(${SimulationControl} SHARED src/biogas_simulation_control_wrapper.cpp)
 add_library(${FileFunctions} SHARED src/biogas_file_functions_wrapper.cpp)
+add_library(${CheckpointUpdate} SHARED src/biogas_checkpoint_wrapper.cpp)

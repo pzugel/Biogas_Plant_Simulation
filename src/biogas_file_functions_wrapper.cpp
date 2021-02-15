@@ -27,7 +27,7 @@
 //static std::string data_string;
 //static std::string header_string;
 
-static const std::vector<std::string> hydrolyse_files{
+static const std::vector<std::string> all_files{
 	"digestateConcentrations.txt",
 	"subMO_mass.txt",
 	"valveGasFlow.txt",
@@ -37,11 +37,27 @@ static const std::vector<std::string> hydrolyse_files{
 	"dbg_nitrogenRates.txt",
 	"producedNormVolumeHourly.txt",
 	"dbg_phContribution.txt",
+	"dbg_reactionrates.txt",
+	"outflow.txt",
 	"reactorState.txt"};
 	
-static const std::vector<std::string> hydrolyse_files_integration{
+static const std::vector<std::string> output_files{
+	"digestateConcentrations.txt",
+	"subMO_mass.txt",
+	"valveGasFlow.txt",
+	"producedNormVolumeCumulative.txt",
+	"dbg_nitrogenRates.txt",
+	"producedNormVolumeHourly.txt",
+	"dbg_phContribution.txt"};
+	
+static const std::vector<std::string> output_files_integration{
 	"dbg_reactionrates.txt",
 	"outflow.txt"};
+	
+static const std::vector<std::string> output_files_nonAdditive{
+	"dbg_avgEqValues.txt",
+	"gas_Volfraction.txt",
+	"reactorState.txt"};
 
 //dbg_density.txt
 //reactorCODcontent.txt
@@ -137,6 +153,61 @@ const char* read_filenames(const char* path)
 }
 
 /**
+ * Removes unwanted files from the outputFiles.lua
+ * We use this for example to remove "reactorState.txt" out
+ * of the hydrolysis storage, since the values from this textfile
+ * cannot be added together (e.g. PH values). They are specific for 
+ * the hydrolysis reactor and should only be regarded in the 
+ * according context.
+ * 
+ * @param outputFiles_path: Path pointing to outputFiles.lua
+ */
+void update_outputFiles(const char* outputFiles_path)
+{
+	std::string newOutputFiles = "";
+	bool takeLine = true;
+	
+	std::string lastLine = "";
+	std::cout << "Updating: " << outputFiles_path << std::endl;
+	std::fstream stream(outputFiles_path);
+	if(stream.good())
+	{
+		for(std::string line; getline(stream,line);)
+		{
+			if(line.find("filename") != std::string::npos && !takeLine)
+				newOutputFiles += lastLine + "\n";
+				
+			if(line.find("filename") != std::string::npos)
+				takeLine = true;	
+			
+			for(const auto& f: output_files_nonAdditive) {
+				if (line.find(f) != std::string::npos) {
+					takeLine = false;
+					size_t line_begin = newOutputFiles.find(lastLine);
+					newOutputFiles.erase(line_begin-1, lastLine.size()+1);
+				}
+			}	
+			
+			if(takeLine)
+				newOutputFiles += line + "\n";
+			
+			lastLine = line;
+		}
+	}
+	
+	//If the last file entry was deleted we need to close a paranthesis
+	if(!takeLine){ 
+		newOutputFiles = newOutputFiles.substr(0, newOutputFiles.size()-2);
+		newOutputFiles += "\n}";
+	}
+	
+	std::ofstream output_file;
+	output_file.open(outputFiles_path);
+	output_file << newOutputFiles;
+	output_file.close();
+}
+
+/**
  * Iterate over all possible hydrolyse output files as specified
  * in the "hydrolyse_files" vector and call the 
  * "merge_hydrolysis_files" function to merge all output files for
@@ -171,7 +242,7 @@ void merge_all_hydrolysis(
 	std::cout << "storage_dir: " << storage_dir << "\n" << std::endl;
 	
 	//Merge hydrolysis files (no integration)
-	for(const auto& f: hydrolyse_files) {
+	for(const auto& f: output_files) {
 		std::string output_file_string = merge_hydrolysis_files(
 			working_dir, 
 			f.c_str(), 
@@ -180,17 +251,18 @@ void merge_all_hydrolysis(
 		std::ofstream output_file;
 		std::string output_file_name = storage_dir + "/" + f;
 		std::cout << output_file_name << std::endl;
-		
-		if(is_first_timestep){
-			output_file.open(output_file_name);
-			output_file << header_string;
-			output_file << output_file_string;
+		if(!output_file_string.empty())
+		{
+			if(is_first_timestep){
+				output_file.open(output_file_name);
+				output_file << header_string;
+				output_file << output_file_string;
+			}
+			else{
+				output_file.open(output_file_name, std::ios_base::app);
+				output_file << output_file_string;
+			}
 		}
-		else{
-			output_file.open(output_file_name, std::ios_base::app);
-			output_file << output_file_string;
-		}
-			
 		output_file.close();
 		std::cout << output_file_string << std::endl;
 	}
@@ -198,59 +270,59 @@ void merge_all_hydrolysis(
 	std::cout << "Integrating files ...." << std::endl;
 	
 	//Merge hydrolysis files with integration
-	for(const auto& f: hydrolyse_files_integration) {
+	for(const auto& f: output_files_integration) {
 		std::string output_names = "";
 		for(int i=0; i<num_reactors; i++){
 			output_names += (string) working_dir + "/" 
 				+ reactors.at(i) + "/" 
-				+ to_string(current_starttime) + "/"
 				+ f;
 			if(i!=num_reactors-1)
 				output_names += "\n";
 		}
-
-		std::string output_file_string = merge_hydrolysis_files_integration(
+		
+		bool exists = merge_hydrolysis_files_integration(
 			current_starttime, 
 			num_reactors,
 			output_names);
-		std::ofstream output_file;
-		std::string output_file_name = storage_dir + "/" + f;
-		std::cout << output_file_name << std::endl;
-	
-		if(is_first_timestep){
-			output_file.open(output_file_name);
-			output_file << output_file_string;
+		if(exists)
+		{
+			std::string output_file_string = get_merged_file();
+			
+			std::ofstream output_file;
+			std::string output_file_name = storage_dir + "/" + f;
+			std::cout << "output_file_name: " << output_file_name << std::endl;
+			
+			if(is_first_timestep){
+				output_file.open(output_file_name);
+				output_file << output_file_string;
+			}
+			else{
+				output_file.open(output_file_name, std::ios_base::app);
+				remove_header_from_string(output_file_string.c_str());
+				output_file << data_string;
+			}
+			
+			output_file.close();
+			std::cout << output_file_string << std::endl;
 		}
-		else{
-			output_file.open(output_file_name, std::ios_base::app);
-			remove_header_from_string(output_file_string.c_str());
-			output_file << data_string;
-		}
-		
-		output_file.close();
-		std::cout << output_file_string << std::endl;
 	}
 }
 
 /**
- * Only concatenates files from one hydrolysis reactor. 
+ * Only concatenates files from one single reactor. 
  * No summation,integration or modification of any sort. 
- * This function will only be used to plot the outputs of a single reactor.
+ * This function will only be used to plot the unmodified
+ * outputs of the reactor.
  * 
- * @param working_dir: Path pointing to a hydrolyse foldes
+ * @param working_dir: Path pointing to a reactor folder
  * @param simulation_starttime: Starttime of the whole simulation
  * @param current_starttime: Current timestep in the simulation
  */
-void merge_one_hydrolysis_reactor(
+void merge_one_reactor(
 	const char* working_dir,
 	int simulation_starttime,
 	int current_starttime)
 {	
-	std::vector<std::string> all_hydrolyse_files = hydrolyse_files;
-	all_hydrolyse_files.insert(all_hydrolyse_files.end(), 
-		hydrolyse_files_integration.begin(), 
-		hydrolyse_files_integration.end());
-	
 	std::string timestep_dir = (std::string) working_dir + "/" + to_string(current_starttime);
 	
 	bool is_first_timestep = false;
@@ -266,7 +338,7 @@ void merge_one_hydrolysis_reactor(
 		copy_file.close();
 	}
 	
-	for(const auto& f: all_hydrolyse_files) {
+	for(const auto& f: all_files) {
 		std::ofstream output_file;
 		std::string input_file_name = (std::string) timestep_dir + "/" + f;
 		std::string output_file_name = (std::string) working_dir + "/" + f;
@@ -277,6 +349,7 @@ void merge_one_hydrolysis_reactor(
 			if(is_first_timestep){
 				output_file.open(output_file_name);
 				output_file << input_file_stream.rdbuf();
+				output_file << "\n";
 			}
 			else{
 				output_file.open(output_file_name, std::ios_base::app);
@@ -295,11 +368,11 @@ void merge_one_hydrolysis_reactor(
  * @param outflow_infile: Path pointing the outflow.txt
  * @param methane_specfile: Path pointing the methane spec file 
  */
-void update_outflow(
+void update_methane_inflow(
 	const char* outflow_infile,
 	const char* methane_specfile)
 {
-	write_outflow(outflow_infile, methane_specfile);
+	write_inflow(outflow_infile, methane_specfile);
 }
 
 } //end extern "C"
@@ -308,27 +381,36 @@ void update_outflow(
  * Only to test functionality
  */
 int main(){
-	/*
-	const char* reactors = "hydrolyse_0\nhydrolyse_1\nhydrolyse_2";
+	double timestep;
+	std::cout << "timestep: ";
+	std::cin >> timestep;
+	const char* reactors = "hydrolyse_0\nhydrolyse_1\n";
 	merge_all_hydrolysis(
 		"/home/paul/Schreibtisch/smalltest/tmp",
 		reactors,
 		0,
-		0);
-	*/
+		timestep);
+	
 	
 	/*
-	merge_one_hydrolysis_reactor(
+	int time;
+	std::string reactor;
+	
+	std::cout << "Current time:";
+	std::cin >> time;
+
+	merge_one_reactor(
 		"/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0",
 		0,
-		0
+		time
 	);
 	*/
 	
 	
-	const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outflow.txt";
-	const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/tmp/methane/0/methane_checkpoint.lua";
-	update_outflow(outflow_infile, methane_specfile);
+	//const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outflow.txt";
+	//const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/tmp/methane/0/methane_checkpoint.lua";
+	//update_methane_inflow(outflow_infile, methane_specfile);
 	
+	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
 	return 0;
 }

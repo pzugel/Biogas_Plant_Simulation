@@ -1,0 +1,4 @@
+name=1_STAGE
+hydrolysis_stages=1
+storage=0
+methane=1

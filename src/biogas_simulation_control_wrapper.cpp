@@ -19,6 +19,7 @@ static std::string plant_structure;
 static std::string sim_log;
 static int iteration;
 static std::string console_output;
+static int num_hydrolysis_reactors;
 
 static std::string simulation_file;
 static std::string hydrolyse_specification;
@@ -239,6 +240,19 @@ void add_console_output(const char* cmd)
 const char* get_console_output()
 {
 	return console_output.c_str();
+}
+
+/**
+ * Getter/setter for the number of hydrolysis reactors
+ */
+void set_num_hydrolysis_reactors(int num)
+{
+	num_hydrolysis_reactors = num;
+}
+
+int get_num_hydrolysis_reactors()
+{
+	return num_hydrolysis_reactors;
 }
 
 } //end extern "C"

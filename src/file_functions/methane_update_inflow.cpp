@@ -34,8 +34,8 @@ void parse_spec_file()
 	std::string inflow_string;
 	spec_inflowData_vec = {};
 	
-	std::regex inflow ("inflow=\\{(\\s)*data=\\{[a-zA-Z,\"\\s]*\\},(\\s)*timetable=\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},(\\s)*\\},?");
-	std::regex timetable ("timetable=\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},");
+	std::regex inflow ("inflow(\\s)*=(\\s)*\\{(\\s)*data(\\s)*=(\\s)*\\{[a-zA-Z,\"\\s]*\\},(\\s)*timetable(\\s)*=(\\s)*\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},(\\s)*\\},?");
+	std::regex timetable ("timetable(\\s)*=(\\s)*\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},");
 	std::regex data ("\"[a-zA-Z0-9\\s]+\"");
 	std::smatch match_inflow;
 	if(std::regex_search(methane_specfile_string, match_inflow, inflow))
@@ -128,33 +128,21 @@ void write_new_timetable()
 	 
 	/*
 	 * Adding parameters defined in data={"...", "..."}
-	 * Matching: Acetic - AA
 	 */
 	for(int i=0; i<spec_inflowData_vec.size(); i++)
 	{
 		int column = -1;
 		std::vector<std::string> col_vector;
 		std::string data_val = spec_inflowData_vec.at(i);
-		
+		boost::replace_all(data_val, "\"", "");
 		/*
-		* For other matching use this template.
-		* e.g. DataName - OutflowName
+		* Match parameter from "data" with the currect column 
+		* from the "outflow.txt" files header
 		*/
-		if(data_val=="\"DataName\""){	
-			for(int j=0; j<outflow_input_header.size(); j++){
-				std::string header_val = outflow_input_header.at(j);
-				if(header_val.find("OutflowName") != string::npos)
-					column = j;
-			}
-		}
-		
-		// Matching: Acetic - AA
-		if(data_val=="\"Acetic\""){	
-			for(int j=0; j<outflow_input_header.size(); j++){
-				std::string header_val = outflow_input_header.at(j);
-				if(header_val.find("AA") != string::npos)
-					column = j;
-			}
+		for(int j=0; j<outflow_input_header.size(); j++){
+			std::string header_val = outflow_input_header.at(j);
+			if(header_val.find(data_val) != string::npos)
+				column = j;
 		}
 		
 		if(column>-1)
@@ -198,11 +186,10 @@ void write_new_timetable_string()
 			if(j!=output_timetable.size()-1)
 				timetable_replacement += ", ";
 		}
-		if(i!=output_timetable.at(0).size()-1)
-			timetable_replacement += "},\n";
-		else	
-			timetable_replacement += "}";
+		timetable_replacement += "},\n";
 	}
+	tabs.erase(0,1);
+	timetable_replacement += tabs + "},\n";
 }
 
 /**
@@ -211,14 +198,14 @@ void write_new_timetable_string()
  * @param outflow_infile: Path pointing the outflow.txt
  * @param methane_specfile: Path pointing the methane spec file 
  */
-void write_outflow(
+void write_inflow(
 	const char* outflow_infile,
 	const char* methane_specfile)
 {
 	std::ifstream methane_specfile_stream(methane_specfile);
 	std::string mBuf((std::istreambuf_iterator<char>(methane_specfile_stream)),
                  std::istreambuf_iterator<char>());
-   methane_specfile_string = mBuf;
+	methane_specfile_string = mBuf;
    
    	std::ifstream outflow_infile_stream(outflow_infile);
 	std::string oBuf((std::istreambuf_iterator<char>(outflow_infile_stream)),

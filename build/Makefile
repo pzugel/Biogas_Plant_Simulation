@@ -130,6 +130,19 @@ depend:
 .PHONY : depend
 
 #=============================================================================
+# Target rules for targets named CheckpointUpdate
+
+# Build rule for target.
+CheckpointUpdate: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 CheckpointUpdate
+.PHONY : CheckpointUpdate
+
+# fast build rule for target.
+CheckpointUpdate/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CheckpointUpdate.dir/build.make CMakeFiles/CheckpointUpdate.dir/build
+.PHONY : CheckpointUpdate/fast
+
+#=============================================================================
 # Target rules for targets named FileFunctions
 
 # Build rule for target.
@@ -180,6 +193,33 @@ SpecValiReader: cmake_check_build_system
 SpecValiReader/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/SpecValiReader.dir/build.make CMakeFiles/SpecValiReader.dir/build
 .PHONY : SpecValiReader/fast
+
+src/biogas_checkpoint_wrapper.o: src/biogas_checkpoint_wrapper.cpp.o
+
+.PHONY : src/biogas_checkpoint_wrapper.o
+
+# target to build an object file
+src/biogas_checkpoint_wrapper.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CheckpointUpdate.dir/build.make CMakeFiles/CheckpointUpdate.dir/src/biogas_checkpoint_wrapper.cpp.o
+.PHONY : src/biogas_checkpoint_wrapper.cpp.o
+
+src/biogas_checkpoint_wrapper.i: src/biogas_checkpoint_wrapper.cpp.i
+
+.PHONY : src/biogas_checkpoint_wrapper.i
+
+# target to preprocess a source file
+src/biogas_checkpoint_wrapper.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CheckpointUpdate.dir/build.make CMakeFiles/CheckpointUpdate.dir/src/biogas_checkpoint_wrapper.cpp.i
+.PHONY : src/biogas_checkpoint_wrapper.cpp.i
+
+src/biogas_checkpoint_wrapper.s: src/biogas_checkpoint_wrapper.cpp.s
+
+.PHONY : src/biogas_checkpoint_wrapper.s
+
+# target to generate assembly for a file
+src/biogas_checkpoint_wrapper.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/CheckpointUpdate.dir/build.make CMakeFiles/CheckpointUpdate.dir/src/biogas_checkpoint_wrapper.cpp.s
+.PHONY : src/biogas_checkpoint_wrapper.cpp.s
 
 src/biogas_file_functions_wrapper.o: src/biogas_file_functions_wrapper.cpp.o
 
@@ -297,10 +337,14 @@ help:
 	@echo "... depend"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
+	@echo "... CheckpointUpdate"
 	@echo "... FileFunctions"
 	@echo "... OutputReader"
 	@echo "... SimulationControl"
 	@echo "... SpecValiReader"
+	@echo "... src/biogas_checkpoint_wrapper.o"
+	@echo "... src/biogas_checkpoint_wrapper.i"
+	@echo "... src/biogas_checkpoint_wrapper.s"
 	@echo "... src/biogas_file_functions_wrapper.o"
 	@echo "... src/biogas_file_functions_wrapper.i"
 	@echo "... src/biogas_file_functions_wrapper.s"

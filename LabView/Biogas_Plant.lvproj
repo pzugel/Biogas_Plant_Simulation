@@ -35,11 +35,12 @@
 			</Item>
 			<Item Name="Elements" Type="Folder">
 				<Item Name="SubVI" Type="Folder">
-					<Item Name="hydrolyse_reactor_merge.vi" Type="VI" URL="../subVI/hydrolyse_reactor_merge.vi"/>
 					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
 					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
 					<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
 					<Item Name="methane_reactor_setup.vi" Type="VI" URL="../subVI/methane_reactor_setup.vi"/>
+					<Item Name="methane_reactor_update.vi" Type="VI" URL="../subVI/methane_reactor_update.vi"/>
+					<Item Name="reactor_merge.vi" Type="VI" URL="../subVI/reactor_merge.vi"/>
 					<Item Name="storage_run.vi" Type="VI" URL="../subVI/storage_run.vi"/>
 				</Item>
 				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
@@ -47,6 +48,7 @@
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
 			</Item>
 			<Item Name="Libraries" Type="Folder">
+				<Item Name="libCheckpointUpdate.lvlib" Type="Library" URL="../lib/libCheckpointUpdate/libCheckpointUpdate.lvlib"/>
 				<Item Name="libFileFunctions.lvlib" Type="Library" URL="../lib/libFileFunctions/libFileFunctions.lvlib"/>
 				<Item Name="libOutputReader.lvlib" Type="Library" URL="../lib/libOutputReader/libOutputReader.lvlib"/>
 				<Item Name="libSimulationControl.lvlib" Type="Library" URL="../lib/libSimulationControl/libSimulationControl.lvlib"/>
@@ -77,6 +79,7 @@
 				<Item Name="Main Panel" Type="Folder">
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
 					<Item Name="main_console_output.vi" Type="VI" URL="../subVI/main_console_output.vi"/>
+					<Item Name="main_feedback_sliders.vi" Type="VI" URL="../subVI/main_feedback_sliders.vi"/>
 					<Item Name="main_impressum.vi" Type="VI" URL="../subVI/main_impressum.vi"/>
 					<Item Name="main_init_element_specs.vi" Type="VI" URL="../subVI/main_init_element_specs.vi"/>
 					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>

@@ -15,6 +15,15 @@
 #include <regex>
 #include <boost/algorithm/string.hpp>
 
+static std::string gesamtdatei_string;
+
+/**
+ * Returns "gesamtdatei_string"
+ */
+std::string get_merged_file(){
+	return gesamtdatei_string;
+}
+
 /**
  * Helper function to correcly read out doubles in dot representation
  * 
@@ -27,9 +36,20 @@ long double dot_conversion_regex(std::string s){
 	return dot_conversion(d);
 }
 
-using namespace std;
+/**
+ * Helper function to correcly convert doube to string 
+ * (keeping the scientific notation)
+ * 
+ * @param d: Double value
+ * @return double in string notation
+ */
+std::string conv_to_string(double d){
+	std::ostringstream out;
+    out << d;
+    return out.str();
+}
 
-static string gesamtdatei_string;
+using namespace std;
 
 static const int timestep = 1; //hourly
 
@@ -42,7 +62,7 @@ static const int timestep = 1; //hourly
  * @param output_names: Path to all files to merge
  * @return File to write out as string
  */
-string merge_hydrolysis_files_integration(
+bool merge_hydrolysis_files_integration(
 	float x,
 	int anzahl,
 	std::string output_names)
@@ -88,10 +108,12 @@ string merge_hydrolysis_files_integration(
         
         // Fehler abfangen: Falls Dateien nicht vorhanden sind
 		if(!file_stream_output1){
-			return "File not found (output1).";
+			std::cout << "File not found (output1)." << std::endl;
+			return false;
 		}
 		else if(!file_stream_output2){
-			return "File not found (output2).";
+			std::cout << "File not found (output2)." << std::endl;
+			return false;
 		}
 		
 		string zahl1;
@@ -142,7 +164,8 @@ string merge_hydrolysis_files_integration(
 			}
 			//Fehler abfangen: kein Wert als Eingabe
 			else if (legendevorbei2 == true){
-				return "falscher Wert in 2.Outflow-Datei (keine Zahl)";
+				std::cout << "falscher Wert in 2.Outflow-Datei (keine Zahl)" << std::endl;
+				return false;
 			}
 		}
 
@@ -189,7 +212,8 @@ string merge_hydrolysis_files_integration(
 		}
 		
 		if (endung == 0){
-			return "Einheiten-Angabe fehlt in Eingabedatei";
+			std::cout << "Einheiten-Angabe fehlt in Eingabedatei" << std::endl;
+			return false;
 		}
 
 		int intervall = y-x; //Endwert-Startwert
@@ -294,7 +318,7 @@ string merge_hydrolysis_files_integration(
 
 						string neu5 = liste[times1*z + (l1%z)]; //alten Wert zum Verrechnen abspeichern
 						long double wert5 = dot_conversion_regex(neu5);					
-						liste[times1*z + (l1%z)] = to_string(wert3*(0.5)*(wert4+wert4_b) + wert5); //Zeitintervall*Mittelwert + alter_Wert
+						liste[times1*z + (l1%z)] = conv_to_string(wert3*(0.5)*(wert4+wert4_b) + wert5); //Zeitintervall*Mittelwert + alter_Wert
 						l1 = l1 + 1;
 					}
 					i1 = i1+1;
@@ -334,7 +358,8 @@ string merge_hydrolysis_files_integration(
 
 						//Fehlerbehandlung: Zeit wird wieder kleiner
 						if (wert1_2<wert2_2){
-							return "Zeitangabe in 2.Outflow-Datei falsch: Zeit darf nicht kleiner werden";
+							std::cout << "Zeitangabe in 2.Outflow-Datei falsch: Zeit darf nicht kleiner werden" << std::endl;
+							return false;
 						}
 						if (wert1_2<=aktueller_timestamp2){
 							string neu22_2 = to_string(wert1_2-wert2_2); //Zeitintervall
@@ -386,7 +411,7 @@ string merge_hydrolysis_files_integration(
 
 						string neu5_2 = liste[times2*z + (l2%z)]; //alten Wert zum Verrechnen abspeichern
 						long double wert5_2 = dot_conversion_regex(neu5_2);
-						liste[times2*z + (l2%z)] = to_string(0.5*wert3_2*(wert4_2+wert4_2_b) + wert5_2); //Zeitintervall*Wert
+						liste[times2*z + (l2%z)] = conv_to_string(0.5*wert3_2*(wert4_2+wert4_2_b) + wert5_2); //Zeitintervall*Wert
 						l2 = l2 + 1;
 					}
 					i2 = i2+1;
@@ -440,7 +465,8 @@ string merge_hydrolysis_files_integration(
 		
         // auf Existenz prüfen:
         if(!file_stream_output1){
-            return "File not found (output1).";
+            std::cout << "File not found (output1)." << std::endl;
+            return false;
         }
 		
         string zahl1;
@@ -470,7 +496,8 @@ string merge_hydrolysis_files_integration(
             }
             //Fehler abfangen: kein Wert als Eingabe
             else{
-                return "falscher Wert in Outflow-Datei (keine Zahl)";
+                std::cout << "falscher Wert in Outflow-Datei (keine Zahl)" << std::endl;
+                return false;
             }
         }
 
@@ -517,7 +544,8 @@ string merge_hydrolysis_files_integration(
         }
 
         if (endung == 0){
-            return "Einheiten-Angabe fehlt in Eingabedatei";
+            std::cout << "Einheiten-Angabe fehlt in Eingabedatei" << std::endl;
+            return false;
         }
 
         int intervall = y-x; //Endwert-Startwert
@@ -564,7 +592,8 @@ string merge_hydrolysis_files_integration(
                         
                         //Fehlerbehandlung: Zeit wird wieder kleiner
                         if (wert1<wert2){
-                            return "Zeitangabe in 1.Outflow-Datei falsch: Zeit darf nicht kleiner werden";
+                            std::cout << "Zeitangabe in 1.Outflow-Datei falsch: Zeit darf nicht kleiner werden" << std::endl;
+                            return false;
                         }
                         if (wert1<=aktueller_timestamp1){
                             string neu22 = to_string(wert1-wert2); //Zeitintervall
@@ -616,7 +645,7 @@ string merge_hydrolysis_files_integration(
                         string neu5 = liste[times1*z + (l1%z)]; //alten Wert zum Verrechnen abspeichern
                         long double wert5 = dot_conversion_regex(neu5);
                         
-                        liste[times1*z + (l1%z)] = to_string(wert3*(0.5)*(wert4+wert4_b) + wert5); //Zeitintervall*Mittelwert + alter_Wert
+                        liste[times1*z + (l1%z)] = conv_to_string(wert3*(0.5)*(wert4+wert4_b) + wert5); //Zeitintervall*Mittelwert + alter_Wert
                         l1 = l1 + 1;
                     }
                     i1 = i1+1;
@@ -658,5 +687,5 @@ string merge_hydrolysis_files_integration(
         boost::replace_all(gesamtdatei_string, ",", ".");
     }
     
-    return gesamtdatei_string;
+    return true;
 }

@@ -160,8 +160,8 @@ problem = {
                 type = "Double",
                 style = "default",
                 range = {
-                    minADJSK = 0,
-                    maxAAIII = 500
+                    min = 0,
+                    max = 5
                 }
             },
             dtMax = {
