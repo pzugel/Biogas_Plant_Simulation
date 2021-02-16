@@ -11,8 +11,7 @@
 
 #include "functions.h"
 
-static std::string methane_specfile_string;
-static std::string outflow_infile_string;
+static std::string specfile_string;
 static std::vector<std::string> spec_inflowData_vec; //Holds params from data={"Acetic", "..."}
 static std::string timetable_string; //Timetable to be replaced
 static std::vector<std::string> outflow_input_header; //Holds header from outflow.txt
@@ -38,7 +37,7 @@ void parse_spec_file()
 	std::regex timetable ("timetable(\\s)*=(\\s)*\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},");
 	std::regex data ("\"[a-zA-Z0-9\\s]+\"");
 	std::smatch match_inflow;
-	if(std::regex_search(methane_specfile_string, match_inflow, inflow))
+	if(std::regex_search(specfile_string, match_inflow, inflow))
 	{
 		inflow_string = match_inflow[0];
 		
@@ -102,8 +101,16 @@ void read_outflow_values()
  * Writes a new timetable by combining the values from the
  * outflow.txt with the according parameters set in "data={...}".
  * The new timetable will be stored in "output_timetable"
+ * 
+ * The inflow can also be fractional as defined by a value in [0,1].
+ * This is used to split up the methane outflow to feed back into
+ * the hydrolysis reactors.
+ * 1 --> No splitting
+ * 0 --> Empty inflow
+ * 
+ * @param fraction: Value to split the inflow
  */
-void write_new_timetable()
+void write_new_timetable(double fraction)
 {
 	output_timetable = {};
 	/*
@@ -149,7 +156,8 @@ void write_new_timetable()
 		{
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
-				col_vector.push_back(outflow_input_values.at(k).at(column));
+				double value = dot_conversion(outflow_input_values.at(k).at(column))*fraction;
+				col_vector.push_back(conv_to_string(value));
 			}	
 			output_timetable.push_back(col_vector);		
 		}	
@@ -165,7 +173,7 @@ void write_new_timetable_string()
 {
 	std::smatch match_inflow_tabs;
 	std::regex inflow_tabs ("inflow");
-	std::istringstream iss(methane_specfile_string);
+	std::istringstream iss(specfile_string);
 	size_t num_tabs;
 	for (std::string line; std::getline(iss, line); )
 	{
@@ -193,24 +201,19 @@ void write_new_timetable_string()
 }
 
 /**
- * Main function to be called
+ * Main function to be called when updating the methane inflow
  * 
- * @param outflow_infile: Path pointing the outflow.txt
+ * @param outflow_infile: Path pointing the outflow.txt (storage_hydrolyse)
  * @param methane_specfile: Path pointing the methane spec file 
  */
-void write_inflow(
+void write_methane_inflow(
 	const char* outflow_infile,
 	const char* methane_specfile)
 {
 	std::ifstream methane_specfile_stream(methane_specfile);
 	std::string mBuf((std::istreambuf_iterator<char>(methane_specfile_stream)),
                  std::istreambuf_iterator<char>());
-	methane_specfile_string = mBuf;
-   
-   	std::ifstream outflow_infile_stream(outflow_infile);
-	std::string oBuf((std::istreambuf_iterator<char>(outflow_infile_stream)),
-                 std::istreambuf_iterator<char>());
-	outflow_infile_string = oBuf;
+	specfile_string = mBuf;
 	
 	get_header(outflow_infile);
 	remove_header(outflow_infile);
@@ -218,16 +221,75 @@ void write_inflow(
 	parse_spec_file();
 	read_outflow_header();
 	read_outflow_values();
-	write_new_timetable();
+	write_new_timetable(1.0);
 	write_new_timetable_string();
 	
 	//Replacement in spec file	
-	std::size_t timetable_pos = methane_specfile_string.find(timetable_string);	
-	methane_specfile_string.replace(timetable_pos, timetable_string.size(), timetable_replacement);
-	std::cout << methane_specfile_string << std::endl;
+	std::size_t timetable_pos = specfile_string.find(timetable_string);	
+	specfile_string.replace(timetable_pos, timetable_string.size(), timetable_replacement);
+	std::cout << specfile_string << std::endl;
 	
 	std::ofstream new_spec;
 	new_spec.open (methane_specfile);
-	new_spec << methane_specfile_string;
+	new_spec << specfile_string;
 	new_spec.close();
+}
+
+/**
+ * Main function to be called when updating the hydrolysis inflow
+ * in the feedback loop
+ * 
+ * @param outflow_infile: Path pointing the outflow.txt (methane)
+ * @param hydrolysis_specfiles: String with the specfiles directions
+ * @param fractions: Array with fractional values to split the inflow
+ */
+int write_hydrolysis_inflow(
+	const char* outflow_infile,
+	const char* hydrolysis_specfiles,
+	double fractions[])
+{	
+	get_header(outflow_infile);
+	remove_header(outflow_infile);
+	read_outflow_header();
+	read_outflow_values();	
+	
+	for(int i=0; i<outflow_input_header.size(); i++)
+		std::cout << outflow_input_header.at(i) << ' ';
+	std::cout << std::endl;
+	for(int i=0; i<outflow_input_values.size(); i++)
+	{
+		for(int j=0; j<outflow_input_values.at(i).size(); j++)
+			std::cout << outflow_input_values.at(i).at(j) << ' ';
+		std::cout << std::endl; 
+	}
+	
+	std::stringstream specfiles_stream(hydrolysis_specfiles);
+	
+	int spec_number = 0;
+	for(std::string spec_file; getline(specfiles_stream, spec_file);)
+	{
+		std::cout << "spec_file: " << spec_file << std::endl;
+		
+		std::ifstream hydrolysis_specfile_stream(spec_file);
+		std::string mBuf((std::istreambuf_iterator<char>(hydrolysis_specfile_stream)),
+					 std::istreambuf_iterator<char>());
+		specfile_string = mBuf;
+		
+		parse_spec_file();
+		write_new_timetable(fractions[spec_number]);
+		write_new_timetable_string();
+		
+		std::size_t timetable_pos = specfile_string.find(timetable_string);	
+		specfile_string.replace(timetable_pos, timetable_string.size(), timetable_replacement);
+		std::cout << specfile_string << std::endl;
+		
+		std::ofstream new_spec;
+		new_spec.open (spec_file);
+		new_spec << specfile_string;
+		new_spec.close();
+		
+		++spec_number;
+	}
+
+	return 0;
 }

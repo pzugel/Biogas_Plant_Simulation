@@ -6,6 +6,7 @@
 	<Property Name="NI.SortType" Type="Int">3</Property>
 	<Item Name="VI" Type="Folder">
 		<Item Name="update methane inflow.vi" Type="VI" URL="../VIs/update methane inflow.vi"/>
+		<Item Name="update hydrolysis inflow.vi" Type="VI" URL="../VIs/update hydrolysis inflow.vi"/>
 		<Item Name="merge one reactor.vi" Type="VI" URL="../VIs/merge one reactor.vi"/>
 		<Item Name="merge all hydrolysis.vi" Type="VI" URL="../VIs/merge all hydrolysis.vi"/>
 		<Item Name="update output Files.vi" Type="VI" URL="../VIs/update output Files.vi"/>

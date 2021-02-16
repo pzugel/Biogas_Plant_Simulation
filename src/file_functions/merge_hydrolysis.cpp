@@ -14,21 +14,6 @@
 static std::vector<std::vector<std::vector<std::string>>> values;
 
 /**
- * Helper function to correcly read out doubles in dot representation
- * "311.15" -> 311,15 
- * 
- * @param s: Double as string
- * @return double
- */
-double dot_conversion(std::string s){
-	std::istringstream valStream(s);
-	double out;
-	while (valStream)
-		valStream >> out;
-	return out;
-}
-
-/**
  * Writes all values from an output file of a reactor at direction
  * "dir" into the values vector 
  * 

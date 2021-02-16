@@ -24,31 +24,6 @@ std::string get_merged_file(){
 	return gesamtdatei_string;
 }
 
-/**
- * Helper function to correcly read out doubles in dot representation
- * 
- * @param s: Double as string
- * @return long double
- */
-long double dot_conversion_regex(std::string s){
-	std::string d = s;
-	d = std::regex_replace(d, (std::regex) ",", ".");
-	return dot_conversion(d);
-}
-
-/**
- * Helper function to correcly convert doube to string 
- * (keeping the scientific notation)
- * 
- * @param d: Double value
- * @return double in string notation
- */
-std::string conv_to_string(double d){
-	std::ostringstream out;
-    out << d;
-    return out.str();
-}
-
 using namespace std;
 
 static const int timestep = 1; //hourly

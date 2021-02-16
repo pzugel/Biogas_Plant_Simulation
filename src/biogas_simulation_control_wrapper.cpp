@@ -20,6 +20,7 @@ static std::string sim_log;
 static int iteration;
 static std::string console_output;
 static int num_hydrolysis_reactors;
+static std::string hydrolysis_fractions;
 
 static std::string simulation_file;
 static std::string hydrolyse_specification;
@@ -253,6 +254,19 @@ void set_num_hydrolysis_reactors(int num)
 int get_num_hydrolysis_reactors()
 {
 	return num_hydrolysis_reactors;
+}
+
+/**
+ * Getter/setter for the number of hydrolysis reactors
+ */
+void set_hydrolysis_fractions(const char* fract)
+{
+	hydrolysis_fractions = (std::string) fract;
+}
+
+const char* get_hydrolysis_fractions()
+{
+	return hydrolysis_fractions.c_str();
 }
 
 } //end extern "C"

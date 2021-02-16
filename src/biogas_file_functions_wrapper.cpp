@@ -372,7 +372,25 @@ void update_methane_inflow(
 	const char* outflow_infile,
 	const char* methane_specfile)
 {
-	write_inflow(outflow_infile, methane_specfile);
+	write_methane_inflow(outflow_infile, methane_specfile);
+}
+
+/**
+ * Updates the specification file for the hydrolysis reacors with the current
+ * outflow from the methane reactor
+ * 
+ * @param outflow_infile: Path pointing the outflow.txt (methane)
+ * @param hydrolysis_specfiles: String with the specfiles directions
+ * @param fractions: Array with fractional values to split the inflow
+ */
+void update_hydrolysis_inflow(
+	const char* outflow_infile,
+	const char* hydrolysis_specfiles,
+	double fractions[])
+{
+	write_hydrolysis_inflow(outflow_infile, 
+		hydrolysis_specfiles, 
+		fractions);
 }
 
 } //end extern "C"
@@ -381,6 +399,7 @@ void update_methane_inflow(
  * Only to test functionality
  */
 int main(){
+	/*
 	double timestep;
 	std::cout << "timestep: ";
 	std::cin >> timestep;
@@ -391,7 +410,7 @@ int main(){
 		0,
 		timestep);
 	
-	
+	*/
 	/*
 	int time;
 	std::string reactor;
@@ -412,5 +431,6 @@ int main(){
 	//update_methane_inflow(outflow_infile, methane_specfile);
 	
 	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
+	
 	return 0;
 }

@@ -46,3 +46,7 @@ const char* load_outputFiles(const char* filepath);
 void set_num_hydrolysis_reactors(int num);
 int get_num_hydrolysis_reactors();
 
+void set_hydrolysis_fractions(const char* fract);
+const char* get_hydrolysis_fractions();
+
+

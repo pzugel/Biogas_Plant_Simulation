@@ -43,8 +43,10 @@
 			<Item Name="set working directory.vi" Type="VI" URL="../VIs/set working directory.vi"/>
 		</Item>
 	</Item>
+	<Item Name="get hydrolysis fractions.vi" Type="VI" URL="../VIs/get hydrolysis fractions.vi"/>
 	<Item Name="get num hydrolysis reactors.vi" Type="VI" URL="../VIs/get num hydrolysis reactors.vi"/>
 	<Item Name="libSimulationControl.so" Type="Document" URL="../libSimulationControl.so"/>
+	<Item Name="set hydrolysis fractions.vi" Type="VI" URL="../VIs/set hydrolysis fractions.vi"/>
 	<Item Name="set num hydrolysis reactors.vi" Type="VI" URL="../VIs/set num hydrolysis reactors.vi"/>
 	<Item Name="simulation_control.dll" Type="Document" URL="../../simulation_control.dll"/>
 </Library>
