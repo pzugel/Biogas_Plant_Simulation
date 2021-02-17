@@ -79,6 +79,7 @@
 					<Item Name="element_editor_validate_specs.vi" Type="VI" URL="../subVI/element_editor_validate_specs.vi"/>
 				</Item>
 				<Item Name="Main Panel" Type="Folder">
+					<Item Name="main_auto_cleanup.vi" Type="VI" URL="../subVI/main_auto_cleanup.vi"/>
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
 					<Item Name="main_console_output.vi" Type="VI" URL="../subVI/main_console_output.vi"/>
 					<Item Name="main_feedback_sliders.vi" Type="VI" URL="../subVI/main_feedback_sliders.vi"/>

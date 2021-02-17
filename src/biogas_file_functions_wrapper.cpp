@@ -17,7 +17,7 @@
 #include <iostream>
 #include <iomanip>
 #include <algorithm>
-
+#include <filesystem>
 
 #include "file_functions/functions.h"
 #include "file_functions/merge_hydrolysis.cpp"
@@ -475,5 +475,6 @@ int main(){
 	std::cout << a[0] << std::endl;
 	std::cout << a[1] << std::endl;
 	*/
+	
 	return 0;
 }
