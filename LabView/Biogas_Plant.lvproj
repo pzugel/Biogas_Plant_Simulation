@@ -35,6 +35,7 @@
 			</Item>
 			<Item Name="Elements" Type="Folder">
 				<Item Name="SubVI" Type="Folder">
+					<Item Name="feedback_run.vi" Type="VI" URL="../subVI/feedback_run.vi"/>
 					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
 					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
 					<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
@@ -115,7 +116,6 @@
 				</Item>
 			</Item>
 		</Item>
-		<Item Name="feedback_run.vi" Type="VI" URL="../subVI/feedback_run.vi"/>
 		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">

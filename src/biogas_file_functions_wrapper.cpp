@@ -380,7 +380,7 @@ void update_methane_inflow(
  * outflow from the methane reactor
  * 
  * @param outflow_infile: Path pointing the outflow.txt (methane)
- * @param hydrolysis_specfiles: String with the specfiles directions
+ * @param hydrolysis_specfiles: String with the specfiles directories
  * @param fractions: Array with fractional values to split the inflow
  */
 void update_hydrolysis_inflow(
@@ -391,6 +391,42 @@ void update_hydrolysis_inflow(
 	write_hydrolysis_inflow(outflow_infile, 
 		hydrolysis_specfiles, 
 		fractions);
+}
+
+/**
+ * Reads out pH value from "reactorState.txt" files. We only use this
+ * for hydrolysis reactors to display in LabView.
+ * 
+ * @param ph_arr: Array containing the pH values
+ * @param reactor_state_files: String with the reactorState.txt directories
+ */
+void get_hydrolysis_PH(
+	double (&ph_arr)[3],
+	const char* reactor_state_files)
+{
+	int reactor_num = 0;
+	std::istringstream dir_stream(reactor_state_files);
+	values = {};
+	for(std::string reactor_state; std::getline(dir_stream,reactor_state);)
+	{
+		std::ifstream f(reactor_state.c_str());
+		if(f.good() && !(f.peek() == EOF))
+		{
+			read_values_from_reactor(reactor_state);
+			int last_row = values.at(0).size();
+			get_header(reactor_state.c_str());
+			read_outflow_header();
+			for(int col=0; col<outflow_input_header.size(); col++)
+			{
+				std::string header_val = outflow_input_header.at(col);
+				if(header_val.find("pH") != string::npos)
+					ph_arr[reactor_num] = dot_conversion(values.at(reactor_num).at(last_row-1).at(col));
+			}
+			reactor_num += 1;
+		}
+		else
+			ph_arr[reactor_num] = 0;
+	}
 }
 
 } //end extern "C"
@@ -432,5 +468,12 @@ int main(){
 	
 	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
 	
+	/*
+	const char* reactor_state_files = "/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0/reactorState.txt\n/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_1/reactorState.txt";
+	double a[3]; 
+	get_hydrolysis_PH(a, reactor_state_files);
+	std::cout << a[0] << std::endl;
+	std::cout << a[1] << std::endl;
+	*/
 	return 0;
 }
