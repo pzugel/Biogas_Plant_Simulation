@@ -37,6 +37,7 @@
 				<Item Name="SubVI" Type="Folder">
 					<Item Name="feedback_run.vi" Type="VI" URL="../subVI/feedback_run.vi"/>
 					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
+					<Item Name="hydrolyse_reactor_run_parallel.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run_parallel.vi"/>
 					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
 					<Item Name="methane_reactor_run.vi" Type="VI" URL="../elements/methane_reactor_run.vi"/>
 					<Item Name="methane_reactor_setup.vi" Type="VI" URL="../subVI/methane_reactor_setup.vi"/>
@@ -46,6 +47,7 @@
 				</Item>
 				<Item Name="feedback.vi" Type="VI" URL="../elements/feedback.vi"/>
 				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
+				<Item Name="hydrolyse_reactor_parallel.vi" Type="VI" URL="../elements/hydrolyse_reactor_parallel.vi"/>
 				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
 			</Item>
@@ -59,6 +61,7 @@
 			<Item Name="Structures" Type="Folder">
 				<Item Name="1_STAGE.vi" Type="VI" URL="../structures/1_STAGE.vi"/>
 				<Item Name="2_STAGE.vi" Type="VI" URL="../structures/2_STAGE.vi"/>
+				<Item Name="2_STAGE_PL.vi" Type="VI" URL="../structures/2_STAGE_PL.vi"/>
 				<Item Name="3_STAGE.vi" Type="VI" URL="../structures/3_STAGE.vi"/>
 				<Item Name="3_STAGE_DUMMY.vi" Type="VI" URL="../structures/3_STAGE_DUMMY.vi"/>
 			</Item>

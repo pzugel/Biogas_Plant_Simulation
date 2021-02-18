@@ -1,4 +1,4 @@
-name=2_STAGE
+name=2_STAGE_PL
 hydrolysis_stages=2
 storage=1
 methane=1

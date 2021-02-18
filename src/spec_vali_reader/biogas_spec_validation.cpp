@@ -39,13 +39,13 @@ validateSpecs(std::string specs)
 	
 	this->validationMessage = "";
 	this->validationErrorParams = "";
-	std::regex isBool ("true|false");
-	std::regex isString ("\"[a-zA-Z0-9_.]+\"");
-	std::regex isStringArr ("\\{\"[a-zA-Z0-9_]+\"\\}");
-	std::regex isInt ("[0-9\\*]+");
-	std::regex isDouble ("[0-9E.\\*\\-]+");
-	std::regex isDoubleTimestamp ("\\{[0-9E.\\*\\-]+,[0-9E.\\*\\-]+\\}");
-	std::regex isIntTimestamp ("\\{[0-9\\*]+,[0-9\\*]+\\}");
+	std::regex isBool ("(\\s)*true(\\s)*|(\\s)*false(\\s)*");
+	std::regex isString ("\"(\\s)*[a-zA-Z0-9_.(\\s)*]+(\\s)*\"");
+	std::regex isStringArr ("(\\s)*\\{(\\s)*\"[a-zA-Z0-9_(\\s)*]+\"(\\s)*\\}(\\s)*");
+	std::regex isInt ("(\\s)*[0-9\\*]+(\\s)*");
+	std::regex isDouble ("(\\s)*[0-9Ee.\\*\\-]+(\\s)*");
+	std::regex isDoubleTimestamp ("(\\s)*\\{(\\s)*([0-9Ee.\\*\\-]+(\\s)*,(\\s)*)+[0-9Ee.\\*\\-]+(\\s)*\\}(\\s)*");
+	std::regex isIntTimestamp ("(\\s)*\\{(\\s)*([0-9\\*]+(\\s)*,(\\s)*)+[0-9\\*]+(\\s)*\\}(\\s)*");
 
 	bool isValid = true;
 	for(int i=0; i<this->number_of_entries; i++)

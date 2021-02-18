@@ -246,7 +246,7 @@ testValidationMatch()
 		return false; //Different number of parameters
 	}
 
-	std::regex timestamp ("\\{[0-9E.\\-\\*]+,[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9Ee.\\-\\*]+,)+[0-9Ee.\\-\\*]+\\}");
 	std::istringstream lineIter(this->input_specModified);
 	
 	int num_lines_test = 0;
