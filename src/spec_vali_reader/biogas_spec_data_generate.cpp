@@ -140,7 +140,7 @@ transformSpecInput()
 bool BiogasSpecValiReader::
 generateSpecs()
 {	
-	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)+[0-9E.\\-\\*]+\\}");
 	
 	std::istringstream lineIter(this->input_specModified);
 	int index = 0;

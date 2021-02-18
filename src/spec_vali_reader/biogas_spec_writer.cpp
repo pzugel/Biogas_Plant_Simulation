@@ -35,7 +35,7 @@ writeOutputSpecs(std::string specs)
 	{
 		inputSpecs.push_back(line);
 	}
-	for(int i=0; i<this->number_of_entries-1; i++)
+	for(int i=0; i<number_of_entries; i++)
 	{
 		this->outputSpecs += std::string(this->entries[i].indent, '\t');
 		if(this->entries[i].glyph == 15)
@@ -49,18 +49,25 @@ writeOutputSpecs(std::string specs)
 			else
 				this->outputSpecs += this->entries[i].leftCell + "=" + inputSpecs[i] + ",\n";
 		}
-
-		if(this->entries[i].indent>this->entries[i+1].indent)
+		
+		if(i<number_of_entries-1)
 		{
-			int num_closing_par = (this->entries[i].indent)-(this->entries[i+1].indent);
+			if(this->entries[i].indent>this->entries[i+1].indent)
+			{
+				int num_closing_par = (this->entries[i].indent)-(this->entries[i+1].indent);
+				for(int j=0; j<num_closing_par; j++)
+					this->outputSpecs += std::string(this->entries[i].indent-j-1,'\t') + "},\n";
+			}
+		}
+		
+		if(i == inputSpecs.size()-1) //lastIteration
+		{
+			int num_closing_par = this->entries[i].indent;
 			for(int j=0; j<num_closing_par; j++)
-				this->outputSpecs += std::string(this->entries[i].indent-j-1,'\t') + "},\n";
+					this->outputSpecs += std::string(this->entries[i].indent-j-1,'\t') + "},\n";
+			while(this->outputSpecs.back() != '}')
+				this->outputSpecs = this->outputSpecs.substr(0, this->outputSpecs.size()-1);
 		}
 	}
-
-	int num_closing_par_end = this->entries[this->number_of_entries-1].indent;
-	for(int i=0; i<num_closing_par_end-1; i++)
-		this->outputSpecs += std::string(num_closing_par_end-i-1,'\t') + "},\n";		
-	this->outputSpecs += "}";
 }
 

@@ -43,7 +43,7 @@ class BiogasSpecValiReader {
 		std::string validationMessage;
 		std::string outputSpecs;
 
-	private:
+	public://should be private - only for debugging
 		std::string input;
 		std::string input_valiModified;
 		std::string input_specModified;
@@ -57,7 +57,7 @@ class BiogasSpecValiReader {
 		bool validateSpecs(std::string);
 		void writeOutputSpecs(std::string);
 		void generateSpecIndents(std::string);
-	private:
+	public: //should be private - only for debugging
 		bool readInput(std::string);	
 		void transformValiInput();
 		void transformSpecInput();
