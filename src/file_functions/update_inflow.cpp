@@ -119,15 +119,14 @@ void write_new_timetable(double fraction)
 	for(int j=0; j<outflow_input_header.size(); j++){
 		std::string header_val = outflow_input_header.at(j);
 		std::vector<std::string> col_vector;
-		if(header_val.find("Time") != string::npos
-			|| header_val.find("All Liquid") != string::npos)
+		if(header_val.find("Time") != std::string::npos
+			|| ((header_val.find("All") != std::string::npos) && (header_val.find("Liquid") != std::string::npos)))
 		{
 			int column = j;
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
 				col_vector.push_back(outflow_input_values.at(k).at(column));
 			}
-			
 			output_timetable.push_back(col_vector);	
 		}
 		
@@ -142,6 +141,7 @@ void write_new_timetable(double fraction)
 		std::vector<std::string> col_vector;
 		std::string data_val = spec_inflowData_vec.at(i);
 		boost::replace_all(data_val, "\"", "");
+
 		/*
 		* Match parameter from "data" with the currect column 
 		* from the "outflow.txt" files header
@@ -156,7 +156,9 @@ void write_new_timetable(double fraction)
 		{
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
-				double value = dot_conversion(outflow_input_values.at(k).at(column))*fraction;
+				double value = dot_conversion(outflow_input_values.at(k).at(column));
+				if(k == outflow_input_values.size() - 1) //only split at last value
+					value = value*fraction;
 				col_vector.push_back(conv_to_string(value));
 			}	
 			output_timetable.push_back(col_vector);		
@@ -197,7 +199,8 @@ void write_new_timetable_string()
 		timetable_replacement += "},\n";
 	}
 	tabs.erase(0,1);
-	timetable_replacement += tabs + "},\n";
+	timetable_replacement += tabs + "},";
+	std::cout << "timetable_replacement: " << timetable_replacement << std::endl;
 }
 
 /**

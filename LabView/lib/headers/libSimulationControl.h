@@ -49,4 +49,7 @@ int get_num_hydrolysis_reactors();
 void set_hydrolysis_fractions(const char* fract);
 const char* get_hydrolysis_fractions();
 
+void set_merge_preexisting(bool merge);
+bool get_merge_preexisting();
+
 

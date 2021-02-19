@@ -22,7 +22,7 @@
 #include "file_functions/functions.h"
 #include "file_functions/merge_hydrolysis.cpp"
 #include "file_functions/merge_hydrolysis_integration.cpp"
-#include "file_functions/methane_update_inflow.cpp"
+#include "file_functions/update_inflow.cpp"
 
 //static std::string data_string;
 //static std::string header_string;
@@ -321,7 +321,8 @@ void merge_all_hydrolysis(
 void merge_one_reactor(
 	const char* working_dir,
 	int simulation_starttime,
-	int current_starttime)
+	int current_starttime,
+	bool merge_preexisting)
 {	
 	std::string timestep_dir = (std::string) working_dir + "/" + to_string(current_starttime);
 	
@@ -347,9 +348,28 @@ void merge_one_reactor(
 		if(input_file_stream.good())
 		{	
 			if(is_first_timestep){
-				output_file.open(output_file_name);
-				output_file << input_file_stream.rdbuf();
-				output_file << "\n";
+				if(merge_preexisting)
+				{
+					std::ifstream output_file_stream(output_file_name);
+					if(output_file_stream.good()) //merge with previous files
+					{
+						output_file.open(output_file_name, std::ios_base::app);
+						remove_header(input_file_name.c_str());
+						output_file << data_string;
+					}
+					else //should merge but no previous files found
+					{
+						output_file.open(output_file_name);
+						output_file << input_file_stream.rdbuf();
+						output_file << "\n";
+					}
+				}
+				else //dont merge
+				{
+					output_file.open(output_file_name);
+					output_file << input_file_stream.rdbuf();
+					output_file << "\n";
+				}
 			}
 			else{
 				output_file.open(output_file_name, std::ios_base::app);
@@ -447,24 +467,11 @@ int main(){
 		timestep);
 	
 	*/
-	/*
-	int time;
-	std::string reactor;
-	
-	std::cout << "Current time:";
-	std::cin >> time;
-
-	merge_one_reactor(
-		"/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0",
-		0,
-		time
-	);
-	*/
 	
 	
-	//const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outflow.txt";
-	//const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/tmp/methane/0/methane_checkpoint.lua";
-	//update_methane_inflow(outflow_infile, methane_specfile);
+	const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/storage_hydrolyse/outflow.txt";
+	const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/methane/0/methane_checkpoint.lua";
+	update_methane_inflow(outflow_infile, methane_specfile);
 	
 	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
 	
@@ -475,6 +482,5 @@ int main(){
 	std::cout << a[0] << std::endl;
 	std::cout << a[1] << std::endl;
 	*/
-	
 	return 0;
 }

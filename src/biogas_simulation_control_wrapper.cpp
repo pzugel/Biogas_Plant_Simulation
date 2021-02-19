@@ -32,6 +32,8 @@ static double sim_endtime;
 static double sim_currenttime;
 static double paused_time;
 
+static bool merge_preexisting;
+
 /**
  * This library only consists of getter/setter parameters to control
  * the simulation flow. It saves information about the current state
@@ -267,6 +269,19 @@ void set_hydrolysis_fractions(const char* fract)
 const char* get_hydrolysis_fractions()
 {
 	return hydrolysis_fractions.c_str();
+}
+
+/**
+ * Getter/setter whether the simulation merges with preexisting files 
+ */
+void set_merge_preexisting(bool merge)
+{
+	merge_preexisting = merge;
+}
+
+bool get_merge_preexisting()
+{
+	return merge_preexisting;
 }
 
 } //end extern "C"
