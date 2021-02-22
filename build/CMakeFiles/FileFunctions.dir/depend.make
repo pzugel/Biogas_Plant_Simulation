@@ -5,5 +5,6 @@ CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/bio
 CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/file_functions/functions.h
 CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/file_functions/merge_hydrolysis.cpp
 CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/file_functions/merge_hydrolysis_integration.cpp
+CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/file_functions/update_feeding.cpp
 CMakeFiles/FileFunctions.dir/src/biogas_file_functions_wrapper.cpp.o: ../src/file_functions/update_inflow.cpp
 

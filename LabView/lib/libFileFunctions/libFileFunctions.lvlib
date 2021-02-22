@@ -12,6 +12,8 @@
 		<Item Name="get header.vi" Type="VI" URL="../VIs/get header.vi"/>
 		<Item Name="remove header.vi" Type="VI" URL="../VIs/remove header.vi"/>
 		<Item Name="merge one reactor.vi" Type="VI" URL="../VIs/merge one reactor.vi"/>
+		<Item Name="load hydrolysis feeding.vi" Type="VI" URL="../VIs/load hydrolysis feeding.vi"/>
+		<Item Name="update hydrolysis feeding.vi" Type="VI" URL="../VIs/update hydrolysis feeding.vi"/>
 		<Item Name="get hydrolysis PH.vi" Type="VI" URL="../VIs/get hydrolysis PH.vi"/>
 		<Item Name="read filenames.vi" Type="VI" URL="../VIs/read filenames.vi"/>
 	</Item>

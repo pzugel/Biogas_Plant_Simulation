@@ -13,7 +13,7 @@
 
 static std::string specfile_string;
 static std::vector<std::string> spec_inflowData_vec; //Holds params from data={"Acetic", "..."}
-static std::string timetable_string; //Timetable to be replaced
+static std::string inflow_timetable_string; //Timetable to be replaced
 static std::vector<std::string> outflow_input_header; //Holds header from outflow.txt
 static std::vector<std::vector<std::string>> outflow_input_values; //Holds values from outflow.txt
 static std::vector<std::vector<std::string>> output_timetable; //Holds new inflow for the methane spec
@@ -25,7 +25,7 @@ static std::string timetable_replacement; //Holds new inflow (as string) for the
  * 
  * e.g. data={"Acetic", "..."}
  * 
- * The whole inflow entry will be stored in the "timetable_string"
+ * The whole inflow entry will be stored in the "inflow_timetable_string"
  * so we can later replace it.
  */
 void parse_spec_file()
@@ -52,7 +52,7 @@ void parse_spec_file()
 		
 		std::smatch match_timetable;
 		if(std::regex_search(inflow_string, match_timetable, timetable))
-			timetable_string = match_timetable[0];
+			inflow_timetable_string = match_timetable[0];
 	}
 }
 
@@ -228,8 +228,8 @@ void write_methane_inflow(
 	write_new_timetable_string();
 	
 	//Replacement in spec file	
-	std::size_t timetable_pos = specfile_string.find(timetable_string);	
-	specfile_string.replace(timetable_pos, timetable_string.size(), timetable_replacement);
+	std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
+	specfile_string.replace(timetable_pos, inflow_timetable_string.size(), timetable_replacement);
 	std::cout << specfile_string << std::endl;
 	
 	std::ofstream new_spec;
@@ -282,8 +282,8 @@ int write_hydrolysis_inflow(
 		write_new_timetable(fractions[spec_number]);
 		write_new_timetable_string();
 		
-		std::size_t timetable_pos = specfile_string.find(timetable_string);	
-		specfile_string.replace(timetable_pos, timetable_string.size(), timetable_replacement);
+		std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
+		specfile_string.replace(timetable_pos, inflow_timetable_string.size(), timetable_replacement);
 		std::cout << specfile_string << std::endl;
 		
 		std::ofstream new_spec;

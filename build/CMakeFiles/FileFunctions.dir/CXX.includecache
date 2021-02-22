@@ -31,6 +31,8 @@ file_functions/merge_hydrolysis.cpp
 /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/merge_hydrolysis.cpp
 file_functions/merge_hydrolysis_integration.cpp
 /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/merge_hydrolysis_integration.cpp
+file_functions/update_feeding.cpp
+/home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/update_feeding.cpp
 file_functions/update_inflow.cpp
 /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/update_inflow.cpp
 
@@ -49,6 +51,10 @@ regex
 -
 boost/algorithm/string.hpp
 -
+
+/home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/update_feeding.cpp
+functions.h
+/home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/functions.h
 
 /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/update_inflow.cpp
 functions.h

@@ -22,6 +22,7 @@
 #include "file_functions/functions.h"
 #include "file_functions/merge_hydrolysis.cpp"
 #include "file_functions/merge_hydrolysis_integration.cpp"
+#include "file_functions/update_feeding.cpp"
 #include "file_functions/update_inflow.cpp"
 
 //static std::string data_string;
@@ -414,6 +415,36 @@ void update_hydrolysis_inflow(
 }
 
 /**
+ * Updates the feeding timetable in a specification file 
+ * for a hydrolysis reacote
+ * 
+ * @param hydrolysis_specfile: Path pointing the the specification
+ * @param time: Timestamp time
+ * @param amount: Timestamp amount
+ * @param number_timestamps: size of arrays time and amount
+ */
+void update_hydrolysis_feeding(
+	const char* hydrolysis_specfile,
+	const char* time,
+	const char* amount,
+	int number_timestamps)
+{
+	update_feeding_timetable(hydrolysis_specfile, time, amount, number_timestamps);
+} 
+
+/**
+ * Returns feeding timetable formatted into a CSV styls string
+ * to be loaded into LabView
+ * 
+ * @param hydrolysis_specfile: Path pointing the the specification
+ */
+const char* load_hydrolysis_feeding(const char* hydrolysis_specfile)
+{
+	get_feeding_timetable(hydrolysis_specfile);
+	return feeding_timetable_csv.c_str();
+}
+
+/**
  * Reads out pH value from "reactorState.txt" files. We only use this
  * for hydrolysis reactors to display in LabView.
  * 
@@ -469,9 +500,17 @@ int main(){
 	*/
 	
 	
-	const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/storage_hydrolyse/outflow.txt";
-	const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/methane/0/methane_checkpoint.lua";
-	update_methane_inflow(outflow_infile, methane_specfile);
+	//const char* hydrolysis_specfile = "/home/paul/Schreibtisch/smalltest/feeding_test/hydrolyse_checkpoint.lua";
+	//const char* table = load_hydrolysis_feeding(hydrolysis_specfile);
+	//std::cout << table << std::endl;
+	//double time[] = {1,2,31,4,5};
+	//double amount[] = {11,12,13,14,15};
+	//update_hydrolysis_feeding(hydrolysis_specfile, time, amount, 5);
+	
+	
+	//const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/storage_hydrolyse/outflow.txt";
+	//const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/methane/0/methane_checkpoint.lua";
+	//update_methane_inflow(outflow_infile, methane_specfile);
 	
 	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
 	
