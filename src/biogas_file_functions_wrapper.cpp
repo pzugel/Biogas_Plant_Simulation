@@ -223,7 +223,8 @@ void merge_all_hydrolysis(
 	const char* working_dir,
 	const char* reactor_names,
 	int simulation_starttime,
-	int current_starttime)
+	int current_starttime,
+	bool merge_preexisting)
 {
 	//Write reactor names into vector
 	std::vector<std::string> reactors;
@@ -233,7 +234,7 @@ void merge_all_hydrolysis(
 		reactors.push_back(line);
 	}
 	int num_reactors = reactors.size();
-	
+	std::cout << "num_reactors: " << num_reactors << std::endl;
 	//First timestep?
 	bool is_first_timestep = false;
 	if(simulation_starttime == current_starttime)
@@ -280,7 +281,7 @@ void merge_all_hydrolysis(
 			if(i!=num_reactors-1)
 				output_names += "\n";
 		}
-		
+		std::cout << "output_names: " << output_names << std::endl;
 		bool exists = merge_hydrolysis_files_integration(
 			current_starttime, 
 			num_reactors,
@@ -292,10 +293,29 @@ void merge_all_hydrolysis(
 			std::ofstream output_file;
 			std::string output_file_name = storage_dir + "/" + f;
 			std::cout << "output_file_name: " << output_file_name << std::endl;
-			
+			std::cout << "output_file_string: " << output_file_string << std::endl;
 			if(is_first_timestep){
-				output_file.open(output_file_name);
-				output_file << output_file_string;
+				
+				if(merge_preexisting)
+				{
+					std::ifstream output_file_stream(output_file_name);
+					if(output_file_stream.good()) //merge with previous files
+					{
+						output_file.open(output_file_name, std::ios_base::app);
+						remove_header_from_string(output_file_string.c_str());
+						output_file << data_string;
+					}
+					else //should merge but no previous files found
+					{
+						output_file.open(output_file_name);
+						output_file << output_file_string;
+					}
+				}
+				else //dont merge
+				{
+					output_file.open(output_file_name);
+					output_file << output_file_string;
+				}				
 			}
 			else{
 				output_file.open(output_file_name, std::ios_base::app);
@@ -304,7 +324,7 @@ void merge_all_hydrolysis(
 			}
 			
 			output_file.close();
-			std::cout << output_file_string << std::endl;
+			
 		}
 	}
 }
@@ -487,19 +507,14 @@ void get_hydrolysis_PH(
  */
 int main(){
 	/*
-	double timestep;
-	std::cout << "timestep: ";
-	std::cin >> timestep;
 	const char* reactors = "hydrolyse_0\nhydrolyse_1\n";
 	merge_all_hydrolysis(
-		"/home/paul/Schreibtisch/smalltest/tmp",
+		"/home/paul/Schreibtisch/smalltest/biogas_20210225_134915@2_STAGE_PL",
 		reactors,
 		0,
-		timestep);
-	
+		1,
+		false);
 	*/
-	
-	
 	//const char* hydrolysis_specfile = "/home/paul/Schreibtisch/smalltest/feeding_test/hydrolyse_checkpoint.lua";
 	//const char* table = load_hydrolysis_feeding(hydrolysis_specfile);
 	//std::cout << table << std::endl;

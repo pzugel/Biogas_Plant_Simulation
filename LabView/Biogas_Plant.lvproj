@@ -71,6 +71,7 @@
 					<Item Name="element_editor.vi" Type="VI" URL="../subVI/element_editor.vi"/>
 					<Item Name="element_editor_close.vi" Type="VI" URL="../subVI/element_editor_close.vi"/>
 					<Item Name="element_editor_highlight_validation.vi" Type="VI" URL="../subVI/element_editor_highlight_validation.vi"/>
+					<Item Name="element_editor_hydrolyse_initial.vi" Type="VI" URL="../subVI/element_editor_hydrolyse_initial.vi"/>
 					<Item Name="element_editor_hydroyse_run.vi" Type="VI" URL="../subVI/element_editor_hydroyse_run.vi"/>
 					<Item Name="element_editor_init_tree.vi" Type="VI" URL="../subVI/element_editor_init_tree.vi"/>
 					<Item Name="element_editor_list_hydrolyse.vi" Type="VI" URL="../subVI/element_editor_list_hydrolyse.vi"/>
@@ -83,14 +84,22 @@
 					<Item Name="element_editor_validate_specs.vi" Type="VI" URL="../subVI/element_editor_validate_specs.vi"/>
 				</Item>
 				<Item Name="Main Panel" Type="Folder">
+					<Item Name="Environment" Type="Folder">
+						<Item Name="main_clear_environment.vi" Type="VI" URL="../subVI/main_clear_environment.vi"/>
+						<Item Name="main_create_environment.vi" Type="VI" URL="../subVI/main_create_environment.vi"/>
+						<Item Name="main_load_environment_check.vi" Type="VI" URL="../subVI/main_load_environment_check.vi"/>
+						<Item Name="main_load_environtment.vi" Type="VI" URL="../subVI/main_load_environtment.vi"/>
+					</Item>
 					<Item Name="main_auto_cleanup.vi" Type="VI" URL="../subVI/main_auto_cleanup.vi"/>
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
 					<Item Name="main_console_output.vi" Type="VI" URL="../subVI/main_console_output.vi"/>
 					<Item Name="main_feedback_sliders.vi" Type="VI" URL="../subVI/main_feedback_sliders.vi"/>
+					<Item Name="main_feeding.vi" Type="VI" URL="../subVI/main_feeding.vi"/>
 					<Item Name="main_init_element_specs.vi" Type="VI" URL="../subVI/main_init_element_specs.vi"/>
 					<Item Name="main_init_panel.vi" Type="VI" URL="../subVI/main_init_panel.vi"/>
 					<Item Name="main_kill_ugshell.vi" Type="VI" URL="../subVI/main_kill_ugshell.vi"/>
 					<Item Name="main_panel_run_init.vi" Type="VI" URL="../subVI/main_panel_run_init.vi"/>
+					<Item Name="main_prepare_run.vi" Type="VI" URL="../subVI/main_prepare_run.vi"/>
 					<Item Name="main_reactor_display.vi" Type="VI" URL="../subVI/main_reactor_display.vi"/>
 					<Item Name="main_reset_panel.vi" Type="VI" URL="../subVI/main_reset_panel.vi"/>
 					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
@@ -98,6 +107,7 @@
 					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
 					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
 					<Item Name="main_time_control.vi" Type="VI" URL="../subVI/main_time_control.vi"/>
+					<Item Name="main_write_summary.vi" Type="VI" URL="../subVI/main_write_summary.vi"/>
 				</Item>
 				<Item Name="Plant" Type="Folder">
 					<Item Name="plant_pause.vi" Type="VI" URL="../subVI/plant_pause.vi"/>
@@ -122,7 +132,6 @@
 		</Item>
 		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
-		<Item Name="main_feeding.vi" Type="VI" URL="../subVI/main_feeding.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>
@@ -162,6 +171,7 @@
 				<Item Name="LVBoundsTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVBoundsTypeDef.ctl"/>
 				<Item Name="LVPositionTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVPositionTypeDef.ctl"/>
 				<Item Name="LVRectTypeDef.ctl" Type="VI" URL="/&lt;vilib&gt;/Utility/miscctls.llb/LVRectTypeDef.ctl"/>
+				<Item Name="List Directory and LLBs.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/List Directory and LLBs.vi"/>
 				<Item Name="Longest Line Length in Pixels.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Longest Line Length in Pixels.vi"/>
 				<Item Name="NI_FileType.lvlib" Type="Library" URL="/&lt;vilib&gt;/Utility/lvfile.llb/NI_FileType.lvlib"/>
 				<Item Name="NI_Matrix.lvlib" Type="Library" URL="/&lt;vilib&gt;/Analysis/Matrix/NI_Matrix.lvlib"/>
@@ -175,6 +185,7 @@
 				<Item Name="Path to URL inner.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Path to URL inner.vi"/>
 				<Item Name="Path to URL.vi" Type="VI" URL="/&lt;vilib&gt;/printing/PathToURL.llb/Path to URL.vi"/>
 				<Item Name="Read PNG File.vi" Type="VI" URL="/&lt;vilib&gt;/picture/png.llb/Read PNG File.vi"/>
+				<Item Name="Recursive File List.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/libraryn.llb/Recursive File List.vi"/>
 				<Item Name="Search and Replace Pattern.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Search and Replace Pattern.vi"/>
 				<Item Name="Set Bold Text.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/error.llb/Set Bold Text.vi"/>
 				<Item Name="Set Cursor (Cursor ID).vi" Type="VI" URL="/&lt;vilib&gt;/Utility/cursorutil.llb/Set Cursor (Cursor ID).vi"/>

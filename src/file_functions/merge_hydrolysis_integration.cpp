@@ -21,6 +21,7 @@ static std::string gesamtdatei_string;
  * Returns "gesamtdatei_string"
  */
 std::string get_merged_file(){
+	std::cout << "gesamtdatei_string: " << gesamtdatei_string << std::endl;
 	return gesamtdatei_string;
 }
 
@@ -59,19 +60,21 @@ bool merge_hydrolysis_files_integration(
         if (runde == 1){	
 				
             getline(output,file_name);
+            std::cout << "runde1 file_name: " << file_name << std::endl;
             file_stream_output1 = ifstream(file_name);
 			std::string output1_content((std::istreambuf_iterator<char>(file_stream_output1)),
 				(std::istreambuf_iterator<char>()));
             file_output1 = istringstream(output1_content);
-
+			std::cout << "output1_content: " << output1_content << std::endl;
             getline(output, file_name);
             file_stream_output2 = ifstream(file_name);
 			std::string output2_content((std::istreambuf_iterator<char>(file_stream_output2)),
 				(std::istreambuf_iterator<char>()));
             file_output2 = istringstream(output2_content);
+            std::cout << "output2_content: " << output2_content << std::endl;
         }
         else{        
-            
+            std::cout << "not runde1 file_name: " << file_name << std::endl;
             getline(output,file_name);
             file_stream_output1 = ifstream(file_name);
 			std::string content((std::istreambuf_iterator<char>(file_stream_output1)),
@@ -104,13 +107,14 @@ bool merge_hydrolysis_files_integration(
 
 		while(file_output1 >> zahl1)  //Zahlenweise durchgehen
 		{
+			std::cout << "zahl1: " << zahl1 << std::endl;
 			// string zu char umwandeln
 			int n = zahl1.length();
 			char char_array[n + 1];
 			strcpy(char_array, zahl1.c_str());
 
 			// Auf Zahl testen (alle Zahlen in den Vektor 'liste1' schreiben, die Oberbegriffe in 'legende') //strchr(char_array, '4')->Sonderfall!
-			if (strchr(char_array, '0')|| strchr(char_array, '1')|| strchr(char_array, '2')|| strchr(char_array, '3')||  strchr(char_array, '5')|| strchr(char_array, '6')|| strchr(char_array, '7')|| strchr(char_array, '8')|| strchr(char_array, '9')){
+			if (strchr(char_array, '0')|| strchr(char_array, '1')|| strchr(char_array, '2')|| strchr(char_array, '3')||  strchr(char_array, '4')|| strchr(char_array, '5')|| strchr(char_array, '6')|| strchr(char_array, '7')|| strchr(char_array, '8')|| strchr(char_array, '9')){
 				liste1.push_back(char_array);
 				legendevorbei = true;
 			}
@@ -120,7 +124,8 @@ bool merge_hydrolysis_files_integration(
 			}
 			//Fehler abfangen: kein Wert als Eingabe
 			else{
-				return "falscher Wert in 1.Outflow-Datei (keine Zahl)";
+				std::cout << "falscher Wert in 1.Outflow-Datei (keine Zahl)" << std::endl;
+				return false;
 			}
 		}
 
@@ -133,7 +138,7 @@ bool merge_hydrolysis_files_integration(
 			strcpy(char_array2, zahl2.c_str());
 
 			// Auf Zahl testen (alle Zahlen in den Vektor 'liste2' schreiben)//strchr(char_array2, '4')||
-			if (strchr(char_array2, '0')|| strchr(char_array2, '1')|| strchr(char_array2, '2')|| strchr(char_array2, '3')|| strchr(char_array2, '5')|| strchr(char_array2, '6')|| strchr(char_array2, '7')|| strchr(char_array2, '8')|| strchr(char_array2, '9')){
+			if (strchr(char_array2, '0')|| strchr(char_array2, '1')|| strchr(char_array2, '2')|| strchr(char_array2, '3')|| strchr(char_array2, '4')|| strchr(char_array2, '5')|| strchr(char_array2, '6')|| strchr(char_array2, '7')|| strchr(char_array2, '8')|| strchr(char_array2, '9')){
 				liste2.push_back(char_array2);
 				legendevorbei2 = true;
 			}
@@ -235,7 +240,8 @@ bool merge_hydrolysis_files_integration(
 
 						//Fehlerbehandlung: Zeit wird wieder kleiner
 						if (wert1<wert2){
-							return "Zeitangabe in 1.Outflow-Datei falsch: Zeit darf nicht kleiner werden";
+							std::cout << "Zeitangabe in 1.Outflow-Datei falsch: Zeit darf nicht kleiner werden" << std::endl;
+							return false;
 						}
 						if (wert1<=aktueller_timestamp1){
 							string neu22 = to_string(wert1-wert2); //Zeitintervall
@@ -462,7 +468,7 @@ bool merge_hydrolysis_files_integration(
             strcpy(char_array, zahl1.c_str());
 
             // Auf Zahl testen (alle Zahlen in den Vektor 'liste1' schreiben, die Oberbegriffe in 'legende') //strchr(char_array, '4')->Sonderfall!
-            if (strchr(char_array, '0')|| strchr(char_array, '1')|| strchr(char_array, '2')|| strchr(char_array, '3')||  strchr(char_array, '5')|| strchr(char_array, '6')|| strchr(char_array, '7')|| strchr(char_array, '8')|| strchr(char_array, '9')){
+            if (strchr(char_array, '0')|| strchr(char_array, '1')|| strchr(char_array, '2')|| strchr(char_array, '3')|| strchr(char_array, '4')|| strchr(char_array, '5')|| strchr(char_array, '6')|| strchr(char_array, '7')|| strchr(char_array, '8')|| strchr(char_array, '9')){
                 liste1.push_back(char_array);
                 legendevorbei = true;
             }
