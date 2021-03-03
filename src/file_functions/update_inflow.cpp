@@ -148,7 +148,7 @@ void write_new_timetable(double fraction)
 		*/
 		for(int j=0; j<outflow_input_header.size(); j++){
 			std::string header_val = outflow_input_header.at(j);
-			if(header_val.find(data_val) != string::npos)
+			if(header_val.find(data_val) != std::string::npos)
 				column = j;
 		}
 		

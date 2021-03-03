@@ -496,7 +496,7 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
 			for(int col=0; col<outflow_input_header.size(); col++)
 			{
 				std::string header_val = outflow_input_header.at(col);
-				if(header_val.find("pH") != string::npos)
+				if(header_val.find("pH") != std::string::npos)
 					ph_string += values.at(reactor_num).at(last_row-1).at(col) + "\n";
 			}
 			reactor_num += 1;
