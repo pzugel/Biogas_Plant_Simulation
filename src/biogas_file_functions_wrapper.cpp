@@ -256,9 +256,16 @@ void merge_all_hydrolysis(
 		if(!output_file_string.empty())
 		{
 			if(is_first_timestep){
-				output_file.open(output_file_name);
-				output_file << header_string;
-				output_file << output_file_string;
+				if(merge_preexisting){
+					output_file.open(output_file_name, std::ios_base::app);
+					output_file << output_file_string;
+				}
+				else
+				{
+					output_file.open(output_file_name);
+					output_file << header_string;
+					output_file << output_file_string;
+				}
 			}
 			else{
 				output_file.open(output_file_name, std::ios_base::app);
@@ -468,13 +475,12 @@ const char* load_hydrolysis_feeding(const char* hydrolysis_specfile)
  * Reads out pH value from "reactorState.txt" files. We only use this
  * for hydrolysis reactors to display in LabView.
  * 
- * @param ph_arr: Array containing the pH values
  * @param reactor_state_files: String with the reactorState.txt directories
+ * @return ph_string: String with PH values
  */
-void get_hydrolysis_PH(
-	double (&ph_arr)[3],
-	const char* reactor_state_files)
+const char* get_hydrolysis_PH(const char* reactor_state_files)
 {
+	ph_string = "";
 	int reactor_num = 0;
 	std::istringstream dir_stream(reactor_state_files);
 	values = {};
@@ -491,13 +497,13 @@ void get_hydrolysis_PH(
 			{
 				std::string header_val = outflow_input_header.at(col);
 				if(header_val.find("pH") != string::npos)
-					ph_arr[reactor_num] = dot_conversion(values.at(reactor_num).at(last_row-1).at(col));
+					ph_string += values.at(reactor_num).at(last_row-1).at(col) + "\n";
 			}
 			reactor_num += 1;
 		}
-		else
-			ph_arr[reactor_num] = 0;
 	}
+	std::replace(ph_string.begin(), ph_string.end(), '.', ',');
+	return ph_string.c_str();
 }
 
 } //end extern "C"
@@ -509,12 +515,13 @@ int main(){
 	/*
 	const char* reactors = "hydrolyse_0\nhydrolyse_1\n";
 	merge_all_hydrolysis(
-		"/home/paul/Schreibtisch/smalltest/biogas_20210225_134915@2_STAGE_PL",
+		"/home/paul/Schreibtisch/smalltest/biogas_20210226_162149@2_STAGE_PL",
 		reactors,
 		0,
-		1,
+		26,
 		false);
 	*/
+	
 	//const char* hydrolysis_specfile = "/home/paul/Schreibtisch/smalltest/feeding_test/hydrolyse_checkpoint.lua";
 	//const char* table = load_hydrolysis_feeding(hydrolysis_specfile);
 	//std::cout << table << std::endl;
@@ -536,5 +543,14 @@ int main(){
 	std::cout << a[0] << std::endl;
 	std::cout << a[1] << std::endl;
 	*/
+	
+	
+	const char* working_dir = "/home/paul/Schreibtisch/smalltest/biogas_20210226_162149@2_STAGE_PL/methane";
+	merge_one_reactor(
+		working_dir,
+		0,
+		26,
+		false);
+	
 	return 0;
 }

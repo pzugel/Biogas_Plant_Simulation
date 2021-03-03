@@ -18,5 +18,5 @@
 		<Item Name="read filenames.vi" Type="VI" URL="../VIs/read filenames.vi"/>
 	</Item>
 	<Item Name="file_functions.dll" Type="Document" URL="../../file_functions.dll"/>
-	<Item Name="libFileFunctions.so" Type="Document" URL="../libFileFunctions.so"/>
+	<Item Name="libFileFunctions.so" Type="Document" URL="../../libFileFunctions.so"/>
 </Library>

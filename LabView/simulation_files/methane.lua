@@ -5,14 +5,20 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"simpleMethane_stage"},
+		activeReactions={"Methane_Stage"},
 	},
 	numericalSetup={
 		sim_starttime=0,
 		sim_endtime=3,
 	},
 	outputSpecs={
-		outputSetting = "plantBasics",
+		customSetting={
+			cDigestate=true,
+			biogas=true,
+			developer=true,
+			debug=true,
+			vtk=false,
+		},
 	},
 	checkpoint={
 		doReadCheckpoint=false,

@@ -34,3 +34,4 @@ add_library(${OutputReader} SHARED src/biogas_output_reader_wrapper.cpp)
 add_library(${SimulationControl} SHARED src/biogas_simulation_control_wrapper.cpp)
 add_library(${FileFunctions} SHARED src/biogas_file_functions_wrapper.cpp)
 add_library(${CheckpointUpdate} SHARED src/biogas_checkpoint_wrapper.cpp)
+
