@@ -5,8 +5,6 @@ import eu.mihosoft.vrl.system.PluginAPI;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
-import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
-import vrl.biogas.biogascontrol.structures.STRUCT_3_STAGE;
 
 
 public class BiogasControlPluginConfigurator extends VPluginConfigurator{
@@ -31,8 +29,7 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       VPluginAPI vapi = (VPluginAPI) api;
 	       vapi.addComponent(BiogasControlPlugin.class);
 	       vapi.addTypeRepresentation(MainPanelContainerType.class);
-	       vapi.addComponent(STRUCT_2_STAGE.class);
-	       vapi.addComponent(STRUCT_3_STAGE.class);
+	       vapi.addComponent(Structure.class);
 	   }
 	}
 

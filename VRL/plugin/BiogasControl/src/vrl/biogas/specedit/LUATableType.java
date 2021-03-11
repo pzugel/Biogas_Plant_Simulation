@@ -1,17 +1,18 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.specedit;
+
+import eu.mihosoft.vrl.annotation.TypeInfo;
+import eu.mihosoft.vrl.reflection.TypeRepresentationBase;
+import eu.mihosoft.vrl.visual.ResizableContainer;
+import eu.mihosoft.vrl.visual.TransparentPanel;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-
-import javax.swing.JComponent;
+import javax.swing.BoxLayout;
 import javax.swing.JPanel;
-
-import eu.mihosoft.vrl.annotation.TypeInfo;
-import eu.mihosoft.vrl.reflection.TypeRepresentationBase;
-import eu.mihosoft.vrl.visual.TransparentPanel;
+import javax.swing.JComponent;
 
 /**
  * Parent type for plot typerepresentations. Can also be used directly as type
@@ -20,19 +21,19 @@ import eu.mihosoft.vrl.visual.TransparentPanel;
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
 @TypeInfo(type = JComponent.class, input = true, output = true, style = "default")
-public class MainPanelContainerType extends TypeRepresentationBase implements java.io.Serializable {
+public class LUATableType extends TypeRepresentationBase implements java.io.Serializable {
 
     private static final long serialVersionUID = 1;
     private JPanel componentContainer;
     private JComponent jComponent;
     
-    public MainPanelContainerType() {
+    public LUATableType() {
     	setValueName(""); // name of the visualization
 
         // Set layout
-    	this.setLayout(new BorderLayout());
-        this.setPreferredSize(new Dimension(200, 200));
-        this.setMinimumSize(new Dimension(100, 100));
+        this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
+        //this.setPreferredSize(new Dimension(300, 300));
+        this.setMinimumSize(new Dimension(200, 120));
 
         // Get the panel from the xychart
         componentContainer = new TransparentPanel();
@@ -40,9 +41,11 @@ public class MainPanelContainerType extends TypeRepresentationBase implements ja
         // Set layout
         componentContainer.setLayout(new BorderLayout());
 
-        add(componentContainer);
-        
-        
+        // Add ruler
+        ResizableContainer container = new ResizableContainer(componentContainer);
+
+        add(container);
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -50,7 +53,7 @@ public class MainPanelContainerType extends TypeRepresentationBase implements ja
                         + "height=" + getHeight());
             }
         });
-		
+
     }
     
     @Override

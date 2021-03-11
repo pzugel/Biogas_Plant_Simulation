@@ -1,11 +1,7 @@
 package vrl.biogas.biogascontrol;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
-import java.awt.Insets;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -14,7 +10,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
@@ -88,7 +83,19 @@ public class SetupPanel {
 
         double size[][] =
             {{0.1, 0.5, 0.01, 0.22, 0.07, TableLayout.FILL},
-             {0.2, 0.05, 0.01, 0.08, 0.01, 0.08, 0.01, 0.08, 0.18, 0.1, 0.1, TableLayout.FILL}};
+             {0.2, //Text 0
+            	0.05, //Directory 1
+            	0.01,  
+            	0.08, //Create 3
+            	0.01, 
+            	0.08, //Clear 5
+            	0.01, 
+            	0.08, //Load 7
+            	//0.18, 
+            	//0.1, 
+            	//0.1, 
+            	TableLayout.FILL,
+            	0.06}};
         setupPanel.setLayout(new TableLayout(size));
         
         //setupPanel.add(new JLabel("0,0"), new TableLayoutConstraints(0, 0, 0, 0, TableLayout.LEFT, TableLayout.TOP));
@@ -96,7 +103,7 @@ public class SetupPanel {
         //setupPanel.add(new JLabel("0,3"), new TableLayoutConstraints(0, 3, 0, 3, TableLayout.LEFT, TableLayout.TOP));
         //setupPanel.add(new JLabel("0,5"), new TableLayoutConstraints(0, 5, 0, 5, TableLayout.LEFT, TableLayout.TOP));
         setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayout.LEFT, TableLayout.CENTER));
-        setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 10, TableLayout.CENTER, TableLayout.CENTER));
+        setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayout.CENTER, TableLayout.CENTER));
         //setupPanel.add(new JLabel("2"), new TableLayoutConstraints(2, 0, 2, 0, TableLayout.LEFT, TableLayout.TOP));
         //setupPanel.add(new JLabel("3,0"), new TableLayoutConstraints(3, 0, 3, 0, TableLayout.LEFT, TableLayout.TOP));
         //setupPanel.add(new JLabel("4,0"), new TableLayoutConstraints(4, 0, 4, 0, TableLayout.LEFT, TableLayout.TOP));
@@ -259,14 +266,14 @@ public class SetupPanel {
 		SimulationPanel.workingDirectory.setText(dir.toString());
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
-		
+		File simulationFiles = new File(BiogasControlPlugin.projectPath, "simulation_files");
 		//Methane
 		if(BiogasControlPlugin.struct.methane()) {
 			File methaneDir = new File(dir, "methane");
 			if (!methaneDir.exists()){
 				methaneDir.mkdirs();
 			}
-			Files.copy(new File(BiogasControlPlugin.projectPath, "methane.lua").toPath(),
+			Files.copy(new File(simulationFiles, "methane.lua").toPath(),
 					new File(methaneDir, "methane.lua").toPath(), 
 					StandardCopyOption.REPLACE_EXISTING);
 			newRoot.add(new DefaultMutableTreeNode("methane"));
@@ -279,7 +286,7 @@ public class SetupPanel {
 			if (!hydroDir.exists()){
 				hydroDir.mkdirs();
 			}	
-			Files.copy(new File(BiogasControlPlugin.projectPath, "hydrolyse.lua").toPath(), 
+			Files.copy(new File(simulationFiles, "hydrolyse.lua").toPath(), 
 					new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
 					StandardCopyOption.REPLACE_EXISTING);
 			newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
