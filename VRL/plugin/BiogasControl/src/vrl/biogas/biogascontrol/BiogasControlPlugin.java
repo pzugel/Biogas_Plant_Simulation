@@ -1,10 +1,11 @@
 package vrl.biogas.biogascontrol;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -24,7 +25,7 @@ import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
 	description="MainPanel Component")
 public class BiogasControlPlugin implements Serializable{
 	private static final long serialVersionUID = 1L;
-	static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
+	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
 	
 	static File projectPath;
 	static JPanel panel;
@@ -36,13 +37,14 @@ public class BiogasControlPlugin implements Serializable{
 	public static JComponent control(
 			@ParamInfo(name = "Structure",
 		    	nullIsValid = false,
-		    	options = "invokeOnChange=true") Structure structure)
+		    	options = "invokeOnChange=true") Structure structure,
+			@ParamInfo(name = "Directory",
+	    		nullIsValid = false,
+	    		options = "invokeOnChange=true") Path projectDir)
 		    			throws IOException, InterruptedException{
 		struct = structure;
-		projectPath = new File(System.getProperty("user.dir")); 
-		projectPath = projectPath.getParentFile();//TODO: ONLY FOR DEBUG
-		projectPath = projectPath.getParentFile();//TODO: ONLY FOR DEBUG
-
+		projectPath = new File(projectDir.toString()).getParentFile();
+		System.out.println("projectPath: " + projectPath);
         JPanel simulationPanel = (new SimulationPanel()).getPanel();
         JPanel setupPanel = (new SetupPanel()).getPanel();
         JPanel settingsPanel = (new SettingsPanel()).getPanel();
@@ -57,9 +59,7 @@ public class BiogasControlPlugin implements Serializable{
         tab_panel.addTab("Settings", settingsPanel);
         tab_panel.addTab("Feedback", feedbackPanel);
         tab_panel.addTab("Feeding", feedingPanel);
-        //tab_panel.setSize(510, 540);
-        
-        
+        //tab_panel.setSize(510, 540);     
 
         panel = new JPanel();
     	//panel.setSize(340, 330);
@@ -90,14 +90,21 @@ public class BiogasControlPlugin implements Serializable{
 	
 	public static void main(String args[]) throws IOException, InterruptedException{         	
 	   
+		//String dir = System.getProperty("user.dir");
+		//File f = new File(dir);
+		//f = f.getParentFile();
+		//f = f.getParentFile();
+		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
+		Path p = Paths.get(f.getPath());
+		
 	    JFrame frame = new JFrame();
-	    //control(new STRUCT_2_STAGE());
-	    //JPanel a = new JPanel(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-	    control(new STRUCT_2_STAGE());
+
+	    control(new STRUCT_2_STAGE(), p);
+	    
+	    
 		frame.add(panel);
 		frame.setSize(600, 600);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-	
+		frame.setVisible(true);		
 	}
 }

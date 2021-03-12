@@ -15,8 +15,6 @@ public class ValidationParser {
 		parameters = inputParams;
 		readFile(path);
 		modifyInput();
-		generateIndents();
-		generateStates();
 		genereteValues();
 	}
 	
@@ -92,22 +90,7 @@ public class ValidationParser {
 		}
 	}
 
-	private void generateIndents() {
-		int ind = -1;
-		for (int i = 0; i < text.length(); i++) {
-			if(text.charAt(i) == '{') {
-				ind += 1;
-				parameters.add(new ValiTableEntry(ind));
-			}
-			else if(text.charAt(i) == '}') {
-				ind -= 1;
-			}
-			
-		}
-	}
-
 	private void genereteValues() {
-		
 		text = text.replaceAll("\\{", "\\{\n");
 		text = text.replaceAll("\\}", "\n}\n");
 		text = text.replaceAll(",", "\n");
@@ -133,13 +116,13 @@ public class ValidationParser {
 			if(m.find())
 			{
 				++index;
-				((ValiTableEntry) parameters.get(index)).setName(line.substring(0, line.length()-2));
+				//((ValiTableEntry) parameters.get(index)).setName(line.substring(0, line.length()-2));
 				Matcher m_table = Pattern.compile(table_entry).matcher(line);
 				if(m_table.find())
 				{
 					((ValiTableEntry) parameters.get(index)).setType(last_type);	
 					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
-					((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
+					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -162,7 +145,7 @@ public class ValidationParser {
 				last_default = tmpline.substring(8);
 				if(((ValiTableEntry) parameters.get(index)).isValueField()) {
 					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
-					((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
+					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -179,25 +162,9 @@ public class ValidationParser {
 		}
 		scanner.close();
 	}
-
-	private void generateStates() {
-		((ValiTableEntry) parameters.get(parameters.size()-1)).setValueField(true);
-		
-		for(int i=0; i<parameters.size()-1; i++)
-		{
-			int thisIndent = ((ValiTableEntry) parameters.get(i)).getIndent();
-			int nextIndent = ((ValiTableEntry) parameters.get(i+1)).getIndent();
-			if(thisIndent<nextIndent)
-			{
-				((ValiTableEntry) parameters.get(i)).setValueField(false);
-			}
-			else {
-				((ValiTableEntry) parameters.get(i)).setValueField(true);
-			}
-		}	
-	}
-	
+	/*
 	public List<ValiTableEntry> getOutput(){
 		return parameters;
 	}
+	*/
 }

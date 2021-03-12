@@ -41,7 +41,7 @@ validateSpecs(std::string specs)
 	this->validationErrorParams = "";
 	std::regex isBool ("(\\s)*true(\\s)*|(\\s)*false(\\s)*");
 	std::regex isString ("\"(\\s)*[a-zA-Z0-9_.(\\s)*]+(\\s)*\"");
-	std::regex isStringArr ("(\\s)*\\{(\\s)*\"[a-zA-Z0-9_(\\s)*]+\"(\\s)*\\}(\\s)*");
+	std::regex isStringArr ("(\\s)*\\{(\\s)*(\"[a-zA-Z0-9_(\\s)*]+\"(\\s)*(,)?(\\s)*)*(\\s)*\\}(\\s)*");
 	std::regex isInt ("(\\s)*[0-9\\*]+(\\s)*");
 	std::regex isDouble ("(\\s)*[0-9Ee.\\*\\-]+(\\s)*");
 	std::regex isDoubleTimestamp ("(\\s)*\\{(\\s)*([0-9Ee.\\*\\-]+(\\s)*,(\\s)*)+[0-9Ee.\\*\\-]+(\\s)*\\}(\\s)*");
@@ -129,7 +129,9 @@ validateSpecs(std::string specs)
 
 			else if(type == "string[]")
 			{
-				if(!std::regex_match(inputSpecs[i], isStringArr))
+				std::string spec = inputSpecs[i];
+				spec.erase(remove_if(spec.begin(), spec.end(), isspace), spec.end());
+				if(!std::regex_match(spec, isStringArr))
 				{
 					this->validationMessage += "Type ERROR: \"" + this->entries[i].leftCell + "\" should be of type " +  type + "\n";
 					this->validationErrorParams += std::to_string(i) + "\n";

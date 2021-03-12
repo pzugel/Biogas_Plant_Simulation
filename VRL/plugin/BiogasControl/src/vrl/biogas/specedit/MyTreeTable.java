@@ -59,9 +59,11 @@ public class MyTreeTable extends JTable {
         Component comp = super.prepareRenderer(renderer, row, col);
 
         List<Integer> errorRows = new ArrayList<Integer>();   
-        for(TreePath p : errorParams)
+        for(TreePath p : errorParams) {
+        	System.out.println("Error Path: " + p.toString());
+        	System.out.println("Error Row: " + tree.getRowForPath(p));
         	errorRows.add(tree.getRowForPath(p));
-
+        }
         //Object value = getModel().getValueAt(row, 0);
         if (getSelectedRow() == row) {
         	if (errorRows.contains(row) && col == 2) {

@@ -83,52 +83,6 @@ transformValiInput()
 	}
 }
 
-/**
- * Generate indentations
- *
- * Parse all parenthesis to assign the correct indentation.
- * This method also creates the TableEntry Objects. 
- * Therefor it has to be called first!
- */
-void BiogasSpecValiReader::
-generateIndents()
-{
-	int ind = -1;
-	this->entries = {};
-
-	for(int i=0; i<this->input_valiModified.size(); i++)
-	{
-		if(this->input_valiModified.at(i) == '{')
-		{
-			ind += 1;
-			TableEntry* newEntry = new TableEntry();
-			newEntry->indent = ind;
-			this->entries.push_back(*newEntry);
-		}
-		else if(this->input_valiModified.at(i) == '}')
-			ind -= 1;
-	}
-
-	number_of_validation_entries = this->entries.size();
-}
-
-/**
- * Generate glyphs 
- *
- * Sets a visual symbol in LabView. If the entry is not a parameter, 
- * we set a folder symbol (15). Otherwise we keep the default (0).
- */
-void BiogasSpecValiReader::
-generateGlyphs()
-{
-	for(int i=0; i<number_of_validation_entries-1; i++)
-	{
-		if(this->entries[i].indent<this->entries[i+1].indent)
-		{
-			this->entries[i].glyph = 15;
-		}
-	}
-}
 
 /**
  * Generate all validation data  
@@ -143,6 +97,13 @@ generateGlyphs()
 bool BiogasSpecValiReader::
 generateValues()
 {	
+	number_of_validation_entries = 0;
+	for(int i=0; i<this->input_valiModified.size(); i++)
+	{
+		if(this->input_valiModified.at(i) == '{')
+			++ number_of_validation_entries;
+	}
+	
 	std::string line_input = this->input_valiModified; 
 	boost::replace_all(line_input, "{", "{\n");
 	boost::replace_all(line_input, "}", "\n}\n");
@@ -240,8 +201,8 @@ testValidationMatch()
 	if(number_of_validation_entries!=this->number_of_entries)
 	{
 		this->validationMessage = "Failed matching of specificaiton file with validation file!\n";
-		this->validationMessage += "--> #parameters in the validation file: " + std::to_string(this->number_of_entries) +"\n";
-		this->validationMessage += "--> #parameters in the specification file: " + std::to_string(number_of_validation_entries) +"\n";
+		this->validationMessage += "--> #parameters in the validation file: " + std::to_string(number_of_validation_entries) + "\n";
+		this->validationMessage += "--> #parameters in the specification file: " + std::to_string(this->number_of_entries) + "\n";
 		std::cout << this->validationMessage << std::endl;
 		return false; //Different number of parameters
 	}

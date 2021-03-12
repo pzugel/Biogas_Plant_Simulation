@@ -17,13 +17,13 @@ public class SpecValidation {
 		
 		validationErrorParams = new ArrayList<TreePath>();
 		
-		String isBool = "true|false";
-		String isString = "\"[a-zA-Z0-9_.]+\"";
-		String isStringArr = "\\{\"[a-zA-Z0-9_]+\"\\}";
-		String isInt = "[0-9\\*]+";
-		String isDouble = "[0-9E.\\*\\-]+";
-		String isDoubleTimestamp = "\\{[0-9E.\\*\\-]+,[0-9E.\\*\\-]+\\}";
-		String isIntTimestamp = "\\{[0-9\\*]+,[0-9\\*]+\\}";
+		String isBool = "(\\s)*true(\\s)*|(\\s)*false(\\s)*";
+		String isString = "\"(\\s)*[a-zA-Z0-9_.(\\s)*]+(\\s)*\"";
+		String isStringArr = "(\\s)*\\{(\\s)*(\"[a-zA-Z0-9_(\\s)*]+\"(\\s)*(,)?(\\s)*)*(\\s)*\\}(\\s)*";
+		String isInt = "(\\s)*[0-9\\*]+(\\s)*";
+		String isDouble = "(\\s)*[0-9Ee.\\*\\-]+(\\s)*";
+		String isDoubleTimestamp = "(\\s)*\\{(\\s)*([0-9Ee.\\*\\-]+(\\s)*,(\\s)*)+[0-9Ee.\\*\\-]+(\\s)*\\}(\\s)*";
+		String isIntTimestamp = "(\\s)*\\{(\\s)*([0-9\\*]+(\\s)*,(\\s)*)+[0-9\\*]+(\\s)*\\}(\\s)*";
 		
 		for(ValiTableEntry entry : parameters)
 		{
@@ -105,7 +105,9 @@ public class SpecValidation {
 	
 				else if(type.equals("string[]"))
 				{
-					if(!Pattern.compile(isStringArr).matcher(entry.getSpecVal()).matches())
+					String spec = entry.getSpecVal();
+					spec.replaceAll(" ", "");
+					if(!Pattern.compile(isStringArr).matcher(spec).matches())
 					{
 						validationMessage += "Type ERROR: \"" + entry.getName() + "\" should be of type " +  type + "\n";
 						validationErrorParams.add(entry.getPath());

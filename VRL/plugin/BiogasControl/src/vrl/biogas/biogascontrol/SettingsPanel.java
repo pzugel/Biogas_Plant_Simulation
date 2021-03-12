@@ -112,7 +112,7 @@ public class SettingsPanel {
             	TableLayout.FILL}};
         elementsPanel.setLayout(new TableLayout(elements_size));
         File simulationFilesPath = new File(BiogasControlPlugin.projectPath, "simulation_files");
-        
+        System.out.println("simulationFilesPath: " + simulationFilesPath);
         JButton methane_edit = new JButton("Edit");
         methane_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
         JTextField methane_path = new JTextField(5);

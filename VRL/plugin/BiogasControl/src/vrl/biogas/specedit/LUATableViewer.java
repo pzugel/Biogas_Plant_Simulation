@@ -1,13 +1,11 @@
 package vrl.biogas.specedit;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import eu.mihosoft.vrl.annotation.MethodInfo;
-import eu.mihosoft.vrl.annotation.OutputInfo;
-import eu.mihosoft.vrl.annotation.ParamGroupInfo;
-import eu.mihosoft.vrl.annotation.ParamInfo;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
+import java.awt.Color;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -17,10 +15,8 @@ import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -40,21 +36,14 @@ public class LUATableViewer implements Serializable{
 	static MyAbstractTreeTableModel myTreeTableModel; //Maybe not needed
 	static public File valFile;
 	static public File specFile;
-	static public File simFile;
-
-	static boolean showVali;
+	static JScrollPane scrollPane;
 	
-	@MethodInfo(name="Editor", hide=false, valueStyle = "multi-out",
-			hideCloseIcon=true, num=1)
-	@OutputInfo(style = "multi-out",
-    	elemNames = {"SimFile", "Parameters"},
-    	elemTypes = {JComponent.class, List.class})
-	public static Object[] editor() throws FileNotFoundException {		
+	public static void editor() throws FileNotFoundException {		
 		//parameters = (new ValidationParser(valFile, new ArrayList<ValiTableEntry>())).getOutput();
 		parameters = new ArrayList<ValiTableEntry>();
 		new SpecificationParser(specFile, parameters);
 		
-		LoadFileData data = new LoadFileData(parameters, showVali);
+		LoadFileData data = new LoadFileData(parameters);
 		myTreeTable = data.getTreeTable();
 		myTreeTableModel = data.getModel();
 		
@@ -62,9 +51,8 @@ public class LUATableViewer implements Serializable{
 		for(int i=0; i<render.getRowCount(); i++)
 			parameters.get(i).setPath(render.getPathForRow(i));	
 		updatePanel();
-		LUATableType container = new LUATableType();
-		container.setViewValue(panel);
-		return new Object[]{container, parameters};
+		//LUATableType container = new LUATableType();
+		//container.setViewValue(panel);
 	}
 	
 	private static void updatePanel() {
@@ -73,60 +61,33 @@ public class LUATableViewer implements Serializable{
 		myTreeTable.getColumnModel().getColumn(2).setPreferredWidth(100);
 		panel = new JPanel(new BorderLayout());
 		
-	    JPanel topPanel = new JPanel();
 	    JPanel btnPanel = new JPanel();
-	    
-	    topPanel.setLayout(new BorderLayout());
-	    panel.add(topPanel, BorderLayout.CENTER);
+	    scrollPane = new JScrollPane(myTreeTable);
+
+	    panel.add(scrollPane, BorderLayout.CENTER);
 	    panel.add(btnPanel, BorderLayout.SOUTH);
 		
-        JScrollPane scrollPane = new JScrollPane(myTreeTable);
-        scrollPane.setPreferredSize(new Dimension(400, 500));
-        topPanel.add(scrollPane,BorderLayout.CENTER);
+        JButton saveBtn = new JButton("Save");
+        JButton saveAsBtn = new JButton("Save As...");
+        JButton loadValBtn = new JButton("Load Validation");
+        JButton valBtn = new JButton("Validate");
         
-        JButton saveButton = new JButton("Save");
-        JButton valButton = new JButton("Validate");
+        saveBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        saveAsBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        loadValBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        valBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        valBtn.setForeground(Color.decode("#008000"));
         
-        btnPanel.add(saveButton);
-        btnPanel.add(valButton);
+        btnPanel.add(saveBtn);
+        btnPanel.add(saveAsBtn);
+        btnPanel.add(loadValBtn);
+        btnPanel.add(valBtn);
         
-        AbstractAction action = new AbstractAction()
-        {
-			private static final long serialVersionUID = 1L;
-
-			public void actionPerformed(ActionEvent e)
-            {
-				
-                TableCellListener tcl = (TableCellListener)e.getSource();
-                System.out.println("Row   : " + tcl.getRow());
-                System.out.println("Column: " + tcl.getColumn());
-                System.out.println("Old   : " + tcl.getOldValue());
-                System.out.println("New   : " + tcl.getNewValue());
-                TreePath p = myTreeTable.getTreeTableRenderer().getPathForRow(tcl.getRow());
-                //TODO: Not nice but works
-                for(ValiTableEntry entry : parameters) { 
-                	if(entry.getPath().equals(p)) {
-                		entry.setSpecVal((String) tcl.getNewValue());
-                	}
-          
-                }
-            }
-        };
+        addTreeListener();           
         
-        new TableCellListener(myTreeTable, action);    
-
-        saveButton.addActionListener(new ActionListener() {
+        saveAsBtn.addActionListener(new ActionListener() {
 	        @Override
 	        public void actionPerformed(ActionEvent e) {
-	        	try {
-					new SpecificationFileWriter(specFile, parameters);
-				} catch (IOException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-	        	
-	        	// DO NOT DELETE - COULD BE USED FOR "SAVE AS" BUTTON
-	        	/*
 	        	JFileChooser fileChooser = new JFileChooser();
 	            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
 	            JFrame parent = new JFrame();
@@ -145,14 +106,67 @@ public class LUATableViewer implements Serializable{
 						e1.printStackTrace();
 					}
 	                System.out.println("Selected file: " + selectedFile.getAbsolutePath());;
-	            }
-	            */
+	            }	
+	        }
+        });
+
+        saveBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	try {
+					new SpecificationFileWriter(specFile, parameters);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 	        }
 	    });
+        
+        loadValBtn.addActionListener(new ActionListener() {
+	        @Override
+	        public void actionPerformed(ActionEvent e) {
+	        	JFileChooser fileChooser = new JFileChooser();
+	            fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+	            JFrame parent = new JFrame();
+	            int result = fileChooser.showOpenDialog(parent);
+	            if (result == JFileChooser.APPROVE_OPTION) {
+	                File selectedFile = fileChooser.getSelectedFile();
+	                valFile = selectedFile;
+	                try {
+						new ValidationParser(valFile, parameters);
+												
+						LoadFileData data = new LoadFileData(parameters);
+						myTreeTable = data.getTreeTable();
+						myTreeTable.getColumnModel().getColumn(0).setPreferredWidth(200);
+						myTreeTable.getColumnModel().getColumn(1).setPreferredWidth(100);
+						myTreeTable.getColumnModel().getColumn(2).setPreferredWidth(100);
+						myTreeTableModel = data.getModel();
+						MyTreeTableCellRenderer render = myTreeTable.getTreeTableRenderer();
+						for(int i=0; i<render.getRowCount(); i++)
+							parameters.get(i).setPath(render.getPathForRow(i));	
+						panel.remove(scrollPane);	
+						scrollPane = new JScrollPane(myTreeTable);
+						panel.add(scrollPane);
+						addTreeListener();
+						panel.revalidate();
+						panel.repaint();
+						
+						//updatePanel();
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+	            }
+	        }
+        });
 
-        valButton.addActionListener(new ActionListener() {
+        valBtn.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
+        		String name = ((ValiTableEntry) parameters.get(12)).getName(); 
+        		String type = ((ValiTableEntry) parameters.get(12)).getType(); 
+        		String val = ((ValiTableEntry) parameters.get(12)).getSpecVal();
+        		System.out.println("Row 12: " + name + " " + type + " " + val);
         		SpecValidation specVal = new SpecValidation(parameters);
         		if(specVal.isValid()) {
         			JOptionPane.showMessageDialog(null, "Specification is valid!", "Validation", 
@@ -170,6 +184,7 @@ public class LUATableViewer implements Serializable{
         });
 	}
 	
+	/*
 	@MethodInfo(name="Files", valueStyle = "multi-out", hide=false,
 			 hideCloseIcon=true, num=1)
 	@OutputInfo(style = "multi-out",
@@ -192,7 +207,36 @@ public class LUATableViewer implements Serializable{
 		 showVali = showvali;
 		 return new Object[] {simFile, parameters};
 	}
+	*/
 	
+	private static void addTreeListener() {
+		AbstractAction action = new AbstractAction()
+        {
+			private static final long serialVersionUID = 1L;
+
+			public void actionPerformed(ActionEvent e)
+            {
+				
+                TableCellListener tcl = (TableCellListener)e.getSource();
+                TreePath p = myTreeTable.getTreeTableRenderer().getPathForRow(tcl.getRow());
+                System.out.println("Value Change " + p.toString());
+                System.out.println("Row   : " + tcl.getRow());
+                System.out.println("Column: " + tcl.getColumn());
+                System.out.println("Old   : " + tcl.getOldValue());
+                System.out.println("New   : " + tcl.getNewValue());
+                
+                //TODO: Not nice but works
+                String pathString = p.toString();
+                for(ValiTableEntry entry : parameters) { 
+                	if(entry.getPath().toString().equals(pathString)) {
+                		entry.setSpecVal((String) tcl.getNewValue());
+                	}
+          
+                }
+            }
+        };
+        new TableCellListener(myTreeTable, action);
+	}
 	
 	public static void main(String args[]) throws IOException{
 
@@ -200,12 +244,12 @@ public class LUATableViewer implements Serializable{
 		
 		//valFile = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/simulation_files/hydro_vali.lua");
 		specFile = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/simulation_files/hydrolyse.lua");
-		showVali = false;
 		editor();
 		
 		JFrame frame = new JFrame("");
 		frame.add(panel);
 		frame.setSize(200, 300);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	

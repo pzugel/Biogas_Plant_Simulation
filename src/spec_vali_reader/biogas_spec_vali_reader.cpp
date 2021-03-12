@@ -36,8 +36,6 @@ init_Vali(const char* filepath_vali)
 	if(this->readInput((std::string) filepath_vali))
 	{
 		this->transformValiInput();
-		this->generateIndents();
-		this->generateGlyphs();
 		return this->generateValues();
 	}
 	
@@ -57,7 +55,6 @@ init_Spec(const char* filepath_spec)
 {
 	if(this->readInput((std::string) filepath_spec))
 	{
-		std::cout << "init_Spec()" << std::endl;
 		this->transformSpecInput();
 		return this->generateSpecs();
 	}

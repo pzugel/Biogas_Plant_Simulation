@@ -10,11 +10,9 @@ public class LoadFileData extends JFrame implements Serializable{
 	public MyAbstractTreeTableModel treeTableModel;
 	static ArrayList<ValiTableEntry> listData;
 	static MyTreeTable myTreeTable;
-	static boolean showVali;
 	
-	public LoadFileData(ArrayList<ValiTableEntry> data, boolean showValidation) {
+	public LoadFileData(ArrayList<ValiTableEntry> data) {
 		listData = data;
-		showVali = showValidation;
 		treeTableModel = new MyDataModel(generate(0, null));
 		//treeTableModel.listenerList.add(arg0, arg1);
 		myTreeTable = new MyTreeTable(treeTableModel, listData.size());
@@ -47,20 +45,11 @@ public class LoadFileData extends JFrame implements Serializable{
 	private MyDataNode generate(int index, List<MyDataNode> children){
 		if(((ValiTableEntry) listData.get(index)).isValueField)
 		{
-			if(showVali) {
-				children.add(new MyDataNode(
-						((ValiTableEntry) listData.get(index)).getName(), 
-						((ValiTableEntry) listData.get(index)).getType(), 
-						((ValiTableEntry) listData.get(index)).getDefaultVal(), 
-						null));	
-			}
-			else {
-				children.add(new MyDataNode(
-						((ValiTableEntry) listData.get(index)).getName(), 
-						((ValiTableEntry) listData.get(index)).getType(), 
-						((ValiTableEntry) listData.get(index)).getSpecVal(), 
-						null));	
-			}
+			children.add(new MyDataNode(
+					((ValiTableEntry) listData.get(index)).getName(), 
+					((ValiTableEntry) listData.get(index)).getType(), 
+					((ValiTableEntry) listData.get(index)).getSpecVal(), 
+					null));	
 		}
 		else
 		{
