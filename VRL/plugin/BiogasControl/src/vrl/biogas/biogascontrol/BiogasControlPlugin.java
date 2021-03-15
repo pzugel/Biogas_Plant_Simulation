@@ -1,15 +1,22 @@
 package vrl.biogas.biogascontrol;
 
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -18,7 +25,10 @@ import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.elements.Hydrolysis;
+import vrl.biogas.biogascontrol.elements.SimulationElement;
 import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
+import vrl.biogas.biogascontrol.structures.Structure;
 
 @ComponentInfo(name="MainPanel", 
 	category="Biogas", 
@@ -27,9 +37,11 @@ public class BiogasControlPlugin implements Serializable{
 	private static final long serialVersionUID = 1L;
 	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
 	
-	static File projectPath;
+	public static File projectPath;
+	public static int currenttime;
 	static JPanel panel;
-	static File workingDirectory;
+	public static File workingDirectory;
+	public static String simulationFile;
 	static Structure struct;
 	
 	@MethodInfo(name="Main", hide=false,
@@ -85,15 +97,58 @@ public class BiogasControlPlugin implements Serializable{
         
         MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(panel);
+	    
+	    startBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				if(SetupPanel.environment_ready) {
+					simulationFile = SettingsPanel.simulation_path.getText();
+					SimulationPanel.simulationLog.setText("**************************\n" 
+							+ "** New Simulation\n"
+							+ "** Hydrolysis File: " + SettingsPanel.hydrolysis_path.getText() + "\n"
+							+ "** Methane File: " + SettingsPanel.methane_path.getText() + "\n"
+							+ "** Simulation File: " + simulationFile + "\n"
+							+ "**************************\n");
+					int starttime = (Integer) SettingsPanel.simStarttime.getValue();
+					SettingsPanel.simStarttime.setEnabled(false);
+					int endtime = (Integer) SettingsPanel.simEndtime.getValue();
+					currenttime = starttime;
+					int iteration = 0;
+					struct.run();
+					/*
+					while(currenttime < endtime) {
+						String log = SimulationPanel.simulationLog.getText();
+						SimulationPanel.simulationLog.setText(log + "Iteration " + iteration + "\n");
+						System.out.println("Done!");
+						
+						struct.run();
+						
+						SimulationPanel.iteration.setText(String.valueOf(iteration));
+						System.out.println("Iteration " + iteration +  " at hour " + currenttime);
+						++ currenttime;
+						++ iteration;
+					}
+					*/
+				}
+				else {
+					JFrame frame = new JFrame();
+					frame.setLocationRelativeTo(panel);
+					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					JOptionPane.showMessageDialog(frame,
+						    "You need to set up a working environment before starting the simulation.",
+						    "Warning",
+						    JOptionPane.WARNING_MESSAGE);
+				}
+				
+				SettingsPanel.simStarttime.setEnabled(true);
+				SetupPanel.clear_Btn.doClick();
+			}
+	    });
 	    return cont;
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{         	
-	   
-		//String dir = System.getProperty("user.dir");
-		//File f = new File(dir);
-		//f = f.getParentFile();
-		//f = f.getParentFile();
+
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());
 		
@@ -105,6 +160,7 @@ public class BiogasControlPlugin implements Serializable{
 		frame.add(panel);
 		frame.setSize(600, 600);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);		
+		frame.setVisible(true);	
+
 	}
 }

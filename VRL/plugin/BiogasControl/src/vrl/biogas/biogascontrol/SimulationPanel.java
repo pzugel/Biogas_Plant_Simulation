@@ -17,11 +17,12 @@ import layout.TableLayoutConstraints;
 public class SimulationPanel {
 	static JPanel simulationPanel;
 	static JTextField plantStructure;
-	static JTextField activeElement;
 	static JTextField iteration;
 	static JTextField runtime;
 	static JTextField workingDirectory;
-	static JTextArea simulationLog;
+	
+	public static JTextField activeElement;
+	public static JTextArea simulationLog;
 	
 	public SimulationPanel() {
 		simulationPanel = new JPanel();

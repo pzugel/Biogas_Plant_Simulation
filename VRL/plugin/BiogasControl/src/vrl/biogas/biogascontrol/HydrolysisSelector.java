@@ -32,8 +32,9 @@ public class HydrolysisSelector {
 		
 		final JFrame frame = new JFrame("");
 		frame.add(panel);
-		frame.setSize(400, 400);
+		frame.setSize(200, 70);
 		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setLocationRelativeTo(BiogasControlPlugin.panel);
 		frame.setVisible(true);
 		
 		okBtn.addActionListener(new ActionListener() {

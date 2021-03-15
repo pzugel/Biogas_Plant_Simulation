@@ -43,6 +43,8 @@ public class SetupPanel {
 	static DefaultTreeModel environment_tree_model;
 	static JTextField dir;
 	
+	static JButton clear_Btn;
+	
 	public SetupPanel() {
 		environment_ready = false;
 		setupPanel = new JPanel();
@@ -58,7 +60,7 @@ public class SetupPanel {
 		JButton open_Btn = new JButton("...");
 		JButton create_Btn = new JButton("Create");
 		create_Btn.setBackground(Color.WHITE);
-		JButton clear_Btn = new JButton("Clear");
+		clear_Btn = new JButton("Clear");
 		clear_Btn.setForeground(Color.RED);
 		clear_Btn.setBackground(Color.WHITE);
 		JButton load_Btn = new JButton("Load");

@@ -1,14 +1,17 @@
 package vrl.biogas.biogascontrol.structures;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.elements.*;
 
 @ComponentInfo(name="2_STAGE", 
   category="Biogas_Structures", 
   description="2_STAGE plant structure")
-public class STRUCT_2_STAGE implements vrl.biogas.biogascontrol.Structure,Serializable{
+public class STRUCT_2_STAGE implements Structure,Serializable{
   private static final long serialVersionUID = 1L;
-  
+  public static ArrayList<SimulationElement> reactorQueue;
   @Override
   public int numHydrolysis() {
     return 2;
@@ -36,8 +39,26 @@ public class STRUCT_2_STAGE implements vrl.biogas.biogascontrol.Structure,Serial
 
   @Override
   public void run() {
-    // TODO Auto-generated method stub
-    System.out.println("Run");
+	  System.out.println("2_STAGE_STRUCT");
+	  reactorQueue = new ArrayList<SimulationElement>();
+	  reactorQueue.add(new Hydrolysis("0", this));
+	  reactorQueue.add(new Hydrolysis("1", this));
+	  runNext();
+  }
+  
+  @Override
+  public void runNext() {
+	  System.out.println("runNext()");
+	  if(hasNext()) {
+		  System.out.println("hasNext()");
+		  reactorQueue.get(0).run();  
+		  reactorQueue.remove(0);
+	  }
+  }
+  
+  @Override
+  public boolean hasNext() {
+	  return !reactorQueue.isEmpty();
   }
 
 }
