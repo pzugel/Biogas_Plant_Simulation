@@ -1,5 +1,7 @@
 package vrl.biogas.biogascontrol.elements;
 
+import java.io.File;
+
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.SimulationPanel;
 
@@ -22,6 +24,12 @@ public class Methane implements SimulationElement{
 		
 		String logEnd = SimulationPanel.simulationLog.getText();
 		SimulationPanel.simulationLog.setText(logEnd + "Done!\n");
+	}
+
+	@Override
+	public File path() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

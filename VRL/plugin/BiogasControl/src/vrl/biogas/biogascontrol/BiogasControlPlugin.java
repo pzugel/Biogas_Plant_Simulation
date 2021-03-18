@@ -60,6 +60,7 @@ public class BiogasControlPlugin implements Serializable{
         JPanel simulationPanel = (new SimulationPanel()).getPanel();
         JPanel setupPanel = (new SetupPanel()).getPanel();
         JPanel settingsPanel = (new SettingsPanel()).getPanel();
+        JPanel plantPanel = (new PlantPanel()).getPanel();
         JPanel feedbackPanel = new JPanel();
         JPanel feedingPanel = new JPanel();
 
@@ -69,6 +70,7 @@ public class BiogasControlPlugin implements Serializable{
         tab_panel.addTab("Simulation", simulationPanel);
         tab_panel.addTab("Setup", setupPanel);
         tab_panel.addTab("Settings", settingsPanel);
+        tab_panel.addTab("Plant", plantPanel);
         tab_panel.addTab("Feedback", feedbackPanel);
         tab_panel.addTab("Feeding", feedingPanel);
         //tab_panel.setSize(510, 540);     
@@ -103,18 +105,23 @@ public class BiogasControlPlugin implements Serializable{
 			public void actionPerformed(ActionEvent arg0) {
 				if(SetupPanel.environment_ready) {
 					simulationFile = SettingsPanel.simulation_path.getText();
-					SimulationPanel.simulationLog.setText("**************************\n" 
+					SimulationPanel.simulationLog.setText("**************************************\n" 
 							+ "** New Simulation\n"
 							+ "** Hydrolysis File: " + SettingsPanel.hydrolysis_path.getText() + "\n"
 							+ "** Methane File: " + SettingsPanel.methane_path.getText() + "\n"
 							+ "** Simulation File: " + simulationFile + "\n"
-							+ "**************************\n");
+							+ "**************************************\n");
 					int starttime = (Integer) SettingsPanel.simStarttime.getValue();
 					SettingsPanel.simStarttime.setEnabled(false);
 					int endtime = (Integer) SettingsPanel.simEndtime.getValue();
 					currenttime = starttime;
 					int iteration = 0;
-					struct.run();
+					try {
+						struct.run();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 					/*
 					while(currenttime < endtime) {
 						String log = SimulationPanel.simulationLog.getText();

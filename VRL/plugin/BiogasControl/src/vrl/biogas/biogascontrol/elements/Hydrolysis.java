@@ -16,19 +16,27 @@ import vrl.biogas.biogascontrol.structures.Structure;
 @ComponentInfo(name="Hydrolysis", 
 	category="Biogas_Elements", 
 	description="Hydrolysis reactor")
-public class Hydrolysis extends ElementFunctions implements SimulationElement{
+public class Hydrolysis implements SimulationElement{
 	private String numeration;
 	private Structure structure;
+	private File directory;
 	public Process proc;
 	
-	public Hydrolysis(String num, Structure struct) {
+	
+	public Hydrolysis(String num, Structure struct, File dir) {
 		numeration = num;
 		structure = struct;
+		directory = dir;
 	}
 	
 	@Override
 	public String name() {
 	    return "Hydrolysis";
+	}
+	
+	@Override
+	public File path() {
+	    return directory;
 	}
 	
 	public String numeration() {
@@ -37,13 +45,13 @@ public class Hydrolysis extends ElementFunctions implements SimulationElement{
 
 	@Override
 	public void run() {
-		System.out.println("Hydrolysis Run Here");
 		SimulationPanel.activeElement.setText("Hydrolysis");
 		String logStart = SimulationPanel.simulationLog.getText();
 		SimulationPanel.simulationLog.setText(logStart + "** Hydrolysis " + numeration + " ... ");
 		
 		final File hydrolysisPath = new File(BiogasControlPlugin.workingDirectory, "hydrolyse_" + numeration);
 		final File currentTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlPlugin.currenttime));
+		System.out.println("Running hydrolysis");
 		System.out.println(currentTimePath);
 		if (!currentTimePath.exists()){
 			currentTimePath.mkdirs();
@@ -63,15 +71,13 @@ public class Hydrolysis extends ElementFunctions implements SimulationElement{
 			System.out.println("cmd: " + cmd);
 			//String[] env = {"ughshell"};
 			//proc = Runtime.getRuntime().exec(cmd, env, currentTimePath);
-			new ExeWorker(cmd, currentTimePath, structure).execute();
+			new ExeWorker(cmd, currentTimePath, structure, this).execute();
 
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
-		
-		this.merge();
 	}
 
 }

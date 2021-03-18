@@ -1,9 +1,12 @@
 package vrl.biogas.biogascontrol.structures;
 
+import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.elements.*;
 
 @ComponentInfo(name="2_STAGE", 
@@ -12,6 +15,7 @@ import vrl.biogas.biogascontrol.elements.*;
 public class STRUCT_2_STAGE implements Structure,Serializable{
   private static final long serialVersionUID = 1L;
   public static ArrayList<SimulationElement> reactorQueue;
+  
   @Override
   public int numHydrolysis() {
     return 2;
@@ -38,19 +42,21 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
   }
 
   @Override
-  public void run() {
+  public void run() throws IOException {
 	  System.out.println("2_STAGE_STRUCT");
+	  File dir = BiogasControlPlugin.workingDirectory;
 	  reactorQueue = new ArrayList<SimulationElement>();
-	  reactorQueue.add(new Hydrolysis("0", this));
-	  reactorQueue.add(new Hydrolysis("1", this));
+	  reactorQueue.add(new Hydrolysis("0", this, new File(dir,"hydrolyse_0")));
+	  reactorQueue.add(new Hydrolysis("1", this, new File(dir,"hydrolyse_1")));
+	  String[] reactorNames = {"hydrolyse_0", "hydrolyse_1"};
+	  reactorQueue.add(new Storage(dir, reactorNames));
 	  runNext();
   }
   
   @Override
-  public void runNext() {
+  public void runNext() throws IOException {
 	  System.out.println("runNext()");
 	  if(hasNext()) {
-		  System.out.println("hasNext()");
 		  reactorQueue.get(0).run();  
 		  reactorQueue.remove(0);
 	  }

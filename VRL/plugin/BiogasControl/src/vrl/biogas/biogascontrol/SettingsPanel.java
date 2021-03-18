@@ -29,7 +29,7 @@ import vrl.biogas.specedit.*;
 public class SettingsPanel {
 	
 	static JPanel settingsPanel;
-	static JSpinner simStarttime;
+	public static JSpinner simStarttime;
 	static JSpinner simEndtime;
 	static JCheckBox autoCleanup;
 	

@@ -1,9 +1,9 @@
 package vrl.biogas.biogascontrol.structures;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.elements.SimulationElement;
+
 
 @ComponentInfo(name="Structure", 
 	category="Biogas_Structures", 
@@ -17,7 +17,7 @@ public interface Structure {
 	public boolean storage();
 	public boolean feedback();
 
-	public void run();
-	public void runNext();
+	public void run() throws IOException;
+	public void runNext() throws IOException;
 	public boolean hasNext();
 }

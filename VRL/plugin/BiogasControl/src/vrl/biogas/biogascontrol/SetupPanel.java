@@ -43,10 +43,13 @@ public class SetupPanel {
 	static DefaultTreeModel environment_tree_model;
 	static JTextField dir;
 	
+	public static boolean mergePreexisting;
+	
 	static JButton clear_Btn;
 	
 	public SetupPanel() {
 		environment_ready = false;
+		mergePreexisting = false;
 		setupPanel = new JPanel();
 		createPanel();
 	}
@@ -214,6 +217,7 @@ public class SetupPanel {
 				SimulationPanel.workingDirectory.setText(path.toString());
 			    environment_path = path;
 			    environment_ready = true;
+			    mergePreexisting = true;
 			    DefaultMutableTreeNode root = new DefaultMutableTreeNode(path.getName());
 			    String[] elementDirs = path.list(new FilenameFilter() {
 			    	  @Override
