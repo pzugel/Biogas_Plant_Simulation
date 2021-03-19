@@ -5,11 +5,11 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"simpleTwoStage"},
+		activeReactions={"hydrolyseDebug"},
 	},
 	numericalSetup={
-		sim_starttime=0,
-		sim_endtime=1,
+		sim_starttime=10,
+		sim_endtime=13,
 	},
 	outputSpecs={
 		customSetting={
@@ -133,7 +133,8 @@ problem={
 			inhibitionTerms = {
 				inhibitionAmmonia = false,
 				limitedTrace = {
-					["Nitrogen"] = false,},
+					["Nitrogen"] = false,
+				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,
 				inhibitionPH = false,

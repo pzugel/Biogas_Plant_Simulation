@@ -9,11 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.io.FileWriter;
 import java.util.ArrayList;
-import java.util.Scanner;
 
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
-import vrl.biogas.biogascontrol.SettingsPanel;
-import vrl.biogas.biogascontrol.SetupPanel;
+import vrl.biogas.biogascontrol.panels.SettingsPanel;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
 
 public class ElementFunctions {
 	
@@ -40,22 +38,24 @@ public class ElementFunctions {
 		"outflow.txt",
 		"reactorState.txt"};
 	
+	@SuppressWarnings("unused")
 	private final static String[] output_files_integration ={
 		"dbg_reactionrates.txt",
 		"outflow.txt"};
-		
+	
+	@SuppressWarnings("unused")
 	private final static String[] output_files_nonAdditive = {
 		"dbg_avgEqValues.txt",
 		"gas_Volfraction.txt",
 		"reactorState.txt"};
 	
-	public static void merge(SimulationElement elem) throws IOException {
+	public static void merge(SimulationElement elem, int currenttime) throws IOException {
 		String name = elem.name();
 		File basePath = elem.path();
 		int startTime = (Integer) SettingsPanel.simStarttime.getValue();
-		int curTime = BiogasControlPlugin.currenttime;
+		//int curTime = BiogasControlPlugin.currenttime;
 		boolean preexisting = SetupPanel.mergePreexisting;
-		File timePath = new File(elem.path(), String.valueOf(curTime));
+		File timePath = new File(elem.path(), String.valueOf(currenttime));
 		
 		System.out.println("********************************************************************************");
 		System.out.println("Merge " + name);
@@ -63,7 +63,7 @@ public class ElementFunctions {
 		System.out.println("\t---> " + basePath);
 		System.out.println("********************************************************************************");
 		
-		merge_one_reactor(basePath.toString(), startTime, curTime, preexisting);
+		merge_one_reactor(basePath.toString(), startTime, currenttime, preexisting);
 	}
 	
 	public static void merge_all_hydrolysis(
@@ -434,7 +434,7 @@ public class ElementFunctions {
 		//merge_one_reactor(working_dir, 0, 1, false);
 		
 		//System.out.println(fileOut);
-		File f = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210318_140134/hydrolyse_0/outflow.txt");
-		String a = integrate_file(f, 0);
+		//File f = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210318_140134/hydrolyse_0/outflow.txt");
+		//String a = integrate_file(f, 0);
 	}
 }

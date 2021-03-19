@@ -1,4 +1,4 @@
-package vrl.biogas.specedit;
+package vrl.biogas.biogascontrol.specedit;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;

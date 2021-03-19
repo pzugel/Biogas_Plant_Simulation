@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"Methane_Stage"},
+		activeReactions={"simpleMethane_stage"},
 	},
 	numericalSetup={
 		sim_starttime=0,
@@ -89,7 +89,8 @@ problem={
 			inhibitionTerms = {
 				inhibitionAmmonia = false,
 				limitedTrace = {
-					["Nitrogen"] = false,},
+					["Nitrogen"] = false,
+				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,
 				inhibitionPH = false,

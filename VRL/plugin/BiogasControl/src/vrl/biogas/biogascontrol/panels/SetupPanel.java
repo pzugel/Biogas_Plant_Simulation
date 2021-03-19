@@ -1,4 +1,4 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.biogascontrol.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -37,7 +38,7 @@ public class SetupPanel {
 	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	
 	static JPanel setupPanel;
-	static boolean environment_ready;
+	static public boolean environment_ready;
 	static File environment_path;
 	static JTree environment_tree;
 	static DefaultTreeModel environment_tree_model;
@@ -45,7 +46,7 @@ public class SetupPanel {
 	
 	public static boolean mergePreexisting;
 	
-	static JButton clear_Btn;
+	static public JButton clear_Btn;
 	
 	public SetupPanel() {
 		environment_ready = false;
@@ -54,11 +55,11 @@ public class SetupPanel {
 		createPanel();
 	}
 	
-	JPanel getPanel() {
+	public JPanel getPanel() {
 		return setupPanel;
 	}
 	
-	void createPanel() {
+	private void createPanel() {
 		
 		JButton open_Btn = new JButton("...");
 		JButton create_Btn = new JButton("Create");

@@ -1,4 +1,4 @@
-package vrl.biogas.specedit;
+package vrl.biogas.biogascontrol.specedit;
 
 import java.awt.event.*;
 import javax.swing.*;

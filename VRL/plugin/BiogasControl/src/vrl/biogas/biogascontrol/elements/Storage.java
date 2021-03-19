@@ -4,10 +4,9 @@ import java.io.File;
 import java.io.IOException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
-import vrl.biogas.biogascontrol.SettingsPanel;
-import vrl.biogas.biogascontrol.SetupPanel;
-import vrl.biogas.biogascontrol.SimulationPanel;
+import vrl.biogas.biogascontrol.panels.SettingsPanel;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
+import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
 @ComponentInfo(name="Storage", 
@@ -15,11 +14,13 @@ import vrl.biogas.biogascontrol.structures.Structure;
 	description="Hydrolysis reactor")
 public class Storage implements SimulationElement{
 	private File storageDirectory;
-	private File workingDirectory;
+	private File directory;
+	private Structure structure;
 	private String[] reactors;
 	
-	public Storage(File dir, String[] reactorNames) {
-		workingDirectory = dir;
+	public Storage(Structure struct, File dir, String[] reactorNames) {
+		directory = dir;
+		structure = struct;
 		storageDirectory = new File(dir, "storage_hydrolyse");
 		reactors = reactorNames;
 	}
@@ -41,13 +42,21 @@ public class Storage implements SimulationElement{
 		SimulationPanel.simulationLog.setText(logStart + "** Storage ... ");
 		
 		int startTime = (Integer) SettingsPanel.simStarttime.getValue();
-		int currentTime = BiogasControlPlugin.currenttime;
 		boolean preexisting = SetupPanel.mergePreexisting;
 		
-		ElementFunctions.merge_all_hydrolysis(workingDirectory.toString(), reactors, startTime, currentTime, preexisting);
-
-		String logEnd = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(logEnd + "Done!\n");
+		if(!structure.wasCancelled()) {
+			ElementFunctions.merge_all_hydrolysis(directory.toString(), reactors, startTime, structure.currentTime(), preexisting);
+	
+			String logEnd = SimulationPanel.simulationLog.getText();
+			SimulationPanel.simulationLog.setText(logEnd + "Done!\n");
+			
+			ElementRunner myRunnable = new ElementRunner(structure);
+			Thread t = new Thread(myRunnable);
+			t.start();
+		} else {
+			String logEnd = SimulationPanel.simulationLog.getText();
+			SimulationPanel.simulationLog.setText(logEnd + "Cancelled!\n");
+		}
 	}
 
 }

@@ -1,4 +1,4 @@
-package vrl.biogas.specedit;
+package vrl.biogas.biogascontrol.specedit;
 
 import javax.swing.JFrame;
 import java.io.Serializable;

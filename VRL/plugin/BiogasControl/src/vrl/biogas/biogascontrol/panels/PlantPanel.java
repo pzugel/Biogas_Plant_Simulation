@@ -1,4 +1,4 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.biogascontrol.panels;
 
 import java.awt.Color;
 import java.io.File;
@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 
 public class PlantPanel {
@@ -20,11 +21,11 @@ public class PlantPanel {
 		createPanel();
 	}
 	
-	JPanel getPanel() {
+	public JPanel getPanel() {
 		return plantPanel;
 	}
 	
-	void createPanel() {
+	private void createPanel() {
         double size[][] =
             {{0.06, 0.88, TableLayout.FILL},
              {0.06, 

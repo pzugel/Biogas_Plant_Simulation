@@ -3,30 +3,32 @@ package vrl.biogas.biogascontrol;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
-import java.net.Socket;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
+import javax.swing.JToggleButton;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
-import vrl.biogas.biogascontrol.elements.Hydrolysis;
-import vrl.biogas.biogascontrol.elements.SimulationElement;
+import vrl.biogas.biogascontrol.panels.PlantPanel;
+import vrl.biogas.biogascontrol.panels.SettingsPanel;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
+import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -38,11 +40,18 @@ public class BiogasControlPlugin implements Serializable{
 	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
 	
 	public static File projectPath;
-	public static int currenttime;
-	static JPanel panel;
+	//public static int currenttime;
+	public static int iteration;
+	static public JPanel panel;
 	public static File workingDirectory;
 	public static String simulationFile;
-	static Structure struct;
+	static public Structure struct;
+	//static public boolean running;
+	
+	public static JToggleButton pauseBtn;
+	public static JToggleButton stopBtn;
+	
+	public static JCheckBox running;
 	
 	@MethodInfo(name="Main", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
@@ -55,6 +64,7 @@ public class BiogasControlPlugin implements Serializable{
 	    		options = "invokeOnChange=true") Path projectDir)
 		    			throws IOException, InterruptedException{
 		struct = structure;
+		running = new JCheckBox("running?", false);
 		projectPath = new File(projectDir.toString()).getParentFile();
 		System.out.println("projectPath: " + projectPath);
         JPanel simulationPanel = (new SimulationPanel()).getPanel();
@@ -72,29 +82,27 @@ public class BiogasControlPlugin implements Serializable{
         tab_panel.addTab("Settings", settingsPanel);
         tab_panel.addTab("Plant", plantPanel);
         tab_panel.addTab("Feedback", feedbackPanel);
-        tab_panel.addTab("Feeding", feedingPanel);
-        //tab_panel.setSize(510, 540);     
+        tab_panel.addTab("Feeding", feedingPanel);   
 
         panel = new JPanel();
-    	//panel.setSize(340, 330);
         double size[][] =
             {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayout.FILL},
              {0.04, 0.06, 0.03, 0.82, TableLayout.FILL}};
         JButton startBtn = new JButton("Start");
         startBtn.setBackground(BUTTON_BLUE);
-        JButton pauseBtn = new JButton("Pause");
+        pauseBtn = new JToggleButton("Pause");
         pauseBtn.setBackground(BUTTON_BLUE);
-        JButton stopBtn = new JButton("Stop");
+        stopBtn = new JToggleButton("Stop");
         stopBtn.setBackground(BUTTON_BLUE);
-        JButton plotBtn = new JButton("Plot");
-        plotBtn.setBackground(BUTTON_BLUE);
-
+        JButton breakBtn = new JButton("Break");
+        breakBtn.setBackground(BUTTON_BLUE);
+        breakBtn.setForeground(Color.RED);
         panel.setLayout(new TableLayout(size));
         
         panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
         panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));
         panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(plotBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayout.FULL, TableLayout.FULL));
+        panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayout.FULL, TableLayout.FULL));
         panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayout.FULL, TableLayout.FULL));
         
         MainPanelContainerType cont = new MainPanelContainerType();
@@ -113,29 +121,17 @@ public class BiogasControlPlugin implements Serializable{
 							+ "**************************************\n");
 					int starttime = (Integer) SettingsPanel.simStarttime.getValue();
 					SettingsPanel.simStarttime.setEnabled(false);
-					int endtime = (Integer) SettingsPanel.simEndtime.getValue();
-					currenttime = starttime;
-					int iteration = 0;
+					iteration = 0;							
+					//SimulationPanel.iteration.setText(String.valueOf(iteration));
+						
 					try {
-						struct.run();
+						running.setSelected(true);
+						struct.run(starttime);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
-					}
-					/*
-					while(currenttime < endtime) {
-						String log = SimulationPanel.simulationLog.getText();
-						SimulationPanel.simulationLog.setText(log + "Iteration " + iteration + "\n");
-						System.out.println("Done!");
-						
-						struct.run();
-						
-						SimulationPanel.iteration.setText(String.valueOf(iteration));
-						System.out.println("Iteration " + iteration +  " at hour " + currenttime);
-						++ currenttime;
-						++ iteration;
-					}
-					*/
+					} 
+					
 				}
 				else {
 					JFrame frame = new JFrame();
@@ -146,13 +142,50 @@ public class BiogasControlPlugin implements Serializable{
 						    "Warning",
 						    JOptionPane.WARNING_MESSAGE);
 				}
-				
-				SettingsPanel.simStarttime.setEnabled(true);
-				SetupPanel.clear_Btn.doClick();
 			}
 	    });
+	    
+		breakBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				running.setSelected(false);
+				String os = System.getProperty("os.name");
+				String killCmd = "";
+				if(os.equals("Linux")) {
+					killCmd = "killall -2 ugshell";
+				} else if(os.equals("Mac")) {
+					killCmd = "killall -2 ugshell";
+				} else if (os.equals("Windows")) {
+					killCmd = "taskkill /IM ugshell.exe /F";		
+				}
+				
+				try {
+					Runtime.getRuntime().exec(killCmd);
+					struct.cancelRun();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		});
+
+		running.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				boolean isRunning = running.isSelected();
+				System.out.println("Running?: " + isRunning);
+				
+				if(!isRunning) {
+					SettingsPanel.simStarttime.setEnabled(true);
+					SetupPanel.clear_Btn.doClick();
+				}		
+			}	
+		});
+		
 	    return cont;
 	}
+	
+
 	
 	public static void main(String args[]) throws IOException, InterruptedException{         	
 

@@ -11,5 +11,5 @@ import eu.mihosoft.vrl.annotation.ComponentInfo;
 public interface SimulationElement{
 	public String name();
 	public File path();
-	public void run() throws IOException;
+	public void run() throws IOException, InterruptedException;
 }

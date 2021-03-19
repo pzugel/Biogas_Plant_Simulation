@@ -1,4 +1,4 @@
-package vrl.biogas.specedit;
+package vrl.biogas.biogascontrol.specedit;
 
 public class MyDataModel extends MyAbstractTreeTableModel {
     // Spalten Name.

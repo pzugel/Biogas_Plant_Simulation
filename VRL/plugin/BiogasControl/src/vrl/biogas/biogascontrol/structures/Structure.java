@@ -16,8 +16,14 @@ public interface Structure {
 	public boolean methane();
 	public boolean storage();
 	public boolean feedback();
-
-	public void run() throws IOException;
+	public int currentTime();
+	public void incrementCurrentTime();
+	public void cancelRun();
+	public boolean wasCancelled();
+	
+	public void run(int currentStarttime) throws IOException;
 	public void runNext() throws IOException;
 	public boolean hasNext();
+	//public void breakRun();
+	
 }

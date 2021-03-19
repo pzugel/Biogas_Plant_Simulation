@@ -1,4 +1,4 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.biogascontrol.panels;
 
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
@@ -23,18 +23,18 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
-
-import vrl.biogas.specedit.*;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
+import vrl.biogas.biogascontrol.specedit.LUATableViewer;
 
 public class SettingsPanel {
 	
 	static JPanel settingsPanel;
 	public static JSpinner simStarttime;
-	static JSpinner simEndtime;
+	public static JSpinner simEndtime;
 	static JCheckBox autoCleanup;
 	
-	static JTextField hydrolysis_path;
-	static JTextField methane_path;
+	public static JTextField hydrolysis_path;
+	public static JTextField methane_path;
 	public static JTextField simulation_path;
 	
 	public SettingsPanel() {
@@ -42,11 +42,11 @@ public class SettingsPanel {
 		createPanel();
 	}
 	
-	JPanel getPanel() {
+	public JPanel getPanel() {
 		return settingsPanel;
 	}
 	
-	void createPanel() {
+	private void createPanel() {
 		SpinnerModel startModel = new SpinnerNumberModel(0, 0, 1000, 1);
 		SpinnerModel endModel = new SpinnerNumberModel(1, 1, 1000, 1);
 		 

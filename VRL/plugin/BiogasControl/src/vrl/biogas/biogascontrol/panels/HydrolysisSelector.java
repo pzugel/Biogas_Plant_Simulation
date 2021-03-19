@@ -1,4 +1,4 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.biogascontrol.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -9,10 +9,12 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
+
 public class HydrolysisSelector {
 	
-	static JButton okBtn;
-	static JComboBox<String> reactorList;
+	static public JButton okBtn;
+	static public JComboBox<String> reactorList;
 	
 	public static void showSelector() {
 		//int numHydrolysis = BiogasControlPlugin.struct.numHydrolysis();

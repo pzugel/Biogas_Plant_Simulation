@@ -1,4 +1,4 @@
-package vrl.biogas.biogascontrol;
+package vrl.biogas.biogascontrol.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,11 +13,12 @@ import javax.swing.SwingConstants;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 public class SimulationPanel {
 	static JPanel simulationPanel;
 	static JTextField plantStructure;
-	static JTextField iteration;
+	public static JTextField iteration;
 	static JTextField runtime;
 	static JTextField workingDirectory;
 	
@@ -29,11 +30,11 @@ public class SimulationPanel {
 		createPanel();
 	}
 	
-	JPanel getPanel() {
+	public JPanel getPanel() {
 		return simulationPanel;
 	}
 	
-	void createPanel() {
+	private void createPanel() {
 		plantStructure = new JTextField(14);
 		plantStructure.setPreferredSize(new Dimension(100,22));
 		plantStructure.setEditable(false);
