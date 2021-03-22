@@ -38,7 +38,6 @@ public class ElementFunctions {
 		"outflow.txt",
 		"reactorState.txt"};
 	
-	@SuppressWarnings("unused")
 	private final static String[] output_files_integration ={
 		"dbg_reactionrates.txt",
 		"outflow.txt"};
@@ -67,22 +66,11 @@ public class ElementFunctions {
 	}
 	
 	public static void merge_all_hydrolysis(
-			String working_dir,
-			String[] reactor_names,
-			int simulation_starttime,
-			int current_starttime,
-			boolean merge_preexisting) throws IOException
-		{
-		
-		//First timestep?
-		boolean is_first_timestep = false;
-		if(simulation_starttime == current_starttime)
-			is_first_timestep = true;
-			
-		String storage_dir = working_dir 
-				+ File.separator
-				+ "storage_hydrolyse";
-		System.out.println("Storage dir: " + storage_dir);
+			File working_dir, 
+			String[] reactor_names) throws IOException 
+	{			
+		File storage_dir = new File(working_dir, "storage_hydrolyse");
+		System.out.println("Storage dir: " + storage_dir.toString());
 		
 		//Merge hydrolysis files (no integration)
 		for(String f: output_files) {
@@ -90,186 +78,146 @@ public class ElementFunctions {
 			String output_file_string = merge_hydrolysis_files(
 				working_dir, 
 				f, 
-				current_starttime,
 				reactor_names);
 			
-			//std::ofstream output_file;
-			String output_file_name = storage_dir + File.separator + f;
+			File output_file_name = new File(storage_dir, f);
 			System.out.println(output_file_name);
 			
-			Writer output;		
-			if(!output_file_string.isEmpty())
-			{
-				
-				if(is_first_timestep){
-					if(merge_preexisting){
-						output = new BufferedWriter(new FileWriter(output_file_name, true));
-						output.append(output_file_string);
-						output.close();
-					}
-					else
-					{
-						output = new BufferedWriter(new FileWriter(output_file_name));
-						output.append(HelperFunctions.header_string);
-						output.append(output_file_string);
-						output.close();
-					}
-				}
-				else{
-					output = new BufferedWriter(new FileWriter(output_file_name, true));
-					output.append(output_file_string);
-					output.close();
-				}
-				
-			}			
-			System.out.println(output_file_string);
+			Writer output = new BufferedWriter(new FileWriter(output_file_name));
+			output.append(output_file_string);
+			output.close();		
 			
+			System.out.println(output_file_string);		
 		}	
 		
-		/*
-		std::cout << "Integrating files ...." << std::endl;
-		
 		//Merge hydrolysis files with integration
-		for(const auto& f: output_files_integration) {
-			std::string output_names = "";
-			for(int i=0; i<num_reactors; i++){
-				output_names += (string) working_dir + "/" 
-					+ reactors.at(i) + "/" 
-					+ f;
-				if(i!=num_reactors-1)
-					output_names += "\n";
-			}
-			std::cout << "output_names: " << output_names << std::endl;
-			bool exists = merge_hydrolysis_files_integration(
-				current_starttime, 
-				num_reactors,
-				output_names);
-			if(exists)
-			{
-				std::string output_file_string = get_merged_file();
-				
-				std::ofstream output_file;
-				std::string output_file_name = storage_dir + "/" + f;
-				std::cout << "output_file_name: " << output_file_name << std::endl;
-				std::cout << "output_file_string: " << output_file_string << std::endl;
-				if(is_first_timestep){
+		for(String f: output_files_integration) {
+			// TODO (Integer) SettingsPanel.simStarttime.getValue()
+			String output_file_string = merge_hydrolysis_files_integration(
+					working_dir, 
+					f, 
+					0, 
+					reactor_names);
+			
+			File output_file_name = new File(storage_dir, f);
+			System.out.println(output_file_name);
+			
+			Writer output = new BufferedWriter(new FileWriter(output_file_name));
+			output.append(output_file_string);
+			output.close();	
 					
-					if(merge_preexisting)
-					{
-						std::ifstream output_file_stream(output_file_name);
-						if(output_file_stream.good()) //merge with previous files
-						{
-							output_file.open(output_file_name, std::ios_base::app);
-							remove_header_from_string(output_file_string.c_str());
-							output_file << data_string;
-						}
-						else //should merge but no previous files found
-						{
-							output_file.open(output_file_name);
-							output_file << output_file_string;
-						}
-					}
-					else //dont merge
-					{
-						output_file.open(output_file_name);
-						output_file << output_file_string;
-					}				
-				}
-				else{
-					output_file.open(output_file_name, std::ios_base::app);
-					remove_header_from_string(output_file_string.c_str());
-					output_file << data_string;
-				}
-				
-				output_file.close();
-				
-			}
+			System.out.println(output_file_string);	
 		}
-		*/
+	}
+	
+	private static String merge_hydrolysis_files_integration(
+			File dir, 
+			String filename,
+			int simStarttime,
+			String[] reactors) throws IOException
+	{
+		for(String r : reactors) {
+			integrate_one_file(new File(dir, r),filename, simStarttime);		
+		}
+		
+		int extensionPos = filename.lastIndexOf(".");
+		String newFileName = filename.substring(0, extensionPos) + "_integrated" + filename.substring(extensionPos);	
+		String output_file_string = merge_hydrolysis_files(dir, newFileName, reactors);
+				
+		return output_file_string;
 	}
 	
 	private static String merge_hydrolysis_files(
-			String dir, 
+			File dir, 
 			String filename, 
-			int current_starttime, 
 			String[] reactors) throws FileNotFoundException
 	{	
 		int num_reactors = reactors.length;
-		String working_dir = dir;
+		String working_dir = dir.toString();
 		String output_file_string = "";
-		boolean fileExists = false;
 		HelperFunctions.values = new ArrayList<ArrayList<ArrayList<String>>>();
 		
+		//Add header to new file
+		String dir_for_header = working_dir + File.separator  + reactors[0] + File.separator  + filename;
+		output_file_string += HelperFunctions.get_header(new File(dir_for_header)); 
 		
-		//Write data into "values" vector
+		
+		//Write data into "values" vector - Check if file exists for every reactor
+		boolean allExist = true;
 		for(String d: reactors) {
 			String file_direction = working_dir + File.separator
 				+ d + File.separator 
-				+ String.valueOf(current_starttime) + File.separator 
 				+  filename;
-			fileExists = HelperFunctions.read_values_from_reactor(file_direction);
+			allExist = allExist && HelperFunctions.read_values_from_reactor(file_direction);
 		}	
 		
-		
-		if(fileExists)
-		{
-			String dir_for_header = working_dir + File.separator  + reactors[0]
-				+ "/" + String.valueOf(current_starttime) + File.separator  + filename;
-			
-			HelperFunctions.get_header(new File(dir_for_header)); 
-			
-			int num_entries_line = HelperFunctions.values.get(0).get(0).size(); //Entries per line
-			
-			
-			//line_counter to keep track of the timesteps
-			ArrayList<Integer> line_counter = new ArrayList<Integer>();
-			for(int i=0; i<num_reactors; i++)
-				line_counter.add(0);
-			
-			double current_time = current_starttime;
-			double endtime = current_starttime + 1;
-			//std::stringstream output_stream;
-			String output_stream = "";
-			
-			while(current_time < endtime){
-				//Get current max
-				double max_time = 0;
-				for(int j=0; j<num_reactors; j++){
-					int c = line_counter.get(j);
-					double time = Double.parseDouble(HelperFunctions.values.get(j).get(c).get(0));
-					if(time>max_time)
-						max_time = time;
-				}
-					
-				//Increase line counter
-				for(int j=0; j<num_reactors; j++){
-
-					while(Double.parseDouble(HelperFunctions.values.get(j).get(line_counter.get(j)).get(0)) <= max_time){
-						if(Double.parseDouble(HelperFunctions.values.get(j).get(line_counter.get(j)).get(0)) == endtime){
-							line_counter.set(j, line_counter.get(j)+1);
-							break;
-						}							
-						line_counter.set(j, line_counter.get(j)+1);;
-					}
-				}
-				
-				//Combine current timestep
-				output_stream += max_time + "\t";
-					
-				for(int i=1; i<num_entries_line; i++){
-					double sum = 0;
-					for(int j=0; j<num_reactors; j++){
-						sum += Double.parseDouble(HelperFunctions.values.get(j).get(line_counter.get(j)-1).get(i));
-					}
-					output_stream += sum + "\t";
-				}
-				output_stream += "\n";
-				current_time = max_time;
-				
+		/*
+		 * Reactors might have different timesteps. Therefore we first need to check
+		 * if a timestep exists in all files for all reactors
+		 */
+		if(allExist)
+		{			
+						
+			ArrayList<String> timeCol = new ArrayList<String>(); //Contains the times from first reactor file
+			for(ArrayList<String> line : HelperFunctions.values.get(0)) {
+				timeCol.add(line.get(0));
 			}
 			
-			output_file_string += output_stream;
+			//Check if all reactors contain a timestep
+			ArrayList<String> validTimes = new ArrayList<String>(); //All valid timesteps
+			for(String time : timeCol) {
+				boolean exists = true;
+				for(int i=0; i<num_reactors; i++) {
+					boolean found = false;
+					int numLines = HelperFunctions.values.get(i).size();
+					for(int j=0; j<numLines; j++) {
+						if(HelperFunctions.values.get(i).get(j).get(0).equals(time)) {
+							found = true;
+						}
+					}
+					exists = exists && found;
+				}
+				
+				if(exists) {
+					validTimes.add(time);
+				}
+			}
 			
+			//Initialize an output array
+			int num_entries_line = HelperFunctions.values.get(0).get(0).size(); //Entries per line
+			ArrayList<ArrayList<Double>> outputValues = new ArrayList<ArrayList<Double>>();
+			for(String time : validTimes) {
+				ArrayList<Double> line = new ArrayList<Double>();
+				line.add(Double.valueOf(time));
+				for(int i=1; i<num_entries_line; i++) {
+					line.add(0.0);
+				}
+				outputValues.add(line);
+			}
+			
+			//Summation over all files and timesteps
+			int lineCount = 0;
+			for(String time : validTimes) {
+				for(int i=0; i<num_reactors; i++) {
+					for(int j=0; j<HelperFunctions.values.get(i).size(); j++) {
+						if(HelperFunctions.values.get(i).get(j).get(0).equals(time)) {
+							for(int k=1; k<num_entries_line; k++) {
+								double sum = outputValues.get(lineCount).get(k) + Double.valueOf(HelperFunctions.values.get(i).get(j).get(k));
+								outputValues.get(lineCount).set(k, sum);
+							}
+						}
+					}
+				}
+				++lineCount;
+			}
+			
+			//Write output array to string
+			for(ArrayList<Double> line : outputValues) {
+				for(Double d : line) {
+					output_file_string += String.valueOf(d) + "\t";
+				}
+				output_file_string += "\n";
+			}			
 		}
 		else
 			System.out.println("Nothing to add up!");
@@ -343,10 +291,17 @@ public class ElementFunctions {
 		}
 	}
 	
-	public static String integrate_file(File f, int simStarttime) throws FileNotFoundException {
-		//System.out.println(f.toString());
+	public static String integrate_one_file(
+			File reactorDir,
+			String f, 
+			int simStarttime) throws IOException 
+	{
+		System.out.println("f: " + f);
+		
 		HelperFunctions.values = new ArrayList<ArrayList<ArrayList<String>>>();
-		HelperFunctions.read_values_from_reactor(f.toString());
+		File fileDir = new File(reactorDir, f);
+		HelperFunctions.read_values_from_reactor(fileDir.toString());
+		
 		ArrayList<ArrayList<String>> values = HelperFunctions.values.get(0);
 		
 		if(!(simStarttime <= Double.valueOf(values.get(0).get(0)))) {
@@ -372,9 +327,6 @@ public class ElementFunctions {
 					double param = Double.valueOf(values.get(i).get(j)); 
 					double val = (Math.abs(param)/2)*h;
 					line.add(String.valueOf(val));
-					//System.out.println("\th: " + h);
-					//System.out.println("\tparam: " + param);
-					//System.out.println("\tval: " + val);
 				}
 				else {
 					double prevTime = Double.valueOf(values.get(i-1).get(0));
@@ -385,56 +337,95 @@ public class ElementFunctions {
 					
 					double val = ((Math.abs(param-prevParam)/2)*h)+(Math.min(param, prevParam)*h);
 					line.add(String.valueOf(val));
-					//System.out.println("\th: " + h);
-					//System.out.println("\tparam: " + param);
-					//System.out.println("\tprevParam: " + prevParam);
-					//System.out.println("\tval: " + val);
 				}	
 			}
 			integratedValues.add(line);
-			//System.out.println("\n");
-
+		}				
+		
+		/*
+		 * Compute sum for full timesteps only.
+		 * This is needed because files might have different substeps.
+		 * 
+		 * First compute the sum for every step:
+		 */
+		ArrayList<ArrayList<String>> integratedValuesSum = new ArrayList<ArrayList<String>>();
+		ArrayList<String> sumLines = new ArrayList<String>();
+		for(int i=0; i<integratedValues.get(0).size(); i++) {
+			sumLines.add("0.0"); //Initialize
+		}
+		for(ArrayList<String> line : integratedValues) {	
+			sumLines.set(0, line.get(0));
+			for(int i=1; i<line.size(); i++) {			
+				double sum = Double.valueOf(sumLines.get(i)) + Double.valueOf(line.get(i));
+				sumLines.set(i, String.valueOf(sum));
+			}
+			integratedValuesSum.add(new ArrayList<String>(sumLines));
 		}
 		
-		String valuesString = "";
+		/*
+		 * Now take only the full steps
+		 */
+		ArrayList<ArrayList<String>> integratedValuesSumFull = new ArrayList<ArrayList<String>>();
+		for(ArrayList<String> line : integratedValuesSum) {
+			double time = Double.valueOf(line.get(0));
+			if ((time == Math.floor(time)) && !Double.isInfinite(time)) { //Is full timestep?
+				integratedValuesSumFull.add(line);
+			}
+		}
+		
+		/*
+		 * Write out different files
+		 */
+		int extensionPos = fileDir.toString().lastIndexOf(".");
+		
+		//Only integrated
+		String integratedOnly = HelperFunctions.get_header(fileDir);
 		for(int i=0; i<integratedValues.size(); i++) {
 			for(int j=0; j<integratedValues.get(0).size(); j++) {
-				valuesString += integratedValues.get(i).get(j) + "\t";
+				integratedOnly += integratedValues.get(i).get(j) + "\t";
 			}
-			valuesString += "\n";
-		}
-		System.out.println(valuesString);
-		return valuesString;
+			integratedOnly += "\n";
+		}			
+		String newFileName = fileDir.toString().substring(0, extensionPos) + "_integrated" + fileDir.toString().substring(extensionPos);
+		File newFile = new File(newFileName);
+		FileWriter myWriter = new FileWriter(newFile);
+		myWriter.write(integratedOnly);
+		myWriter.close();
+		
+		//Integrated and summed
+		String integratedSum = HelperFunctions.get_header(fileDir);
+		for(int i=0; i<integratedValuesSum.size(); i++) {
+			for(int j=0; j<integratedValuesSum.get(0).size(); j++) {
+				integratedSum += integratedValuesSum.get(i).get(j) + "\t";
+			}
+			integratedSum += "\n";
+		}	
+		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum" + fileDir.toString().substring(extensionPos);
+		newFile = new File(newFileName);
+		myWriter = new FileWriter(newFile);
+		myWriter.write(integratedSum);
+		myWriter.close();
+		
+		//Integrated and summed - only full timesteps
+		String integratedSumFull = HelperFunctions.get_header(fileDir);
+		for(int i=0; i<integratedValuesSumFull.size(); i++) {
+			for(int j=0; j<integratedValuesSumFull.get(0).size(); j++) {
+				integratedSumFull += integratedValuesSumFull.get(i).get(j) + "\t";
+			}
+			integratedSumFull += "\n";
+		}	
+		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum_fullTimesteps" + fileDir.toString().substring(extensionPos);
+		newFile = new File(newFileName);
+		myWriter = new FileWriter(newFile);
+		myWriter.write(integratedSumFull);
+		myWriter.close();
+		
+		return integratedSumFull;
 	}
 	
-	public static void main(String args[]) throws IOException, InterruptedException{ 
-		/*
-		File f = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210317_135533/hydrolyse_0/0/outflow.txt");
-		values = new ArrayList<ArrayList<ArrayList<String>>>();
-		read_values_from_reactor(f.toString());
-		ArrayList<ArrayList<String>> firstEntry = values.get(0);
-		for(int i=0; i<firstEntry.size(); i++) {
-			for(int j=0; j<firstEntry.get(0).size(); j++) {
-				System.out.print(firstEntry.get(i).get(j) + "\t");
-			}
-			System.out.print("\n");
-		}
-		*/
-		
-		/*
-		String dir = "/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210317_135533";
-		String[] reactors = {"hydrolyse_0", "hydrolyse_1"};
-	
-		
-		merge_all_hydrolysis(dir, reactors, 0, 0, false);
-		*/
-		
-		//String working_dir = "/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210317_135533/hydrolyse_0";
-		
-		//merge_one_reactor(working_dir, 0, 1, false);
-		
-		//System.out.println(fileOut);
-		//File f = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210318_140134/hydrolyse_0/outflow.txt");
-		//String a = integrate_file(f, 0);
+	public static void main(String args[]) throws IOException, InterruptedException{ 	
+		File dir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210322_141433");
+		String[] reactors = {"hydrolyse_0", "hydrolyse_1", "hydrolyse_2"};
+		merge_all_hydrolysis(dir, reactors);
 	}
 }

@@ -14,11 +14,13 @@ import vrl.biogas.biogascontrol.structures.Structure;
 	description="Methane reactor")
 public class Methane implements SimulationElement{
 	private File methaneDirectory;
+	private File storageDirectory;
 	private Structure structure;
 	
 	public Methane(Structure struct, File dir) {
-		structure = struct;
-		methaneDirectory = new File(dir, "methane");
+		this.structure = struct;
+		this.methaneDirectory = new File(dir, "methane");
+		this.storageDirectory = new File(dir, "storage_hydrolyse");
 	}
 	
 	@Override
@@ -53,12 +55,15 @@ public class Methane implements SimulationElement{
 				Files.copy(previousSpec.toPath(), 
 						methaneFile.toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
-				SpecfileUpdater.update_read_checkpoint(methaneFile, previousTimePath);
+				SpecfileUpdater.update_read_checkpoint(methaneFile, previousTimePath);			
 			} else { //first timestep			
 				Files.copy(new File(methaneDirectory, "methane.lua").toPath(), 
 						methaneFile.toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 			}
+			
+			File outflowFile = new File(storageDirectory, "outflow.txt");
+			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);
 			SpecfileUpdater.update_starttime(methaneFile, structure.currentTime());
 			SpecfileUpdater.update_endtime(methaneFile, structure.currentTime()+1);
 			

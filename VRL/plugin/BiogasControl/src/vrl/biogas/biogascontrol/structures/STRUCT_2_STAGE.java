@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.elements.*;
+import vrl.biogas.biogascontrol.panels.SettingsPanel;
 
 @ComponentInfo(name="2_STAGE", 
   category="Biogas_Structures", 
@@ -17,7 +18,8 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 	public static ArrayList<SimulationElement> reactorQueue;
 	public static int time;
 	public static boolean breakRun;
-	  
+	public static boolean firstTimestep;
+	
 	@Override
 	public int numHydrolysis() {
 		return 2;
@@ -58,6 +60,7 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 		System.out.println("2_STAGE_STRUCT");
 		breakRun = false;
 		time = currentStarttime;
+		firstTimestep = (currentStarttime == (Integer) SettingsPanel.simStarttime.getValue());
 		fillQueue();
 		ElementRunner myRunnable = new ElementRunner(this);
 		Thread t = new Thread(myRunnable);
@@ -91,11 +94,14 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 	public void fillQueue() {
 		System.out.println("fillQueue()");
 		File dir = BiogasControlPlugin.workingDirectory;
+		
 		reactorQueue = new ArrayList<SimulationElement>();
 		reactorQueue.add(new Start(this));
-		reactorQueue.add(new Hydrolysis(this, dir, 0));
-		reactorQueue.add(new Hydrolysis(this, dir, 1));
 		String[] reactorNames = {"hydrolyse_0", "hydrolyse_1"};
+		double[] fractions = {0.5, 0.5};
+		reactorQueue.add(new HydrolysisSetup(this, dir, reactorNames, fractions, firstTimestep));
+		reactorQueue.add(new Hydrolysis(this, dir, 0));
+		reactorQueue.add(new Hydrolysis(this, dir, 1));		
 		reactorQueue.add(new Storage(this, dir, reactorNames));
 		reactorQueue.add(new Methane(this, dir));
 		reactorQueue.add(new Pause(this));

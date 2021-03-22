@@ -46,6 +46,11 @@ public class Hydrolysis implements SimulationElement{
 		SimulationPanel.simulationLog.setText(logStart + "** Hydrolysis " + numeration + " ... ");
 		
 		final File currentTimePath = new File(hydrolysisDirectory, String.valueOf(structure.currentTime()));
+		File hydolysisFile = new File(currentTimePath, "hydrolysis_checkpoint.lua");
+		
+		new ElementExecution(hydolysisFile, currentTimePath, structure, this).execute();
+		/*
+		final File currentTimePath = new File(hydrolysisDirectory, String.valueOf(structure.currentTime()));
 		final File previousTimePath = new File(hydrolysisDirectory, String.valueOf(structure.currentTime()-1));
 		System.out.println("Running hydrolysis");
 		System.out.println(currentTimePath);
@@ -77,6 +82,7 @@ public class Hydrolysis implements SimulationElement{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
+		*/
 	}
 
 }

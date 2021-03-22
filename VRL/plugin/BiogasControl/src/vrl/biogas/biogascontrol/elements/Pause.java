@@ -15,7 +15,7 @@ public class Pause implements SimulationElement{
 	private Structure structure;
 	
 	public Pause(Structure struct) {
-		structure = struct;
+		this.structure = struct;
 	}
 	
 	@Override

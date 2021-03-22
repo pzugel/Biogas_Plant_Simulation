@@ -16,7 +16,7 @@ public class Stop implements SimulationElement{
 	private Structure structure;
 	
 	public Stop(Structure struct) {
-		structure = struct;
+		this.structure = struct;
 	}
 	
 	@Override

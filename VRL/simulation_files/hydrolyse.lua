@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"hydrolyseDebug"},
+		activeReactions={"simpleHydrolysis_stage"},
 	},
 	numericalSetup={
 		sim_starttime=10,
@@ -95,9 +95,9 @@ problem={
 		},
 	},
 	inflow={
-		data={"Propionic", "Acetic"},
+		data={"Acetic"},
 		timetable={
-			{0, 0, 0, 0},
+			{0, 0, 0},
 		},
 
 	},	

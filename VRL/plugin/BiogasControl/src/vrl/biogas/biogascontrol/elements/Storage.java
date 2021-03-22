@@ -19,10 +19,10 @@ public class Storage implements SimulationElement{
 	private String[] reactors;
 	
 	public Storage(Structure struct, File dir, String[] reactorNames) {
-		directory = dir;
-		structure = struct;
-		storageDirectory = new File(dir, "storage_hydrolyse");
-		reactors = reactorNames;
+		this.directory = dir;
+		this.structure = struct;
+		this.storageDirectory = new File(dir, "storage_hydrolyse");
+		this.reactors = reactorNames;
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class Storage implements SimulationElement{
 		boolean preexisting = SetupPanel.mergePreexisting;
 		
 		if(!structure.wasCancelled()) {
-			ElementFunctions.merge_all_hydrolysis(directory.toString(), reactors, startTime, structure.currentTime(), preexisting);
+			ElementFunctions.merge_all_hydrolysis(directory, reactors);
 	
 			String logEnd = SimulationPanel.simulationLog.getText();
 			SimulationPanel.simulationLog.setText(logEnd + "Done!\n");
