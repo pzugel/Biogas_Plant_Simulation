@@ -33,9 +33,11 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       vapi.addTypeRepresentation(MainPanelContainerType.class);
 	       vapi.addComponent(STRUCT_2_STAGE.class);
 	       vapi.addComponent(Structure.class);
-	       vapi.addComponent(Hydrolysis.class);
-	       vapi.addComponent(Methane.class);
 	       vapi.addComponent(SimulationElement.class);
+	       
+	       vapi.addComponent(MainPanelContainerType.class); //TEST
+	       vapi.addComponent(UserStructure.class);
+	       vapi.addComponent(BiogasUserControlPlugin.class);
 	   }
 	}
 

@@ -51,7 +51,6 @@ public class SpecificationParser {
 		int ind = 0;
 		while (lineIter.hasNextLine()) {
 			String line = lineIter.nextLine();
-			System.out.println("line: " + line);
 			int valuePos = line.indexOf('=');
 			int timeSt = line.lastIndexOf("$");
 			if (valuePos != -1 || timeSt == 0) {
@@ -90,7 +89,6 @@ public class SpecificationParser {
 		{
 			
 			String match = timestampMatcher.group();
-			System.out.println("timestampMatch: " + match);
 			String replacement = match;
 			//int pos = match.indexOf(',');
 			//int pos_end = match.indexOf('}');
@@ -98,7 +96,6 @@ public class SpecificationParser {
 			replacement = replacement.replaceAll("\\{", "\\$");
 			replacement = replacement.replaceAll("\\}", "?");
 			replacement = replacement.replaceAll(",", "#");
-			System.out.println("timestampReplacement: " + replacement);
 			text = text.replace(match, replacement);
 		} 
 		

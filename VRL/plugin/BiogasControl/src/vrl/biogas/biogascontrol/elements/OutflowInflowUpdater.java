@@ -1,7 +1,6 @@
 package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -126,7 +125,6 @@ public class OutflowInflowUpdater {
 			if(line.contains("inflow")) {		
 				for (int i = 0; i < line.length(); i++) {
 				    if (line.charAt(i) == '\t') {
-				    	System.out.println("IS TAB");
 				    	tabs += "\t";
 				    }
 				}
@@ -135,7 +133,6 @@ public class OutflowInflowUpdater {
 		}
 		lineIter.close();
 		
-		System.out.println("tab:" + tabs);
 		tabs += "\t\t";
 		timetable_replacement = "timetable={\n";
 		for(int i=0; i<output_timetable.get(0).size(); i++){

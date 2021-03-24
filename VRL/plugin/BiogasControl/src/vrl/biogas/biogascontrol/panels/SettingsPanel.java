@@ -1,6 +1,8 @@
 package vrl.biogas.biogascontrol.panels;
 
+import java.awt.BasicStroke;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -12,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
@@ -70,7 +73,7 @@ public class SettingsPanel {
 				+ "<br>initial values, you need to set up a working environtment first.</body></html>");
 		
         double size[][] =
-            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.22, 0.3, TableLayout.FILL},
+            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.18, 0.3, TableLayout.FILL},
              {0.06, 
             	0.05, //Label 1
             	0.06, //Spinner 2
@@ -80,15 +83,17 @@ public class SettingsPanel {
             	0.41, //Elements Panel 6 
             	TableLayout.FILL}};
         settingsPanel.setLayout(new TableLayout(size));
-
+        settingsPanel.setBorder(BiogasControlPlugin.border);
         
         JPanel line = new JPanel() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
             protected void paintComponent(Graphics g) {
-                super.paintComponent(g);            
-                g.drawLine(0, 20, (int) (settingsPanel.getWidth()*0.85), 20);
+                super.paintComponent(g);   
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setStroke(new BasicStroke(2));
+                g2.drawLine(0, 20, (int) (settingsPanel.getWidth()*0.85), 20);
             }
         };
         
@@ -180,6 +185,7 @@ public class SettingsPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				if((Integer) simEndtime.getValue() <= (Integer) simStarttime.getValue()) {
 					simEndtime.setValue((Integer) simEndtime.getValue() + 1);
+					// TODO Compare with currenttime / struct time
 				}
 					
 			}
@@ -195,11 +201,25 @@ public class SettingsPanel {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
 							String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
-							System.out.println("returnvalue: " + reactor);
+							System.out.println("Selected: " + reactor);
 							try {
-								File hydrolysisPath = new File(BiogasControlPlugin.workingDirectory, reactor);
-								LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
+								JFrame messageFrame = new JFrame();
+								messageFrame.setLocationRelativeTo(settingsPanel);
+								messageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+								JOptionPane.showMessageDialog(messageFrame,
+									    "It is advised to pause the simulation before making changes.",
+									    "Warning",
+									    JOptionPane.WARNING_MESSAGE);
 								
+								File hydrolysisPath = new File(BiogasControlPlugin.workingDirectory, reactor);
+								File hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlPlugin.struct.currentTime()));
+								File specFile = new File(hydrolysisTimePath, "hydrolysis_checkpoint.lua");
+								if(specFile.exists()) {
+									LUATableViewer.specFile = specFile;
+								} else {
+									LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
+								}
+															
 								LUATableViewer.editor();
 								JFrame frame = new JFrame("Hydrolysis reactor");
 								frame.add(LUATableViewer.panel);
@@ -259,9 +279,17 @@ public class SettingsPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click methane edit");
-				if(SetupPanel.environment_ready) { //Open Via Selector
+				if(SetupPanel.environment_ready) {
 					File methanePath = new File(BiogasControlPlugin.workingDirectory, "methane");
-					LUATableViewer.specFile = new File(methanePath, "methane.lua");
+					File methaneTimePath = new File(methanePath, String.valueOf(BiogasControlPlugin.struct.currentTime()));
+					File specFile = new File(methaneTimePath, "methane_checkpoint.lua");
+					
+					if(specFile.exists()) {
+						LUATableViewer.specFile = specFile;
+					} else {
+						LUATableViewer.specFile = new File(methanePath, "methane.lua");
+					}
+					
 					try {
 						LUATableViewer.editor();
 						JFrame frame = new JFrame("Methane reactor");

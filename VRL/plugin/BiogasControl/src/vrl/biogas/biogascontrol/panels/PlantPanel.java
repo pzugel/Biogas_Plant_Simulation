@@ -32,6 +32,8 @@ public class PlantPanel {
             	0.88, //Picutre
             	TableLayout.FILL}};
         plantPanel.setLayout(new TableLayout(size));
+        plantPanel.setBorder(BiogasControlPlugin.border);
+        
         plantPanel.setBackground(Color.WHITE);
         
 		String plantName = BiogasControlPlugin.struct.name();

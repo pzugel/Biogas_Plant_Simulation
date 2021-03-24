@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.IOException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.panels.SettingsPanel;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -40,9 +38,6 @@ public class Storage implements SimulationElement{
 		SimulationPanel.activeElement.setText("Storage");
 		String logStart = SimulationPanel.simulationLog.getText();
 		SimulationPanel.simulationLog.setText(logStart + "** Storage ... ");
-		
-		int startTime = (Integer) SettingsPanel.simStarttime.getValue();
-		boolean preexisting = SetupPanel.mergePreexisting;
 		
 		if(!structure.wasCancelled()) {
 			ElementFunctions.merge_all_hydrolysis(directory, reactors);

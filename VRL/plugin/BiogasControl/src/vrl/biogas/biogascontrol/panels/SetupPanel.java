@@ -52,14 +52,21 @@ public class SetupPanel {
 		environment_ready = false;
 		mergePreexisting = false;
 		setupPanel = new JPanel();
-		createPanel();
+		createPanel(false);
+	}
+	
+	public SetupPanel(boolean userDefined) {
+		environment_ready = false;
+		mergePreexisting = false;
+		setupPanel = new JPanel();
+		createPanel(userDefined);
 	}
 	
 	public JPanel getPanel() {
 		return setupPanel;
 	}
 	
-	private void createPanel() {
+	private void createPanel(final boolean userDefined) {
 		
 		JButton open_Btn = new JButton("...");
 		JButton create_Btn = new JButton("Create");
@@ -103,6 +110,7 @@ public class SetupPanel {
             	TableLayout.FILL,
             	0.06}};
         setupPanel.setLayout(new TableLayout(size));
+        setupPanel.setBorder(BiogasControlPlugin.border);
         
         //setupPanel.add(new JLabel("0,0"), new TableLayoutConstraints(0, 0, 0, 0, TableLayout.LEFT, TableLayout.TOP));
         //setupPanel.add(new JLabel("0,1"), new TableLayoutConstraints(0, 1, 0, 1, TableLayout.LEFT, TableLayout.TOP));
@@ -170,7 +178,11 @@ public class SetupPanel {
 				environment_ready = false;
 				dir.setText("");
 				SettingsPanel.simStarttime.setEnabled(true);
-				SimulationPanel.plantStructure.setText(BiogasControlPlugin.struct.name());
+				if(userDefined) {
+					SimulationPanel.plantStructure.setText("User defined");
+				} else {
+					SimulationPanel.plantStructure.setText(BiogasControlPlugin.struct.name());	
+				}		
 				SimulationPanel.workingDirectory.setText("");
 			}
 		});
