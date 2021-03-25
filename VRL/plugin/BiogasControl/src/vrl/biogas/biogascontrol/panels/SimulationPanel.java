@@ -13,17 +13,19 @@ import javax.swing.SwingConstants;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 public class SimulationPanel {
 	static JPanel simulationPanel;
-	static JTextField plantStructure;
-	public static JTextField iteration;
-	static JTextField runtime;
-	static JTextField workingDirectory;
 	
-	public static JTextField activeElement;
-	public static JTextArea simulationLog;
+	public JTextField plantStructure;
+	public JTextField iteration;
+	public JTextField runtime;
+	public JTextField workingDirectory;
+	
+	public JTextField activeElement;
+	public JTextArea simulationLog;
 	
 	public SimulationPanel() {
 		simulationPanel = new JPanel();
@@ -113,7 +115,7 @@ public class SimulationPanel {
             	TableLayout.FILL, //TextArea 8
             	0.06}};
         simulationPanel.setLayout(new TableLayout(size));
-        simulationPanel.setBorder(BiogasControlPlugin.border);
+        simulationPanel.setBorder(BiogasControl.border);
         
         simulationPanel.add(plantStructureLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
         simulationPanel.add(activeElementLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));

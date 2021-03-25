@@ -30,10 +30,11 @@ public class Pause implements SimulationElement{
 	
 	@Override
 	public void run() throws IOException, InterruptedException {
+		final SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
 		System.out.println("Pause here!");
-		SimulationPanel.activeElement.setText("Pause");
-		String logStart = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(logStart + "** Pause ... ");
+		simPanel.activeElement.setText("Pause");
+		String logStart = simPanel.simulationLog.getText();
+		simPanel.simulationLog.setText(logStart + "** Pause ... ");
 		
 		if(!structure.wasCancelled()) { 
 			Runnable runnable = new Runnable()
@@ -54,8 +55,8 @@ public class Pause implements SimulationElement{
 						}                     
 					}
 					try {
-						String logEnd = SimulationPanel.simulationLog.getText();
-						SimulationPanel.simulationLog.setText(logEnd + "Continue!\n");
+						String logEnd = simPanel.simulationLog.getText();
+						simPanel.simulationLog.setText(logEnd + "Continue!\n");
 						structure.runNext();
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
@@ -67,8 +68,8 @@ public class Pause implements SimulationElement{
 	    	threadObject.start();
 		}
 		else {
-			String logEnd = SimulationPanel.simulationLog.getText();
-			SimulationPanel.simulationLog.setText(logEnd + "Cancelled!\n");
+			String logEnd = simPanel.simulationLog.getText();
+			simPanel.simulationLog.setText(logEnd + "Cancelled!\n");
 		}
 	}
 }

@@ -26,15 +26,16 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.specedit.LUATableViewer;
 
 public class SettingsPanel {
 	
-	static JPanel settingsPanel;
-	public static JSpinner simStarttime;
-	public static JSpinner simEndtime;
-	static JCheckBox autoCleanup;
+	public JPanel settingsPanel;
+	public JSpinner simStarttime;
+	public JSpinner simEndtime;
+	public JCheckBox autoCleanup;
 	
 	public static JTextField hydrolysis_path;
 	public static JTextField methane_path;
@@ -42,14 +43,19 @@ public class SettingsPanel {
 	
 	public SettingsPanel() {
 		settingsPanel = new JPanel();
-		createPanel();
+		createPanel(false);
+	}
+	
+	public SettingsPanel(boolean userDefined) {
+		settingsPanel = new JPanel();
+		createPanel(userDefined);
 	}
 	
 	public JPanel getPanel() {
 		return settingsPanel;
 	}
 	
-	private void createPanel() {
+	private void createPanel(final boolean userDefined) {
 		SpinnerModel startModel = new SpinnerNumberModel(0, 0, 1000, 1);
 		SpinnerModel endModel = new SpinnerNumberModel(1, 1, 1000, 1);
 		 
@@ -83,7 +89,7 @@ public class SettingsPanel {
             	0.41, //Elements Panel 6 
             	TableLayout.FILL}};
         settingsPanel.setLayout(new TableLayout(size));
-        settingsPanel.setBorder(BiogasControlPlugin.border);
+        settingsPanel.setBorder(BiogasControl.border);
         
         JPanel line = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -120,32 +126,32 @@ public class SettingsPanel {
             	0.18, //Simulation
             	TableLayout.FILL}};
         elementsPanel.setLayout(new TableLayout(elements_size));
-        File simulationFilesPath = new File(BiogasControlPlugin.projectPath, "simulation_files");
+        File simulationFilesPath = new File(BiogasControl.projectPath, "simulation_files");
         System.out.println("simulationFilesPath: " + simulationFilesPath);
         JButton methane_edit = new JButton("Edit");
-        methane_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        methane_edit.setBackground(BiogasControl.BUTTON_BLUE);
         methane_path = new JTextField(5);
         methane_path.setText(new File(simulationFilesPath, "methane.lua").toString());
         methane_path.setEditable(false);
         JButton open_methane_edit = new JButton("...");
-        open_methane_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        open_methane_edit.setBackground(BiogasControl.BUTTON_BLUE);
         
         JButton hydrolysis_edit = new JButton("Edit");
-        hydrolysis_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        hydrolysis_edit.setBackground(BiogasControl.BUTTON_BLUE);
         hydrolysis_path = new JTextField(5);
         hydrolysis_path.setText(new File(simulationFilesPath, "hydrolyse.lua").toString());
         hydrolysis_path.setEditable(false);
         JButton open_hydrolysis_edit = new JButton("...");
-        open_hydrolysis_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        open_hydrolysis_edit.setBackground(BiogasControl.BUTTON_BLUE);
         
         simulation_path = new JTextField(5);
         simulation_path.setText(new File(simulationFilesPath, "Biogas.lua").toString());
         simulation_path.setEditable(false);
         JButton open_simulation_edit = new JButton("...");
-        open_simulation_edit.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        open_simulation_edit.setBackground(BiogasControl.BUTTON_BLUE);
         
         //ICONS
-		File iconPath = new File(BiogasControlPlugin.projectPath, "icons");
+		File iconPath = new File(BiogasControl.projectPath, "icons");
 		
 		File hydroIcon_path = new File(iconPath, "hydrolyse_reactor.png");
 		File methIcon_path = new File(iconPath, "methane_reactor.png");
@@ -187,10 +193,24 @@ public class SettingsPanel {
 					simEndtime.setValue((Integer) simEndtime.getValue() + 1);
 					// TODO Compare with currenttime / struct time
 				}
+				
+				if(BiogasControl.running.isSelected()) {
+					int cTime;
+					if(userDefined) {
+						cTime = BiogasControl.currenttime;
+					} else {
+						cTime = BiogasControlPlugin.struct.currentTime();
+					}
+					
+					if((Integer) simEndtime.getValue() < cTime+1) {
+						simEndtime.setValue(cTime+1);
+					}
+				}
 					
 			}
 	    }); 
 		
+
 		hydrolysis_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -211,11 +231,24 @@ public class SettingsPanel {
 									    "Warning",
 									    JOptionPane.WARNING_MESSAGE);
 								
-								File hydrolysisPath = new File(BiogasControlPlugin.workingDirectory, reactor);
-								File hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlPlugin.struct.currentTime()));
-								File specFile = new File(hydrolysisTimePath, "hydrolysis_checkpoint.lua");
-								if(specFile.exists()) {
-									LUATableViewer.specFile = specFile;
+								File hydrolysisPath = new File(BiogasControl.workingDirectory, reactor);
+								
+								if(BiogasControl.running.isSelected()) {
+									File hydrolysisTimePath;
+									
+									if(userDefined) {
+										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControl.currenttime));
+									} else {
+										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlPlugin.struct.currentTime()));	
+									}
+														
+									File specFile = new File(hydrolysisTimePath, "hydrolysis_checkpoint.lua");								
+									if(specFile.exists()) {
+										LUATableViewer.specFile = specFile;
+									} else {
+										LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
+									}
+									
 								} else {
 									LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
 								}
@@ -225,7 +258,7 @@ public class SettingsPanel {
 								frame.add(LUATableViewer.panel);
 								frame.setSize(700, 600);
 								frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-								frame.setLocationRelativeTo(BiogasControlPlugin.panel);
+								frame.setLocationRelativeTo(BiogasControl.panel);
 								frame.setVisible(true);
 							} catch (FileNotFoundException e) {
 								// TODO Auto-generated catch block
@@ -243,7 +276,7 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlPlugin.panel);
+						frame.setLocationRelativeTo(BiogasControl.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -253,27 +286,7 @@ public class SettingsPanel {
 
 
 			}
-	    }); 
-		
-		open_hydrolysis_edit.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				JFileChooser fileChooser = new JFileChooser();
-				fileChooser.setDialogTitle("Select new hydrolysis base file");
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);				
-				FileNameExtensionFilter filter = new FileNameExtensionFilter("LUA FILES", "*.lua", "lua");
-				fileChooser.setFileFilter(filter);
-				
-				int result = fileChooser.showOpenDialog(settingsPanel);
-				if (result == JFileChooser.APPROVE_OPTION) {
-				    File selectedPath = fileChooser.getSelectedFile();
-				    System.out.println("New hydrolysis base file: " + selectedPath.getAbsolutePath());
-				    hydrolysis_path.setText(new File(selectedPath.getAbsolutePath()).toString());
-				}
-				else
-					System.out.println("Invalid file!");
-			}
-		});
+	    }); 	
 		
 		methane_edit.addActionListener(new ActionListener() {
 			@Override
@@ -281,11 +294,23 @@ public class SettingsPanel {
 				System.out.println("Click methane edit");
 				if(SetupPanel.environment_ready) {
 					File methanePath = new File(BiogasControlPlugin.workingDirectory, "methane");
-					File methaneTimePath = new File(methanePath, String.valueOf(BiogasControlPlugin.struct.currentTime()));
-					File specFile = new File(methaneTimePath, "methane_checkpoint.lua");
 					
-					if(specFile.exists()) {
-						LUATableViewer.specFile = specFile;
+					if(BiogasControl.running.isSelected()) {
+						File methaneTimePath;
+						
+						if(userDefined) {
+							methaneTimePath = new File(methanePath, String.valueOf(BiogasControl.currenttime));
+						} else {
+							methaneTimePath = new File(methanePath, String.valueOf(BiogasControlPlugin.struct.currentTime()));	
+						}
+											
+						File specFile = new File(methaneTimePath, "methane_checkpoint.lua");								
+						if(specFile.exists()) {
+							LUATableViewer.specFile = specFile;
+						} else {
+							LUATableViewer.specFile = new File(methanePath, "methane.lua");
+						}
+						
 					} else {
 						LUATableViewer.specFile = new File(methanePath, "methane.lua");
 					}
@@ -321,6 +346,27 @@ public class SettingsPanel {
 				}
 			}
 		});
+			
+		open_hydrolysis_edit.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				JFileChooser fileChooser = new JFileChooser();
+				fileChooser.setDialogTitle("Select new hydrolysis base file");
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);				
+				FileNameExtensionFilter filter = new FileNameExtensionFilter("LUA FILES", "*.lua", "lua");
+				fileChooser.setFileFilter(filter);
+				
+				int result = fileChooser.showOpenDialog(settingsPanel);
+				if (result == JFileChooser.APPROVE_OPTION) {
+				    File selectedPath = fileChooser.getSelectedFile();
+				    System.out.println("New hydrolysis base file: " + selectedPath.getAbsolutePath());
+				    hydrolysis_path.setText(new File(selectedPath.getAbsolutePath()).toString());
+				}
+				else
+					System.out.println("Invalid file!");
+			}
+		});
+		
 		
 		open_methane_edit.addActionListener(new ActionListener() {
 			@Override

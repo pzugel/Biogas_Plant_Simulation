@@ -73,7 +73,7 @@ public class SpecificationParser {
 	private void modifyInput() {
 		text = text.replaceAll("\\s","");
 		
-		String str_arr = "\\{\"[a-zA-Z0-9_]+\"\\}";
+		String str_arr = "\\{(\"[a-zA-Z0-9_]+\"(,)?)*\\}";
 		String timestamp = "\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}";
 
 		Matcher strArrMatcher = Pattern.compile(str_arr).matcher(text); //Match types Str[]
@@ -81,9 +81,10 @@ public class SpecificationParser {
 		{
 			String match = strArrMatcher.group();
 			String matched_str_arr = match.substring(1,match.length()-1);
+			matched_str_arr = matched_str_arr.replaceAll(",", "#");
 			text = text.replace(match, "$"+matched_str_arr+"?");
 		} 
-		
+		System.out.println("*********** FIRST ***********\n" + text + "\n");
 		Matcher timestampMatcher = Pattern.compile(timestamp).matcher(text); //Match timestamps
 		while (timestampMatcher.find()) 
 		{
@@ -129,6 +130,7 @@ public class SpecificationParser {
 		text = text.replaceAll("\\$", "{");
 		text = text.replaceAll("\\?", "}");
 		text = text.replaceAll("#", ",");
+		System.out.println("*********** SECOND ***********\n" + text + "\n");
 	}
 
 	//Should be expanded by testValidationMatch()

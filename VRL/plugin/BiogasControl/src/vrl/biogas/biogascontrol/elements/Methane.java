@@ -2,25 +2,28 @@ package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
 @ComponentInfo(name="Methane", 
 	category="Biogas_Elements", 
 	description="Methane reactor")
-public class Methane implements SimulationElement{
+public class Methane implements SimulationElement, Serializable{
+	private static final long serialVersionUID = 1L;
 	private File methaneDirectory;
 	private File storageDirectory;
 	private Structure structure;
 	
 	public Methane(Structure struct, File dir) {
-		this.structure = struct;
-		this.methaneDirectory = new File(dir, "methane");
-		this.storageDirectory = new File(dir, "storage_hydrolyse");
+		structure = struct;
+		methaneDirectory = new File(dir, "methane");
+		storageDirectory = new File(dir, "storage_hydrolyse");
 	}
 	
 	@Override
@@ -35,14 +38,16 @@ public class Methane implements SimulationElement{
 
 	@Override
 	public void run() {
-		SimulationPanel.activeElement.setText("Methane");
-		String logStart = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(logStart + "** Methane ... ");
+		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		
+		simPanel.activeElement.setText("Methane");
+		String logStart = simPanel.simulationLog.getText();
+		simPanel.simulationLog.setText(logStart + "** Methane ... ");
 		
 		final File currentTimePath = new File(methaneDirectory, String.valueOf(structure.currentTime()));
 		final File previousTimePath = new File(methaneDirectory, String.valueOf(structure.currentTime()-1));
 		System.out.println("Running methane");
-		System.out.println(currentTimePath);
+		System.out.println("currentTimePath : " + currentTimePath);
 		if (!currentTimePath.exists()){
 			currentTimePath.mkdirs();
 		}
@@ -63,7 +68,8 @@ public class Methane implements SimulationElement{
 			}
 			
 			File outflowFile = new File(storageDirectory, "outflow.txt");
-			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);
+			System.out.println("outflowFile: " + outflowFile.toString());
+			//OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);
 			SpecfileUpdater.update_starttime(methaneFile, structure.currentTime());
 			SpecfileUpdater.update_endtime(methaneFile, structure.currentTime()+1);
 			
@@ -71,12 +77,8 @@ public class Methane implements SimulationElement{
 
 			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} 
 	}
-
-
-
 }
 

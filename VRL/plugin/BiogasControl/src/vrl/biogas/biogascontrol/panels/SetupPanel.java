@@ -17,6 +17,7 @@ import javax.swing.tree.DefaultTreeModel;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 import java.awt.event.ActionEvent;
@@ -44,15 +45,12 @@ public class SetupPanel {
 	static DefaultTreeModel environment_tree_model;
 	static JTextField dir;
 	
-	public static boolean mergePreexisting;
+	public boolean mergePreexisting;
 	
-	static public JButton clear_Btn;
+	public static JButton clear_Btn;
 	
 	public SetupPanel() {
-		environment_ready = false;
-		mergePreexisting = false;
-		setupPanel = new JPanel();
-		createPanel(false);
+		new SetupPanel(false);
 	}
 	
 	public SetupPanel(boolean userDefined) {
@@ -61,7 +59,7 @@ public class SetupPanel {
 		setupPanel = new JPanel();
 		createPanel(userDefined);
 	}
-	
+
 	public JPanel getPanel() {
 		return setupPanel;
 	}
@@ -110,18 +108,10 @@ public class SetupPanel {
             	TableLayout.FILL,
             	0.06}};
         setupPanel.setLayout(new TableLayout(size));
-        setupPanel.setBorder(BiogasControlPlugin.border);
+        setupPanel.setBorder(BiogasControl.border);
         
-        //setupPanel.add(new JLabel("0,0"), new TableLayoutConstraints(0, 0, 0, 0, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("0,1"), new TableLayoutConstraints(0, 1, 0, 1, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("0,3"), new TableLayoutConstraints(0, 3, 0, 3, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("0,5"), new TableLayoutConstraints(0, 5, 0, 5, TableLayout.LEFT, TableLayout.TOP));
         setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayout.LEFT, TableLayout.CENTER));
         setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayout.CENTER, TableLayout.CENTER));
-        //setupPanel.add(new JLabel("2"), new TableLayoutConstraints(2, 0, 2, 0, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("3,0"), new TableLayoutConstraints(3, 0, 3, 0, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("4,0"), new TableLayoutConstraints(4, 0, 4, 0, TableLayout.LEFT, TableLayout.TOP));
-        //setupPanel.add(new JLabel("5,0"), new TableLayoutConstraints(5, 0, 5, 0, TableLayout.LEFT, TableLayout.TOP));
         setupPanel.add(dir, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.TOP));
         setupPanel.add(open_Btn, new TableLayoutConstraints(4, 1, 4, 1, TableLayout.FULL, TableLayout.TOP));
         setupPanel.add(create_Btn, new TableLayoutConstraints(3, 3, 4, 3, TableLayout.CENTER, TableLayout.TOP));
@@ -154,9 +144,9 @@ public class SetupPanel {
 			public void actionPerformed(ActionEvent arg0) throws NullPointerException{
 				try {
 					if (environment_path.isDirectory()) {
-						create_environment(environment_path);
+						create_environment(environment_path, userDefined);
 						environment_ready = true;
-						SettingsPanel.simStarttime.setEnabled(true);
+						BiogasControl.settingsPanelObj.simStarttime.setEnabled(true);
 					}
 					else
 						System.out.println("Not a valid path!");
@@ -177,13 +167,12 @@ public class SetupPanel {
 				environment_tree_model.reload();
 				environment_ready = false;
 				dir.setText("");
-				SettingsPanel.simStarttime.setEnabled(true);
+				BiogasControl.settingsPanelObj.simStarttime.setEnabled(true);
 				if(userDefined) {
-					SimulationPanel.plantStructure.setText("User defined");
+					BiogasControl.simulationPanelObj.plantStructure.setText("User defined");
 				} else {
-					SimulationPanel.plantStructure.setText(BiogasControlPlugin.struct.name());	
+					BiogasControl.simulationPanelObj.plantStructure.setText(BiogasControlPlugin.struct.name());	
 				}		
-				SimulationPanel.workingDirectory.setText("");
 			}
 		});
 		
@@ -216,18 +205,18 @@ public class SetupPanel {
 		        	finished = true;
 		        } else if(data.startsWith("STRUCTURE")) {
 		        	String struct = data.substring(data.indexOf("=")+1, data.length());
-		        	SimulationPanel.plantStructure.setText(struct);
+		        	BiogasControl.simulationPanelObj.plantStructure.setText(struct);
 		        } else if(data.startsWith("ENDTIME")) {
 		        	String endtime = data.substring(data.indexOf("=")+1, data.length());
-		        	SettingsPanel.simStarttime.setValue(Integer.valueOf(endtime)+1);
-		        	SettingsPanel.simStarttime.setEnabled(false);
+		        	BiogasControl.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime)+1);
+		        	BiogasControl.settingsPanelObj.simStarttime.setEnabled(false);
 		        }
 			}
 			myReader.close();
 			if(finished) {
 				System.out.println("Finished!");
 				dir.setText(path.toString());
-				SimulationPanel.workingDirectory.setText(path.toString());
+				BiogasControl.simulationPanelObj.workingDirectory.setText(path.toString());
 			    environment_path = path;
 			    environment_ready = true;
 			    mergePreexisting = true;
@@ -278,48 +267,50 @@ public class SetupPanel {
 		}
 	}
 	
-	void create_environment(File path) throws IOException {
+	void create_environment(File path, boolean userDefined) throws IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		File dir = new File(path, "biogasVRL_" + sdf.format(timestamp));
-		BiogasControlPlugin.workingDirectory = dir;
-		SimulationPanel.workingDirectory.setText(dir.toString());
+		BiogasControl.workingDirectory = dir;
+		BiogasControl.simulationPanelObj.workingDirectory.setText(dir.toString());
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
-		File simulationFiles = new File(BiogasControlPlugin.projectPath, "simulation_files");
-		//Methane
-		if(BiogasControlPlugin.struct.methane()) {
-			File methaneDir = new File(dir, "methane");
-			if (!methaneDir.exists()){
-				methaneDir.mkdirs();
+		File simulationFiles = new File(BiogasControl.projectPath, "simulation_files");
+		
+		if(!userDefined) {
+			//Methane
+			if(BiogasControlPlugin.struct.methane()) {
+				File methaneDir = new File(dir, "methane");
+				if (!methaneDir.exists()){
+					methaneDir.mkdirs();
+				}
+				Files.copy(new File(simulationFiles, "methane.lua").toPath(),
+						new File(methaneDir, "methane.lua").toPath(), 
+						StandardCopyOption.REPLACE_EXISTING);
+				newRoot.add(new DefaultMutableTreeNode("methane"));
 			}
-			Files.copy(new File(simulationFiles, "methane.lua").toPath(),
-					new File(methaneDir, "methane.lua").toPath(), 
-					StandardCopyOption.REPLACE_EXISTING);
-			newRoot.add(new DefaultMutableTreeNode("methane"));
+			
+			//Hydrolysis
+			int num = BiogasControlPlugin.struct.numHydrolysis();
+			for(int i=0; i<num; i++) {
+				File hydroDir = new File(dir, "hydrolyse_" + i);
+				if (!hydroDir.exists()){
+					hydroDir.mkdirs();
+				}	
+				Files.copy(new File(simulationFiles, "hydrolyse.lua").toPath(), 
+						new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
+						StandardCopyOption.REPLACE_EXISTING);
+				newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
+			}
+			
+			//Storage
+			if(BiogasControlPlugin.struct.storage()) {
+				File storageDir = new File(dir, "storage_hydrolyse");
+				if (!storageDir.exists()){
+					storageDir.mkdirs();
+				}	
+				newRoot.add(new DefaultMutableTreeNode("storage_hydrolyse"));
+			}
 		}
-		
-		//Hydrolysis
-		int num = BiogasControlPlugin.struct.numHydrolysis();
-		for(int i=0; i<num; i++) {
-			File hydroDir = new File(dir, "hydrolyse_" + i);
-			if (!hydroDir.exists()){
-				hydroDir.mkdirs();
-			}	
-			Files.copy(new File(simulationFiles, "hydrolyse.lua").toPath(), 
-					new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
-					StandardCopyOption.REPLACE_EXISTING);
-			newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
-		}
-		
-		//Storage
-		if(BiogasControlPlugin.struct.storage()) {
-			File storageDir = new File(dir, "storage_hydrolyse");
-			if (!storageDir.exists()){
-				storageDir.mkdirs();
-			}	
-			newRoot.add(new DefaultMutableTreeNode("storage_hydrolyse"));
-		}
-				
 		environment_tree_model.setRoot(newRoot);
 		environment_tree_model.reload();
 	}

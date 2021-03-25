@@ -5,9 +5,9 @@ import eu.mihosoft.vrl.system.PluginAPI;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
-import vrl.biogas.biogascontrol.elements.*;
+import vrl.biogas.biogascontrol.elements.SimulationElement;
 import vrl.biogas.biogascontrol.structures.*;
-
+import vrl.biogas.biogascontrol.userstructure.Hydrolysis;
 
 public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	public BiogasControlPluginConfigurator() {
@@ -38,6 +38,9 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       vapi.addComponent(MainPanelContainerType.class); //TEST
 	       vapi.addComponent(UserStructure.class);
 	       vapi.addComponent(BiogasUserControlPlugin.class);
+	       vapi.addComponent(Hydrolysis.class);
+	       
+	       vapi.addComponent(BiogasControl.class); //Not sure if needed
 	   }
 	}
 

@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -17,7 +16,6 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -34,36 +32,12 @@ import vrl.biogas.biogascontrol.panels.SimulationPanel;
 @ComponentInfo(name="MainPanel_User", 
 	category="Biogas", 
 	description="MainPanel Component")
-public class BiogasUserControlPlugin implements Serializable{
+public class BiogasUserControlPlugin extends BiogasControl implements Serializable{
 	private static final long serialVersionUID = 1L;
-	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
-	public static final Border border = BorderFactory.createLineBorder(Color.black);
-	
-	public static File projectPath;
-	public static int currenttime;
-	public static int iteration;
-	static public JPanel panel;
-	public static File workingDirectory;
-	public static String simulationFile;
-
-	public static JToggleButton pauseBtn;
-	public static JToggleButton stopBtn;
-	public static JButton startBtn;
-	public static JButton breakBtn;
-	
-	public static JCheckBox running;
-	
-	public static SimulationPanel simulationPanelObj;
-	public static SetupPanel setupPanelObj;
-	public static SettingsPanel settingsPanelObj;
-	public static FeedbackPanel feedbackPanelObj;
-	//public static FeedingPanel feedingPanelObj;
-	
-    JTabbedPane tab_panel = new JTabbedPane();
 	
 	@MethodInfo(name="Main", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
-	public static JComponent controlSTRUCT(
+	public JComponent controlSTRUCT(
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") Path projectDir)
@@ -75,7 +49,7 @@ public class BiogasUserControlPlugin implements Serializable{
 	}
 	
 	@MethodInfo(hide=true)
-	private static JPanel control(
+	private JPanel control(
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") Path projectDir)
@@ -83,11 +57,11 @@ public class BiogasUserControlPlugin implements Serializable{
 		running = new JCheckBox("running?", false);
 		projectPath = new File(projectDir.toString()).getParentFile();
 		System.out.println("projectPath: " + projectPath);
-
+		className =  BiogasUserControlPlugin.class.getSimpleName();	
 		simulationPanelObj = new SimulationPanel(true);
 		setupPanelObj = new SetupPanel(true);
-		settingsPanelObj = new SettingsPanel();
-		feedbackPanelObj = new FeedbackPanel();
+		settingsPanelObj = new SettingsPanel(true);
+		feedbackPanelObj = new FeedbackPanel(true);
 		
         JPanel simulationPanel = simulationPanelObj.getPanel();
         JPanel setupPanel = setupPanelObj.getPanel();
@@ -199,10 +173,10 @@ public class BiogasUserControlPlugin implements Serializable{
 				System.out.println("Running?: " + isRunning);
 				
 				if(!isRunning) {
-					SettingsPanel.simStarttime.setEnabled(true);
-					SetupPanel.clear_Btn.doClick();
+					settingsPanelObj.simStarttime.setEnabled(true);
+					setupPanelObj.clear_Btn.doClick();
 				} else {
-					SettingsPanel.simStarttime.setEnabled(false);
+					settingsPanelObj.simStarttime.setEnabled(false);
 				}
 			}	
 		});
@@ -210,7 +184,7 @@ public class BiogasUserControlPlugin implements Serializable{
 	    return panel;
 	}
 	
-	public static void main(String args[]) throws IOException, InterruptedException{         	
+	public void main(String args[]) throws IOException, InterruptedException{         	
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());
 		

@@ -2,17 +2,18 @@ package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
-import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
 @ComponentInfo(name="Stop", 
 	category="Biogas_Elements", 
 	description="Stop element")
-public class Stop implements SimulationElement{	
+public class Stop implements SimulationElement, Serializable{	
+	private static final long serialVersionUID = 1L;
 	private Structure structure;
 	
 	public Stop(Structure struct) {
@@ -32,26 +33,28 @@ public class Stop implements SimulationElement{
 	@Override
 	public void run() throws IOException {
 		System.out.println("Stop here!");
-		SimulationPanel.activeElement.setText("Stop");
-		String logStart = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(logStart + "** Stop ... ");
-		int endtime = (Integer) SettingsPanel.simEndtime.getValue();
+		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		
+		simPanel.activeElement.setText("Stop");
+		String logStart = simPanel.simulationLog.getText();
+		simPanel.simulationLog.setText(logStart + "** Stop ... ");
+		int endtime = (Integer) BiogasControlPlugin.settingsPanelObj.simEndtime.getValue();
 		
 		if(!structure.wasCancelled()) {
 			if(BiogasControlPlugin.stopBtn.isSelected()) {
 				BiogasControlPlugin.running.setSelected(false);
 				System.out.println("Simulation stopped!");
 				
-				String logEnd = SimulationPanel.simulationLog.getText();
-				SimulationPanel.simulationLog.setText(logEnd + "Stopped!\n");
+				String logEnd = simPanel.simulationLog.getText();
+				simPanel.simulationLog.setText(logEnd + "Stopped!\n");
 			}
 			else {
 				if(structure.currentTime() < endtime-1) {
 					
-					String logEnd = SimulationPanel.simulationLog.getText();
-					SimulationPanel.simulationLog.setText(logEnd + "Continue!\n");
-					++ BiogasControlPlugin.iteration;
-					SimulationPanel.iteration.setText(String.valueOf(BiogasControlPlugin.iteration));
+					String logEnd = simPanel.simulationLog.getText();
+					simPanel.simulationLog.setText(logEnd + "Continue!\n");
+					++ BiogasControlPlugin.iteration;					
+					BiogasControlPlugin.simulationPanelObj.iteration.setText(String.valueOf(BiogasControlPlugin.iteration));
 					structure.incrementCurrentTime();
 								
 					
@@ -79,14 +82,14 @@ public class Stop implements SimulationElement{
 				}
 				else {
 					BiogasControlPlugin.running.setSelected(false);
-					String logEnd = SimulationPanel.simulationLog.getText();
-					SimulationPanel.simulationLog.setText(logEnd + "Simulation finished!\n");
+					String logEnd = simPanel.simulationLog.getText();
+					simPanel.simulationLog.setText(logEnd + "Simulation finished!\n");
 				}
 			}
 		}
 		else {
-			String logEnd = SimulationPanel.simulationLog.getText();
-			SimulationPanel.simulationLog.setText(logEnd + "Cancelled!\n");
+			String logEnd = simPanel.simulationLog.getText();
+			simPanel.simulationLog.setText(logEnd + "Cancelled!\n");
 		}
 	}
 }

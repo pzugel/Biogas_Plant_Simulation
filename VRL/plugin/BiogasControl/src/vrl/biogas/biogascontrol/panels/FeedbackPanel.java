@@ -12,18 +12,20 @@ public class FeedbackPanel {
 	
 	public FeedbackPanel() {
 		feedbackPanel = new JPanel();
-		createPanel();
+		createPanel(false);
+	}
+	
+	public FeedbackPanel(boolean userDefined) {
+		feedbackPanel = new JPanel();
+		createPanel(userDefined);
 	}
 	
 	public JPanel getPanel() {
 		return feedbackPanel;
 	}
 	
-	private void createPanel() {
+	private void createPanel(boolean userDefined) {
 		final JSlider slider1 = new JSlider(JSlider.VERTICAL,0, 100, 100);
-		JSlider slider2 = new JSlider(JSlider.VERTICAL,0, 100, 100);
-		JSlider slider3 = new JSlider(JSlider.VERTICAL,0, 100, 100);
-		
 		
 		slider1.setMajorTickSpacing(20);
 		slider1.setMinorTickSpacing(5);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.elements.*;
-import vrl.biogas.biogascontrol.panels.SettingsPanel;
 
 @ComponentInfo(name="2_STAGE", 
   category="Biogas_Structures", 
@@ -19,6 +18,7 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 	public static int time;
 	public static boolean breakRun;
 	public static boolean firstTimestep;
+	public static BiogasControlPlugin panel;
 	
 	@Override
 	public int numHydrolysis() {
@@ -60,7 +60,7 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 		System.out.println("2_STAGE_STRUCT");
 		breakRun = false;
 		time = currentStarttime;
-		firstTimestep = (currentStarttime == (Integer) SettingsPanel.simStarttime.getValue());
+		firstTimestep = (currentStarttime == (Integer) BiogasControlPlugin.settingsPanelObj.simStarttime.getValue());
 		fillQueue();
 		ElementRunner myRunnable = new ElementRunner(this);
 		Thread t = new Thread(myRunnable);

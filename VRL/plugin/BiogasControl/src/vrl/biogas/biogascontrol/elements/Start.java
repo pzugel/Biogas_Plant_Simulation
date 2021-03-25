@@ -1,6 +1,7 @@
 package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
+import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
@@ -10,7 +11,8 @@ import vrl.biogas.biogascontrol.structures.Structure;
 @ComponentInfo(name="Start", 
 	category="Biogas_Elements", 
 	description="Start element")
-public class Start implements SimulationElement{	
+public class Start implements SimulationElement, Serializable{	
+	private static final long serialVersionUID = 1L;
 	private Structure structure;
 	
 	public Start(Structure struct) {
@@ -30,8 +32,9 @@ public class Start implements SimulationElement{
 	@Override
 	public void run() throws InterruptedException {
 		System.out.println("Start here!");
-		String log = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(log + "Iteration " + BiogasControlPlugin.iteration + "\n");
+		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		String log = simPanel.simulationLog.getText();
+		simPanel.simulationLog.setText(log + "Iteration " + BiogasControlPlugin.iteration + "\n");
 		System.out.println("Start done!");
 		ElementRunner myRunnable = new ElementRunner(structure);
 		Thread t = new Thread(myRunnable);

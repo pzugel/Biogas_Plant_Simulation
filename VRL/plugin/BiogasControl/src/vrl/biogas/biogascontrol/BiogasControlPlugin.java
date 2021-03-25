@@ -9,7 +9,6 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
@@ -18,7 +17,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
-import javax.swing.border.Border;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -38,27 +36,14 @@ import vrl.biogas.biogascontrol.structures.Structure;
 @ComponentInfo(name="MainPanel", 
 	category="Biogas", 
 	description="MainPanel Component")
-public class BiogasControlPlugin implements Serializable{
+public class BiogasControlPlugin extends BiogasControl implements Serializable{
 	private static final long serialVersionUID = 1L;
-	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
-	public static final Border border = BorderFactory.createLineBorder(Color.black);
-	
-	public static File projectPath;
-	//public static int currenttime;
-	public static int iteration;
-	static public JPanel panel;
-	public static File workingDirectory;
-	public static String simulationFile;
-	static public Structure struct;
 
-	public static JToggleButton pauseBtn;
-	public static JToggleButton stopBtn;
-	
-	public static JCheckBox running;
+	static public Structure struct;
 	
 	@MethodInfo(name="Main", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
-	public static JComponent controlSTRUCT(
+	public JComponent controlSTRUCT(
 			@ParamInfo(name = "Structure",
 		    	nullIsValid = false,
 		    	options = "invokeOnChange=true") Structure structure,
@@ -69,11 +54,12 @@ public class BiogasControlPlugin implements Serializable{
 		control(structure, projectDir);
 		MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(panel);
+	    
 		return cont;		
 	}
 	
 	@MethodInfo(hide=true)
-	private static JPanel control(
+	private JPanel control(
 			@ParamInfo(name = "Structure",
 		    	nullIsValid = false,
 		    	options = "invokeOnChange=true") Structure structure,
@@ -85,12 +71,17 @@ public class BiogasControlPlugin implements Serializable{
 		running = new JCheckBox("running?", false);
 		projectPath = new File(projectDir.toString()).getParentFile();
 		System.out.println("projectPath: " + projectPath);
-
-        JPanel simulationPanel = (new SimulationPanel()).getPanel();
-        JPanel setupPanel = (new SetupPanel()).getPanel();
-        JPanel settingsPanel = (new SettingsPanel()).getPanel();
+		className =  BiogasControlPlugin.class.getSimpleName();		
+		simulationPanelObj = new SimulationPanel();
+		setupPanelObj = new SetupPanel();
+		settingsPanelObj = new SettingsPanel();
+		feedbackPanelObj = new FeedbackPanel();
+		
+        JPanel simulationPanel = simulationPanelObj.getPanel();
+        JPanel setupPanel = setupPanelObj.getPanel();
+        JPanel settingsPanel = settingsPanelObj.getPanel();
         JPanel plantPanel = (new PlantPanel()).getPanel();
-        JPanel feedbackPanel = (new FeedbackPanel()).getPanel();
+        JPanel feedbackPanel = feedbackPanelObj.getPanel();
         JPanel feedingPanel = new JPanel();
         JTabbedPane tab_panel = new JTabbedPane();
         
@@ -130,13 +121,13 @@ public class BiogasControlPlugin implements Serializable{
 			public void actionPerformed(ActionEvent arg0) {
 				if(SetupPanel.environment_ready) {
 					simulationFile = SettingsPanel.simulation_path.getText();
-					SimulationPanel.simulationLog.setText("**************************************\n" 
+					simulationPanelObj.simulationLog.setText("**************************************\n" 
 							+ "** New Simulation\n"
 							+ "** Hydrolysis File: " + SettingsPanel.hydrolysis_path.getText() + "\n"
 							+ "** Methane File: " + SettingsPanel.methane_path.getText() + "\n"
 							+ "** Simulation File: " + simulationFile + "\n"
 							+ "**************************************\n");
-					int starttime = (Integer) SettingsPanel.simStarttime.getValue();
+					int starttime = (Integer) settingsPanelObj.simStarttime.getValue();
 					iteration = 0;							
 					//SimulationPanel.iteration.setText(String.valueOf(iteration));
 					
@@ -193,9 +184,11 @@ public class BiogasControlPlugin implements Serializable{
 				System.out.println("Running?: " + isRunning);
 				
 				if(!isRunning) {
-					SettingsPanel.simStarttime.setEnabled(true);
-					SetupPanel.clear_Btn.doClick();
-				}		
+					settingsPanelObj.simStarttime.setEnabled(true);
+					setupPanelObj.clear_Btn.doClick();
+				} else {
+					settingsPanelObj.simStarttime.setEnabled(false);
+				}
 			}	
 		});
 		
@@ -203,13 +196,13 @@ public class BiogasControlPlugin implements Serializable{
 	}
 	
 	@MethodInfo(hide=true)
-	private static void main(String args[]) throws IOException, InterruptedException{         	
+	public static void main(String args[]) throws IOException, InterruptedException{
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());
 		
 	    JFrame frame = new JFrame();
-
-	    control(new STRUCT_2_STAGE(), p);	    
+	    BiogasControlPlugin b = new BiogasControlPlugin();
+	    b.control(new STRUCT_2_STAGE(), p);	    
 	    
 		frame.add(panel);
 		frame.setSize(600, 600);

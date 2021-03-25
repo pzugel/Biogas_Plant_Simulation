@@ -9,6 +9,7 @@ import javax.swing.JPanel;
 
 import layout.TableLayout;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 
@@ -18,14 +19,19 @@ public class PlantPanel {
 	
 	public PlantPanel() {
 		plantPanel = new JPanel();
-		createPanel();
+		createPanel(false);
+	}
+	
+	public PlantPanel(boolean userDefined) {
+		plantPanel = new JPanel();
+		createPanel(userDefined);
 	}
 	
 	public JPanel getPanel() {
 		return plantPanel;
 	}
 	
-	private void createPanel() {
+	private void createPanel(boolean userDefined) {
         double size[][] =
             {{0.06, 0.88, TableLayout.FILL},
              {0.06, 
@@ -36,9 +42,11 @@ public class PlantPanel {
         
         plantPanel.setBackground(Color.WHITE);
         
-		String plantName = BiogasControlPlugin.struct.name();
-		File iconPath = new File(BiogasControlPlugin.projectPath, "icons");
-		ImageIcon plantIcon = new ImageIcon(new File(iconPath, plantName + ".png").toString());
-		plantPanel.add(new JLabel(plantIcon), new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
+        if(!userDefined) {
+    		String plantName = BiogasControlPlugin.struct.name();
+    		File iconPath = new File(BiogasControl.projectPath, "icons");
+    		ImageIcon plantIcon = new ImageIcon(new File(iconPath, plantName + ".png").toString());
+    		plantPanel.add(new JLabel(plantIcon), new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));	
+        }
 	}
 }

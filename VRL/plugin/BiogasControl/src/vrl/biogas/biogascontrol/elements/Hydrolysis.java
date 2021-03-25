@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -39,9 +40,11 @@ public class Hydrolysis implements SimulationElement, Serializable{
 
 	@Override
 	public void run() {
-		SimulationPanel.activeElement.setText("Hydrolysis");
-		String logStart = SimulationPanel.simulationLog.getText();
-		SimulationPanel.simulationLog.setText(logStart + "** Hydrolysis " + numeration + " ... ");
+		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		
+		simPanel.activeElement.setText("Hydrolysis");
+		String logStart = simPanel.simulationLog.getText();
+		simPanel.simulationLog.setText(logStart + "** Hydrolysis " + numeration + " ... ");
 		
 		final File currentTimePath = new File(hydrolysisDirectory, String.valueOf(structure.currentTime()));
 		File hydolysisFile = new File(currentTimePath, "hydrolysis_checkpoint.lua");

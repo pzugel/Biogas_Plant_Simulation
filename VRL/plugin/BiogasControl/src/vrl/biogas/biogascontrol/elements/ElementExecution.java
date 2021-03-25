@@ -2,6 +2,7 @@ package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 
 import javax.swing.SwingWorker;
 
@@ -9,7 +10,8 @@ import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-public class ElementExecution extends SwingWorker<String, String> {
+public class ElementExecution extends SwingWorker<String, String> implements Serializable{
+	private static final long serialVersionUID = 1L;
 	static String command;
 	static Structure structure;
 	static File directory;
@@ -37,9 +39,11 @@ public class ElementExecution extends SwingWorker<String, String> {
     }
 
     public void done() {
-    	if(!structure.wasCancelled()) {
-        	String logEnd = SimulationPanel.simulationLog.getText();
-    		SimulationPanel.simulationLog.setText(logEnd + "Done!\n");
+    	SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+    	
+    	if(!structure.wasCancelled()) {			
+        	String logEnd = simPanel.simulationLog.getText();
+        	simPanel.simulationLog.setText(logEnd + "Done!\n");
     		
     		try {
     			ElementFunctions.merge(element, structure.currentTime());
@@ -55,8 +59,8 @@ public class ElementExecution extends SwingWorker<String, String> {
     			e.printStackTrace();
     		}
     	} else {
-    		String logEnd = SimulationPanel.simulationLog.getText();
-    		SimulationPanel.simulationLog.setText(logEnd + "Cancelled!\n");
+    		String logEnd = simPanel.simulationLog.getText();
+    		simPanel.simulationLog.setText(logEnd + "Cancelled!\n");
     	}
 
     }

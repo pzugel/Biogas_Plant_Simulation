@@ -10,8 +10,7 @@ import java.nio.file.StandardCopyOption;
 import java.io.FileWriter;
 import java.util.ArrayList;
 
-import vrl.biogas.biogascontrol.panels.SettingsPanel;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
+import vrl.biogas.biogascontrol.BiogasControl;
 
 public class ElementFunctions {
 	
@@ -51,9 +50,9 @@ public class ElementFunctions {
 	public static void merge(SimulationElement elem, int currenttime) throws IOException {
 		String name = elem.name();
 		File basePath = elem.path();
-		int startTime = (Integer) SettingsPanel.simStarttime.getValue();
+		int startTime = (Integer) BiogasControl.settingsPanelObj.simStarttime.getValue();
 		//int curTime = BiogasControlPlugin.currenttime;
-		boolean preexisting = SetupPanel.mergePreexisting;
+		boolean preexisting = BiogasControl.setupPanelObj.mergePreexisting;
 		File timePath = new File(elem.path(), String.valueOf(currenttime));
 		
 		System.out.println("********************************************************************************");
