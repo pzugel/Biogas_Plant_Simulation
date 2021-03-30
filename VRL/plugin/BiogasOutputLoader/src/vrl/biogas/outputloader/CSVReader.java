@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class CSVReader {
 
@@ -19,9 +21,11 @@ public class CSVReader {
 	private void readFile(File path) throws FileNotFoundException {
 		data = new ArrayList<List<Double>>();
 		Scanner scanner = new Scanner(path);
+		Pattern p = Pattern.compile("(^#)|(^[a-zA-Z])");
 		while (scanner.hasNextLine()) {
 			String line = scanner.nextLine();
-			if(!line.startsWith("#"))
+			Matcher m = p.matcher(line);
+			if(!m.find())
 		        data.add(readRow(line));
 		}
 		scanner.close();

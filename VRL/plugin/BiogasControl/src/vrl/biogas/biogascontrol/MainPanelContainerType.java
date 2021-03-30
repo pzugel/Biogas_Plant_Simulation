@@ -9,6 +9,7 @@ import java.awt.event.ComponentEvent;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.TypeInfo;
 import eu.mihosoft.vrl.reflection.TypeRepresentationBase;
 import eu.mihosoft.vrl.visual.TransparentPanel;
@@ -19,6 +20,7 @@ import eu.mihosoft.vrl.visual.TransparentPanel;
  * 
  * @author Michael Hoffer <info@michaelhoffer.de>
  */
+@ComponentInfo(name="MainPanelContainerType", category="Biogas", description="MainPanelContainerType")
 @TypeInfo(type = JComponent.class, input = true, output = true, style = "default")
 public class MainPanelContainerType extends TypeRepresentationBase implements java.io.Serializable {
 
@@ -41,8 +43,7 @@ public class MainPanelContainerType extends TypeRepresentationBase implements ja
         componentContainer.setLayout(new BorderLayout());
 
         add(componentContainer);
-        
-        
+                
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

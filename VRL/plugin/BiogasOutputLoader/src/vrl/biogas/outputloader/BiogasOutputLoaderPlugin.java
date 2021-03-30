@@ -15,20 +15,36 @@ import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
 import static java.nio.file.StandardWatchEventKinds.*;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.tree.DefaultMutableTreeNode;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import eu.mihosoft.vrl.math.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.title.LegendTitle;
+import org.jfree.data.statistics.HistogramDataset;
+import org.jfree.data.xy.XYSeries;
+import org.jfree.data.xy.XYSeriesCollection;
+
+import com.sun.tools.javac.util.Pair;
 
 @ComponentInfo(name="BiogasOutputLoader", 
 category="Biogas", 
@@ -39,6 +55,7 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 	static JTree tree;
 	static List<Trajectory> trajectories;
 	static File filepath;
+	static JPanel mainPanel;
 	
 	@MethodInfo(name="Load", hide=false, 
 			hideCloseIcon=true, interactive=false, num=1)
@@ -73,7 +90,7 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 			}
 		}
 		
-		JPanel mainPanel = new JPanel(new BorderLayout());
+		mainPanel = new JPanel(new BorderLayout());
 		mainPanel.setSize(300, 450);
 		
 		JPanel topPanel = new JPanel();
@@ -106,6 +123,12 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 				} catch (FileNotFoundException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 				
 				/*
@@ -134,61 +157,86 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 	
 	@MethodInfo(name="Plot", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
-	public static Trajectory getValues() throws FileNotFoundException {
+	public static Trajectory getValues() throws IOException, InterruptedException {
 		Trajectory trajectory = new Trajectory("");
 		
 		if(tree.getLastSelectedPathComponent() == null)
 			return new Trajectory("");
+		
+		
+		Set<String> filenames = new HashSet<String>();
+		TreePath[] sel = tree.getSelectionPaths();
+		
+		// Get all different filenames from the selected entries
+		for(TreePath p : sel) {
+			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) p.getLastPathComponent();
+			OutputEntry treeEntry = (OutputEntry) treeNode.getUserObject();
+			filenames.add(treeEntry.getFilename());
+		}
+		
+		// Create an XYSerie for every selected entry
+		List<Pair<OutputEntry, XYSeries>> dataSetList = new ArrayList<Pair<OutputEntry, XYSeries>>();
+		for(TreePath p : sel) {
 
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode) tree.getLastSelectedPathComponent();
-		OutputEntry entry = (OutputEntry) node.getUserObject();
+			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) p.getLastPathComponent();
+			OutputEntry treeEntry = (OutputEntry) treeNode.getUserObject();
+			File f = new File(filepath.getParent(), treeEntry.getFilename());
+			
+			System.out.println("Plotting from File: " + f);
+			System.out.println("--> x value " + treeEntry.getXValueName() + treeEntry.getXValueUnit() 
+				+ " from column " + treeEntry.getXValueColumn());
+			System.out.println("--> y value " + treeEntry.getName() + treeEntry.getUnit() 
+				+ " from column " + treeEntry.getColumn());
+			
+			CSVReader reader = new CSVReader(f);
+			List<Double> col = reader.getCol(treeEntry.getColumn());
+			List<Double> x_col = reader.getCol(treeEntry.getXValueColumn());
+			
+			XYSeries series = new XYSeries(treeEntry.getName());
+			for(int i=0; i<col.size(); i++) {
+				series.add(x_col.get(i), col.get(i));
+			}
 
-		trajectory.setTitle(entry.getFilename());
-		trajectory.setyAxisLabel(entry.getName() + entry.getUnit());
-		trajectory.setxAxisLabel(entry.getXValueName() + entry.getXValueUnit());
+		   Pair<OutputEntry, XYSeries> dataPair = new Pair<OutputEntry, XYSeries>(treeEntry, series);
+		   dataSetList.add(dataPair);
+		}
 		
-		File path = new File(filepath.getParent() + "/" + entry.getFilename());
+		// Match the filenames to the correct collection of series and create the chart
+		for(String name: filenames) {					    
+			XYSeriesCollection dataset = new XYSeriesCollection();
+			
+			String xLabel = "";
+			String yLabel = "";
+			for(Pair<OutputEntry, XYSeries> pair : dataSetList) {
+				if(pair.fst.getFilename().equals(name)){
+					dataset.addSeries(pair.snd);
+					xLabel = pair.fst.getXValueName() + pair.fst.getXValueUnit();
+					yLabel = pair.fst.getUnit();
+				}		
+			}
+			
+			JFreeChart chart = ChartFactory.createXYLineChart(
+					name, // Title
+					xLabel, // x-axis Label
+					yLabel, // y-axis Label
+					dataset, // Dataset
+					PlotOrientation.VERTICAL, // Plot Orientation
+					true, // Show Legend
+					true, // Use tooltips
+					false
+					);
+			
+			ChartPanel panel = new ChartPanel(chart);		        
+			JFrame frame = new JFrame();
+		    frame.add(panel);
+		    frame.setSize(600, 600);
+		    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		    frame.setVisible(true);	
+		       
+		}
 		
-		System.out.println("Plotting from File: " + path.getPath());
-		System.out.println("--> x value " + entry.getXValueName() + entry.getXValueUnit() 
-			+ " from column " + entry.getXValueColumn());
-		System.out.println("--> y value " + entry.getName() + entry.getUnit() 
-			+ " from column " + entry.getColumn());
-		
-		CSVReader reader = new CSVReader(path);
-		List<Double> col = reader.getCol(entry.getColumn());
-		List<Double> x_col = reader.getCol(entry.getXValueColumn());
-		
-		for(int i=0; i<reader.getRowSize(); i++)
-			trajectory.add(x_col.get(i), col.get(i));
-		
-		//TreePath[] paths = tree.getSelectionPaths();
-		//for(TreePath p : paths)
-		//	System.out.println("Plotting: " + p.toString());
 		return trajectory;
 	}
-	
-	/*
-	public Trajectory[] returnTrajectories() {
-		Trajectory[] t = new Trajectory[trajectories.size()];
-		for(int i=0; i<trajectories.size(); i++)
-			t[i] = trajectories.get(i);
-		return t;
-	}
-	*/
-	/*
-	public JComponent test() {
-        String data[][]={ {"101","Amit","670000"},    
-                {"102","Jai","780000"},    
-                {"101","Sachin","700000"}};    
-		String column[]={"ID","NAME","SALARY"};         
-		JTable jt=new JTable(data,column);  
-		OutputContainerType cont = new OutputContainerType();
-		cont.setViewValue(jt);
-		return cont;
-	}
-	*/
-	
 	
 	public static void main(String args[]) throws IOException, InterruptedException{
 		/*
@@ -263,6 +311,12 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 		//tree.setSelectionRow(5);
 		//getValues();
 		 * */
+		
+		
+		
+		
+		// KEEP THIS - MIGHT HELP LATER
+		/*
 		final Path path = Paths.get("/home/paul/Schreibtisch/Run_Folder");
 		System.out.println(path);
 		WatchService watchService = FileSystems.getDefault().newWatchService();
@@ -282,7 +336,39 @@ public class BiogasOutputLoaderPlugin implements Serializable{
 	        	break; 
 	        }
 	    }
-	
+		*/
+		
+		XYSeries series1 = new XYSeries("FIRST");
+		XYSeries series2 = new XYSeries("SECOND");
+		for(int i=0; i<20; i++) {
+			series1.add(i, 2*i+3);
+			series2.add(i, 3*i-5);
+		}
+		
+		XYSeriesCollection dataset = new XYSeriesCollection();
+		dataset.addSeries(series1);
+		dataset.addSeries(series2);
+		JFreeChart chart = ChartFactory.createXYLineChart(
+			   "TEST", // Title
+			   "X", // x-axis Label
+			   "Y", // y-axis Label
+			   dataset, // Dataset
+			   PlotOrientation.VERTICAL, // Plot Orientation
+			   true, // Show Legend
+			   true, // Use tooltips
+			   false // Configure chart to generate URLs?
+		);
+
+		ChartPanel panel = new ChartPanel(chart);		        
+        
+        JFrame frame = new JFrame();
+        load(new File("/home/paul/Schreibtisch/smalltest/aceto/biogas_80h_2_STAGE_PL_ACETO/methane/outputFiles.lua"));
+        frame.add(mainPanel);
+        //frame.add(panel);
+		frame.setSize(600, 600);
+		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setVisible(true);	
+
 	}
 	
 }

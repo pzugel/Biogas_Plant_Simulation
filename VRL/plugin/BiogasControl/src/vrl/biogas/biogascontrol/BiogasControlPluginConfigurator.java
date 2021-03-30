@@ -15,12 +15,16 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	   setIdentifier(new PluginIdentifier("MainPanel-Plugin", "0.1"));
 
 	   // describe the plugin
-	   setDescription("Plugin Description");
+	   setDescription("Plugin for the control of a UG4-Biogasmodel");
 
 	   // copyright info
 	   setCopyrightInfo("Sample-Plugin",
-	           "(c) Your Name",
-	           "www.you.com", "License Name", "License Text...");
+	           "(c) Paul Zügel - GCSC 2021",
+	           "https://github.com/pzugel/Biogas_Plant_Simulation", "GNU Lesser General Public License", 
+	           "This program is distributed in the hope that it will be useful,\n" + 
+	           "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" + 
+	           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n" + 
+	           "GNU Lesser General Public License for more details.");
 	}
 
 	@Override
@@ -35,12 +39,14 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       vapi.addComponent(Structure.class);
 	       vapi.addComponent(SimulationElement.class);
 	       
-	       vapi.addComponent(MainPanelContainerType.class); //TEST
+	       vapi.addComponent(MainPanelContainerType.class); //Needed for the BiogasPlotter
 	       vapi.addComponent(UserStructure.class);
 	       vapi.addComponent(BiogasUserControlPlugin.class);
 	       vapi.addComponent(Hydrolysis.class);
 	       
-	       vapi.addComponent(BiogasControl.class); //Not sure if needed
+	       //vapi.addComponent(BiogasControl.class); //Not sure if needed
+	       
+	       vapi.addComponent(BiogasOutputLoaderPlugin.class);
 	   }
 	}
 

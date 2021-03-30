@@ -28,6 +28,7 @@ public class OutputContainerType extends TypeRepresentationBase implements java.
     private JComponent jComponent;
     
     public OutputContainerType() {
+    	
     	setValueName(""); // name of the visualization
 
         // Set layout
@@ -45,7 +46,7 @@ public class OutputContainerType extends TypeRepresentationBase implements java.
         ResizableContainer container = new ResizableContainer(componentContainer);
 
         add(container);
-
+		
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

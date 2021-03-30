@@ -7,5 +7,6 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/paul/Schreibtisch/VRL-Studio/.application/lib/VRL.jar"/>
+	<classpathentry kind="lib" path="/home/paul/Schreibtisch/Biogas_plant_setup/VRL/extensions/VRL-JFreeChart.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
