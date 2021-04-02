@@ -9,9 +9,11 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
 
 import layout.TableLayout;
+import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
@@ -79,8 +81,8 @@ public class SimulationPanel {
 		simulationLog = new JTextArea(22,46);
 		
 		JScrollPane simulationLogScroll = new JScrollPane (simulationLog, 
-				JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, 
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+				ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS, 
+				ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		
 		JLabel plantStructureLabel = new JLabel("Plant structure");
 		plantStructureLabel.setLabelFor(plantStructure);
@@ -103,7 +105,7 @@ public class SimulationPanel {
         simulationPanel.setLayout(new GridBagLayout());   
         
         double size[][] =
-            {{0.06, 0.3, 0.01, 0.22, 0.01, 0.15, 0.01, 0.15, TableLayout.FILL},
+            {{0.06, 0.3, 0.01, 0.22, 0.01, 0.15, 0.01, 0.15, TableLayoutConstants.FILL},
              {0.06, 
             	0.05, //Label 1
             	0.06, //TextField 2
@@ -112,25 +114,25 @@ public class SimulationPanel {
             	0.06, //TextField 5
             	0.03, 
             	0.05, //Label 7
-            	TableLayout.FILL, //TextArea 8
+            	TableLayoutConstants.FILL, //TextArea 8
             	0.06}};
         simulationPanel.setLayout(new TableLayout(size));
         simulationPanel.setBorder(BiogasControl.border);
         
-        simulationPanel.add(plantStructureLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(activeElementLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(iterationLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(runtimeLabel, new TableLayoutConstraints(7, 1, 7, 1, TableLayout.FULL, TableLayout.FULL));
+        simulationPanel.add(plantStructureLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(activeElementLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(iterationLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(runtimeLabel, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
  
-        simulationPanel.add(plantStructure, new TableLayoutConstraints(1, 2, 1, 2, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(activeElement, new TableLayoutConstraints(3, 2, 3, 2, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(iteration, new TableLayoutConstraints(5, 2, 5, 2, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(runtime, new TableLayoutConstraints(7, 2, 7, 2, TableLayout.FULL, TableLayout.FULL));
+        simulationPanel.add(plantStructure, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(activeElement, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(iteration, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(runtime, new TableLayoutConstraints(7, 2, 7, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
-        simulationPanel.add(workingDirectoryLabel, new TableLayoutConstraints(1, 4, 1, 4, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(workingDirectory, new TableLayoutConstraints(1, 5, 7, 5, TableLayout.FULL, TableLayout.FULL));
+        simulationPanel.add(workingDirectoryLabel, new TableLayoutConstraints(1, 4, 1, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(workingDirectory, new TableLayoutConstraints(1, 5, 7, 5, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
        
-        simulationPanel.add(simulationLogLabel, new TableLayoutConstraints(1, 7, 1, 7, TableLayout.FULL, TableLayout.FULL));
-        simulationPanel.add(simulationLogScroll, new TableLayoutConstraints(1, 8, 7, 8, TableLayout.FULL, TableLayout.FULL));
+        simulationPanel.add(simulationLogLabel, new TableLayoutConstraints(1, 7, 1, 7, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        simulationPanel.add(simulationLogScroll, new TableLayoutConstraints(1, 8, 7, 8, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 	}
 }

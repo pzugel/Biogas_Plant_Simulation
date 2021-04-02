@@ -19,12 +19,14 @@ public class MyTreeTableCellEditor extends AbstractCellEditor implements TableCe
         this.table = table;
     }
  
-    public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
+    @Override
+	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int r, int c) {
         System.out.println("getTableCellEditorComponent");
     	return tree;
     }
  
-    public boolean isCellEditable(EventObject e) {
+    @Override
+	public boolean isCellEditable(EventObject e) {
         if (e instanceof MouseEvent) {
             int colunm1 = 0;
             MouseEvent me = (MouseEvent) e;

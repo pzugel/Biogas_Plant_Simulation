@@ -1,7 +1,7 @@
 package vrl.biogas.biogascontrol.outputloader;
 
 public class OutputEntry {
-	OutputEntry(){};
+	public OutputEntry(){};
 
 	private int indent = 0;
 	//int glyph = 0;
@@ -15,6 +15,7 @@ public class OutputEntry {
 	private String xValueUnit = ""; 
 	private int xValueColumn = -1;
 	
+	@Override
 	public String toString() {
 		return this.name;	
 	}

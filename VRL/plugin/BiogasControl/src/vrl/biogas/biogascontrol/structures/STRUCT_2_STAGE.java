@@ -6,6 +6,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.elements.*;
 
@@ -60,7 +61,7 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 		System.out.println("2_STAGE_STRUCT");
 		breakRun = false;
 		time = currentStarttime;
-		firstTimestep = (currentStarttime == (Integer) BiogasControlPlugin.settingsPanelObj.simStarttime.getValue());
+		firstTimestep = (currentStarttime == (Integer) BiogasControl.settingsPanelObj.simStarttime.getValue());
 		fillQueue();
 		ElementRunner myRunnable = new ElementRunner(this);
 		Thread t = new Thread(myRunnable);
@@ -93,7 +94,7 @@ public class STRUCT_2_STAGE implements Structure,Serializable{
 	  
 	public void fillQueue() {
 		System.out.println("fillQueue()");
-		File dir = BiogasControlPlugin.workingDirectory;
+		File dir = BiogasControl.workingDirectory;
 		
 		reactorQueue = new ArrayList<SimulationElement>();
 		reactorQueue.add(new Start(this));

@@ -8,7 +8,9 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 public class HydrolysisSelector {
@@ -16,9 +18,9 @@ public class HydrolysisSelector {
 	static public JButton okBtn;
 	static public JComboBox<String> reactorList;
 	
-	public static void showSelector() {
+	public static void showSelector(int numHydrolysis) {
 		//int numHydrolysis = BiogasControlPlugin.struct.numHydrolysis();
-		int numHydrolysis = 2;
+		//int numHydrolysis = 2;
 	
 		String[] reactors = new String[numHydrolysis];
 		for(int i=0; i<numHydrolysis; i++) {
@@ -35,8 +37,8 @@ public class HydrolysisSelector {
 		final JFrame frame = new JFrame("");
 		frame.add(panel);
 		frame.setSize(200, 70);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-		frame.setLocationRelativeTo(BiogasControlPlugin.panel);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+		frame.setLocationRelativeTo(BiogasControl.panel);
 		frame.setVisible(true);
 		
 		okBtn.addActionListener(new ActionListener() {
@@ -48,7 +50,7 @@ public class HydrolysisSelector {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{         		   
-		showSelector();
+		showSelector(2);
 		okBtn.addActionListener(new ActionListener() {
 
 			@Override

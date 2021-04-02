@@ -1,6 +1,7 @@
 package vrl.biogas.biogascontrol.specedit;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 import java.awt.BorderLayout;
@@ -22,6 +23,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
 @ComponentInfo(name="Initializer", 
@@ -72,10 +74,10 @@ public class LUATableViewer implements Serializable{
         JButton loadValBtn = new JButton("Load Validation");
         JButton valBtn = new JButton("Validate");
         
-        saveBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
-        saveAsBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
-        loadValBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
-        valBtn.setBackground(BiogasControlPlugin.BUTTON_BLUE);
+        saveBtn.setBackground(BiogasControl.BUTTON_BLUE);
+        saveAsBtn.setBackground(BiogasControl.BUTTON_BLUE);
+        loadValBtn.setBackground(BiogasControl.BUTTON_BLUE);
+        valBtn.setBackground(BiogasControl.BUTTON_BLUE);
         valBtn.setForeground(Color.decode("#008000"));
         
         btnPanel.add(saveBtn);
@@ -163,9 +165,9 @@ public class LUATableViewer implements Serializable{
         valBtn.addActionListener(new ActionListener() {
         	@Override
         	public void actionPerformed(ActionEvent e) {
-        		String name = ((ValiTableEntry) parameters.get(12)).getName(); 
-        		String type = ((ValiTableEntry) parameters.get(12)).getType(); 
-        		String val = ((ValiTableEntry) parameters.get(12)).getSpecVal();
+        		String name = parameters.get(12).getName(); 
+        		String type = parameters.get(12).getType(); 
+        		String val = parameters.get(12).getSpecVal();
         		System.out.println("Row 12: " + name + " " + type + " " + val);
         		SpecValidation specVal = new SpecValidation(parameters);
         		if(specVal.isValid()) {
@@ -214,6 +216,7 @@ public class LUATableViewer implements Serializable{
         {
 			private static final long serialVersionUID = 1L;
 
+			@Override
 			public void actionPerformed(ActionEvent e)
             {
 				
@@ -249,7 +252,7 @@ public class LUATableViewer implements Serializable{
 		JFrame frame = new JFrame("");
 		frame.add(panel);
 		frame.setSize(200, 300);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);
 	}
 	

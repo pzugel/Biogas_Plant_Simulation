@@ -20,14 +20,17 @@ import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SpinnerModel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 import layout.TableLayout;
+import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
+import vrl.biogas.biogascontrol.BiogasUserControlPlugin;
 import vrl.biogas.biogascontrol.specedit.LUATableViewer;
 
 public class SettingsPanel {
@@ -79,7 +82,7 @@ public class SettingsPanel {
 				+ "<br>initial values, you need to set up a working environtment first.</body></html>");
 		
         double size[][] =
-            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.18, 0.3, TableLayout.FILL},
+            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.18, 0.3, TableLayoutConstants.FILL},
              {0.06, 
             	0.05, //Label 1
             	0.06, //Spinner 2
@@ -87,7 +90,7 @@ public class SettingsPanel {
             	0.15, //Text 4 
             	0.02,
             	0.41, //Elements Panel 6 
-            	TableLayout.FILL}};
+            	TableLayoutConstants.FILL}};
         settingsPanel.setLayout(new TableLayout(size));
         settingsPanel.setBorder(BiogasControl.border);
         
@@ -104,27 +107,27 @@ public class SettingsPanel {
         };
         
         
-		settingsPanel.add(simStarttimeLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(simEndtimeLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(autoCleanupLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(simStarttime, new TableLayoutConstraints(1, 2, 1, 2, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(simEndtime, new TableLayoutConstraints(3, 2, 3, 2, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(autoCleanup, new TableLayoutConstraints(5, 2, 5, 2, TableLayout.FULL, TableLayout.FULL));
-		settingsPanel.add(text, new TableLayoutConstraints(1, 4, 6, 4, TableLayout.CENTER, TableLayout.FULL));
-		settingsPanel.add(line, new TableLayoutConstraints(1, 3, 6, 3, TableLayout.CENTER, TableLayout.CENTER));
+		settingsPanel.add(simStarttimeLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(simEndtimeLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(autoCleanupLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(simStarttime, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(simEndtime, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(autoCleanup, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(text, new TableLayoutConstraints(1, 4, 6, 4, TableLayoutConstants.CENTER, TableLayoutConstants.FULL));
+		settingsPanel.add(line, new TableLayoutConstraints(1, 3, 6, 3, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
 		
 		//settingsPanel.add(new JLabel("15"), new TableLayoutConstraints(1, 5, 1, 5, TableLayout.TOP, TableLayout.LEFT));
 		//settingsPanel.add(new JLabel("16"), new TableLayoutConstraints(1, 6, 1, 6, TableLayout.TOP, TableLayout.LEFT));
 		
 		JPanel elementsPanel = new JPanel();
         double elements_size[][] =
-            {{0.09, 0.03, 0.44, 0.01, 0.06, 0.05, 0.2, TableLayout.FILL},
+            {{0.09, 0.03, 0.44, 0.01, 0.06, 0.05, 0.2, TableLayoutConstants.FILL},
              {0.18, //Methane
             	0.08, 
             	0.18, //Hydrolysis
             	0.08, 
             	0.18, //Simulation
-            	TableLayout.FILL}};
+            	TableLayoutConstants.FILL}};
         elementsPanel.setLayout(new TableLayout(elements_size));
         File simulationFilesPath = new File(BiogasControl.projectPath, "simulation_files");
         System.out.println("simulationFilesPath: " + simulationFilesPath);
@@ -160,21 +163,21 @@ public class SettingsPanel {
         ImageIcon methIcon = new ImageIcon(methIcon_path.toString());
         ImageIcon runIcon = new ImageIcon(runIcon_path.toString());
         
-        elementsPanel.add(new JLabel(hydroIcon), new TableLayoutConstraints(0, 0, 0, 0, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(methane_path, new TableLayoutConstraints(2, 0, 2, 0, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(open_methane_edit, new TableLayoutConstraints(4, 0, 4, 0, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(methane_edit, new TableLayoutConstraints(6, 0, 6, 0, TableLayout.FULL, TableLayout.FULL));
+        elementsPanel.add(new JLabel(hydroIcon), new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(methane_path, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(open_methane_edit, new TableLayoutConstraints(4, 0, 4, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(methane_edit, new TableLayoutConstraints(6, 0, 6, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
-        elementsPanel.add(new JLabel(methIcon), new TableLayoutConstraints(0, 2, 0, 2, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(hydrolysis_path, new TableLayoutConstraints(2, 2, 2, 2, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(open_hydrolysis_edit, new TableLayoutConstraints(4, 2, 4, 2, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(hydrolysis_edit, new TableLayoutConstraints(6, 2, 6, 2, TableLayout.FULL, TableLayout.FULL));
+        elementsPanel.add(new JLabel(methIcon), new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(hydrolysis_path, new TableLayoutConstraints(2, 2, 2, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(open_hydrolysis_edit, new TableLayoutConstraints(4, 2, 4, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(hydrolysis_edit, new TableLayoutConstraints(6, 2, 6, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
-        elementsPanel.add(new JLabel(runIcon), new TableLayoutConstraints(0, 4, 0, 4, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(simulation_path, new TableLayoutConstraints(2, 4, 2, 4, TableLayout.FULL, TableLayout.FULL));
-        elementsPanel.add(open_simulation_edit, new TableLayoutConstraints(4, 4, 4, 4, TableLayout.FULL, TableLayout.FULL));
+        elementsPanel.add(new JLabel(runIcon), new TableLayoutConstraints(0, 4, 0, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(simulation_path, new TableLayoutConstraints(2, 4, 2, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(open_simulation_edit, new TableLayoutConstraints(4, 4, 4, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
-        settingsPanel.add(elementsPanel, new TableLayoutConstraints(1, 6, 6, 6, TableLayout.FULL, TableLayout.FULL));
+        settingsPanel.add(elementsPanel, new TableLayoutConstraints(1, 6, 6, 6, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
 		simStarttime.addChangeListener(new ChangeListener() {
 			@Override
@@ -216,7 +219,14 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click hydro edit");
 				if(SetupPanel.environment_ready) { //Open Via Selector
-					HydrolysisSelector.showSelector();
+					int numHydrolysis;
+					if(userDefined) {
+						numHydrolysis = BiogasUserControlPlugin.numHydrolysis;
+						//TODO How to get number of hydrolysis reacotors when user defined?
+					} else {
+						numHydrolysis = BiogasControlPlugin.struct.numHydrolysis();
+					}
+					HydrolysisSelector.showSelector(numHydrolysis);
 					HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
@@ -225,7 +235,7 @@ public class SettingsPanel {
 							try {
 								JFrame messageFrame = new JFrame();
 								messageFrame.setLocationRelativeTo(settingsPanel);
-								messageFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+								messageFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 								JOptionPane.showMessageDialog(messageFrame,
 									    "It is advised to pause the simulation before making changes.",
 									    "Warning",
@@ -257,7 +267,7 @@ public class SettingsPanel {
 								JFrame frame = new JFrame("Hydrolysis reactor");
 								frame.add(LUATableViewer.panel);
 								frame.setSize(700, 600);
-								frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+								frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 								frame.setLocationRelativeTo(BiogasControl.panel);
 								frame.setVisible(true);
 							} catch (FileNotFoundException e) {
@@ -275,7 +285,7 @@ public class SettingsPanel {
 						JFrame frame = new JFrame("Hydrolysis base file");
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
-						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 						frame.setLocationRelativeTo(BiogasControl.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
@@ -293,7 +303,7 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click methane edit");
 				if(SetupPanel.environment_ready) {
-					File methanePath = new File(BiogasControlPlugin.workingDirectory, "methane");
+					File methanePath = new File(BiogasControl.workingDirectory, "methane");
 					
 					if(BiogasControl.running.isSelected()) {
 						File methaneTimePath;
@@ -320,8 +330,8 @@ public class SettingsPanel {
 						JFrame frame = new JFrame("Methane reactor");
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
-						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlPlugin.panel);
+						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+						frame.setLocationRelativeTo(BiogasControl.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -336,8 +346,8 @@ public class SettingsPanel {
 						JFrame frame = new JFrame("Methane base file");
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
-						frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlPlugin.panel);
+						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+						frame.setLocationRelativeTo(BiogasControl.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block

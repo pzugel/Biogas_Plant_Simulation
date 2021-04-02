@@ -12,31 +12,37 @@ public class MyDataModel extends MyAbstractTreeTableModel {
         root = rootNode;
     }
  
-    public Object getChild(Object parent, int index) {
+    @Override
+	public Object getChild(Object parent, int index) {
         return ((MyDataNode) parent).getChildren().get(index);
     }
  
  
-    public int getChildCount(Object parent) {
+    @Override
+	public int getChildCount(Object parent) {
         return ((MyDataNode) parent).getChildren().size();
     }
  
  
-    public int getColumnCount() {
+    @Override
+	public int getColumnCount() {
         return columnNames.length;
     }
  
  
-    public String getColumnName(int column) {
+    @Override
+	public String getColumnName(int column) {
         return columnNames[column];
     }
  
  
-    public Class<?> getColumnClass(int column) {
+    @Override
+	public Class<?> getColumnClass(int column) {
         return columnTypes[column];
     }
  
-    public Object getValueAt(Object node, int column) {
+    @Override
+	public Object getValueAt(Object node, int column) {
         switch (column) {
         case 0:
             return ((MyDataNode) node).getName();
@@ -50,7 +56,8 @@ public class MyDataModel extends MyAbstractTreeTableModel {
         return null;
     }
  
-    public boolean isCellEditable(Object node, int column) {
+    @Override
+	public boolean isCellEditable(Object node, int column) {
     	if(column == 1)
     	{
     		return false;
@@ -58,7 +65,8 @@ public class MyDataModel extends MyAbstractTreeTableModel {
         return true; // Important to activate TreeExpandListener
     }
  
-    public void setValueAt(Object aValue, Object node, int column) {
+    @Override
+	public void setValueAt(Object aValue, Object node, int column) {
     	switch (column) {
         case 2:
             ((MyDataNode) node).setValue((String) aValue);

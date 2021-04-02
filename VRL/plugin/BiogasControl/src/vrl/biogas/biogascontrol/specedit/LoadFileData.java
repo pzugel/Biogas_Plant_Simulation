@@ -27,15 +27,15 @@ public class LoadFileData extends JFrame implements Serializable{
 	}
 	
  	private List<Integer> getChildren(int index){
-		if(((ValiTableEntry) listData.get(index)).isValueField)
+		if(listData.get(index).isValueField)
 			return java.util.Collections.emptyList();
 		List<Integer> children = new ArrayList<Integer>();
-		int indent = ((ValiTableEntry) listData.get(index)).getIndent();
+		int indent = listData.get(index).getIndent();
 		for(int i=index+1; i<listData.size(); i++) {
-			if(((ValiTableEntry) listData.get(i)).getIndent()==indent) {
+			if(listData.get(i).getIndent()==indent) {
 				break;
 			}
-			if(((ValiTableEntry) listData.get(i)).getIndent()==indent+1) {
+			if(listData.get(i).getIndent()==indent+1) {
 				children.add(i);
 			}
 		}
@@ -43,12 +43,12 @@ public class LoadFileData extends JFrame implements Serializable{
 	}
 	
 	private MyDataNode generate(int index, List<MyDataNode> children){
-		if(((ValiTableEntry) listData.get(index)).isValueField)
+		if(listData.get(index).isValueField)
 		{
 			children.add(new MyDataNode(
-					((ValiTableEntry) listData.get(index)).getName(), 
-					((ValiTableEntry) listData.get(index)).getType(), 
-					((ValiTableEntry) listData.get(index)).getSpecVal(), 
+					listData.get(index).getName(), 
+					listData.get(index).getType(), 
+					listData.get(index).getSpecVal(), 
 					null));	
 		}
 		else
@@ -56,7 +56,7 @@ public class LoadFileData extends JFrame implements Serializable{
 			if(index == 0) {
 				List<MyDataNode> rootNodes = new ArrayList<MyDataNode>();
 				MyDataNode root = new MyDataNode(
-						((ValiTableEntry) listData.get(index)).getName(), 
+						listData.get(index).getName(), 
 			    		"", 
 			    		"", 
 			    		rootNodes);
@@ -69,7 +69,7 @@ public class LoadFileData extends JFrame implements Serializable{
 			{
 				List<MyDataNode> myChildren = new ArrayList<MyDataNode>();
 				children.add(new MyDataNode(
-						((ValiTableEntry) listData.get(index)).getName(), 
+						listData.get(index).getName(), 
 						"", 
 						"", 
 						myChildren));

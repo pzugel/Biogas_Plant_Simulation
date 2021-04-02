@@ -16,13 +16,16 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
+import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import layout.TableLayout;
+import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
 import vrl.biogas.biogascontrol.panels.SettingsPanel;
@@ -32,28 +35,30 @@ import vrl.biogas.biogascontrol.panels.SimulationPanel;
 @ComponentInfo(name="MainPanel_User", 
 	category="Biogas", 
 	description="MainPanel Component")
+@ObjectInfo(name = "BiogasUserControl")
 public class BiogasUserControlPlugin extends BiogasControl implements Serializable{
 	private static final long serialVersionUID = 1L;
+	public static int numHydrolysis;
 	
 	@MethodInfo(name="Main", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
 	public JComponent controlSTRUCT(
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") Path projectDir)
+	    		options = "invokeOnChange=true") Path projectDir,
+			@ParamInfo(name = "#Hydrolysis",
+				nullIsValid = false,
+				options = "invokeOnChange=true") int numHydrolysis)
 		    			throws IOException, InterruptedException{
-		control(projectDir);
+		control(projectDir, numHydrolysis);
 		MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(panel);
 		return cont;		
 	}
 	
 	@MethodInfo(hide=true)
-	private JPanel control(
-			@ParamInfo(name = "Directory",
-	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") Path projectDir)
-		    			throws IOException, InterruptedException{
+	private JPanel control(Path projectDir,int numHydro) throws IOException, InterruptedException{
+		numHydrolysis = numHydro;
 		running = new JCheckBox("running?", false);
 		projectPath = new File(projectDir.toString()).getParentFile();
 		System.out.println("projectPath: " + projectPath);
@@ -79,8 +84,8 @@ public class BiogasUserControlPlugin extends BiogasControl implements Serializab
 
         panel = new JPanel();
         double size[][] =
-            {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayout.FILL},
-             {0.04, 0.06, 0.03, 0.82, TableLayout.FILL}};
+            {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayoutConstants.FILL},
+             {0.04, 0.06, 0.03, 0.82, TableLayoutConstants.FILL}};
         startBtn = new JButton("Start");
         startBtn.setBackground(BUTTON_BLUE);
         pauseBtn = new JToggleButton("Pause");
@@ -92,11 +97,11 @@ public class BiogasUserControlPlugin extends BiogasControl implements Serializab
         breakBtn.setForeground(Color.RED);
         panel.setLayout(new TableLayout(size));
         
-        panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayout.FULL, TableLayout.FULL));
+        panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
         //MainPanelContainerType cont = new MainPanelContainerType();
 	    //cont.setViewValue(panel);
@@ -174,7 +179,7 @@ public class BiogasUserControlPlugin extends BiogasControl implements Serializab
 				
 				if(!isRunning) {
 					settingsPanelObj.simStarttime.setEnabled(true);
-					setupPanelObj.clear_Btn.doClick();
+					SetupPanel.clear_Btn.doClick();
 				} else {
 					settingsPanelObj.simStarttime.setEnabled(false);
 				}
@@ -184,17 +189,17 @@ public class BiogasUserControlPlugin extends BiogasControl implements Serializab
 	    return panel;
 	}
 	
-	public void main(String args[]) throws IOException, InterruptedException{         	
+	public static void main(String args[]) throws IOException, InterruptedException{         	
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());
 		
 	    JFrame frame = new JFrame();
-
-	    control(p);	    
+	    BiogasUserControlPlugin userControl = new BiogasUserControlPlugin();
+	    userControl.control(p, 2);	    
 	    
 		frame.add(panel);
 		frame.setSize(600, 600);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);	
 	}
 }

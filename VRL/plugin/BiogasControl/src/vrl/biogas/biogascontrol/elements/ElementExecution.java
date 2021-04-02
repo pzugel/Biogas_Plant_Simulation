@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 import javax.swing.SwingWorker;
 
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
@@ -22,7 +23,7 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		File ugpath = new File(home, "ug4");
 		File ugshell = new File(new File(ugpath, "bin").getAbsolutePath(), "ugshell");
 		
-		final String cmd = ugshell + " -ex " + BiogasControlPlugin.simulationFile + " -p " + specification.toString();
+		final String cmd = ugshell + " -ex " + BiogasControl.simulationFile + " -p " + specification.toString();
 		//final String cmd = "ls";
 		System.out.println("cmd: " + cmd);
 		
@@ -32,14 +33,16 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		element = elem;
 	}
 	
-    public String doInBackground() throws IOException, InterruptedException {
+    @Override
+	public String doInBackground() throws IOException, InterruptedException {
     	Process proc = Runtime.getRuntime().exec(command, null, directory);
     	proc.waitFor();
     	return proc.toString();
     }
 
-    public void done() {
-    	SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+    @Override
+	public void done() {
+    	SimulationPanel simPanel = BiogasControl.simulationPanelObj;
     	
     	if(!structure.wasCancelled()) {			
         	String logEnd = simPanel.simulationLog.getText();

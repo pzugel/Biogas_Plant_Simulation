@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
@@ -33,16 +34,16 @@ public class Stop implements SimulationElement, Serializable{
 	@Override
 	public void run() throws IOException {
 		System.out.println("Stop here!");
-		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Stop");
 		String logStart = simPanel.simulationLog.getText();
 		simPanel.simulationLog.setText(logStart + "** Stop ... ");
-		int endtime = (Integer) BiogasControlPlugin.settingsPanelObj.simEndtime.getValue();
+		int endtime = (Integer) BiogasControl.settingsPanelObj.simEndtime.getValue();
 		
 		if(!structure.wasCancelled()) {
-			if(BiogasControlPlugin.stopBtn.isSelected()) {
-				BiogasControlPlugin.running.setSelected(false);
+			if(BiogasControl.stopBtn.isSelected()) {
+				BiogasControl.running.setSelected(false);
 				System.out.println("Simulation stopped!");
 				
 				String logEnd = simPanel.simulationLog.getText();
@@ -53,8 +54,8 @@ public class Stop implements SimulationElement, Serializable{
 					
 					String logEnd = simPanel.simulationLog.getText();
 					simPanel.simulationLog.setText(logEnd + "Continue!\n");
-					++ BiogasControlPlugin.iteration;					
-					BiogasControlPlugin.simulationPanelObj.iteration.setText(String.valueOf(BiogasControlPlugin.iteration));
+					++ BiogasControl.iteration;					
+					BiogasControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasControl.iteration));
 					structure.incrementCurrentTime();
 								
 					
@@ -81,7 +82,7 @@ public class Stop implements SimulationElement, Serializable{
 					
 				}
 				else {
-					BiogasControlPlugin.running.setSelected(false);
+					BiogasControl.running.setSelected(false);
 					String logEnd = simPanel.simulationLog.getText();
 					simPanel.simulationLog.setText(logEnd + "Simulation finished!\n");
 				}

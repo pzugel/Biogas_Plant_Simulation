@@ -120,8 +120,8 @@ public class ValidationParser {
 				Matcher m_table = Pattern.compile(table_entry).matcher(line);
 				if(m_table.find())
 				{
-					((ValiTableEntry) parameters.get(index)).setType(last_type);	
-					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
+					parameters.get(index).setType(last_type);	
+					parameters.get(index).setDefaultVal(last_default);
 					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
@@ -132,8 +132,8 @@ public class ValidationParser {
 				last_type = line.substring(6);
 				last_type = last_type.replaceAll("\"", "");
 					
-				if(((ValiTableEntry) parameters.get(index)).isValueField()) {
-					((ValiTableEntry) parameters.get(index)).setType(last_type);
+				if(parameters.get(index).isValueField()) {
+					parameters.get(index).setType(last_type);
 				}
 			}
 			
@@ -143,8 +143,8 @@ public class ValidationParser {
 				String tmpline = line;
 				tmpline = tmpline.replaceAll("\"", "");
 				last_default = tmpline.substring(8);
-				if(((ValiTableEntry) parameters.get(index)).isValueField()) {
-					((ValiTableEntry) parameters.get(index)).setDefaultVal(last_default);
+				if(parameters.get(index).isValueField()) {
+					parameters.get(index).setDefaultVal(last_default);
 					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
@@ -156,8 +156,8 @@ public class ValidationParser {
 				int max_pos = line.indexOf('-');
 				int end_pos = line.indexOf(']');
 				
-				((ValiTableEntry) parameters.get(index)).setRangeMin(line.substring(min_pos+1,max_pos));
-				((ValiTableEntry) parameters.get(index)).setRangeMax(line.substring(max_pos+1,end_pos));
+				parameters.get(index).setRangeMin(line.substring(min_pos+1,max_pos));
+				parameters.get(index).setRangeMax(line.substring(max_pos+1,end_pos));
 			}
 		}
 		scanner.close();

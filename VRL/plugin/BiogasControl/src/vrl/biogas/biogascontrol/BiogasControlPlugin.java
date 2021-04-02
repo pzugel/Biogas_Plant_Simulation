@@ -17,13 +17,16 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
+import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
 import layout.TableLayout;
+import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
 import vrl.biogas.biogascontrol.panels.PlantPanel;
@@ -36,6 +39,7 @@ import vrl.biogas.biogascontrol.structures.Structure;
 @ComponentInfo(name="MainPanel", 
 	category="Biogas", 
 	description="MainPanel Component")
+@ObjectInfo(name = "BiogasControl")
 public class BiogasControlPlugin extends BiogasControl implements Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -94,8 +98,8 @@ public class BiogasControlPlugin extends BiogasControl implements Serializable{
 
         panel = new JPanel();
         double size[][] =
-            {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayout.FILL},
-             {0.04, 0.06, 0.03, 0.82, TableLayout.FILL}};
+            {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayoutConstants.FILL},
+             {0.04, 0.06, 0.03, 0.82, TableLayoutConstants.FILL}};
         JButton startBtn = new JButton("Start");
         startBtn.setBackground(BUTTON_BLUE);
         pauseBtn = new JToggleButton("Pause");
@@ -107,11 +111,11 @@ public class BiogasControlPlugin extends BiogasControl implements Serializable{
         breakBtn.setForeground(Color.RED);
         panel.setLayout(new TableLayout(size));
         
-        panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayout.FULL, TableLayout.FULL));
-        panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayout.FULL, TableLayout.FULL));
+        panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
         //MainPanelContainerType cont = new MainPanelContainerType();
 	    //cont.setViewValue(panel);
@@ -144,7 +148,7 @@ public class BiogasControlPlugin extends BiogasControl implements Serializable{
 				else {
 					JFrame frame = new JFrame();
 					frame.setLocationRelativeTo(panel);
-					frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					JOptionPane.showMessageDialog(frame,
 						    "You need to set up a working environment before starting the simulation.",
 						    "Warning",
@@ -185,7 +189,7 @@ public class BiogasControlPlugin extends BiogasControl implements Serializable{
 				
 				if(!isRunning) {
 					settingsPanelObj.simStarttime.setEnabled(true);
-					setupPanelObj.clear_Btn.doClick();
+					SetupPanel.clear_Btn.doClick();
 				} else {
 					settingsPanelObj.simStarttime.setEnabled(false);
 				}
@@ -206,7 +210,7 @@ public class BiogasControlPlugin extends BiogasControl implements Serializable{
 	    
 		frame.add(panel);
 		frame.setSize(600, 600);
-		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);	
 	}
 }

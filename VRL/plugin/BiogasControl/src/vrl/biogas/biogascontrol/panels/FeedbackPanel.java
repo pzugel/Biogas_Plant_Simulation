@@ -3,6 +3,7 @@ package vrl.biogas.biogascontrol.panels;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -25,7 +26,7 @@ public class FeedbackPanel {
 	}
 	
 	private void createPanel(boolean userDefined) {
-		final JSlider slider1 = new JSlider(JSlider.VERTICAL,0, 100, 100);
+		final JSlider slider1 = new JSlider(SwingConstants.VERTICAL,0, 100, 100);
 		
 		slider1.setMajorTickSpacing(20);
 		slider1.setMinorTickSpacing(5);

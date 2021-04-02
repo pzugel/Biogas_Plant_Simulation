@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
@@ -38,7 +39,7 @@ public class Methane implements SimulationElement, Serializable{
 
 	@Override
 	public void run() {
-		SimulationPanel simPanel = BiogasControlPlugin.simulationPanelObj;
+		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Methane");
 		String logStart = simPanel.simulationLog.getText();

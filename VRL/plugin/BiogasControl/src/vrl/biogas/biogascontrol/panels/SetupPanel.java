@@ -12,10 +12,12 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 import layout.TableLayout;
+import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlPlugin;
@@ -86,14 +88,14 @@ public class SetupPanel {
 		environment_tree = new JTree(environment_tree_model);
 		environment_tree.setBorder(BorderFactory.createLineBorder(Color.black));
 		JScrollPane environment_tree_pane = new JScrollPane(environment_tree,
-			      JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-			      JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			      ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS,
+			      ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		environment_tree_pane.setPreferredSize(new Dimension(280,290));
 		
 		JLabel text = new JLabel("<html><body>Create a working environtment for your<br>selected plant structure:</body></html>");
 
         double size[][] =
-            {{0.1, 0.5, 0.01, 0.22, 0.07, TableLayout.FILL},
+            {{0.1, 0.5, 0.01, 0.22, 0.07, TableLayoutConstants.FILL},
              {0.2, //Text 0
             	0.05, //Directory 1
             	0.01,  
@@ -105,18 +107,18 @@ public class SetupPanel {
             	//0.18, 
             	//0.1, 
             	//0.1, 
-            	TableLayout.FILL,
+            	TableLayoutConstants.FILL,
             	0.06}};
         setupPanel.setLayout(new TableLayout(size));
         setupPanel.setBorder(BiogasControl.border);
         
-        setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayout.LEFT, TableLayout.CENTER));
-        setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayout.CENTER, TableLayout.CENTER));
-        setupPanel.add(dir, new TableLayoutConstraints(3, 1, 3, 1, TableLayout.FULL, TableLayout.TOP));
-        setupPanel.add(open_Btn, new TableLayoutConstraints(4, 1, 4, 1, TableLayout.FULL, TableLayout.TOP));
-        setupPanel.add(create_Btn, new TableLayoutConstraints(3, 3, 4, 3, TableLayout.CENTER, TableLayout.TOP));
-        setupPanel.add(clear_Btn, new TableLayoutConstraints(3, 5, 4, 5, TableLayout.CENTER, TableLayout.TOP));
-        setupPanel.add(load_Btn, new TableLayoutConstraints(3, 7, 4, 7, TableLayout.CENTER, TableLayout.TOP));
+        setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstants.LEFT, TableLayoutConstants.CENTER));
+        setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
+        setupPanel.add(dir, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.TOP));
+        setupPanel.add(open_Btn, new TableLayoutConstraints(4, 1, 4, 1, TableLayoutConstants.FULL, TableLayoutConstants.TOP));
+        setupPanel.add(create_Btn, new TableLayoutConstraints(3, 3, 4, 3, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
+        setupPanel.add(clear_Btn, new TableLayoutConstraints(3, 5, 4, 5, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
+        setupPanel.add(load_Btn, new TableLayoutConstraints(3, 7, 4, 7, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
         
         //Register Events
 		open_Btn.addActionListener(new ActionListener() {
