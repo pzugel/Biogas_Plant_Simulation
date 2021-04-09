@@ -42,12 +42,12 @@ public class SetupPanel {
 	
 	static JPanel setupPanel;
 	static public boolean environment_ready;
-	static File environment_path;
+	public static File environment_path;
 	static JTree environment_tree;
 	static DefaultTreeModel environment_tree_model;
 	static JTextField dir;
 	
-	public boolean mergePreexisting;
+	public static boolean mergePreexisting;
 	
 	public static JButton clear_Btn;
 	

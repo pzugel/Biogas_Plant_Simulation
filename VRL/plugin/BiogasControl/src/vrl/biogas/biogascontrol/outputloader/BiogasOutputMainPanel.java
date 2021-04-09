@@ -25,8 +25,6 @@ import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
-import javax.swing.tree.TreePath;
-import javax.swing.tree.TreeSelectionModel;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
@@ -42,6 +40,7 @@ import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.BiogasUserControlPlugin;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
 
 @ComponentInfo(name="BiogasOutputPanel", 
 	category="Biogas", 
@@ -50,7 +49,7 @@ import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
 public class BiogasOutputMainPanel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
-	static JTree tree;
+	static CheckBoxTree tree;
 	static List<Trajectory> trajectories;
 	static File filepath;
 	static JPanel mainPanel;
@@ -95,17 +94,21 @@ public class BiogasOutputMainPanel implements Serializable{
              {0.08, 0.84, TableLayoutConstants.FILL}};
 	    mainPanel.setLayout(new TableLayout(size));
 	    
-		OutputEntry empty = new OutputEntry();
-		empty.setName("...");
-        tree = new JTree(new DefaultMutableTreeNode(empty));
-		tree.getSelectionModel().setSelectionMode(TreeSelectionModel.DISCONTIGUOUS_TREE_SELECTION);
+		OutputEntry emptyEntry = new OutputEntry();
+		emptyEntry.setName("...");
 		
+        tree = new CheckBoxTree();
+        DefaultTreeModel model =(DefaultTreeModel) tree.getModel();
+        model.setAsksAllowsChildren(true);
+        DefaultMutableTreeNode emptyNode = new DefaultMutableTreeNode(emptyEntry, true);               
+        model.setRoot(emptyNode);
+        
 	    final JScrollPane treeScrollPane = new JScrollPane(tree);	    
-	    JButton plotButton = new JButton("Plot");
+	    JButton clearBtn = new JButton("Clear");
 	    
 	    mainPanel.add(upperPanel, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
         mainPanel.add(treeScrollPane, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        mainPanel.add(plotButton, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
+        mainPanel.add(clearBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
 	    
 	    MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(mainPanel);
@@ -113,21 +116,22 @@ public class BiogasOutputMainPanel implements Serializable{
 	    loadBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean isRunning = BiogasControl.running.isSelected();
-				
-				if(!isRunning && plotSelect.getSelectedIndex() != 3) {
+				boolean isReady = SetupPanel.environment_ready;
+				//boolean isReady = false; //TODO For debug
+				if(!isReady && plotSelect.getSelectedIndex() != 3) {
 					JFrame frame = new JFrame();
 					frame.setLocationRelativeTo(mainPanel);
 					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					JOptionPane.showMessageDialog(frame,
-						    "There is currently no running simulation.",
+						    "There is currently no simulation to load.",
 						    "Warning",
 						    JOptionPane.WARNING_MESSAGE);
 					updateTree(null);
 				}
 				
-				if(isRunning && plotSelect.getSelectedIndex() != 3) {
-					if(BiogasControl.iteration == 0) {
+				if(isReady && plotSelect.getSelectedIndex() != 3) {
+					boolean envLoaded = SetupPanel.mergePreexisting;
+					if(!envLoaded && BiogasControl.iteration == 0) {
 						JFrame frame = new JFrame();
 						frame.setLocationRelativeTo(mainPanel);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
@@ -137,12 +141,12 @@ public class BiogasOutputMainPanel implements Serializable{
 							    JOptionPane.WARNING_MESSAGE);
 						updateTree(null);
 					}
-					else {
-						final File workingDirectory = BiogasControl.workingDirectory;
+					else if(envLoaded || BiogasControl.iteration != 0){
+						final File environmentDir = SetupPanel.environment_path;
 						
 						//Methane
 						if(plotSelect.getSelectedIndex() == 0) {
-							File methaneOutputFile = new File(workingDirectory, "methane" + File.separator + "outputFiles.lua");
+							File methaneOutputFile = new File(environmentDir, "methane" + File.separator + "outputFiles.lua");
 							updateTree(methaneOutputFile);
 						}
 						
@@ -154,7 +158,7 @@ public class BiogasOutputMainPanel implements Serializable{
 								@Override
 								public void actionPerformed(ActionEvent arg0) {
 									String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
-									File hydrolysisOutputFile = new File(workingDirectory, reactor + File.separator + "outputFiles.lua");
+									File hydrolysisOutputFile = new File(environmentDir, reactor + File.separator + "outputFiles.lua");
 									updateTree(hydrolysisOutputFile);
 								}
 							});
@@ -163,7 +167,7 @@ public class BiogasOutputMainPanel implements Serializable{
 						
 						//Storage
 						if(plotSelect.getSelectedIndex() == 2) {
-							File storageOutputFile = new File(workingDirectory, "storage_hydrolyse" + File.separator + "outputFiles.lua");
+							File storageOutputFile = new File(environmentDir, "storage_hydrolyse" + File.separator + "outputFiles.lua");
 							updateTree(storageOutputFile);
 						}
 					}
@@ -188,25 +192,50 @@ public class BiogasOutputMainPanel implements Serializable{
 			}
 	    });
 	    
-	    plotButton.addActionListener(new ActionListener() {
+	    clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					getValues();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
+				DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+				DefaultMutableTreeNode root = (DefaultMutableTreeNode) model.getRoot();
+				int numFiles = root.getChildCount();
+				for(int i=0; i<numFiles; i++) {
+					DefaultMutableTreeNode fileNode = (DefaultMutableTreeNode) root.getChildAt(i);	    
+					int numParams = fileNode.getChildCount();
+					
+					for(int j=0; j<numParams; j++) {
+						DefaultMutableTreeNode paramNode = (DefaultMutableTreeNode) fileNode.getChildAt(j);
+						Object userObject = paramNode.getUserObject();
+						
+						if(userObject instanceof TreeNodeCheckBox) {
+							((TreeNodeCheckBox) userObject).setSelected(false);
+						}
+					}
 				}
+				//model.reload();
+				mainPanel.revalidate();
+				mainPanel.repaint();
 			}
+			
 	    });
 	    
 		return cont;
 	}
 	
 	private static void updateTree(File outputFilesPath) {
+		System.out.println("updateTree --> " + outputFilesPath);
 		
 		DefaultMutableTreeNode root;
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		
+		if(outputFilesPath == null) {//Create an empty tree
+			OutputEntry empty = new OutputEntry();
+			empty.setName("...");
+	        root = new DefaultMutableTreeNode(empty);
+	        model.setAsksAllowsChildren(true);
+	        model.setRoot(root);
+			model.reload();
+			return;
+		}
 		
 		if(outputFilesPath.isFile()) {
 			filepath = outputFilesPath;
@@ -232,76 +261,117 @@ public class BiogasOutputMainPanel implements Serializable{
 					lastParent.add(param);
 				}
 			}	
+			model.setAsksAllowsChildren(false);
 		}
 		else { //Create an empty tree
 			OutputEntry empty = new OutputEntry();
 			empty.setName("...");
 	        root = new DefaultMutableTreeNode(empty);
+	        model.setAsksAllowsChildren(true);
+	        
+	        JFrame frame = new JFrame();
+			frame.setLocationRelativeTo(mainPanel);
+			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			JOptionPane.showMessageDialog(frame,
+				    "Invalid Path.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE);
 		}
 		
 		
-		//Updating Tree
-		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		//Updating Tree		
 		model.setRoot(root);
 		model.reload();
 	}
 	
-	@MethodInfo(name="Plot", hide=false, valueName="Trajectory[][]",
-			hideCloseIcon=true, num=1)
+	private static DefaultMutableTreeNode[] fetchPaths(JTree tree) {
+		ArrayList<DefaultMutableTreeNode> sel = new ArrayList<DefaultMutableTreeNode>();
+		DefaultMutableTreeNode root = (DefaultMutableTreeNode) ((DefaultTreeModel) tree.getModel()).getRoot();
+		int numFiles = root.getChildCount();
+		System.out.println("numFiles: " + numFiles);
+		for(int i=0; i<numFiles; i++) {
+			DefaultMutableTreeNode fileNode = (DefaultMutableTreeNode) root.getChildAt(i);	    
+			int numParams = fileNode.getChildCount();
+			
+			for(int j=0; j<numParams; j++) {
+				DefaultMutableTreeNode paramNode = (DefaultMutableTreeNode) fileNode.getChildAt(j);
+				Object userObject = paramNode.getUserObject();
+				
+				if(userObject instanceof TreeNodeCheckBox) {
+					boolean isSelected = ((TreeNodeCheckBox) userObject).isSelected();
+					System.out.println("userObject: " + isSelected);
+					if(isSelected) {
+						sel.add(paramNode);
+					}
+				}
+			}
+		}
+	   
+		DefaultMutableTreeNode[] returnArr = new DefaultMutableTreeNode[sel.size()];
+		returnArr = sel.toArray(returnArr);    	
+		return returnArr;
+	}
+	
+	@MethodInfo(name="Plot", hide=false, valueName="Trajectory[][]", hideCloseIcon=true, num=1)
 	public static ArrayList<ArrayList<Trajectory>> getValues() throws IOException, InterruptedException {		
 		
 		Set<String> filenames = new HashSet<String>();
-		TreePath[] sel = tree.getSelectionPaths();
-		if(sel == null) {
+		DefaultMutableTreeNode[] sel = fetchPaths(tree);
+		if(sel.length == 0) {
 			System.out.println("Nothing to plot.");
 			return null;
 		}
 		
 		// Get all different filenames from the selected entries
-		for(TreePath p : sel) {
-			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) p.getLastPathComponent();
-			OutputEntry treeEntry = (OutputEntry) treeNode.getUserObject();
-			if(treeEntry.isValue()) {
-				filenames.add(treeEntry.getFilename());
-			} 			
+		for(DefaultMutableTreeNode treeNode : sel) {
+			Object userObject = treeNode.getUserObject();
+			if(userObject instanceof TreeNodeCheckBox) {
+				TreeNodeCheckBox userNodeObject = (TreeNodeCheckBox) userObject;
+				OutputEntry treeEntry = userNodeObject.getEntry();
+				if(treeEntry.isValue()) {
+					filenames.add(treeEntry.getFilename());
+				} 		
+			}			
 		}
 		
 		// Create an XYSerie for every selected entry
 		List<Pair<OutputEntry, Trajectory>> dataSetList = new ArrayList<Pair<OutputEntry, Trajectory>>();
-		for(TreePath p : sel) {
-			
-			DefaultMutableTreeNode treeNode = (DefaultMutableTreeNode) p.getLastPathComponent();
-			OutputEntry treeEntry = (OutputEntry) treeNode.getUserObject();
-			if(treeEntry.isValue()) {
-				File f = new File(filepath.getParent(), treeEntry.getFilename());
-				
-				System.out.println("Plotting from File: " + f);
-				System.out.println("--> x value " + treeEntry.getXValueName() + treeEntry.getXValueUnit() 
-					+ " from column " + treeEntry.getXValueColumn());
-				System.out.println("--> y value " + treeEntry.getName() + treeEntry.getUnit() 
-					+ " from column " + treeEntry.getColumn());
-				
-				CSVReader reader = new CSVReader(f);
-				List<Double> col = reader.getCol(treeEntry.getColumn());
-				List<Double> x_col = reader.getCol(treeEntry.getXValueColumn());
-				
-				Trajectory t = new Trajectory(treeEntry.getName());
-				for(int i=0; i<col.size(); i++) {			
-					t.add(x_col.get(i), col.get(i));
-					System.out.println("\t --> " + x_col.get(i) + ", " + col.get(i));
-				}
-				t.setTitle(treeEntry.getFilename());
-				t.setxAxisLabel(treeEntry.getXValueName() + treeEntry.getXValueUnit());
-				t.setyAxisLabel(treeEntry.getUnit());
-				t.setxAxisLogarithmic(false);
-				t.setyAxisLogarithmic(false);
+		for(DefaultMutableTreeNode treeNode : sel) {
+			Object userObject = treeNode.getUserObject();
+			if(userObject instanceof TreeNodeCheckBox) {
+				OutputEntry treeEntry = ((TreeNodeCheckBox) userObject).getEntry();
+				if(treeEntry.isValue()) {
+					File f = new File(filepath.getParent(), treeEntry.getFilename());
+					
+					System.out.println("Plotting from File: " + f);
+					System.out.println("--> x value " + treeEntry.getXValueName() + treeEntry.getXValueUnit() 
+						+ " from column " + treeEntry.getXValueColumn());
+					System.out.println("--> y value " + treeEntry.getName() + treeEntry.getUnit() 
+						+ " from column " + treeEntry.getColumn());
+					
+					CSVReader reader = new CSVReader(f);
+					List<Double> col = reader.getCol(treeEntry.getColumn());
+					List<Double> x_col = reader.getCol(treeEntry.getXValueColumn());
+					
+					Trajectory t = new Trajectory(treeEntry.getName());
+					for(int i=0; i<col.size(); i++) {			
+						t.add(x_col.get(i), col.get(i));
+						System.out.println("\t --> " + x_col.get(i) + ", " + col.get(i));
+					}
+					t.setTitle(treeEntry.getFilename());
+					t.setxAxisLabel(treeEntry.getXValueName() + treeEntry.getXValueUnit());
+					t.setyAxisLabel(treeEntry.getUnit());
+					t.setxAxisLogarithmic(false);
+					t.setyAxisLogarithmic(false);
 
-				Pair<OutputEntry, Trajectory> dataPair = new Pair<OutputEntry, Trajectory>(treeEntry, t);
-				dataSetList.add(dataPair);	
+					Pair<OutputEntry, Trajectory> dataPair = new Pair<OutputEntry, Trajectory>(treeEntry, t);
+					dataSetList.add(dataPair);	
+				}
+				else {
+					System.out.println("Ignoring selection of non value tree node --> " + treeEntry.getName());
+				}
 			}
-			else {
-				System.out.println("Ignoring selection of non value tree node --> " + treeEntry.getName());
-			}
+			
 			
 		}
 		
@@ -322,7 +392,7 @@ public class BiogasOutputMainPanel implements Serializable{
 		return outList;
 	}
 	
-	@MethodInfo(name="SamplePlot", hide=false, interactive=true, valueName="Trajectory[][]", num=1)
+	@MethodInfo(name="SamplePlot", hide=false, valueName="Trajectory[][]", hideCloseIcon=false)
 	public static ArrayList<ArrayList<Trajectory>> samplePlot() {
 		Trajectory t1 = new Trajectory("T1");
 		Trajectory t2 = new Trajectory("T2");
@@ -377,9 +447,9 @@ public class BiogasOutputMainPanel implements Serializable{
 		//File f = new File("/home/paul/Schreibtisch/smalltest/aceto/biogas_80h_2_STAGE_PL_ACETO/methane/outputFiles.lua");
 		
 	    JFrame frame = new JFrame();
-	    load(2);   
-	    
+	    load(2);   	    
 		frame.add(mainPanel);
+		
 		frame.setSize(300, 500);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 		frame.setVisible(true);	

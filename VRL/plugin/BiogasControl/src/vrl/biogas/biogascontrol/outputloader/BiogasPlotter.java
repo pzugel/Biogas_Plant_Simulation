@@ -1,33 +1,24 @@
 package vrl.biogas.biogascontrol.outputloader;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.awt.Color;
 import java.awt.GridLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.io.Serializable;
+import java.lang.reflect.InvocationTargetException;
 
-import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYItemRenderer;
-import org.jfree.data.xy.XYDataset;
 
 import edu.gcsc.vrl.jfreechart.TrajectoryPlotter;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
@@ -160,7 +151,7 @@ public class BiogasPlotter implements Serializable {
     return cont;
   }
   
-  public static void main(String args[]) throws IOException, InterruptedException{  
+  public static void main(String args[]) throws IOException, InterruptedException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{  
 	  BiogasPlotter plotter = new BiogasPlotter();
 
 	  ArrayList<ArrayList<Trajectory>> trajectories = BiogasOutputMainPanel.samplePlot();
@@ -169,9 +160,9 @@ public class BiogasPlotter implements Serializable {
 	  
 	  JFrame frame = new JFrame(); 
     
-	  frame.add(mainPanel);
+	  frame.add(mainPanel);	  
 	  frame.setSize(300, 500);
 	  frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-	  frame.setVisible(true);	
+	  frame.setVisible(true);
   }
 }

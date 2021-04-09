@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.util.ArrayList;
 
 import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
 
 public class ElementFunctions {
 	
@@ -52,7 +53,7 @@ public class ElementFunctions {
 		File basePath = elem.path();
 		int startTime = (Integer) BiogasControl.settingsPanelObj.simStarttime.getValue();
 		//int curTime = BiogasControlPlugin.currenttime;
-		boolean preexisting = BiogasControl.setupPanelObj.mergePreexisting;
+		boolean preexisting = SetupPanel.mergePreexisting;
 		File timePath = new File(elem.path(), String.valueOf(currenttime));
 		
 		System.out.println("********************************************************************************");

@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 public class HydrolysisSelector {
 	

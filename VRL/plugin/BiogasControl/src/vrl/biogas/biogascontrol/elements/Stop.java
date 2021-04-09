@@ -6,7 +6,6 @@ import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 

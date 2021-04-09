@@ -59,6 +59,7 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       
 	       vapi.addComponent(BiogasOutputMainPanel.class);
 	       vapi.addComponent(BiogasPlotter.class);
+	       vapi.addComponent(Iterator.class);
 	   }
 	}
 

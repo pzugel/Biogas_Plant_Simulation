@@ -3,7 +3,6 @@ package vrl.biogas.biogascontrol.userstructure;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasUserControlPlugin;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 
 @ComponentInfo(name="Hydrolysis", category="BiogasUserElements")

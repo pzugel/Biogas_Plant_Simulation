@@ -2,7 +2,6 @@ package vrl.biogas.biogascontrol.specedit;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 import java.awt.BorderLayout;
 import java.awt.Color;

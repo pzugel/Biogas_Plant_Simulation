@@ -52,8 +52,8 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 			File[] specDirsArr = new File[specDirs.size()];
 			specDirs.toArray(specDirsArr);
 			if(!firstTimestep) {
-				// TODO UNCOMMENT!
-					//OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractions);
+				// TODO Check if this works!
+				OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractions);
 			}
 			
 			//Iterate hydrolysis reactors
