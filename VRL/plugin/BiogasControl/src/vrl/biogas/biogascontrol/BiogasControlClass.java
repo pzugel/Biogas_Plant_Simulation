@@ -1,0 +1,112 @@
+package vrl.biogas.biogascontrol;
+
+import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+import javax.swing.BorderFactory;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JPanel;
+import javax.swing.JToggleButton;
+import javax.swing.Timer;
+import javax.swing.border.Border;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+
+import vrl.biogas.biogascontrol.panels.FeedbackPanel;
+import vrl.biogas.biogascontrol.panels.SettingsPanel;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
+import vrl.biogas.biogascontrol.panels.SimulationPanel;
+
+public class BiogasControlClass {
+		
+	private final static int ONE_SECOND = 1000;
+	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
+	public static final Border border = BorderFactory.createLineBorder(Color.black);
+	
+	public static File projectPath;
+	public static int currenttime;
+	public static int iteration;
+	public static JPanel panel;
+	public static File workingDirectory;
+	public static String simulationFile;
+
+	public static JToggleButton pauseBtn;
+	public static JToggleButton stopBtn;
+	public static JButton startBtn;
+	public static JButton breakBtn;
+	
+	public static JCheckBox running;
+	public static Timer timer;
+	public static long timerStartTime;
+	
+	public static SetupPanel setupPanelObj;
+	public static SimulationPanel simulationPanelObj;
+	public static SettingsPanel settingsPanelObj;
+	public static FeedbackPanel feedbackPanelObj;	
+	
+	BiogasControlClass(){
+		timer = new Timer(ONE_SECOND, new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+            	long currentTime = System.currentTimeMillis();
+            	long timeElapsed = currentTime - timerStartTime;
+            	Date date = new Date(timeElapsed);
+				DateFormat formatter = new SimpleDateFormat("HH:mm:ss");
+				formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+				String timeFormatted = formatter.format(date);;
+            	simulationPanelObj.runtime.setText(timeFormatted);
+            }
+        });
+		
+		running = new JCheckBox("running?", false);
+		running.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				boolean isRunning = running.isSelected();
+				System.out.println("Running?: " + isRunning);
+				
+				if(!isRunning) {					
+					timer.stop();
+					int endtime = (Integer) settingsPanelObj.simEndtime.getValue();
+					settingsPanelObj.simStarttime.setValue(endtime);
+					//settingsPanelObj.simStarttime.setEnabled(true);
+					//SetupPanel.clear_tree();
+					
+				} else {
+					timerStartTime = System.currentTimeMillis();
+					timer.start();					
+					settingsPanelObj.simStarttime.setEnabled(false);
+				}
+			}	
+		});
+		
+		breakBtn = new JButton("Break");
+		breakBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				running.setSelected(false);
+				String os = System.getProperty("os.name");
+				String killCmd = "";
+				if(os.equals("Linux")) {
+					killCmd = "killall -2 ugshell";
+				} else if(os.equals("Mac")) {
+					killCmd = "killall -2 ugshell";
+				} else if (os.equals("Windows")) {
+					killCmd = "taskkill /IM ugshell.exe /F";		
+				}				
+				try {
+					Runtime.getRuntime().exec(killCmd);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		});
+	}
+}

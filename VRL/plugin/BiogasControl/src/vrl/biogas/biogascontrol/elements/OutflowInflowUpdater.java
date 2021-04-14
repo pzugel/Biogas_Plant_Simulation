@@ -21,22 +21,34 @@ public class OutflowInflowUpdater {
 	
 	private static void parse_spec_file(File spec) throws IOException
 	{ 
+		System.out.println("parse_spec_file: " + spec);
 		spec_inflowData_vec = new ArrayList<String>();
-		String content = Files.readString(spec.toPath(), StandardCharsets.US_ASCII);
+		//String content = Files.readString(spec.toPath(), StandardCharsets.US_ASCII); //Not compatible with groovy
+		String content = "";
+		Scanner lineIter = new Scanner(spec);		
+		while (lineIter.hasNextLine()) {
+			content += lineIter.nextLine() + "\n";
+		}
+		lineIter.close();
+		System.out.println("content: " + content);
+		
 		Pattern p = Pattern.compile("inflow(\\s)*=(\\s)*\\{(\\s)*data(\\s)*=(\\s)*\\{[a-zA-Z,\"\\s]*\\},(\\s)*timetable(\\s)*=(\\s)*\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},(\\s)*\\},?");
 		Matcher m = p.matcher(content);
 		if(m.find()) {
+			
 			String inflow = m.group(0);
-
+			System.out.println("was found: " + inflow);
 			p = Pattern.compile("\"[a-zA-Z0-9\\s]+\"");
 			m = p.matcher(inflow);		
 			while (m.find()) {
+				System.out.println("data m.group(0): " + m.group(0));
 				spec_inflowData_vec.add(m.group(0));
 			}
 			
 			p = Pattern.compile("timetable(\\s)*=(\\s)*\\{(\\s)*(\\{.*\\},?(\\s)*)*\\},");
 			m = p.matcher(inflow);
 			if(m.find()) {
+				System.out.println("timetable m.group(0): " + m.group(0));
 				inflow_timetable_string = m.group(0);
 			}	
 		}
@@ -72,6 +84,7 @@ public class OutflowInflowUpdater {
 	
 	private static void write_new_timetable(double fraction)
 	{
+		System.out.println("write_new_timetable: " + fraction);
 		output_timetable = new ArrayList<ArrayList<String>>();
 
 		// Adding parameters "Time" and "All Liquid"
@@ -116,8 +129,8 @@ public class OutflowInflowUpdater {
 	
 	private static void write_new_timetable_string(File spec) throws IOException
 	{
-		String content = Files.readString(spec.toPath(), StandardCharsets.US_ASCII);
-		Scanner lineIter = new Scanner(content);	
+		System.out.println("write_new_timetable_string: " + spec);
+		Scanner lineIter = new Scanner(spec);	
 		String tabs = "";
 		while (lineIter.hasNextLine()) {
 			String line = lineIter.nextLine();
@@ -180,15 +193,20 @@ public class OutflowInflowUpdater {
 		String data = HelperFunctions.remove_header(outflow_infile);
 		read_outflow_header(header);
 		read_outflow_values(data);
-		
+		System.out.println("write_hydrolysis_inflow");
 		int specNum = 0;
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
 			write_new_timetable(fractions[specNum]);
 			write_new_timetable_string(spec);
-			
+			System.out.println("spec: " + spec);
 			//Replacement in spec file	
-			String specString = Files.readString(spec.toPath(), StandardCharsets.US_ASCII);
+			String specString = "";
+			Scanner lineIter = new Scanner(spec);		
+			while (lineIter.hasNextLine()) {
+				specString += lineIter.nextLine() + "\n";
+			}
+			lineIter.close();
 			specString = specString.replace(inflow_timetable_string, timetable_replacement);
 			
 			//Write to file

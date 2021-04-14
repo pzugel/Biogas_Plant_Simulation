@@ -1,12 +1,18 @@
 package vrl.biogas.biogascontrol.elements;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serializable;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
 
 import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -22,7 +28,7 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		File ugpath = new File(home, "ug4");
 		File ugshell = new File(new File(ugpath, "bin").getAbsolutePath(), "ugshell");
 		
-		final String cmd = ugshell + " -ex " + BiogasControl.simulationFile + " -p " + specification.toString();
+		final String cmd = ugshell + " -ex " + BiogasControlClass.simulationFile + " -p " + specification.toString();
 		//final String cmd = "ls";
 		System.out.println("cmd: " + cmd);
 		
@@ -35,13 +41,31 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
     @Override
 	public String doInBackground() throws IOException, InterruptedException {
     	Process proc = Runtime.getRuntime().exec(command, null, directory);
-    	proc.waitFor();
+    	proc.waitFor(); 	
+    	
+    	//Check if execution throws any errors
+    	final int exitVal =  proc.exitValue(); //TODO Does not show console error
+    	if(exitVal != 0 && !structure.wasCancelled()) {
+    		BufferedReader errBuffer = new BufferedReader(new InputStreamReader(proc.getErrorStream())); 
+    		String errOutput = "";
+    		if(errBuffer.readLine() != null)
+    			errOutput += errBuffer.readLine();
+    		JFrame frame = new JFrame();   		
+			frame.setLocationRelativeTo(BiogasControl.panel);
+			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+			JOptionPane.showMessageDialog(frame,
+				    "Something went wrong! \n" + errOutput.toString(),
+				    "UG Error",
+				    JOptionPane.ERROR_MESSAGE);
+			structure.cancelRun();
+			BiogasControlClass.running.setSelected(false);
+    	}
     	return proc.toString();
     }
 
     @Override
 	public void done() {
-    	SimulationPanel simPanel = BiogasControl.simulationPanelObj;
+    	SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
     	
     	if(!structure.wasCancelled()) {			
         	String logEnd = simPanel.simulationLog.getText();

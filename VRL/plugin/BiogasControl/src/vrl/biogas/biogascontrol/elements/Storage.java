@@ -5,7 +5,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -38,7 +38,7 @@ public class Storage implements SimulationElement, Serializable{
 
 	@Override
 	public void run() throws IOException {
-		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
+		SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Storage");
 		String logStart = simPanel.simulationLog.getText();

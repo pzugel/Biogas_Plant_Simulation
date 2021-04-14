@@ -1,7 +1,7 @@
 package vrl.biogas.biogascontrol.specedit;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -73,10 +73,10 @@ public class LUATableViewer implements Serializable{
         JButton loadValBtn = new JButton("Load Validation");
         JButton valBtn = new JButton("Validate");
         
-        saveBtn.setBackground(BiogasControl.BUTTON_BLUE);
-        saveAsBtn.setBackground(BiogasControl.BUTTON_BLUE);
-        loadValBtn.setBackground(BiogasControl.BUTTON_BLUE);
-        valBtn.setBackground(BiogasControl.BUTTON_BLUE);
+        saveBtn.setBackground(BiogasControlClass.BUTTON_BLUE);
+        saveAsBtn.setBackground(BiogasControlClass.BUTTON_BLUE);
+        loadValBtn.setBackground(BiogasControlClass.BUTTON_BLUE);
+        valBtn.setBackground(BiogasControlClass.BUTTON_BLUE);
         valBtn.setForeground(Color.decode("#008000"));
         
         btnPanel.add(saveBtn);

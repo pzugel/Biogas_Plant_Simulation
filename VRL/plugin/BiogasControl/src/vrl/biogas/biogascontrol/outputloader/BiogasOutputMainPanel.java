@@ -35,9 +35,9 @@ import eu.mihosoft.vrl.reflection.Pair;
 import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
-import vrl.biogas.biogascontrol.BiogasUserControlPlugin;
+import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
@@ -58,16 +58,16 @@ public class BiogasOutputMainPanel implements Serializable{
 	public static JComponent loadBiogas(
 			@ParamInfo(name = "BiogasControlPlugin",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") BiogasControlPlugin main) throws FileNotFoundException {		
-		return load(BiogasControlPlugin.struct.numHydrolysis());
+	    		options = "invokeOnChange=true") BiogasControl main) throws FileNotFoundException {		
+		return load(BiogasControl.struct.numHydrolysis());
 	}
 	
 	@MethodInfo(name="LoadUserDefined", hide=false, interactive=true, num=1)
 	public static JComponent loadBiogasUser(
 			@ParamInfo(name = "BiogasUserControlPlugin",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") BiogasUserControlPlugin main) throws FileNotFoundException {	
-		return load(BiogasUserControlPlugin.numHydrolysis);
+	    		options = "invokeOnChange=true") BiogasUserControl main) throws FileNotFoundException {	
+		return load(BiogasUserControl.numHydrolysis);
 	}
 	
 	private static JComponent load(final int numHydrolysis) throws FileNotFoundException {		
@@ -75,7 +75,7 @@ public class BiogasOutputMainPanel implements Serializable{
 		
 		JPanel upperPanel = new JPanel();
 		JButton loadBtn = new JButton("Load");
-		loadBtn.setBackground(BiogasControl.BUTTON_BLUE);
+		loadBtn.setBackground(BiogasControlClass.BUTTON_BLUE);
 		final JComboBox<String> plotSelect = new JComboBox<String>();
 		plotSelect.addItem("Methane");
 		plotSelect.addItem("Hydrolysis");
@@ -130,45 +130,62 @@ public class BiogasOutputMainPanel implements Serializable{
 				}
 				
 				if(isReady && plotSelect.getSelectedIndex() != 3) {
-					boolean envLoaded = SetupPanel.mergePreexisting;
-					if(!envLoaded && BiogasControl.iteration == 0) {
-						JFrame frame = new JFrame();
-						frame.setLocationRelativeTo(mainPanel);
-						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						JOptionPane.showMessageDialog(frame,
-							    "Wait until the first iteration has finished.",
-							    "Warning",
-							    JOptionPane.WARNING_MESSAGE);
-						updateTree(null);
+					final File environmentDir = BiogasControlClass.workingDirectory;
+					final JFrame frame = new JFrame();
+					frame.setLocationRelativeTo(mainPanel);
+					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					
+					//Methane
+					if(plotSelect.getSelectedIndex() == 0) {
+						File methaneOutputFile = new File(environmentDir, "methane" + File.separator + "outputFiles.lua");
+						if(methaneOutputFile.exists()) {
+							updateTree(methaneOutputFile);	
+						} else {
+							JOptionPane.showMessageDialog(frame,
+								    "Nothing to load.",
+								    "Warning",
+								    JOptionPane.WARNING_MESSAGE);
+							System.out.println("Methane outputFiles not found: " + methaneOutputFile);
+							updateTree(null);
+						}					
 					}
-					else if(envLoaded || BiogasControl.iteration != 0){
-						final File environmentDir = SetupPanel.environment_path;
+					
+					//Hydrolysis
+					if(plotSelect.getSelectedIndex() == 1) {
+						HydrolysisSelector.showSelector(numHydrolysis);
 						
-						//Methane
-						if(plotSelect.getSelectedIndex() == 0) {
-							File methaneOutputFile = new File(environmentDir, "methane" + File.separator + "outputFiles.lua");
-							updateTree(methaneOutputFile);
-						}
+						HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
+							@Override
+							public void actionPerformed(ActionEvent arg0) {
+								String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
+								File hydrolysisOutputFile = new File(environmentDir, reactor + File.separator + "outputFiles.lua");
+								if(hydrolysisOutputFile.exists()) {
+									updateTree(hydrolysisOutputFile);	
+								} else {
+									JOptionPane.showMessageDialog(frame,
+										    "Nothing to load.",
+										    "Warning",
+										    JOptionPane.WARNING_MESSAGE);
+									System.out.println("Hydrolysis outputFiles not found: " + hydrolysisOutputFile);
+									updateTree(null);
+								}	
+							}
+						});
 						
-						//hydrolysis
-						if(plotSelect.getSelectedIndex() == 1) {
-							HydrolysisSelector.showSelector(numHydrolysis);
-							
-							HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
-								@Override
-								public void actionPerformed(ActionEvent arg0) {
-									String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
-									File hydrolysisOutputFile = new File(environmentDir, reactor + File.separator + "outputFiles.lua");
-									updateTree(hydrolysisOutputFile);
-								}
-							});
-							
-						}
-						
-						//Storage
-						if(plotSelect.getSelectedIndex() == 2) {
-							File storageOutputFile = new File(environmentDir, "storage_hydrolyse" + File.separator + "outputFiles.lua");
-							updateTree(storageOutputFile);
+					}
+					
+					//Storage
+					if(plotSelect.getSelectedIndex() == 2) {
+						File storageOutputFile = new File(environmentDir, "storage_hydrolyse" + File.separator + "outputFiles.lua");
+						if(storageOutputFile.exists()) {
+							updateTree(storageOutputFile);	
+						} else {
+							JOptionPane.showMessageDialog(frame,
+								    "Nothing to load.",
+								    "Warning",
+								    JOptionPane.WARNING_MESSAGE);
+							System.out.println("Storage outputFiles not found: " + storageOutputFile);
+							updateTree(null);
 						}
 					}
 				}

@@ -52,7 +52,11 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 			File[] specDirsArr = new File[specDirs.size()];
 			specDirs.toArray(specDirsArr);
 			if(!firstTimestep) {
+				System.out.println("Not first timestep --> OutflowInflowUpdater");
 				// TODO Check if this works!
+				System.out.println("outflowFile: " + outflowFile);
+				System.out.println("specDirsArr: " + specDirsArr);
+				System.out.println("fractions: " + fractions);
 				OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractions);
 			}
 			
@@ -75,13 +79,11 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 					File previousSpec = new File(previousTimePath, "hydrolysis_checkpoint.lua");			
 					
 					if(previousSpec.exists()) { //not first timestep
-						System.out.println("not first timestep");
 						Files.copy(previousSpec.toPath(), 
 								hydolysisFile.toPath(), 
 								StandardCopyOption.REPLACE_EXISTING);
 						SpecfileUpdater.update_read_checkpoint(hydolysisFile, previousTimePath);
 					} else { //first timestep			
-						System.out.println("first timestep");
 						Files.copy(new File(reactorPath, "hydrolysis_startfile.lua").toPath(), 
 								hydolysisFile.toPath(), 
 								StandardCopyOption.REPLACE_EXISTING);
@@ -91,7 +93,6 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 					SpecfileUpdater.update_endtime(hydolysisFile, structure.currentTime()+1);
 						
 				} catch (IOException e) {
-					System.out.println("CATCH: " + e.toString());
 					e.printStackTrace();
 				} 	
 			}		
@@ -100,7 +101,7 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 			Thread t = new Thread(myRunnable);
 			t.start();
 		} else {
-			System.out.println("CALCELLED!");
+			System.out.println("Cancelled!");
 			ElementRunner myRunnable = new ElementRunner(structure);
 			Thread t = new Thread(myRunnable);
 			t.start();

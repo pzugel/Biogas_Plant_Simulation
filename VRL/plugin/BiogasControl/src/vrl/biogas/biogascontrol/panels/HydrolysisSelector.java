@@ -10,7 +10,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
-import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 
 public class HydrolysisSelector {
 	
@@ -37,7 +37,7 @@ public class HydrolysisSelector {
 		frame.add(panel);
 		frame.setSize(200, 70);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		frame.setLocationRelativeTo(BiogasControl.panel);
+		frame.setLocationRelativeTo(BiogasControlClass.panel);
 		frame.setVisible(true);
 		
 		okBtn.addActionListener(new ActionListener() {

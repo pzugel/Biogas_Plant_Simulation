@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -30,7 +30,7 @@ public class Pause implements SimulationElement{
 	
 	@Override
 	public void run() throws IOException, InterruptedException {
-		final SimulationPanel simPanel = BiogasControl.simulationPanelObj;
+		final SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
 		System.out.println("Pause here!");
 		simPanel.activeElement.setText("Pause");
 		String logStart = simPanel.simulationLog.getText();
@@ -42,11 +42,13 @@ public class Pause implements SimulationElement{
 				@Override
 				public void run() 
 				{
-					while(BiogasControl.pauseBtn.isSelected())
+					while(BiogasControlClass.pauseBtn.isSelected())
 					{
 						try 
 						{
-							Thread.sleep(500);
+							Thread.sleep(1000);
+							BiogasControlClass.timer.stop();
+							BiogasControlClass.timerStartTime = BiogasControlClass.timerStartTime+1000;
 						} 
 						catch (InterruptedException e) 
 						{
@@ -55,6 +57,7 @@ public class Pause implements SimulationElement{
 						}                     
 					}
 					try {
+						BiogasControlClass.timer.start();
 						String logEnd = simPanel.simulationLog.getText();
 						simPanel.simulationLog.setText(logEnd + "Continue!\n");
 						structure.runNext();

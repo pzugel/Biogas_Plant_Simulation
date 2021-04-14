@@ -10,8 +10,8 @@ import javax.swing.JPanel;
 import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 
 public class PlantPanel {
@@ -39,13 +39,13 @@ public class PlantPanel {
             	0.88, //Picutre
             	TableLayoutConstants.FILL}};
         plantPanel.setLayout(new TableLayout(size));
-        plantPanel.setBorder(BiogasControl.border);
+        plantPanel.setBorder(BiogasControlClass.border);
         
         plantPanel.setBackground(Color.WHITE);
         
         if(!userDefined) {
-    		String plantName = BiogasControlPlugin.struct.name();
-    		File iconPath = new File(BiogasControl.projectPath, "icons");
+    		String plantName = BiogasControl.struct.name();
+    		File iconPath = new File(BiogasControlClass.projectPath, "icons");
     		ImageIcon plantIcon = new ImageIcon(new File(iconPath, plantName + ".png").toString());
     		plantPanel.add(new JLabel(plantIcon), new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));	
         }

@@ -28,9 +28,9 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
-import vrl.biogas.biogascontrol.BiogasUserControlPlugin;
+import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.specedit.LUATableViewer;
 
 public class SettingsPanel {
@@ -92,7 +92,7 @@ public class SettingsPanel {
             	0.41, //Elements Panel 6 
             	TableLayoutConstants.FILL}};
         settingsPanel.setLayout(new TableLayout(size));
-        settingsPanel.setBorder(BiogasControl.border);
+        settingsPanel.setBorder(BiogasControlClass.border);
         
         JPanel line = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -129,32 +129,32 @@ public class SettingsPanel {
             	0.18, //Simulation
             	TableLayoutConstants.FILL}};
         elementsPanel.setLayout(new TableLayout(elements_size));
-        File simulationFilesPath = new File(BiogasControl.projectPath, "simulation_files");
+        File simulationFilesPath = new File(BiogasControlClass.projectPath, "simulation_files");
         System.out.println("simulationFilesPath: " + simulationFilesPath);
         JButton methane_edit = new JButton("Edit");
-        methane_edit.setBackground(BiogasControl.BUTTON_BLUE);
+        methane_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         methane_path = new JTextField(5);
         methane_path.setText(new File(simulationFilesPath, "methane.lua").toString());
         methane_path.setEditable(false);
         JButton open_methane_edit = new JButton("...");
-        open_methane_edit.setBackground(BiogasControl.BUTTON_BLUE);
+        open_methane_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         JButton hydrolysis_edit = new JButton("Edit");
-        hydrolysis_edit.setBackground(BiogasControl.BUTTON_BLUE);
+        hydrolysis_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         hydrolysis_path = new JTextField(5);
         hydrolysis_path.setText(new File(simulationFilesPath, "hydrolyse.lua").toString());
         hydrolysis_path.setEditable(false);
         JButton open_hydrolysis_edit = new JButton("...");
-        open_hydrolysis_edit.setBackground(BiogasControl.BUTTON_BLUE);
+        open_hydrolysis_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         simulation_path = new JTextField(5);
         simulation_path.setText(new File(simulationFilesPath, "Biogas.lua").toString());
         simulation_path.setEditable(false);
         JButton open_simulation_edit = new JButton("...");
-        open_simulation_edit.setBackground(BiogasControl.BUTTON_BLUE);
+        open_simulation_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         //ICONS
-		File iconPath = new File(BiogasControl.projectPath, "icons");
+		File iconPath = new File(BiogasControlClass.projectPath, "icons");
 		
 		File hydroIcon_path = new File(iconPath, "hydrolyse_reactor.png");
 		File methIcon_path = new File(iconPath, "methane_reactor.png");
@@ -197,12 +197,12 @@ public class SettingsPanel {
 					// TODO Compare with currenttime / struct time
 				}
 				
-				if(BiogasControl.running.isSelected()) {
+				if(BiogasControlClass.running.isSelected()) {
 					int cTime;
 					if(userDefined) {
-						cTime = BiogasControl.currenttime;
+						cTime = BiogasControlClass.currenttime;
 					} else {
-						cTime = BiogasControlPlugin.struct.currentTime();
+						cTime = BiogasControl.struct.currentTime();
 					}
 					
 					if((Integer) simEndtime.getValue() < cTime+1) {
@@ -221,10 +221,10 @@ public class SettingsPanel {
 				if(SetupPanel.environment_ready) { //Open Via Selector
 					int numHydrolysis;
 					if(userDefined) {
-						numHydrolysis = BiogasUserControlPlugin.numHydrolysis;
+						numHydrolysis = BiogasUserControl.numHydrolysis;
 						//TODO How to get number of hydrolysis reacotors when user defined?
 					} else {
-						numHydrolysis = BiogasControlPlugin.struct.numHydrolysis();
+						numHydrolysis = BiogasControl.struct.numHydrolysis();
 					}
 					HydrolysisSelector.showSelector(numHydrolysis);
 					HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
@@ -241,15 +241,15 @@ public class SettingsPanel {
 									    "Warning",
 									    JOptionPane.WARNING_MESSAGE);
 								
-								File hydrolysisPath = new File(BiogasControl.workingDirectory, reactor);
+								File hydrolysisPath = new File(BiogasControlClass.workingDirectory, reactor);
 								
-								if(BiogasControl.running.isSelected()) {
+								if(BiogasControlClass.running.isSelected()) {
 									File hydrolysisTimePath;
 									
 									if(userDefined) {
-										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControl.currenttime));
+										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlClass.currenttime));
 									} else {
-										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlPlugin.struct.currentTime()));	
+										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControl.struct.currentTime()));	
 									}
 														
 									File specFile = new File(hydrolysisTimePath, "hydrolysis_checkpoint.lua");								
@@ -268,7 +268,7 @@ public class SettingsPanel {
 								frame.add(LUATableViewer.panel);
 								frame.setSize(700, 600);
 								frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-								frame.setLocationRelativeTo(BiogasControl.panel);
+								frame.setLocationRelativeTo(BiogasControlClass.panel);
 								frame.setVisible(true);
 							} catch (FileNotFoundException e) {
 								// TODO Auto-generated catch block
@@ -286,7 +286,7 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControl.panel);
+						frame.setLocationRelativeTo(BiogasControlClass.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -303,15 +303,15 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click methane edit");
 				if(SetupPanel.environment_ready) {
-					File methanePath = new File(BiogasControl.workingDirectory, "methane");
+					File methanePath = new File(BiogasControlClass.workingDirectory, "methane");
 					
-					if(BiogasControl.running.isSelected()) {
+					if(BiogasControlClass.running.isSelected()) {
 						File methaneTimePath;
 						
 						if(userDefined) {
-							methaneTimePath = new File(methanePath, String.valueOf(BiogasControl.currenttime));
+							methaneTimePath = new File(methanePath, String.valueOf(BiogasControlClass.currenttime));
 						} else {
-							methaneTimePath = new File(methanePath, String.valueOf(BiogasControlPlugin.struct.currentTime()));	
+							methaneTimePath = new File(methanePath, String.valueOf(BiogasControl.struct.currentTime()));	
 						}
 											
 						File specFile = new File(methaneTimePath, "methane_checkpoint.lua");								
@@ -331,7 +331,7 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControl.panel);
+						frame.setLocationRelativeTo(BiogasControlClass.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block
@@ -347,7 +347,7 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControl.panel);
+						frame.setLocationRelativeTo(BiogasControlClass.panel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
 						// TODO Auto-generated catch block

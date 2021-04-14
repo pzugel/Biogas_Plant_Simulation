@@ -16,10 +16,9 @@ public class ElementRunner implements Runnable, Serializable{
 	@Override
 	public void run() {
 		try {
-			System.out.println("Element Runner!");
+			System.out.println("Element Runner --> ");
 			structure.runNext();
 		} catch (IOException e) {
-			System.out.println("CATCH Element Runner");
 			e.printStackTrace();
 		}		
 	}

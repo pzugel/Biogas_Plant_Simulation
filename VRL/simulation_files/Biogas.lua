@@ -5,6 +5,7 @@
 
 ug_load_script("ug_util.lua") 
 
+
 local pfile = util.GetParam ("-p"			,	"")
 local sfile = util.GetParam ("-s"			,	"")
 
@@ -16,10 +17,12 @@ if (pfile == "") and (sfile == "") then
 end
 local pFileLoaded = false
 if (pfile ~= "") then
-	ug_load_script(pfile)
+   ug_load_script(pfile)
+	--problem = require(pfile)
 	print("LOADED "..pfile)
 	pFileLoaded = true
 end
+
 if (sfile ~= "") then
 	ug_load_script(sfile)
 	if (not stoiInfo) then
@@ -90,9 +93,7 @@ if (sfile ~= "") then
 					exit()
 				end
 			elseif (purpose == "inoculum") then
-				if not problem.initialValues then
-					problem.initialValues = {}
-				end
+				problem.initialValues = problem.initialValues or {}
 				problem.initialValues.stoidisintegration = calculatedStoi
 				problem.initialValues.drymass = info.values.drymass
 			end
@@ -113,6 +114,14 @@ ug4_home			=	ug_get_root_path().."/"
 app_home			=	ug4_home.."apps/biogas_app/"
 common_scripts		= 	app_home.."scripts/"
 geom_home			= 	app_home.."geometry/"
+
+io_home  = ""
+if (BIOGAS_MULTISTAGE_REACTOR ~= nil) then
+  local myrank = BIOGAS_MULTISTAGE_REACTOR.global_rank
+  local myreactor = BIOGAS_MULTISTAGE_REACTOR.reactors[myrank+1]
+  io_home = myreactor.subdir
+  
+end
 
 -----------------------------------------------------------------
 -- Execute main script

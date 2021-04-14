@@ -24,6 +24,5 @@ public interface Structure {
 	public void run(int currentStarttime) throws IOException;
 	public void runNext() throws IOException;
 	public boolean hasNext();
-	//public void breakRun();
-	
+	public void fillQueue();
 }

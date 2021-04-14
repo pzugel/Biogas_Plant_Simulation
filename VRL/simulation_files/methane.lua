@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"simpleMethane_stage"},
+		activeReactions={"Methane_Stage"},
 	},
 	numericalSetup={
 		sim_starttime=0,

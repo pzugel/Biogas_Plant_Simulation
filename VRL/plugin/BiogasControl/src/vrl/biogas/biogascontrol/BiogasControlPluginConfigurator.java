@@ -11,10 +11,11 @@ import vrl.biogas.biogascontrol.elements.SimulationElement;
 import vrl.biogas.biogascontrol.outputloader.BiogasOutputMainPanel;
 import vrl.biogas.biogascontrol.outputloader.BiogasPlotter;
 import vrl.biogas.biogascontrol.structures.*;
-import vrl.biogas.biogascontrol.userstructure.Hydrolysis;
+import vrl.biogas.biogascontrol.userstructure.UserHydrolysis;
+import vrl.biogas.biogascontrol.userstructure.UserStart;
 
 /*
- * Export as runnable JAR
+ * Eclipse: Export as runnable JAR
  * -> Package required libraries into generated JAR
  */
 public class BiogasControlPluginConfigurator extends VPluginConfigurator{
@@ -43,22 +44,27 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 
 	   // register plugin with canvas
 	   if (api instanceof VPluginAPI) {
-	       VPluginAPI vapi = (VPluginAPI) api;
-	       vapi.addComponent(BiogasControlPlugin.class);
+		   VPluginAPI vapi = (VPluginAPI) api;
 	       vapi.addTypeRepresentation(MainPanelContainerType.class);
-	       vapi.addComponent(STRUCT_2_STAGE.class);
+	       
+	       // Main
+	       vapi.addComponent(BiogasControl.class);	
+	       
+	       //Structures
 	       vapi.addComponent(Structure.class);
-	       vapi.addComponent(SimulationElement.class);
+	       vapi.addComponent(STRUCT_2_STAGE.class);      
 	       
-	       vapi.addComponent(MainPanelContainerType.class); //Needed for the BiogasPlotter
-	       vapi.addComponent(UserStructure.class);
-	       vapi.addComponent(BiogasUserControlPlugin.class);
-	       vapi.addComponent(Hydrolysis.class);
+	       vapi.addComponent(SimulationElement.class); // Prob not needed
 	       
-	       //vapi.addComponent(BiogasControl.class); //Not sure if needed
-	       
-	       vapi.addComponent(BiogasOutputMainPanel.class);
+	       //For the BiogasPlotter
+	       vapi.addComponent(MainPanelContainerType.class); // Check if needed
 	       vapi.addComponent(BiogasPlotter.class);
+	       vapi.addComponent(BiogasOutputMainPanel.class);
+	       
+	       //For user defined strucutres
+	       vapi.addComponent(BiogasUserControl.class);
+	       vapi.addComponent(UserStart.class);	
+	       vapi.addComponent(UserHydrolysis.class);	                     
 	       vapi.addComponent(Iterator.class);
 	   }
 	}
@@ -71,5 +77,5 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	@Override
 	public void init(InitPluginAPI iApi) {
 	   // nothing to init
-	  }
+	}
 }

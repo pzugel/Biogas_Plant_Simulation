@@ -15,8 +15,8 @@ import javax.swing.SwingConstants;
 import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
-import vrl.biogas.biogascontrol.BiogasControlPlugin;
 
 public class SimulationPanel {
 	static JPanel simulationPanel;
@@ -51,7 +51,7 @@ public class SimulationPanel {
 		if(userDefined) {
 			plantStructure.setText("User defined");
 		} else {
-			plantStructure.setText(BiogasControlPlugin.struct.name());
+			plantStructure.setText(BiogasControl.struct.name());
 		}
 				
 		activeElement = new JTextField(10);
@@ -117,7 +117,7 @@ public class SimulationPanel {
             	TableLayoutConstants.FILL, //TextArea 8
             	0.06}};
         simulationPanel.setLayout(new TableLayout(size));
-        simulationPanel.setBorder(BiogasControl.border);
+        simulationPanel.setBorder(BiogasControlClass.border);
         
         simulationPanel.add(plantStructureLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         simulationPanel.add(activeElementLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));

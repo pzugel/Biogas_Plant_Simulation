@@ -25,39 +25,39 @@ public class Iterator implements java.io.Serializable {
 	public void run(
 	@ParamInfo(name = "MainPanel",
 			nullIsValid = false,
-			options = "invokeOnChange=true")BiogasUserControlPlugin panel,
+			options = "invokeOnChange=true")BiogasUserControl panel,
 	@ParamInfo(name = "Structure",
 			nullIsValid = false,
 			options = "invokeOnChange=true")Object a) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		 
-		int starttime = (Integer) BiogasUserControlPlugin.settingsPanelObj.simStarttime.getValue();
-		int endtime = (Integer) BiogasUserControlPlugin.settingsPanelObj.simEndtime.getValue(); 
+		int starttime = (Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue();
+		int endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue(); 
 		
 		Method[] methods = a.getClass().getMethods();
 		Method runMethod = methods[0];
 	    
-		BiogasUserControlPlugin.iteration = 0;    
-		BiogasUserControlPlugin.currenttime = starttime; 
+		BiogasUserControl.iteration = 0;    
+		BiogasUserControl.currenttime = starttime; 
 		
 		boolean isReady = SetupPanel.environment_ready;
 		if(isReady) {
-			BiogasUserControlPlugin.running.setSelected(true); 
+			BiogasUserControl.running.setSelected(true); 
 			
 			System.out.println("Time " + starttime + " --> " + endtime);
-			while(BiogasUserControlPlugin.currenttime < endtime) {
+			while(BiogasUserControl.currenttime < endtime) {
 				System.out.println("Current: " + starttime);
-				BiogasUserControlPlugin.simulationPanelObj.iteration.setText(String.valueOf(BiogasUserControlPlugin.iteration));
+				BiogasUserControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasUserControl.iteration));
 				runMethod.invoke(a);  
-				endtime = (Integer) BiogasUserControlPlugin.settingsPanelObj.simEndtime.getValue();
-				++ BiogasUserControlPlugin.currenttime;
-				++ BiogasUserControlPlugin.iteration;
+				endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue();
+				++ BiogasUserControl.currenttime;
+				++ BiogasUserControl.iteration;
 			}
 		    
-			BiogasUserControlPlugin.running.setSelected(false); 
+			BiogasUserControl.running.setSelected(false); 
 		}
 		else {
 			JFrame frame = new JFrame();
-			frame.setLocationRelativeTo(BiogasUserControlPlugin.panel);
+			frame.setLocationRelativeTo(BiogasUserControl.panel);
 			frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			JOptionPane.showMessageDialog(frame,
 				    "You need to set up a working environment before starting the simulation.",
