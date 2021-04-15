@@ -7,7 +7,6 @@ import eu.mihosoft.vrl.system.PluginDependency;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
-import vrl.biogas.biogascontrol.elements.SimulationElement;
 import vrl.biogas.biogascontrol.outputloader.BiogasOutputMainPanel;
 import vrl.biogas.biogascontrol.outputloader.BiogasPlotter;
 import vrl.biogas.biogascontrol.structures.*;
@@ -54,7 +53,7 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       vapi.addComponent(Structure.class);
 	       vapi.addComponent(STRUCT_2_STAGE.class);      
 	       
-	       vapi.addComponent(SimulationElement.class); // Prob not needed
+	       //vapi.addComponent(SimulationElement.class); // Prob not needed
 	       
 	       //For the BiogasPlotter
 	       vapi.addComponent(MainPanelContainerType.class); // Check if needed

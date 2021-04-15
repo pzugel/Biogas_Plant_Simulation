@@ -47,12 +47,12 @@ public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Seri
 		reactorQueue = new ArrayList<SimulationElement>();
 		reactorQueue.add(new Start(this));
 		String[] reactorNames = {"hydrolyse_0", "hydrolyse_1"};
-		double[] fractions = {0.5, 0.5};
-		reactorQueue.add(new HydrolysisSetup(this, dir, reactorNames, fractions, firstTimestep));
+		reactorQueue.add(new HydrolysisSetup(this, dir, reactorNames));
 		reactorQueue.add(new Hydrolysis(this, dir, 0));
 		reactorQueue.add(new Hydrolysis(this, dir, 1));		
-		reactorQueue.add(new Storage(this, dir, reactorNames));
+		reactorQueue.add(new StorageHydrolysis(this, dir, reactorNames));
 		reactorQueue.add(new Methane(this, dir));
+		reactorQueue.add(new MethaneMerge(this, dir));
 		reactorQueue.add(new Pause(this));
 		reactorQueue.add(new Stop(this));
 	}

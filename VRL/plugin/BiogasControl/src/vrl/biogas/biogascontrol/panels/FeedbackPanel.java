@@ -7,9 +7,12 @@ import javax.swing.SwingConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.BiogasUserControl;
+
 public class FeedbackPanel {
 
-	static JPanel feedbackPanel;
+	private JPanel feedbackPanel;
 	
 	public FeedbackPanel() {
 		feedbackPanel = new JPanel();
@@ -26,25 +29,35 @@ public class FeedbackPanel {
 	}
 	
 	private void createPanel(boolean userDefined) {
-		final JSlider slider1 = new JSlider(SwingConstants.VERTICAL,0, 100, 100);
+		int numHydrolysis;
+		if(userDefined) {
+			numHydrolysis = BiogasUserControl.numHydrolysis;
+		}
+		else {
+			numHydrolysis = BiogasControl.struct.numHydrolysis();
+		}
 		
-		slider1.setMajorTickSpacing(20);
-		slider1.setMinorTickSpacing(5);
-		slider1.setPaintTicks(true);
-		slider1.setPaintLabels(true);
-		slider1.setSnapToTicks(true);
+		for(int i=0; i<numHydrolysis; i++) {
+			final JSlider slider = new JSlider(SwingConstants.VERTICAL,0, 100, 100);		
+			slider.setMajorTickSpacing(20);
+			slider.setMinorTickSpacing(5);
+			slider.setPaintTicks(true);
+			slider.setPaintLabels(true);
+			slider.setSnapToTicks(true);
+			
+			final JTextField field1 = new JTextField();
+			field1.setText(String.valueOf(slider.getValue()) + "%");
+			
+			feedbackPanel.add(slider);
+			feedbackPanel.add(field1);
+			
+			slider.addChangeListener(new ChangeListener() {
+				@Override
+				public void stateChanged(ChangeEvent arg0) {
+					field1.setText(String.valueOf(slider.getValue()) + "%");
+				}	
+			});	
+		}
 		
-		final JTextField field1 = new JTextField();
-		field1.setText(String.valueOf(slider1.getValue()) + "%");
-		
-		feedbackPanel.add(slider1);
-		feedbackPanel.add(field1);
-		
-		slider1.addChangeListener(new ChangeListener() {
-			@Override
-			public void stateChanged(ChangeEvent arg0) {
-				field1.setText(String.valueOf(slider1.getValue()) + "%");
-			}	
-		});
 	}
 }

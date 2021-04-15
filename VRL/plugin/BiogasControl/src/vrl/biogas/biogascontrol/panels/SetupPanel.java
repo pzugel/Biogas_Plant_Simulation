@@ -41,18 +41,17 @@ import java.util.Scanner;
 
 
 public class SetupPanel {
-	private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
+	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	
-	static JPanel setupPanel;
-	public static boolean environment_ready;
-	public File environment_path;
-	static JTree environment_tree;
-	static DefaultTreeModel environment_tree_model;
-	static JTextField dir;
+	private JTree environment_tree;
+	private DefaultTreeModel environment_tree_model;
+	private File environment_path;
+	private JTextField dir;
+	private JButton clear_Btn;
 	
-	public static boolean mergePreexisting; //TODO: Check if needs to be static
-	
-	public static JButton clear_Btn;
+	public JPanel setupPanel;
+	public boolean environment_ready;		
+	public boolean mergePreexisting;	
 	
 	public SetupPanel() {
 		new SetupPanel(false);
@@ -113,7 +112,7 @@ public class SetupPanel {
             	TableLayoutConstants.FILL,
             	0.06}};
         setupPanel.setLayout(new TableLayout(size));
-        setupPanel.setBorder(BiogasControlClass.border);
+        setupPanel.setBorder(BiogasControlClass.BORDER);
         
         setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstants.LEFT, TableLayoutConstants.CENTER));
         setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
@@ -303,7 +302,7 @@ public class SetupPanel {
 		File dir = new File(path, "biogasVRL_" + sdf.format(timestamp));
 		BiogasControlClass.workingDirectory = dir;
 		BiogasControlClass.simulationPanelObj.workingDirectory.setText(dir.toString());
-		SetupPanel.mergePreexisting = false;
+		this.mergePreexisting = false;
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
 		File simulationFiles = new File(BiogasControlClass.projectPath, "simulation_files");
@@ -334,7 +333,7 @@ public class SetupPanel {
 				newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
 			}
 			
-			//Storage
+			//Storage Hydrolysis
 			if(BiogasControl.struct.storage()) {
 				File storageDir = new File(dir, "storage_hydrolyse");
 				if (!storageDir.exists()){
@@ -368,12 +367,13 @@ public class SetupPanel {
 				newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
 			}
 			
-			//Storage
-			File storageDir = new File(dir, "storage_hydrolyse");
-			if (!storageDir.exists()){
-				storageDir.mkdirs();
+			//Storage Hydrolysis
+			File hydrolysisStorageDir = new File(dir, "storage_hydrolyse");
+			if (!hydrolysisStorageDir.exists()){
+				hydrolysisStorageDir.mkdirs();
 			}	
 			newRoot.add(new DefaultMutableTreeNode("storage_hydrolyse"));
+			
 		}
 		environment_tree_model.setRoot(newRoot);
 		environment_tree_model.reload();

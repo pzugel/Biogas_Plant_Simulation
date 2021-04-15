@@ -27,9 +27,10 @@ import vrl.biogas.biogascontrol.panels.SimulationPanel;
 
 public class BiogasControlClass {
 		
-	private final static int ONE_SECOND = 1000;
+	private final int ONE_SECOND = 1000;
 	public static final Color BUTTON_BLUE = Color.decode("#F0F6FF");
-	public static final Border border = BorderFactory.createLineBorder(Color.black);
+	public static final Color BUTTON_GREY = Color.decode("#C1C4C9");
+	public static final Border BORDER = BorderFactory.createLineBorder(Color.BLACK);
 	
 	public static File projectPath;
 	public static int currenttime;
@@ -52,7 +53,35 @@ public class BiogasControlClass {
 	public static SettingsPanel settingsPanelObj;
 	public static FeedbackPanel feedbackPanelObj;	
 	
-	BiogasControlClass(){
+	BiogasControlClass(){		
+		pauseBtn = new JToggleButton("Pause");
+		pauseBtn.setBackground(BUTTON_BLUE);
+		pauseBtn.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				if(pauseBtn.isSelected()) {
+					pauseBtn.setBackground(BUTTON_GREY);
+				} else {
+					pauseBtn.setBackground(BUTTON_BLUE);
+				}			
+			}		
+		});
+				
+        stopBtn = new JToggleButton("Stop");
+        stopBtn.setBackground(BUTTON_BLUE);
+        stopBtn.addChangeListener(new ChangeListener() {
+
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				if(stopBtn.isSelected()) {
+					stopBtn.setBackground(BUTTON_GREY);
+				} else {
+					stopBtn.setBackground(BUTTON_BLUE);
+				}			
+			}		
+		});
+
 		timer = new Timer(ONE_SECOND, new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
             	long currentTime = System.currentTimeMillis();
@@ -88,6 +117,8 @@ public class BiogasControlClass {
 		});
 		
 		breakBtn = new JButton("Break");
+		breakBtn.setBackground(BUTTON_BLUE);
+        breakBtn.setForeground(Color.RED);
 		breakBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

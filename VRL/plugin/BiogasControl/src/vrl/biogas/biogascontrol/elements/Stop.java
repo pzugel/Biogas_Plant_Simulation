@@ -9,8 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControlClass;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -38,17 +37,17 @@ public class Stop implements SimulationElement, Serializable{
 	@Override
 	public void run() throws IOException {
 		System.out.println("Stop here!");
-		SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
+		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Stop");
 		String logStart = simPanel.simulationLog.getText();
 		simPanel.simulationLog.setText(logStart + "** Stop ... ");
-		int endtime = (Integer) BiogasControlClass.settingsPanelObj.simEndtime.getValue();
+		int endtime = (Integer) BiogasControl.settingsPanelObj.simEndtime.getValue();
 		
 		if(!structure.wasCancelled()) {
-			if(BiogasControlClass.stopBtn.isSelected()) {
-				writeSummary(BiogasControlClass.workingDirectory, true);
-				BiogasControlClass.running.setSelected(false);
+			if(BiogasControl.stopBtn.isSelected()) {
+				writeSummary(BiogasControl.workingDirectory, true);
+				BiogasControl.running.setSelected(false);
 				System.out.println("Simulation stopped!");
 				
 				String logEnd = simPanel.simulationLog.getText();
@@ -59,8 +58,8 @@ public class Stop implements SimulationElement, Serializable{
 					
 					String logEnd = simPanel.simulationLog.getText();
 					simPanel.simulationLog.setText(logEnd + "Continue!\n");
-					++ BiogasControlClass.iteration;					
-					BiogasControlClass.simulationPanelObj.iteration.setText(String.valueOf(BiogasControlClass.iteration));
+					++ BiogasControl.iteration;					
+					BiogasControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasControl.iteration));
 					structure.incrementCurrentTime();
 								
 					
@@ -87,9 +86,9 @@ public class Stop implements SimulationElement, Serializable{
 					
 				}
 				else {
-					writeSummary(BiogasControlClass.workingDirectory, true);
-					SetupPanel.mergePreexisting = true;
-					BiogasControlClass.running.setSelected(false);
+					writeSummary(BiogasControl.workingDirectory, true);
+					BiogasControl.setupPanelObj.mergePreexisting = true;
+					BiogasControl.running.setSelected(false);
 					String logEnd = simPanel.simulationLog.getText();
 					simPanel.simulationLog.setText(logEnd + "Simulation finished!\n");
 					
@@ -97,7 +96,7 @@ public class Stop implements SimulationElement, Serializable{
 			}
 		}
 		else {
-			writeSummary(BiogasControlClass.workingDirectory, false);
+			writeSummary(BiogasControl.workingDirectory, false);
 			String logEnd = simPanel.simulationLog.getText();
 			simPanel.simulationLog.setText(logEnd + "Cancelled!\n");
 		}
@@ -108,11 +107,11 @@ public class Stop implements SimulationElement, Serializable{
 		summary += "WORKING_DIR=" + dir + "\n";
 		summary += "STRUCTURE=" + structure.name() + "\n";
 		summary += "NUM_HYDROLYSIS=" + structure.numHydrolysis() + "\n";
-		summary += "STARTTIME=" + BiogasControlClass.settingsPanelObj.simStarttime.getValue() + "\n";
+		summary += "STARTTIME=" + BiogasControl.settingsPanelObj.simStarttime.getValue() + "\n";
 		int endtime = structure.currentTime()+1;
 		summary += "ENDTIME=" + endtime + "\n";
-		summary += "PREEXISTING=" + SetupPanel.mergePreexisting + "\n";
-		summary += "RUNTIME=" + BiogasControlClass.simulationPanelObj.runtime.getText() + "\n";
+		summary += "PREEXISTING=" + BiogasControl.setupPanelObj.mergePreexisting + "\n";
+		summary += "RUNTIME=" + BiogasControl.simulationPanelObj.runtime.getText() + "\n";
 		
 		File summaryFile = new File(dir, "simulation_summary.txt");		
 		
@@ -128,7 +127,7 @@ public class Stop implements SimulationElement, Serializable{
 				existingSummary += lineIter.nextLine() + "\n";
 			}
 			lineIter.close();
-			existingSummary += "RUNTIME=" + BiogasControlClass.simulationPanelObj.runtime.getText() + "\n";
+			existingSummary += "RUNTIME=" + BiogasControl.simulationPanelObj.runtime.getText() + "\n";
 			
 			String endtimeString = "";
 			Pattern pEndtime = Pattern.compile("ENDTIME=[0-9]+");
@@ -154,8 +153,6 @@ public class Stop implements SimulationElement, Serializable{
 			FileWriter summaryWriter = new FileWriter(summaryFile, false);
 			summaryWriter.write(existingSummary);
 			summaryWriter.close();
-		}
-		
-		
+		}		
 	}
 }

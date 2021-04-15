@@ -10,10 +10,8 @@ import javax.swing.WindowConstants;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import vrl.biogas.biogascontrol.BiogasUserControl;
-import vrl.biogas.biogascontrol.panels.SettingsPanel;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
 
-@ComponentInfo(name="Start", category="BiogasUserElements")
+@ComponentInfo(name="Start", category="Biogas_UserElements")
 public class UserStart extends UserStructureFunctions implements Serializable{
 private static final long serialVersionUID=1L;
 	
@@ -21,14 +19,14 @@ private static final long serialVersionUID=1L;
 	public void run() throws InterruptedException, IOException{
 		boolean firstTimestep = ((Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue() == BiogasUserControl.currenttime);
 		
-		if(SetupPanel.environment_ready) {
+		if(BiogasUserControl.setupPanelObj.environment_ready) {
 			
 			if(firstTimestep) {
-				BiogasUserControl.simulationFile = SettingsPanel.simulation_path.getText();
+				BiogasUserControl.simulationFile = BiogasUserControl.settingsPanelObj.simulation_path.getText();
 				BiogasUserControl.simulationPanelObj.simulationLog.setText("**************************************\n" 
 						+ "** New Simulation\n"
-						+ "** Hydrolysis File: " + SettingsPanel.hydrolysis_path.getText() + "\n"
-						+ "** Methane File: " + SettingsPanel.methane_path.getText() + "\n"
+						+ "** Hydrolysis File: " + BiogasUserControl.settingsPanelObj.hydrolysis_path.getText() + "\n"
+						+ "** Methane File: " + BiogasUserControl.settingsPanelObj.methane_path.getText() + "\n"
 						+ "** Simulation File: " + BiogasUserControl.simulationFile + "\n"
 						+ "**************************************\n");
 				BiogasUserControl.iteration = 0;

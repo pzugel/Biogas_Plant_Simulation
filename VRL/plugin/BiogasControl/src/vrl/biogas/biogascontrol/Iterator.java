@@ -6,7 +6,6 @@ import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
 
 import java.lang.reflect.Method;
 
@@ -28,18 +27,18 @@ public class Iterator implements java.io.Serializable {
 			options = "invokeOnChange=true")BiogasUserControl panel,
 	@ParamInfo(name = "Structure",
 			nullIsValid = false,
-			options = "invokeOnChange=true")Object a) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+			options = "invokeOnChange=true")Object structure) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
 		 
 		int starttime = (Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue();
 		int endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue(); 
 		
-		Method[] methods = a.getClass().getMethods();
+		Method[] methods = structure.getClass().getMethods();
 		Method runMethod = methods[0];
 	    
 		BiogasUserControl.iteration = 0;    
 		BiogasUserControl.currenttime = starttime; 
 		
-		boolean isReady = SetupPanel.environment_ready;
+		boolean isReady = BiogasUserControl.setupPanelObj.environment_ready;
 		if(isReady) {
 			BiogasUserControl.running.setSelected(true); 
 			
@@ -47,7 +46,7 @@ public class Iterator implements java.io.Serializable {
 			while(BiogasUserControl.currenttime < endtime) {
 				System.out.println("Current: " + starttime);
 				BiogasUserControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasUserControl.iteration));
-				runMethod.invoke(a);  
+				runMethod.invoke(structure);  
 				endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue();
 				++ BiogasUserControl.currenttime;
 				++ BiogasUserControl.iteration;

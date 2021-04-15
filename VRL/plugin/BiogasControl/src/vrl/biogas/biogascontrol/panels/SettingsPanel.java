@@ -40,9 +40,9 @@ public class SettingsPanel {
 	public JSpinner simEndtime;
 	public JCheckBox autoCleanup;
 	
-	public static JTextField hydrolysis_path;
-	public static JTextField methane_path;
-	public static JTextField simulation_path;
+	public JTextField hydrolysis_path;
+	public JTextField methane_path;
+	public JTextField simulation_path;
 	
 	public SettingsPanel() {
 		settingsPanel = new JPanel();
@@ -92,7 +92,7 @@ public class SettingsPanel {
             	0.41, //Elements Panel 6 
             	TableLayoutConstants.FILL}};
         settingsPanel.setLayout(new TableLayout(size));
-        settingsPanel.setBorder(BiogasControlClass.border);
+        settingsPanel.setBorder(BiogasControlClass.BORDER);
         
         JPanel line = new JPanel() {
 			private static final long serialVersionUID = 1L;
@@ -218,7 +218,7 @@ public class SettingsPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click hydro edit");
-				if(SetupPanel.environment_ready) { //Open Via Selector
+				if(BiogasControlClass.setupPanelObj.environment_ready) { //Open Via Selector
 					int numHydrolysis;
 					if(userDefined) {
 						numHydrolysis = BiogasUserControl.numHydrolysis;
@@ -226,11 +226,12 @@ public class SettingsPanel {
 					} else {
 						numHydrolysis = BiogasControl.struct.numHydrolysis();
 					}
-					HydrolysisSelector.showSelector(numHydrolysis);
-					HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
+					final HydrolysisSelector selector = new HydrolysisSelector();
+					selector.showSelector(numHydrolysis);
+					selector.okBtn.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {
-							String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
+							String reactor = (String) selector.reactorList.getSelectedItem();
 							System.out.println("Selected: " + reactor);
 							try {
 								JFrame messageFrame = new JFrame();
@@ -302,7 +303,7 @@ public class SettingsPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				System.out.println("Click methane edit");
-				if(SetupPanel.environment_ready) {
+				if(BiogasControlClass.setupPanelObj.environment_ready) {
 					File methanePath = new File(BiogasControlClass.workingDirectory, "methane");
 					
 					if(BiogasControlClass.running.isSelected()) {

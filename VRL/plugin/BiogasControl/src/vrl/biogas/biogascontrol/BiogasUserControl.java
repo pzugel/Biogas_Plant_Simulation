@@ -1,6 +1,5 @@
 package vrl.biogas.biogascontrol;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,7 +10,6 @@ import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
@@ -86,12 +84,7 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
             	0.82, //Panel
             	TableLayoutConstants.FILL}};
 
-        pauseBtn = new JToggleButton("Pause");
-        pauseBtn.setBackground(BUTTON_BLUE);
-        stopBtn = new JToggleButton("Stop");
-        stopBtn.setBackground(BUTTON_BLUE);
-        breakBtn.setBackground(BUTTON_BLUE);
-        breakBtn.setForeground(Color.RED);
+        
         panel.setLayout(new TableLayout(size));
         
         panel.add(pauseBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));

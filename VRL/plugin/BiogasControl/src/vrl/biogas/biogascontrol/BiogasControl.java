@@ -1,6 +1,5 @@
 package vrl.biogas.biogascontrol;
 
-import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -15,7 +14,6 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
-import javax.swing.JToggleButton;
 import javax.swing.WindowConstants;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
@@ -98,12 +96,6 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
              {0.04, 0.06, 0.03, 0.82, TableLayoutConstants.FILL}};
         JButton startBtn = new JButton("Start");
         startBtn.setBackground(BUTTON_BLUE);
-        pauseBtn = new JToggleButton("Pause");
-        pauseBtn.setBackground(BUTTON_BLUE);
-        stopBtn = new JToggleButton("Stop");
-        stopBtn.setBackground(BUTTON_BLUE);
-        breakBtn.setBackground(BUTTON_BLUE);
-        breakBtn.setForeground(Color.RED);
         panel.setLayout(new TableLayout(size));
         
         panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
@@ -115,12 +107,12 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 	    startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if(SetupPanel.environment_ready) {
-					simulationFile = SettingsPanel.simulation_path.getText();
+				if(setupPanelObj.environment_ready) {
+					simulationFile = settingsPanelObj.simulation_path.getText();
 					simulationPanelObj.simulationLog.setText("**************************************\n" 
 							+ "** New Simulation\n"
-							+ "** Hydrolysis File: " + SettingsPanel.hydrolysis_path.getText() + "\n"
-							+ "** Methane File: " + SettingsPanel.methane_path.getText() + "\n"
+							+ "** Hydrolysis File: " + settingsPanelObj.hydrolysis_path.getText() + "\n"
+							+ "** Methane File: " + settingsPanelObj.methane_path.getText() + "\n"
 							+ "** Simulation File: " + simulationFile + "\n"
 							+ "**************************************\n");
 					int starttime = (Integer) settingsPanelObj.simStarttime.getValue();
@@ -156,7 +148,6 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 	    return panel;
 	}
 	
-	@MethodInfo(hide=true)
 	public static void main(String args[]) throws IOException, InterruptedException{
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());

@@ -17,6 +17,7 @@ public interface Structure {
 	public boolean storage();
 	public boolean feedback();
 	public int currentTime();
+	public boolean firstTimestep();
 	public void incrementCurrentTime();
 	public void cancelRun();
 	public boolean wasCancelled();

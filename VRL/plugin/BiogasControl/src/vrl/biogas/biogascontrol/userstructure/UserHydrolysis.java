@@ -10,10 +10,10 @@ import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasUserControl;
-import vrl.biogas.biogascontrol.elements.OutflowInflowUpdater;
-import vrl.biogas.biogascontrol.elements.SpecfileUpdater;
+import vrl.biogas.biogascontrol.elements.functions.OutflowInflowUpdater;
+import vrl.biogas.biogascontrol.elements.functions.SpecfileUpdater;
 
-@ComponentInfo(name="Hydrolysis", category="BiogasUserElements")
+@ComponentInfo(name="Hydrolysis", category="Biogas_UserElements")
 public class UserHydrolysis extends UserStructureFunctions implements java.io.Serializable{
 	private static final long serialVersionUID=1L;
 	

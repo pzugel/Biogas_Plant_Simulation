@@ -4,7 +4,8 @@ import java.io.File;
 import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControlClass;
+import vrl.biogas.biogascontrol.BiogasControl;
+import vrl.biogas.biogascontrol.elements.functions.ElementRunner;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -32,9 +33,9 @@ public class Start implements SimulationElement, Serializable{
 	@Override
 	public void run() throws InterruptedException {
 		System.out.println("Start here!");
-		SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
+		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		String log = simPanel.simulationLog.getText();
-		simPanel.simulationLog.setText(log + "Iteration " + BiogasControlClass.iteration + "\n");
+		simPanel.simulationLog.setText(log + "Iteration " + BiogasControl.iteration + "\n");
 		System.out.println("Start done!");
 		ElementRunner myRunnable = new ElementRunner(structure);
 		Thread t = new Thread(myRunnable);

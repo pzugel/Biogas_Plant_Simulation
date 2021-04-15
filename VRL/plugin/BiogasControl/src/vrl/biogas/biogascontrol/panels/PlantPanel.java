@@ -16,7 +16,7 @@ import vrl.biogas.biogascontrol.BiogasControl;
 
 public class PlantPanel {
 	
-	static JPanel plantPanel;
+	private JPanel plantPanel;
 	
 	public PlantPanel() {
 		plantPanel = new JPanel();
@@ -39,7 +39,7 @@ public class PlantPanel {
             	0.88, //Picutre
             	TableLayoutConstants.FILL}};
         plantPanel.setLayout(new TableLayout(size));
-        plantPanel.setBorder(BiogasControlClass.border);
+        plantPanel.setBorder(BiogasControlClass.BORDER);
         
         plantPanel.setBackground(Color.WHITE);
         

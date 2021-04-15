@@ -19,7 +19,7 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
 
 public class SimulationPanel {
-	static JPanel simulationPanel;
+	public JPanel simulationPanel;
 	
 	public JTextField plantStructure;
 	public JTextField iteration;
@@ -117,7 +117,7 @@ public class SimulationPanel {
             	TableLayoutConstants.FILL, //TextArea 8
             	0.06}};
         simulationPanel.setLayout(new TableLayout(size));
-        simulationPanel.setBorder(BiogasControlClass.border);
+        simulationPanel.setBorder(BiogasControlClass.BORDER);
         
         simulationPanel.add(plantStructureLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         simulationPanel.add(activeElementLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));

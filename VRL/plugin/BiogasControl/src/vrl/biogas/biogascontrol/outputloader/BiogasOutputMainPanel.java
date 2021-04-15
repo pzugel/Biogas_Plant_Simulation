@@ -40,7 +40,6 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
-import vrl.biogas.biogascontrol.panels.SetupPanel;
 
 @ComponentInfo(name="BiogasOutputPanel", 
 	category="Biogas", 
@@ -55,7 +54,7 @@ public class BiogasOutputMainPanel implements Serializable{
 	static JPanel mainPanel;
 	
 	@MethodInfo(name="Load", hide=false, interactive=true, num=1)
-	public static JComponent loadBiogas(
+	public JComponent loadBiogas(
 			@ParamInfo(name = "BiogasControlPlugin",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") BiogasControl main) throws FileNotFoundException {		
@@ -63,14 +62,14 @@ public class BiogasOutputMainPanel implements Serializable{
 	}
 	
 	@MethodInfo(name="LoadUserDefined", hide=false, interactive=true, num=1)
-	public static JComponent loadBiogasUser(
+	public JComponent loadBiogasUser(
 			@ParamInfo(name = "BiogasUserControlPlugin",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") BiogasUserControl main) throws FileNotFoundException {	
 		return load(BiogasUserControl.numHydrolysis);
 	}
 	
-	private static JComponent load(final int numHydrolysis) throws FileNotFoundException {		
+	private JComponent load(final int numHydrolysis) throws FileNotFoundException {		
 		mainPanel = new JPanel(new BorderLayout());
 		
 		JPanel upperPanel = new JPanel();
@@ -116,7 +115,7 @@ public class BiogasOutputMainPanel implements Serializable{
 	    loadBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean isReady = SetupPanel.environment_ready;
+				boolean isReady = BiogasControlClass.setupPanelObj.environment_ready;
 				//boolean isReady = false; //TODO For debug
 				if(!isReady && plotSelect.getSelectedIndex() != 3) {
 					JFrame frame = new JFrame();
@@ -152,12 +151,13 @@ public class BiogasOutputMainPanel implements Serializable{
 					
 					//Hydrolysis
 					if(plotSelect.getSelectedIndex() == 1) {
-						HydrolysisSelector.showSelector(numHydrolysis);
+						final HydrolysisSelector selector = new HydrolysisSelector();
+						selector.showSelector(numHydrolysis, mainPanel);
 						
-						HydrolysisSelector.okBtn.addActionListener(new ActionListener() {
+						selector.okBtn.addActionListener(new ActionListener() {
 							@Override
 							public void actionPerformed(ActionEvent arg0) {
-								String reactor = (String) HydrolysisSelector.reactorList.getSelectedItem();
+								String reactor = (String) selector.reactorList.getSelectedItem();
 								File hydrolysisOutputFile = new File(environmentDir, reactor + File.separator + "outputFiles.lua");
 								if(hydrolysisOutputFile.exists()) {
 									updateTree(hydrolysisOutputFile);	
@@ -238,7 +238,7 @@ public class BiogasOutputMainPanel implements Serializable{
 		return cont;
 	}
 	
-	private static void updateTree(File outputFilesPath) {
+	private void updateTree(File outputFilesPath) {
 		System.out.println("updateTree --> " + outputFilesPath);
 		
 		DefaultMutableTreeNode root;
@@ -409,7 +409,7 @@ public class BiogasOutputMainPanel implements Serializable{
 		return outList;
 	}
 	
-	@MethodInfo(name="SamplePlot", hide=false, valueName="Trajectory[][]", hideCloseIcon=false)
+	@MethodInfo(name="SamplePlot", hide=true, valueName="Trajectory[][]", hideCloseIcon=false)
 	public static ArrayList<ArrayList<Trajectory>> samplePlot() {
 		Trajectory t1 = new Trajectory("T1");
 		Trajectory t2 = new Trajectory("T2");
@@ -464,7 +464,8 @@ public class BiogasOutputMainPanel implements Serializable{
 		//File f = new File("/home/paul/Schreibtisch/smalltest/aceto/biogas_80h_2_STAGE_PL_ACETO/methane/outputFiles.lua");
 		
 	    JFrame frame = new JFrame();
-	    load(2);   	    
+	    BiogasOutputMainPanel main = new BiogasOutputMainPanel();
+	    main.load(2);   	    
 		frame.add(mainPanel);
 		
 		frame.setSize(300, 500);

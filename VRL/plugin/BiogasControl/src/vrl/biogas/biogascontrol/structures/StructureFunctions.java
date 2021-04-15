@@ -6,8 +6,8 @@ import java.util.ArrayList;
 
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
-import vrl.biogas.biogascontrol.elements.ElementRunner;
 import vrl.biogas.biogascontrol.elements.SimulationElement;
+import vrl.biogas.biogascontrol.elements.functions.ElementRunner;
 
 public class StructureFunctions implements Structure,Serializable{
 	private static final long serialVersionUID = 1L;
@@ -15,7 +15,6 @@ public class StructureFunctions implements Structure,Serializable{
 	public static ArrayList<SimulationElement> reactorQueue;
 	public static int time;
 	public static boolean breakRun;
-	public static boolean firstTimestep;
 	public static BiogasControl panel;
 	
 	@Override
@@ -63,7 +62,6 @@ public class StructureFunctions implements Structure,Serializable{
 		System.out.println("2_STAGE_STRUCT");
 		breakRun = false;
 		time = currentStarttime;
-		firstTimestep = (currentStarttime == (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue());
 		fillQueue();
 		ElementRunner myRunnable = new ElementRunner(this);
 		Thread t = new Thread(myRunnable);
@@ -105,5 +103,10 @@ public class StructureFunctions implements Structure,Serializable{
 	@Override
 	public void fillQueue() {
 		// Default		
+	}
+
+	@Override
+	public boolean firstTimestep() {
+		return (time == (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue());
 	}
 }

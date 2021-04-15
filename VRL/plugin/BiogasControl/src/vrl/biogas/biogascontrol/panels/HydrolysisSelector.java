@@ -2,7 +2,6 @@ package vrl.biogas.biogascontrol.panels;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -14,12 +13,14 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 
 public class HydrolysisSelector {
 	
-	static public JButton okBtn;
-	static public JComboBox<String> reactorList;
+	public JButton okBtn;
+	public JComboBox<String> reactorList;
 	
-	public static void showSelector(int numHydrolysis) {
-		//int numHydrolysis = BiogasControlPlugin.struct.numHydrolysis();
-		//int numHydrolysis = 2;
+	public void showSelector(int numHydrolysis) {
+		showSelector(numHydrolysis, BiogasControlClass.panel);
+	}
+	
+	public void showSelector(int numHydrolysis, JPanel referencePanel) {
 	
 		String[] reactors = new String[numHydrolysis];
 		for(int i=0; i<numHydrolysis; i++) {
@@ -37,7 +38,7 @@ public class HydrolysisSelector {
 		frame.add(panel);
 		frame.setSize(200, 70);
 		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		frame.setLocationRelativeTo(BiogasControlClass.panel);
+		frame.setLocationRelativeTo(referencePanel);
 		frame.setVisible(true);
 		
 		okBtn.addActionListener(new ActionListener() {
@@ -45,18 +46,6 @@ public class HydrolysisSelector {
 			public void actionPerformed(ActionEvent arg0) {
 				frame.dispose();
 			}
-		});
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{         		   
-		showSelector(2);
-		okBtn.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("returnvalue: " + (String) reactorList.getSelectedItem());
-			}
-			
 		});
 	}
 }
