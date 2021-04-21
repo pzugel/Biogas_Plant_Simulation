@@ -13,7 +13,7 @@ import java.util.Scanner;
 
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
-import vrl.biogas.biogascontrol.elements.SimulationElement;;
+import vrl.biogas.biogascontrol.elements.SimulationElement;
 
 public class ElementFunctions {
 	
@@ -51,13 +51,14 @@ public class ElementFunctions {
 		"gas_Volfraction.txt",
 		"reactorState.txt"};
 	
-	public static void merge(SimulationElement elem, int currenttime) throws IOException {
+	public static void merge(SimulationElement elem, int currenttime, File timePath) throws IOException {
 		String name = elem.name();
-		File basePath = elem.path();
+		File basePath = timePath.getParentFile();
 		int startTime = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue();
 		//int curTime = BiogasControlPlugin.currenttime;
 		boolean preexisting = BiogasControl.setupPanelObj.mergePreexisting;
-		File timePath = new File(elem.path(), String.valueOf(currenttime));
+		//File timePath = new File(elem.path(), String.valueOf(currenttime));
+		
 		
 		System.out.println("********************************************************************************");
 		System.out.println("Merge " + name);
@@ -472,9 +473,9 @@ public class ElementFunctions {
 	 * Adds the integrated file outflow_integratedSum_fullTimesteps.txt to the outputFiles
 	 * of the hydrolysis storage
 	 */
-	public static void create_outputFiles(File workingDir) throws IOException {
-		File storageDir = new File(workingDir, "storage_hydrolyse");
-		File hydrolysisDir = new File(workingDir, "hydrolyse_0");
+	public static void create_outputFiles(File workingDir, String hydrolysisName) throws IOException {
+		File storageDir = new File(workingDir, "storage_hydrolysis");
+		File hydrolysisDir = new File(workingDir, hydrolysisName);
 		File outputFiles = new File(hydrolysisDir, "outputFiles.lua");
 		
 		/*
@@ -525,7 +526,7 @@ public class ElementFunctions {
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 	
 		File dir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210414_190921");
-		create_outputFiles(dir);
+		create_outputFiles(dir, "hydrolysis_0");
 	}
 	
 }

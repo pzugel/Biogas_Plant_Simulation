@@ -1,8 +1,10 @@
 package vrl.biogas.biogascontrol.structures;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
@@ -69,7 +71,7 @@ public class StructureFunctions implements Structure,Serializable{
 	}
 
 	@Override
-	public void runNext() throws IOException {
+	public void runNext() throws IOException, ExecutionException {
 		System.out.println("runNext()");
 		if(hasNext() && !breakRun) {
 			System.out.println("queue size before: " + reactorQueue.size());
@@ -108,5 +110,17 @@ public class StructureFunctions implements Structure,Serializable{
 	@Override
 	public boolean firstTimestep() {
 		return (time == (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue());
+	}
+
+	@Override
+	public String[] hydrolysisNames() {
+		// Default
+		return null;
+	}
+
+	@Override
+	public File directory() {
+		// Default
+		return BiogasControlClass.workingDirectory;
 	}
 }

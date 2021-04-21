@@ -116,8 +116,14 @@ public class LUATableViewer implements Serializable{
 	        public void actionPerformed(ActionEvent e) {
 	        	try {
 					new SpecificationFileWriter(specFile, parameters);
+					JFrame frame = new JFrame();
+					frame.setLocationRelativeTo(panel);
+					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+					JOptionPane.showMessageDialog(frame,
+						    "Saved.",
+						    "",
+						    JOptionPane.INFORMATION_MESSAGE);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	        }
@@ -154,7 +160,6 @@ public class LUATableViewer implements Serializable{
 						
 						//updatePanel();
 					} catch (FileNotFoundException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 	            }

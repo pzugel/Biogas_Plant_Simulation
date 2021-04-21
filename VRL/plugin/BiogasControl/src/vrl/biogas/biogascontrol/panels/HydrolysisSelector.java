@@ -9,6 +9,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 
 public class HydrolysisSelector {
@@ -16,15 +17,19 @@ public class HydrolysisSelector {
 	public JButton okBtn;
 	public JComboBox<String> reactorList;
 	
-	public void showSelector(int numHydrolysis) {
-		showSelector(numHydrolysis, BiogasControlClass.panel);
+	public void showSelector(int numHydrolysis, boolean userDefined) {
+		showSelector(numHydrolysis, BiogasControlClass.panel, userDefined);
 	}
 	
-	public void showSelector(int numHydrolysis, JPanel referencePanel) {
+	public void showSelector(int numHydrolysis, JPanel referencePanel, boolean userDefined) {
 	
 		String[] reactors = new String[numHydrolysis];
 		for(int i=0; i<numHydrolysis; i++) {
-			reactors[i] = "hydrolyse_" + i;
+			if(userDefined) {
+				reactors[i] = "hydrolysis_" + i;
+			} else {
+				reactors[i] = BiogasControl.struct.hydrolysisNames()[i];
+			}		
 		}
 		reactorList = new JComboBox<String>(reactors);
 		

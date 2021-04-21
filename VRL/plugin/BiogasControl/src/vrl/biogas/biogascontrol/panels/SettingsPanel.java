@@ -64,9 +64,7 @@ public class SettingsPanel {
 		 
 		
 		simStarttime = new JSpinner(startModel);
-		//simStarttime.setPreferredSize(new Dimension(70,20));
 		simEndtime = new JSpinner(endModel);
-		//simEndtime.setPreferredSize(new Dimension(70,20));
 		autoCleanup = new JCheckBox("Off/On");
 		
 		JLabel simStarttimeLabel = new JLabel("Starttime");
@@ -115,9 +113,6 @@ public class SettingsPanel {
 		settingsPanel.add(autoCleanup, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 		settingsPanel.add(text, new TableLayoutConstraints(1, 4, 6, 4, TableLayoutConstants.CENTER, TableLayoutConstants.FULL));
 		settingsPanel.add(line, new TableLayoutConstraints(1, 3, 6, 3, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
-		
-		//settingsPanel.add(new JLabel("15"), new TableLayoutConstraints(1, 5, 1, 5, TableLayout.TOP, TableLayout.LEFT));
-		//settingsPanel.add(new JLabel("16"), new TableLayoutConstraints(1, 6, 1, 6, TableLayout.TOP, TableLayout.LEFT));
 		
 		JPanel elementsPanel = new JPanel();
         double elements_size[][] =
@@ -227,7 +222,7 @@ public class SettingsPanel {
 						numHydrolysis = BiogasControl.struct.numHydrolysis();
 					}
 					final HydrolysisSelector selector = new HydrolysisSelector();
-					selector.showSelector(numHydrolysis);
+					selector.showSelector(numHydrolysis, userDefined);
 					selector.okBtn.addActionListener(new ActionListener() {
 						@Override
 						public void actionPerformed(ActionEvent arg0) {

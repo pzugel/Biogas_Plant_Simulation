@@ -34,8 +34,9 @@ public class Start implements SimulationElement, Serializable{
 	public void run() throws InterruptedException {
 		System.out.println("Start here!");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
+		BiogasControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasControl.struct.currentTime() + 1));
 		String log = simPanel.simulationLog.getText();
-		simPanel.simulationLog.setText(log + "Iteration " + BiogasControl.iteration + "\n");
+		simPanel.simulationLog.setText(log + "Iteration " + BiogasControl.iteration + " (Time " + BiogasControl.struct.currentTime() + ")\n");
 		System.out.println("Start done!");
 		ElementRunner myRunnable = new ElementRunner(structure);
 		Thread t = new Thread(myRunnable);

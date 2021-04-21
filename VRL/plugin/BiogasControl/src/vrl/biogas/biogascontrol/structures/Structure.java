@@ -1,6 +1,8 @@
 package vrl.biogas.biogascontrol.structures;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 
@@ -21,9 +23,11 @@ public interface Structure {
 	public void incrementCurrentTime();
 	public void cancelRun();
 	public boolean wasCancelled();
+	public String[] hydrolysisNames();
+	public File directory();
 	
 	public void run(int currentStarttime) throws IOException;
-	public void runNext() throws IOException;
+	public void runNext() throws IOException, ExecutionException;
 	public boolean hasNext();
 	public void fillQueue();
 }

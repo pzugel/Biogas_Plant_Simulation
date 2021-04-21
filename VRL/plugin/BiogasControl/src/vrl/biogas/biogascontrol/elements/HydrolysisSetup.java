@@ -8,23 +8,21 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.functions.ElementRunner;
 import vrl.biogas.biogascontrol.elements.functions.OutflowInflowUpdater;
 import vrl.biogas.biogascontrol.elements.functions.SpecfileUpdater;
-import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
 public class HydrolysisSetup implements SimulationElement, Serializable{
 	private static final long serialVersionUID = 1L;
-	private File directory;
 	private Structure structure;
-	private String[] reactors;
-	private double[] fractions;
+	private File directory;
 	
-	public HydrolysisSetup(Structure struct, File dir, String[] reactorNames) {
+	public HydrolysisSetup(Structure struct) {
 		structure = struct;
-		directory = dir;
-		reactors = reactorNames;
+		directory = struct.directory();
 	}
 	
 	@Override
@@ -41,8 +39,8 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 	public void run() throws IOException, InterruptedException {
 		System.out.println("Run hydrolysis setup");	
 		if(!structure.wasCancelled()) {
-			computeFractions();
 			System.out.println("Not Cancelled");
+			String[] reactors = structure.hydrolysisNames();
 			
 			//Write reactors to ArrayList
 			ArrayList<File> specDirs = new ArrayList<File>();		
@@ -63,6 +61,8 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 					currentTimePath.mkdirs();
 					System.out.println("create dir");
 				}
+				SetupPanel setPanel = BiogasControl.setupPanelObj;
+				setPanel.update_tree(structure.directory());
 				
 				try {			
 					//Copy specification files
@@ -88,6 +88,18 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 				} 	
 			}		
 			
+			//Get fractions from feedback sliders
+			ArrayList<Double> fractions = BiogasControl.feedbackPanelObj.computeFractions();
+			Double[] fractionsDoubleArr = new Double[fractions.size()];
+			fractions.toArray(fractionsDoubleArr);
+			
+			double[] fractionsArr = new double[fractionsDoubleArr.length];
+			int i = 0;
+			for(Double d : fractionsDoubleArr) {
+				fractionsArr[i] = (double) d;
+				i++;
+			}
+			
 			//Update inflow in hydrolysis specification
 			File[] specDirsArr = new File[specDirs.size()];
 			specDirs.toArray(specDirsArr);
@@ -98,8 +110,8 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 				// TODO Check if this works!
 				System.out.println("outflowFile: " + outflowFile);
 				System.out.println("specDirsArr: " + Arrays.toString(specDirsArr));
-				System.out.println("fractions: " + Arrays.toString(fractions));
-				OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractions);
+				System.out.println("fractions: " + Arrays.toString(fractionsArr));
+				OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractionsArr);
 			}
 			
 			ElementRunner myRunnable = new ElementRunner(structure);
@@ -111,23 +123,5 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 			Thread t = new Thread(myRunnable);
 			t.start();
 		}
-	}
-	
-	private void computeFractions() {
-		int num = structure.numHydrolysis();
-		double frac[] = new double[num]; 
-		for(int i=0; i<num; i++) {
-			frac[i] = 1.0 / num; //EVEN SPLIT
-		}
-		fractions = frac;
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{  
-		File dir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210415_124715");
-		String names[] = {"hydrolyse_0", "hydrolyse_1"};
-		Structure struct = new STRUCT_2_STAGE();
-		struct.incrementCurrentTime();
-		HydrolysisSetup setup = new HydrolysisSetup(struct,dir,names);
-		setup.run();
 	}
 }

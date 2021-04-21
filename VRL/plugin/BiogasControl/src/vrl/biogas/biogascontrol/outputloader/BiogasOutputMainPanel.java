@@ -53,11 +53,14 @@ public class BiogasOutputMainPanel implements Serializable{
 	static File filepath;
 	static JPanel mainPanel;
 	
+	private boolean userDefined;
+	
 	@MethodInfo(name="Load", hide=false, interactive=true, num=1)
 	public JComponent loadBiogas(
 			@ParamInfo(name = "BiogasControlPlugin",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") BiogasControl main) throws FileNotFoundException {		
+	    		options = "invokeOnChange=true") BiogasControl main) throws FileNotFoundException {	
+		userDefined = false;
 		return load(BiogasControl.struct.numHydrolysis());
 	}
 	
@@ -66,6 +69,7 @@ public class BiogasOutputMainPanel implements Serializable{
 			@ParamInfo(name = "BiogasUserControlPlugin",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") BiogasUserControl main) throws FileNotFoundException {	
+		userDefined = true;
 		return load(BiogasUserControl.numHydrolysis);
 	}
 	
@@ -152,7 +156,7 @@ public class BiogasOutputMainPanel implements Serializable{
 					//Hydrolysis
 					if(plotSelect.getSelectedIndex() == 1) {
 						final HydrolysisSelector selector = new HydrolysisSelector();
-						selector.showSelector(numHydrolysis, mainPanel);
+						selector.showSelector(numHydrolysis, mainPanel, userDefined);
 						
 						selector.okBtn.addActionListener(new ActionListener() {
 							@Override

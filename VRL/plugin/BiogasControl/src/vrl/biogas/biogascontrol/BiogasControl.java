@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 import javax.swing.WindowConstants;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
@@ -24,11 +26,12 @@ import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
+import vrl.biogas.biogascontrol.panels.FeedingPanel;
 import vrl.biogas.biogascontrol.panels.PlantPanel;
 import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
-import vrl.biogas.biogascontrol.structures.STRUCT_2_STAGE;
+import vrl.biogas.biogascontrol.structures.*;
 import vrl.biogas.biogascontrol.structures.Structure;
 
 @ComponentInfo(name="MainPanel", 
@@ -74,14 +77,15 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		setupPanelObj = new SetupPanel();
 		settingsPanelObj = new SettingsPanel();
 		feedbackPanelObj = new FeedbackPanel();
+		feedingPanelObj = new FeedingPanel();
 		
         JPanel simulationPanel = simulationPanelObj.getPanel();
         JPanel setupPanel = setupPanelObj.getPanel();
         JPanel settingsPanel = settingsPanelObj.getPanel();
         JPanel plantPanel = (new PlantPanel()).getPanel();
         JPanel feedbackPanel = feedbackPanelObj.getPanel();
-        JPanel feedingPanel = new JPanel();
-        JTabbedPane tab_panel = new JTabbedPane();
+        JPanel feedingPanel = feedingPanelObj.getPanel();
+        JTabbedPane tab_panel = new JTabbedPane();	
         
         tab_panel.addTab("Simulation", simulationPanel);
         tab_panel.addTab("Setup", setupPanel);
@@ -93,8 +97,12 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
         panel = new JPanel();
         double size[][] =
             {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayoutConstants.FILL},
-             {0.04, 0.06, 0.03, 0.82, TableLayoutConstants.FILL}};
-        JButton startBtn = new JButton("Start");
+             {0.04, 
+            	0.06, //Top buttons
+            	0.03, 
+            	0.82, //Tabbed pane
+            	TableLayoutConstants.FILL}};
+        final JButton startBtn = new JButton("Start");
         startBtn.setBackground(BUTTON_BLUE);
         panel.setLayout(new TableLayout(size));
         
@@ -145,6 +153,18 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 			}
 		});
 		
+		running.addChangeListener(new ChangeListener() {
+			@Override
+			public void stateChanged(ChangeEvent arg0) {
+				boolean isRunning = running.isSelected();
+				if(!isRunning) {
+					startBtn.setEnabled(true);
+				} else {
+					startBtn.setEnabled(false);
+				}
+			}
+		});
+		
 	    return panel;
 	}
 	
@@ -154,7 +174,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		
 	    JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.control(new STRUCT_2_STAGE(), p);	    
+	    b.control(new STRUCT_2P_STAGE(), p);	    
 	    
 		frame.add(panel);
 		frame.setSize(600, 600);

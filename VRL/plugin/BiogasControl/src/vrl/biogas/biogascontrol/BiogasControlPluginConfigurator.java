@@ -46,14 +46,15 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 		   VPluginAPI vapi = (VPluginAPI) api;
 	       vapi.addTypeRepresentation(MainPanelContainerType.class);
 	       
-	       // Main
+	       //Main
 	       vapi.addComponent(BiogasControl.class);	
 	       
 	       //Structures
 	       vapi.addComponent(Structure.class);
-	       vapi.addComponent(STRUCT_2_STAGE.class);      
-	       
-	       //vapi.addComponent(SimulationElement.class); // Prob not needed
+	       vapi.addComponent(STRUCT_1_STAGE.class);      
+	       vapi.addComponent(STRUCT_2_STAGE.class); 
+	       vapi.addComponent(STRUCT_3_STAGE.class); 
+	       vapi.addComponent(STRUCT_2P_STAGE.class);
 	       
 	       //For the BiogasPlotter
 	       vapi.addComponent(MainPanelContainerType.class); // Check if needed

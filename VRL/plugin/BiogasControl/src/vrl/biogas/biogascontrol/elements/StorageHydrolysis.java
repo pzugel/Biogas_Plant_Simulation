@@ -19,13 +19,11 @@ public class StorageHydrolysis implements SimulationElement, Serializable{
 	private File storageDirectory;
 	private File directory;
 	private Structure structure;
-	private String[] reactors;
 	
-	public StorageHydrolysis(Structure struct, File dir, String[] reactorNames) {
-		directory = dir;
+	public StorageHydrolysis(Structure struct) {
+		directory = struct.directory();
 		structure = struct;
-		storageDirectory = new File(dir, "storage_hydrolyse");
-		reactors = reactorNames;
+		storageDirectory = new File(struct.directory(), "storage_hydrolysis");
 	}
 
 	@Override
@@ -47,9 +45,10 @@ public class StorageHydrolysis implements SimulationElement, Serializable{
 		simPanel.simulationLog.setText(logStart + "** Storage ... ");
 		
 		if(!structure.wasCancelled()) {
-			ElementFunctions.merge_all_hydrolysis(storageDirectory, directory, reactors);
+			ElementFunctions.merge_all_hydrolysis(storageDirectory, directory, structure.hydrolysisNames());
 			if(structure.firstTimestep()) {
-				ElementFunctions.create_outputFiles(directory);
+				String hydrolysisName = structure.hydrolysisNames()[0];
+				ElementFunctions.create_outputFiles(directory, hydrolysisName);
 			}
 			
 			String logEnd = simPanel.simulationLog.getText();

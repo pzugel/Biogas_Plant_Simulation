@@ -1,16 +1,14 @@
 package vrl.biogas.biogascontrol.structures;
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.elements.*;
 
 @ComponentInfo(name="2_STAGE", 
-  category="Biogas_Structures", 
-  description="2_STAGE plant structure")
+	category="Biogas_Structures", 
+	description="2_STAGE plant structure")
 public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Serializable {
 	private static final long serialVersionUID = 1L;
 	
@@ -40,19 +38,22 @@ public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Seri
 	}
 	
 	@Override
+	public String[] hydrolysisNames() {
+		return new String[] {"hydrolyse_0", "hydrolyse_1"};
+	}
+	
+	@Override
 	public void fillQueue() {
 		System.out.println("fillQueue()");
-		File dir = BiogasControlClass.workingDirectory;
 		
 		reactorQueue = new ArrayList<SimulationElement>();
 		reactorQueue.add(new Start(this));
-		String[] reactorNames = {"hydrolyse_0", "hydrolyse_1"};
-		reactorQueue.add(new HydrolysisSetup(this, dir, reactorNames));
-		reactorQueue.add(new Hydrolysis(this, dir, 0));
-		reactorQueue.add(new Hydrolysis(this, dir, 1));		
-		reactorQueue.add(new StorageHydrolysis(this, dir, reactorNames));
-		reactorQueue.add(new Methane(this, dir));
-		reactorQueue.add(new MethaneMerge(this, dir));
+		reactorQueue.add(new HydrolysisSetup(this));
+		reactorQueue.add(new Hydrolysis(this, 0));
+		reactorQueue.add(new Hydrolysis(this, 1));		
+		reactorQueue.add(new StorageHydrolysis(this));
+		reactorQueue.add(new Methane(this));
+		reactorQueue.add(new MethaneMerge(this));
 		reactorQueue.add(new Pause(this));
 		reactorQueue.add(new Stop(this));
 	}

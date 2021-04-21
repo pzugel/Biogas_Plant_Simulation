@@ -2,7 +2,6 @@ package vrl.biogas.biogascontrol.panels;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -101,8 +100,6 @@ public class SimulationPanel {
 		
 		JLabel simulationLogLabel = new JLabel("Simulation log");
 		simulationLogLabel.setLabelFor(simulationLog);
-        
-        simulationPanel.setLayout(new GridBagLayout());   
         
         double size[][] =
             {{0.06, 0.3, 0.01, 0.22, 0.01, 0.15, 0.01, 0.15, TableLayoutConstants.FILL},

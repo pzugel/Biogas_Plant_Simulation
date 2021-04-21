@@ -2,6 +2,7 @@ package vrl.biogas.biogascontrol.elements.functions;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -19,6 +20,8 @@ public class ElementRunner implements Runnable, Serializable{
 			System.out.println("Element Runner --> ");
 			structure.runNext();
 		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ExecutionException e) {
 			e.printStackTrace();
 		}		
 	}

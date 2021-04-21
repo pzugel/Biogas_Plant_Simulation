@@ -20,6 +20,7 @@ import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
+import vrl.biogas.biogascontrol.panels.FeedingPanel;
 import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
@@ -60,13 +61,13 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 		setupPanelObj = new SetupPanel(true);
 		settingsPanelObj = new SettingsPanel(true);
 		feedbackPanelObj = new FeedbackPanel(true);
+		feedingPanelObj = new FeedingPanel(true);
 		
         JPanel simulationPanel = simulationPanelObj.getPanel();
         JPanel setupPanel = setupPanelObj.getPanel();
         JPanel settingsPanel = settingsPanelObj.getPanel();
         JPanel feedbackPanel = feedbackPanelObj.getPanel();
-        JPanel feedingPanel = new JPanel();
-        
+        JPanel feedingPanel = feedingPanelObj.getPanel();       
         JTabbedPane tab_panel = new JTabbedPane();
         
         tab_panel.addTab("Simulation", simulationPanel);

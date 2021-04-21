@@ -21,10 +21,10 @@ private File methaneDirectory;
 private File directory;
 private Structure structure;
 
-public MethaneMerge(Structure struct, File dir) {
-	directory = dir;
+public MethaneMerge(Structure struct) {
+	directory = struct.directory();
 	structure = struct;
-	methaneDirectory = new File(dir, "methane");
+	methaneDirectory = new File(struct.directory(), "methane");
 }
 
 @Override

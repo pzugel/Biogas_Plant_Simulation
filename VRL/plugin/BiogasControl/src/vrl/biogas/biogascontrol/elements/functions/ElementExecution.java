@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -19,10 +20,10 @@ import vrl.biogas.biogascontrol.structures.Structure;
 
 public class ElementExecution extends SwingWorker<String, String> implements Serializable{
 	private static final long serialVersionUID = 1L;
-	static String command;
-	static Structure structure;
-	static File directory;
-	static SimulationElement element;
+	private String command;
+	private Structure structure;
+	private File directory;
+	private SimulationElement element;
 	
 	public ElementExecution(File specification, File dir, Structure struct, SimulationElement elem) {
 		String home = System.getProperty("user.home");
@@ -30,7 +31,7 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		File ugshell = new File(new File(ugpath, "bin").getAbsolutePath(), "ugshell");
 		
 		final String cmd = ugshell + " -ex " + BiogasControlClass.simulationFile + " -p " + specification.toString();
-		//final String cmd = "ls";
+		System.out.println("directory: " + dir);
 		System.out.println("cmd: " + cmd);
 		
 		command = cmd;
@@ -41,6 +42,7 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 	
     @Override
 	public String doInBackground() throws IOException, InterruptedException {
+    	
     	Process proc = Runtime.getRuntime().exec(command, null, directory);
     	proc.waitFor(); 	
     	
@@ -69,22 +71,32 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
     	SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;
     	
     	if(!structure.wasCancelled()) {			
-        	String logEnd = simPanel.simulationLog.getText();
-        	simPanel.simulationLog.setText(logEnd + "Done!\n");
+    		String log = simPanel.simulationLog.getText();
+        	if(element.name().equals("Hydrolysis")) {
+        		System.out.println("Is hydrolysis");
+        		log = log.replace("... \n", " ... Done!\n");
+        		simPanel.simulationLog.setText(log + "\n");
+        	} 
+        	else {
+        		
+        		simPanel.simulationLog.setText(log + "Done!\n");
+        	}
+        	
     		
     		try {
-    			ElementFunctions.merge(element, structure.currentTime());
+    			ElementFunctions.merge(element, structure.currentTime(), directory);
     		} catch (IOException e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
     		}
     		
-    		try {
+			try {
     			structure.runNext();
     		} catch (IOException e) {
-    			// TODO Auto-generated catch block
     			e.printStackTrace();
-    		}
+    		} catch (ExecutionException e) {
+				e.printStackTrace();
+			}	
+    		
     	} else {
     		String logEnd = simPanel.simulationLog.getText();
     		simPanel.simulationLog.setText(logEnd + "Cancelled!\n");

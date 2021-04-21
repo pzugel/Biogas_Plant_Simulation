@@ -11,6 +11,7 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.functions.ElementExecution;
 import vrl.biogas.biogascontrol.elements.functions.OutflowInflowUpdater;
 import vrl.biogas.biogascontrol.elements.functions.SpecfileUpdater;
+import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
@@ -23,10 +24,10 @@ public class Methane implements SimulationElement, Serializable{
 	private File storageDirectory;
 	private Structure structure;
 	
-	public Methane(Structure struct, File dir) {
+	public Methane(Structure struct) {
 		structure = struct;
-		methaneDirectory = new File(dir, "methane");
-		storageDirectory = new File(dir, "storage_hydrolyse");
+		methaneDirectory = new File(struct.directory(), "methane");
+		storageDirectory = new File(struct.directory(), "storage_hydrolysis");
 	}
 	
 	@Override
@@ -42,6 +43,7 @@ public class Methane implements SimulationElement, Serializable{
 	@Override
 	public void run() {
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
+		SetupPanel setPanel = BiogasControl.setupPanelObj;
 		
 		simPanel.activeElement.setText("Methane");
 		String logStart = simPanel.simulationLog.getText();
@@ -56,6 +58,7 @@ public class Methane implements SimulationElement, Serializable{
 		if (!currentTimePath.exists()){
 			currentTimePath.mkdirs();
 		}
+		setPanel.update_tree(structure.directory());
 		
 		try { //Copy specifications
 			File methaneFile = new File(currentTimePath, "methane_checkpoint.lua");			

@@ -2,6 +2,7 @@ package vrl.biogas.biogascontrol.elements;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.concurrent.ExecutionException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
@@ -62,7 +63,8 @@ public class Pause implements SimulationElement{
 						simPanel.simulationLog.setText(logEnd + "Continue!\n");
 						structure.runNext();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
+						e.printStackTrace();
+					} catch (ExecutionException e) {
 						e.printStackTrace();
 					}	
 				}

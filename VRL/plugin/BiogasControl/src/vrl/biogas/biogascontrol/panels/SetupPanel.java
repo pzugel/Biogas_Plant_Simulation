@@ -43,23 +43,25 @@ import java.util.Scanner;
 public class SetupPanel {
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	
+	private JPanel setupPanel;
 	private JTree environment_tree;
 	private DefaultTreeModel environment_tree_model;
 	private File environment_path;
 	private JTextField dir;
-	private JButton clear_Btn;
-	
-	public JPanel setupPanel;
+		
+	public JButton clearBtn;
+	public JButton openBtn;
+	public JButton createBtn;
+	public JButton loadBtn;
 	public boolean environment_ready;		
 	public boolean mergePreexisting;	
 	
 	public SetupPanel() {
-		new SetupPanel(false);
+		setupPanel = new JPanel();
+		createPanel(false);
 	}
 	
-	public SetupPanel(boolean userDefined) {
-		environment_ready = false;
-		mergePreexisting = false;
+	public SetupPanel(boolean userDefined) {		
 		setupPanel = new JPanel();
 		createPanel(userDefined);
 	}
@@ -69,15 +71,17 @@ public class SetupPanel {
 	}
 	
 	private void createPanel(final boolean userDefined) {
+		environment_ready = false;
+		mergePreexisting = false;
 		
-		JButton open_Btn = new JButton("...");
-		JButton create_Btn = new JButton("Create");
-		create_Btn.setBackground(Color.WHITE);
-		clear_Btn = new JButton("Clear");
-		clear_Btn.setForeground(Color.RED);
-		clear_Btn.setBackground(Color.WHITE);
-		JButton load_Btn = new JButton("Load");
-		load_Btn.setBackground(Color.WHITE);
+		openBtn = new JButton("...");
+		createBtn = new JButton("Create");
+		createBtn.setBackground(Color.WHITE);
+		clearBtn = new JButton("Clear");
+		clearBtn.setForeground(Color.RED);
+		clearBtn.setBackground(Color.WHITE);
+		loadBtn = new JButton("Load");
+		loadBtn.setBackground(Color.WHITE);
 		
 		dir = new JTextField(8);
 		dir.setPreferredSize(new Dimension(100,25));
@@ -111,19 +115,20 @@ public class SetupPanel {
             	//0.1, 
             	TableLayoutConstants.FILL,
             	0.06}};
+            	
         setupPanel.setLayout(new TableLayout(size));
         setupPanel.setBorder(BiogasControlClass.BORDER);
         
         setupPanel.add(text, new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstants.LEFT, TableLayoutConstants.CENTER));
         setupPanel.add(environment_tree_pane, new TableLayoutConstraints(1, 1, 1, 8, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
         setupPanel.add(dir, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.TOP));
-        setupPanel.add(open_Btn, new TableLayoutConstraints(4, 1, 4, 1, TableLayoutConstants.FULL, TableLayoutConstants.TOP));
-        setupPanel.add(create_Btn, new TableLayoutConstraints(3, 3, 4, 3, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
-        setupPanel.add(clear_Btn, new TableLayoutConstraints(3, 5, 4, 5, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
-        setupPanel.add(load_Btn, new TableLayoutConstraints(3, 7, 4, 7, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
+        setupPanel.add(openBtn, new TableLayoutConstraints(4, 1, 4, 1, TableLayoutConstants.FULL, TableLayoutConstants.TOP));
+        setupPanel.add(createBtn, new TableLayoutConstraints(3, 3, 4, 3, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
+        setupPanel.add(clearBtn, new TableLayoutConstraints(3, 5, 4, 5, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
+        setupPanel.add(loadBtn, new TableLayoutConstraints(3, 7, 4, 7, TableLayoutConstants.CENTER, TableLayoutConstants.TOP));
         
         //Register Events
-		open_Btn.addActionListener(new ActionListener() {
+		openBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser dirChooser = new JFileChooser();
@@ -142,8 +147,8 @@ public class SetupPanel {
 					System.out.println("Invalid path!");
 			}
 	    });    
-		
-		create_Btn.addActionListener(new ActionListener() {
+	    		
+		createBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) throws NullPointerException{
 				try {
@@ -175,8 +180,8 @@ public class SetupPanel {
 				}
 			}
 	    }); 
-		
-		clear_Btn.addActionListener(new ActionListener() {
+	    		
+		clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				clear_tree();
@@ -192,8 +197,8 @@ public class SetupPanel {
 				}		
 			}
 		});
-		
-		load_Btn.addActionListener(new ActionListener() {
+				
+		loadBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser dirChooser = new JFileChooser();
@@ -208,7 +213,7 @@ public class SetupPanel {
 				else
 					System.out.println("Invalid path!");
 			}
-		});
+		});		
 	}
 	
 	public void clear_tree() {
@@ -217,13 +222,52 @@ public class SetupPanel {
 		environment_tree_model.reload();
 		environment_ready = false;
 		dir.setText("");
+		BiogasControlClass.feedingPanelObj.setControls(false);
 		BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
 	}
 	
+	public void update_tree(File path) {
+		DefaultMutableTreeNode root = new DefaultMutableTreeNode(path.getName());
+	    String[] elementDirs = path.list(new FilenameFilter() {
+	    	  @Override
+	    	  public boolean accept(File current, String name) {
+	    	    return new File(current, name).isDirectory();
+	    	  }
+    	});
+	    for(String e : elementDirs) {
+	    	DefaultMutableTreeNode elem = new DefaultMutableTreeNode(e);
+	    	root.add(elem);
+	    	File element = new File(path, e);
+	    	String[] timeDirs = element.list(new FilenameFilter() {
+		    	  @Override
+		    	  public boolean accept(File current, String name) {
+		    	    return new File(current, name).isDirectory();
+		    	  }
+	    	});
+	    	
+	    	//Sort timesteps
+	    	 Arrays.sort(timeDirs, new Comparator<String>() {
+	    	        @Override
+	    	        public int compare(String o1, String o2) {
+	    	            return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
+	    	        }
+	    	});
+
+	    	for(String time : timeDirs) {
+	    		DefaultMutableTreeNode t = new DefaultMutableTreeNode(time);
+	    		elem.add(t);
+	    	}
+	    }
+		environment_tree_model.setRoot(root);
+		environment_tree_model.reload();
+	}
+	
+	//TODO Will the strucutre be correct (when loading from LabView project)? What if project was userDefined?
 	void load_environment(File summary, File path) {
+		String endtime = "";
 		try {
 		    boolean finished = false;
-			Scanner myReader = new Scanner(summary);
+			Scanner myReader = new Scanner(summary);			
 			while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
 		        if(data.startsWith("FINISHED") && data.contains("true")) {
@@ -232,9 +276,7 @@ public class SetupPanel {
 		        	String struct = data.substring(data.indexOf("=")+1, data.length());
 		        	BiogasControlClass.simulationPanelObj.plantStructure.setText(struct);
 		        } else if(data.startsWith("ENDTIME")) {
-		        	String endtime = data.substring(data.indexOf("=")+1, data.length());
-		        	BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
-		        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
+		        	endtime = data.substring(data.indexOf("=")+1, data.length());
 		        }
 			}
 			myReader.close();
@@ -247,42 +289,14 @@ public class SetupPanel {
 				BiogasControlClass.simulationPanelObj.activeElement.setText("");
 				BiogasControlClass.simulationPanelObj.simulationLog.setText("** Environment loaded ... \n");
 				BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
+				BiogasControlClass.feedingPanelObj.setControls(true);
+				BiogasControlClass.feedingPanelObj.nextTimestep.setText(String.valueOf(endtime));
+				BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
+	        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
 			    this.environment_path = path;
 			    environment_ready = true;
 			    mergePreexisting = true;
-			    DefaultMutableTreeNode root = new DefaultMutableTreeNode(path.getName());
-			    String[] elementDirs = path.list(new FilenameFilter() {
-			    	  @Override
-			    	  public boolean accept(File current, String name) {
-			    	    return new File(current, name).isDirectory();
-			    	  }
-		    	});
-			    for(String e : elementDirs) {
-			    	DefaultMutableTreeNode elem = new DefaultMutableTreeNode(e);
-			    	root.add(elem);
-			    	File element = new File(path, e);
-			    	String[] timeDirs = element.list(new FilenameFilter() {
-				    	  @Override
-				    	  public boolean accept(File current, String name) {
-				    	    return new File(current, name).isDirectory();
-				    	  }
-			    	});
-			    	
-			    	//Sort timesteps
-			    	 Arrays.sort(timeDirs, new Comparator<String>() {
-			    	        @Override
-			    	        public int compare(String o1, String o2) {
-			    	            return Integer.valueOf(o1).compareTo(Integer.valueOf(o2));
-			    	        }
-			    	});
-
-			    	for(String time : timeDirs) {
-			    		DefaultMutableTreeNode t = new DefaultMutableTreeNode(time);
-			    		elem.add(t);
-			    	}
-			    }
-				environment_tree_model.setRoot(root);
-				environment_tree_model.reload();
+			    update_tree(path);
 			}
 			else
 				JOptionPane.showMessageDialog(setupPanel,
@@ -302,6 +316,7 @@ public class SetupPanel {
 		File dir = new File(path, "biogasVRL_" + sdf.format(timestamp));
 		BiogasControlClass.workingDirectory = dir;
 		BiogasControlClass.simulationPanelObj.workingDirectory.setText(dir.toString());
+		BiogasControlClass.feedingPanelObj.setControls(true);
 		this.mergePreexisting = false;
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
@@ -322,24 +337,25 @@ public class SetupPanel {
 			
 			//Hydrolysis
 			int num = BiogasControl.struct.numHydrolysis();
+			String[] names = BiogasControl.struct.hydrolysisNames();
 			for(int i=0; i<num; i++) {
-				File hydroDir = new File(dir, "hydrolyse_" + i);
+				File hydroDir = new File(dir, names[i]);
 				if (!hydroDir.exists()){
 					hydroDir.mkdirs();
 				}	
-				Files.copy(new File(simulationFiles, "hydrolyse.lua").toPath(), 
+				Files.copy(new File(simulationFiles, "hydrolysis.lua").toPath(), 
 						new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
-				newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
+				newRoot.add(new DefaultMutableTreeNode(names[i]));
 			}
 			
 			//Storage Hydrolysis
 			if(BiogasControl.struct.storage()) {
-				File storageDir = new File(dir, "storage_hydrolyse");
+				File storageDir = new File(dir, "storage_hydrolysis");
 				if (!storageDir.exists()){
 					storageDir.mkdirs();
 				}	
-				newRoot.add(new DefaultMutableTreeNode("storage_hydrolyse"));
+				newRoot.add(new DefaultMutableTreeNode("storage_hydrolysis"));
 			}
 		} else { //User Defined structure
 			
@@ -357,14 +373,14 @@ public class SetupPanel {
 			//Hydrolysis
 			int num = BiogasUserControl.numHydrolysis;
 			for(int i=0; i<num; i++) {
-				File hydroDir = new File(dir, "hydrolyse_" + i);
+				File hydroDir = new File(dir, "hydrolysis_" + i);
 				if (!hydroDir.exists()){
 					hydroDir.mkdirs();
 				}	
-				Files.copy(new File(simulationFiles, "hydrolyse.lua").toPath(), 
+				Files.copy(new File(simulationFiles, "hydrolysis.lua").toPath(), 
 						new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
-				newRoot.add(new DefaultMutableTreeNode("hydrolyse_" + i));
+				newRoot.add(new DefaultMutableTreeNode("hydrolysis_" + i));
 			}
 			
 			//Storage Hydrolysis
@@ -372,7 +388,7 @@ public class SetupPanel {
 			if (!hydrolysisStorageDir.exists()){
 				hydrolysisStorageDir.mkdirs();
 			}	
-			newRoot.add(new DefaultMutableTreeNode("storage_hydrolyse"));
+			newRoot.add(new DefaultMutableTreeNode("storage_hydrolysis"));
 			
 		}
 		environment_tree_model.setRoot(newRoot);

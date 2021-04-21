@@ -17,12 +17,12 @@ public class Hydrolysis implements SimulationElement, Serializable{
 	private int numeration;
 	private Structure structure;
 	private File hydrolysisDirectory;
-	public Process proc;
 	
-	public Hydrolysis(Structure struct, File dir, int num) {
+	public Hydrolysis(Structure struct, int num) {
 		numeration = num;
 		structure = struct;
-		hydrolysisDirectory = new File(dir, "hydrolyse_" + numeration);
+		String reactor = struct.hydrolysisNames()[num];
+		hydrolysisDirectory = new File(struct.directory(), reactor);
 	}
 	
 	@Override
@@ -45,7 +45,7 @@ public class Hydrolysis implements SimulationElement, Serializable{
 		
 		simPanel.activeElement.setText("Hydrolysis");
 		String logStart = simPanel.simulationLog.getText();
-		simPanel.simulationLog.setText(logStart + "** Hydrolysis " + numeration + " ... ");
+		simPanel.simulationLog.setText(logStart + "** Hydrolysis ... \n    >" + structure.hydrolysisNames()[numeration]);
 		
 		final File currentTimePath = new File(hydrolysisDirectory, String.valueOf(structure.currentTime()));
 		File hydolysisFile = new File(currentTimePath, "hydrolysis_checkpoint.lua");

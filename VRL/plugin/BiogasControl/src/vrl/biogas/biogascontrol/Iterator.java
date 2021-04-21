@@ -46,6 +46,7 @@ public class Iterator implements java.io.Serializable {
 			while(BiogasUserControl.currenttime < endtime) {
 				System.out.println("Current: " + starttime);
 				BiogasUserControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasUserControl.iteration));
+				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currenttime + 1));
 				runMethod.invoke(structure);  
 				endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue();
 				++ BiogasUserControl.currenttime;

@@ -14,7 +14,7 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
 
 
-public class PlantPanel {
+public class PlantPanel{
 	
 	private JPanel plantPanel;
 	
@@ -32,7 +32,7 @@ public class PlantPanel {
 		return plantPanel;
 	}
 	
-	private void createPanel(boolean userDefined) {
+	public void createPanel(boolean userDefined) {
         double size[][] =
             {{0.06, 0.88, TableLayoutConstants.FILL},
              {0.06, 
@@ -50,4 +50,5 @@ public class PlantPanel {
     		plantPanel.add(new JLabel(plantIcon), new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));	
         }
 	}
+
 }

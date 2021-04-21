@@ -21,6 +21,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
+import vrl.biogas.biogascontrol.panels.FeedingPanel;
 import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
@@ -52,6 +53,7 @@ public class BiogasControlClass {
 	public static SimulationPanel simulationPanelObj;
 	public static SettingsPanel settingsPanelObj;
 	public static FeedbackPanel feedbackPanelObj;	
+	public static FeedingPanel feedingPanelObj;	
 	
 	BiogasControlClass(){		
 		pauseBtn = new JToggleButton("Pause");
@@ -104,7 +106,12 @@ public class BiogasControlClass {
 				if(!isRunning) {					
 					timer.stop();
 					int endtime = (Integer) settingsPanelObj.simEndtime.getValue();
-					settingsPanelObj.simStarttime.setValue(endtime);
+					settingsPanelObj.simStarttime.setValue(endtime); //TODO Why do this?
+					feedingPanelObj.nextTimestep.setEnabled(false);
+					setupPanelObj.createBtn.setEnabled(true);
+					setupPanelObj.loadBtn.setEnabled(true);
+					setupPanelObj.openBtn.setEnabled(true);
+					setupPanelObj.clearBtn.setEnabled(true);
 					//settingsPanelObj.simStarttime.setEnabled(true);
 					//SetupPanel.clear_tree();
 					
@@ -112,6 +119,11 @@ public class BiogasControlClass {
 					timerStartTime = System.currentTimeMillis();
 					timer.start();					
 					settingsPanelObj.simStarttime.setEnabled(false);
+					feedingPanelObj.nextTimestep.setEnabled(true);
+					setupPanelObj.createBtn.setEnabled(false);
+					setupPanelObj.loadBtn.setEnabled(false);
+					setupPanelObj.openBtn.setEnabled(false);
+					setupPanelObj.clearBtn.setEnabled(false);
 				}
 			}	
 		});
