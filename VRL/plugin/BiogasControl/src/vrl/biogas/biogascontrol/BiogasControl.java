@@ -51,7 +51,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		    	options = "invokeOnChange=true") Structure structure,
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") Path projectDir)
+	    		options = "invokeOnChange=false") Path projectDir)
 		    			throws IOException, InterruptedException{
 		control(structure, projectDir);
 		MainPanelContainerType cont = new MainPanelContainerType();
@@ -174,7 +174,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		
 	    JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.control(new STRUCT_2P_STAGE(), p);	    
+	    b.control(new STRUCT_1_STAGE(), p);	    
 	    
 		frame.add(panel);
 		frame.setSize(600, 600);

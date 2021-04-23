@@ -1,5 +1,7 @@
 package vrl.biogas.biogascontrol;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -33,13 +35,15 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 	private static final long serialVersionUID = 1L;
 	public static int numHydrolysis;
 	public static boolean wasCancelled;
+	public static String[] hydrolysisNames;
+	public static String structureName;
 	
 	@MethodInfo(name="Main", hide=false,
 			hideCloseIcon=true, interactive=true, num=1)
 	public JComponent mainControl(
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") Path projectDir,
+	    		options = "invokeOnChange=false") Path projectDir,
 			@ParamInfo(name = "#Hydrolysis",
 				nullIsValid = false,
 				options = "invokeOnChange=true") int numHydrolysis)
@@ -53,8 +57,13 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 	@MethodInfo(hide=true)
 	private JPanel control(Path projectDir,int numHydro) throws IOException, InterruptedException{
 		wasCancelled = false;
-		numHydrolysis = numHydro;		
+		numHydrolysis = numHydro;	
+		structureName = "";
 		projectPath = new File(projectDir.toString()).getParentFile();
+		hydrolysisNames = new String[numHydro];
+		for(int i=0; i<numHydro; i++) {
+			hydrolysisNames[i] = "hydrolysis_" + String.valueOf(i);
+		}
 		System.out.println("projectPath: " + projectPath);
 
 		simulationPanelObj = new SimulationPanel(true);
@@ -93,6 +102,12 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
         panel.add(breakBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(tab_panel, new TableLayoutConstraints(1, 3, 5, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));        	
 		
+        breakBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				wasCancelled = true;
+			}
+		});
 	    return panel;
 	}
 	

@@ -16,12 +16,10 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
-import javax.swing.WindowConstants;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
@@ -122,10 +120,7 @@ public class BiogasOutputMainPanel implements Serializable{
 				boolean isReady = BiogasControlClass.setupPanelObj.environment_ready;
 				//boolean isReady = false; //TODO For debug
 				if(!isReady && plotSelect.getSelectedIndex() != 3) {
-					JFrame frame = new JFrame();
-					frame.setLocationRelativeTo(mainPanel);
-					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog(mainPanel,
 						    "There is currently no simulation to load.",
 						    "Warning",
 						    JOptionPane.WARNING_MESSAGE);
@@ -134,9 +129,6 @@ public class BiogasOutputMainPanel implements Serializable{
 				
 				if(isReady && plotSelect.getSelectedIndex() != 3) {
 					final File environmentDir = BiogasControlClass.workingDirectory;
-					final JFrame frame = new JFrame();
-					frame.setLocationRelativeTo(mainPanel);
-					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 					
 					//Methane
 					if(plotSelect.getSelectedIndex() == 0) {
@@ -144,7 +136,7 @@ public class BiogasOutputMainPanel implements Serializable{
 						if(methaneOutputFile.exists()) {
 							updateTree(methaneOutputFile);	
 						} else {
-							JOptionPane.showMessageDialog(frame,
+							JOptionPane.showMessageDialog(mainPanel,
 								    "Nothing to load.",
 								    "Warning",
 								    JOptionPane.WARNING_MESSAGE);
@@ -166,7 +158,7 @@ public class BiogasOutputMainPanel implements Serializable{
 								if(hydrolysisOutputFile.exists()) {
 									updateTree(hydrolysisOutputFile);	
 								} else {
-									JOptionPane.showMessageDialog(frame,
+									JOptionPane.showMessageDialog(mainPanel,
 										    "Nothing to load.",
 										    "Warning",
 										    JOptionPane.WARNING_MESSAGE);
@@ -184,7 +176,7 @@ public class BiogasOutputMainPanel implements Serializable{
 						if(storageOutputFile.exists()) {
 							updateTree(storageOutputFile);	
 						} else {
-							JOptionPane.showMessageDialog(frame,
+							JOptionPane.showMessageDialog(mainPanel,
 								    "Nothing to load.",
 								    "Warning",
 								    JOptionPane.WARNING_MESSAGE);
@@ -290,10 +282,7 @@ public class BiogasOutputMainPanel implements Serializable{
 	        root = new DefaultMutableTreeNode(empty);
 	        model.setAsksAllowsChildren(true);
 	        
-	        JFrame frame = new JFrame();
-			frame.setLocationRelativeTo(mainPanel);
-			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-			JOptionPane.showMessageDialog(frame,
+			JOptionPane.showMessageDialog(mainPanel,
 				    "Invalid Path.",
 				    "Error",
 				    JOptionPane.ERROR_MESSAGE);
@@ -461,22 +450,5 @@ public class BiogasOutputMainPanel implements Serializable{
 		a.add(secondPlot);
 		a.add(thirdPlot);
 		return a;
-	}
-	
-	@MethodInfo(hide = true)
-	public static void main(String args[]) throws IOException, InterruptedException{
-		//File f = new File("/home/paul/Schreibtisch/smalltest/aceto/biogas_80h_2_STAGE_PL_ACETO/methane/outputFiles.lua");
-		
-	    JFrame frame = new JFrame();
-	    BiogasOutputMainPanel main = new BiogasOutputMainPanel();
-	    main.load(2);   	    
-		frame.add(mainPanel);
-		
-		frame.setSize(300, 500);
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);	
-		
-	}
-	
-	
+	}		
 }

@@ -3,14 +3,12 @@ package vrl.biogas.biogascontrol.panels;
 import java.awt.FlowLayout;
 import java.util.ArrayList;
 
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -35,7 +33,7 @@ import vrl.biogas.biogascontrol.BiogasUserControl;
 
 public class FeedbackPanel {
 
-	private JPanel feedbackPanel;
+	public JPanel feedbackPanel;
 	public ArrayList<JSlider> sliderList;
 	//public ArrayList<DialPlot> dialList;
 	
@@ -111,10 +109,7 @@ public class FeedbackPanel {
 					computeFractions();
 					if(allZero()) {
 						slider.setValue(10);
-						JFrame messageFrame = new JFrame();
-						messageFrame.setLocationRelativeTo(feedbackPanel);
-						messageFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						JOptionPane.showMessageDialog(messageFrame,
+						JOptionPane.showMessageDialog(feedbackPanel,
 							    "Sliders cannot all be zero!",
 							    "Warning",
 							    JOptionPane.WARNING_MESSAGE);

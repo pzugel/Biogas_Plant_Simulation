@@ -189,13 +189,12 @@ public class SettingsPanel {
 			public void stateChanged(ChangeEvent arg0) {
 				if((Integer) simEndtime.getValue() <= (Integer) simStarttime.getValue()) {
 					simEndtime.setValue((Integer) simEndtime.getValue() + 1);
-					// TODO Compare with currenttime / struct time
 				}
 				
 				if(BiogasControlClass.running.isSelected()) {
 					int cTime;
 					if(userDefined) {
-						cTime = BiogasControlClass.currenttime;
+						cTime = BiogasControlClass.currentTime;
 					} else {
 						cTime = BiogasControl.struct.currentTime();
 					}
@@ -217,7 +216,6 @@ public class SettingsPanel {
 					int numHydrolysis;
 					if(userDefined) {
 						numHydrolysis = BiogasUserControl.numHydrolysis;
-						//TODO How to get number of hydrolysis reacotors when user defined?
 					} else {
 						numHydrolysis = BiogasControl.struct.numHydrolysis();
 					}
@@ -229,10 +227,7 @@ public class SettingsPanel {
 							String reactor = (String) selector.reactorList.getSelectedItem();
 							System.out.println("Selected: " + reactor);
 							try {
-								JFrame messageFrame = new JFrame();
-								messageFrame.setLocationRelativeTo(settingsPanel);
-								messageFrame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-								JOptionPane.showMessageDialog(messageFrame,
+								JOptionPane.showMessageDialog(settingsPanel,
 									    "It is advised to pause the simulation before making changes.",
 									    "Warning",
 									    JOptionPane.WARNING_MESSAGE);
@@ -243,7 +238,7 @@ public class SettingsPanel {
 									File hydrolysisTimePath;
 									
 									if(userDefined) {
-										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlClass.currenttime));
+										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControlClass.currentTime));
 									} else {
 										hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(BiogasControl.struct.currentTime()));	
 									}
@@ -264,10 +259,9 @@ public class SettingsPanel {
 								frame.add(LUATableViewer.panel);
 								frame.setSize(700, 600);
 								frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-								frame.setLocationRelativeTo(BiogasControlClass.panel);
+								frame.setLocationRelativeTo(settingsPanel);
 								frame.setVisible(true);
 							} catch (FileNotFoundException e) {
-								// TODO Auto-generated catch block
 								e.printStackTrace();
 							}	
 						}
@@ -282,10 +276,9 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlClass.panel);
+						frame.setLocationRelativeTo(settingsPanel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}		
 				}
@@ -305,7 +298,7 @@ public class SettingsPanel {
 						File methaneTimePath;
 						
 						if(userDefined) {
-							methaneTimePath = new File(methanePath, String.valueOf(BiogasControlClass.currenttime));
+							methaneTimePath = new File(methanePath, String.valueOf(BiogasControlClass.currentTime));
 						} else {
 							methaneTimePath = new File(methanePath, String.valueOf(BiogasControl.struct.currentTime()));	
 						}
@@ -327,10 +320,9 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlClass.panel);
+						frame.setLocationRelativeTo(settingsPanel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}
@@ -343,10 +335,9 @@ public class SettingsPanel {
 						frame.add(LUATableViewer.panel);
 						frame.setSize(700, 600);
 						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						frame.setLocationRelativeTo(BiogasControlClass.panel);
+						frame.setLocationRelativeTo(settingsPanel);
 						frame.setVisible(true);
 					} catch (FileNotFoundException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}		
 				}

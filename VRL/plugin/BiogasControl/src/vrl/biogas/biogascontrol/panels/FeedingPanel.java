@@ -14,14 +14,12 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import javax.swing.WindowConstants;
 import javax.swing.table.DefaultTableModel;
 
 import javafx.util.Pair;
@@ -163,7 +161,7 @@ public class FeedingPanel{
 					File hydrolysisTimePath;
 					
 					if(userDefined) {
-						hydrolysisTimePath = new File(reactorPath, String.valueOf(BiogasControlClass.currenttime));
+						hydrolysisTimePath = new File(reactorPath, String.valueOf(BiogasControlClass.currentTime));
 					} else {
 						hydrolysisTimePath = new File(reactorPath, String.valueOf(BiogasControl.struct.currentTime()));	
 					}
@@ -205,10 +203,7 @@ public class FeedingPanel{
 				}
 				try {
 					UpdateFeeding.update_feeding_timetable(loadedSpec, table);
-					JFrame frame = new JFrame();
-					frame.setLocationRelativeTo(feedingPanel);
-					frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-					JOptionPane.showMessageDialog(frame,
+					JOptionPane.showMessageDialog(feedingPanel,
 						    "Saved.",
 						    "",
 						    JOptionPane.INFORMATION_MESSAGE);

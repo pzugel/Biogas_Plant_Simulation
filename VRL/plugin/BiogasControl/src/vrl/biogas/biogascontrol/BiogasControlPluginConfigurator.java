@@ -7,11 +7,13 @@ import eu.mihosoft.vrl.system.PluginDependency;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
+import vrl.biogas.biogascontrol.elements.userElements.UserHydrolysis;
+import vrl.biogas.biogascontrol.elements.userElements.UserMethane;
+import vrl.biogas.biogascontrol.elements.userElements.UserStart;
+import vrl.biogas.biogascontrol.elements.userElements.UserStorage;
 import vrl.biogas.biogascontrol.outputloader.BiogasOutputMainPanel;
 import vrl.biogas.biogascontrol.outputloader.BiogasPlotter;
 import vrl.biogas.biogascontrol.structures.*;
-import vrl.biogas.biogascontrol.userstructure.UserHydrolysis;
-import vrl.biogas.biogascontrol.userstructure.UserStart;
 
 /*
  * Eclipse: Export as runnable JAR
@@ -63,9 +65,13 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       
 	       //For user defined strucutres
 	       vapi.addComponent(BiogasUserControl.class);
-	       vapi.addComponent(UserStart.class);	
-	       vapi.addComponent(UserHydrolysis.class);	                     
 	       vapi.addComponent(Iterator.class);
+	       
+	       //User elements
+	       vapi.addComponent(UserStart.class);	
+	       vapi.addComponent(UserHydrolysis.class);	 
+	       vapi.addComponent(UserStorage.class);
+	       vapi.addComponent(UserMethane.class);	       
 	   }
 	}
 

@@ -4,15 +4,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.elements.HydrolysisParallel;
-import vrl.biogas.biogascontrol.elements.HydrolysisSetup;
-import vrl.biogas.biogascontrol.elements.Methane;
-import vrl.biogas.biogascontrol.elements.MethaneMerge;
-import vrl.biogas.biogascontrol.elements.Pause;
-import vrl.biogas.biogascontrol.elements.SimulationElement;
-import vrl.biogas.biogascontrol.elements.Start;
-import vrl.biogas.biogascontrol.elements.Stop;
-import vrl.biogas.biogascontrol.elements.StorageHydrolysis;
+import vrl.biogas.biogascontrol.elements.structureElements.HydrolysisParallel;
+import vrl.biogas.biogascontrol.elements.structureElements.HydrolysisSetup;
+import vrl.biogas.biogascontrol.elements.structureElements.Methane;
+import vrl.biogas.biogascontrol.elements.structureElements.MethaneMerge;
+import vrl.biogas.biogascontrol.elements.structureElements.Pause;
+import vrl.biogas.biogascontrol.elements.structureElements.SimulationElement;
+import vrl.biogas.biogascontrol.elements.structureElements.Start;
+import vrl.biogas.biogascontrol.elements.structureElements.Stop;
+import vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis;
 
 @ComponentInfo(name="2P_STAGE", 
 category="Biogas_Structures", 

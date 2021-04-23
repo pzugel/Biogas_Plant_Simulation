@@ -8,8 +8,8 @@ import java.util.concurrent.ExecutionException;
 
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
-import vrl.biogas.biogascontrol.elements.SimulationElement;
-import vrl.biogas.biogascontrol.elements.functions.ElementRunner;
+import vrl.biogas.biogascontrol.elements.structureElements.SimulationElement;
+import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 
 public class StructureFunctions implements Structure,Serializable{
 	private static final long serialVersionUID = 1L;

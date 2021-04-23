@@ -34,7 +34,7 @@ public class BiogasControlClass {
 	public static final Border BORDER = BorderFactory.createLineBorder(Color.BLACK);
 	
 	public static File projectPath;
-	public static int currenttime;
+	public static int currentTime;
 	public static int iteration;
 	public static JPanel panel;
 	public static File workingDirectory;
@@ -105,16 +105,13 @@ public class BiogasControlClass {
 				
 				if(!isRunning) {					
 					timer.stop();
-					int endtime = (Integer) settingsPanelObj.simEndtime.getValue();
-					settingsPanelObj.simStarttime.setValue(endtime); //TODO Why do this?
+					//int endtime = (Integer) settingsPanelObj.simEndtime.getValue();
+					//settingsPanelObj.simStarttime.setValue(endtime); //Moved into stop functions
 					feedingPanelObj.nextTimestep.setEnabled(false);
 					setupPanelObj.createBtn.setEnabled(true);
 					setupPanelObj.loadBtn.setEnabled(true);
 					setupPanelObj.openBtn.setEnabled(true);
-					setupPanelObj.clearBtn.setEnabled(true);
-					//settingsPanelObj.simStarttime.setEnabled(true);
-					//SetupPanel.clear_tree();
-					
+					setupPanelObj.clearBtn.setEnabled(true);					
 				} else {
 					timerStartTime = System.currentTimeMillis();
 					timer.start();					

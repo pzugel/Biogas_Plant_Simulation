@@ -6,7 +6,6 @@ import java.awt.Dimension;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -14,7 +13,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JTree;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.WindowConstants;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
@@ -110,9 +108,6 @@ public class SetupPanel {
             	0.08, //Clear 5
             	0.01, 
             	0.08, //Load 7
-            	//0.18, 
-            	//0.1, 
-            	//0.1, 
             	TableLayoutConstants.FILL,
             	0.06}};
             	
@@ -162,10 +157,7 @@ public class SetupPanel {
 						BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
 					}
 					else {
-						JFrame frame = new JFrame();
-						frame.setLocationRelativeTo(BiogasControl.panel);
-						frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-						JOptionPane.showMessageDialog(frame,
+						JOptionPane.showMessageDialog(setupPanel,
 						    "Not a valid path.",
 						    "Information",
 						    JOptionPane.INFORMATION_MESSAGE);
@@ -208,7 +200,7 @@ public class SetupPanel {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedPath = dirChooser.getSelectedFile();
 					File summary = new File(selectedPath, "simulation_summary.txt");
-					load_environment(summary, selectedPath);					
+					load_environment(summary, selectedPath, userDefined);					
 				}
 				else
 					System.out.println("Invalid path!");
@@ -263,40 +255,65 @@ public class SetupPanel {
 	}
 	
 	//TODO Will the strucutre be correct (when loading from LabView project)? What if project was userDefined?
-	void load_environment(File summary, File path) {
+	void load_environment(File summary, File path, boolean userDefined) {
 		String endtime = "";
 		try {
 		    boolean finished = false;
+		    boolean correctStructure = true;
+		    String loadStruct = "";
+		    String struct = "";
 			Scanner myReader = new Scanner(summary);			
 			while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
 		        if(data.startsWith("FINISHED") && data.contains("true")) {
 		        	finished = true;
 		        } else if(data.startsWith("STRUCTURE")) {
-		        	String struct = data.substring(data.indexOf("=")+1, data.length());
-		        	BiogasControlClass.simulationPanelObj.plantStructure.setText(struct);
+		        	loadStruct = data.substring(data.indexOf("=")+1, data.length());
+		        	struct = BiogasControlClass.simulationPanelObj.plantStructure.getText();
+		        	if(!loadStruct.equals(struct)) {
+		        		correctStructure = false;
+		        	}
 		        } else if(data.startsWith("ENDTIME")) {
 		        	endtime = data.substring(data.indexOf("=")+1, data.length());
 		        }
 			}
 			myReader.close();
 			if(finished) {
-				System.out.println("Finished!");
-				dir.setText(path.toString());
-				BiogasControlClass.workingDirectory = path;
-				BiogasControlClass.simulationPanelObj.workingDirectory.setText(path.toString());
-				BiogasControlClass.simulationPanelObj.iteration.setText("0");
-				BiogasControlClass.simulationPanelObj.activeElement.setText("");
-				BiogasControlClass.simulationPanelObj.simulationLog.setText("** Environment loaded ... \n");
-				BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
-				BiogasControlClass.feedingPanelObj.setControls(true);
-				BiogasControlClass.feedingPanelObj.nextTimestep.setText(String.valueOf(endtime));
-				BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
-	        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
-			    this.environment_path = path;
-			    environment_ready = true;
-			    mergePreexisting = true;
-			    update_tree(path);
+				if(correctStructure) {
+					System.out.println("Finished!");
+					dir.setText(path.toString());
+					BiogasControlClass.workingDirectory = path;
+					BiogasControlClass.simulationPanelObj.workingDirectory.setText(path.toString());
+					BiogasControlClass.simulationPanelObj.iteration.setText("0");
+					BiogasControlClass.simulationPanelObj.activeElement.setText("");
+					BiogasControlClass.simulationPanelObj.simulationLog.setText("** Environment loaded ... \n");
+					BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
+					BiogasControlClass.feedingPanelObj.setControls(true);
+					BiogasControlClass.feedingPanelObj.nextTimestep.setText(String.valueOf(endtime));
+					BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
+		        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
+				    this.environment_path = path;
+				    environment_ready = true;
+				    mergePreexisting = true;
+				    update_tree(path);
+				}
+				else {
+					if(userDefined) {
+						JOptionPane.showMessageDialog(setupPanel,
+							    "Please make sure the simulation you are trying to load uses the same plant structure.",
+							    "Information",
+							    JOptionPane.INFORMATION_MESSAGE);
+					}
+					else {
+						JOptionPane.showMessageDialog(setupPanel,
+							    "The simulation you are trying to load uses a different plant structure:\n -->" 
+							    		+ struct 
+							    		+ "\n-->"
+							    		+ loadStruct,
+							    "Incorrect Structure",
+							    JOptionPane.ERROR_MESSAGE);
+					}
+				}
 			}
 			else
 				JOptionPane.showMessageDialog(setupPanel,
@@ -384,7 +401,7 @@ public class SetupPanel {
 			}
 			
 			//Storage Hydrolysis
-			File hydrolysisStorageDir = new File(dir, "storage_hydrolyse");
+			File hydrolysisStorageDir = new File(dir, "storage_hydrolysis");
 			if (!hydrolysisStorageDir.exists()){
 				hydrolysisStorageDir.mkdirs();
 			}	

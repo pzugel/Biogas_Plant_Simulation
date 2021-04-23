@@ -1,11 +1,14 @@
 package vrl.biogas.biogascontrol;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
+import vrl.biogas.biogascontrol.elements.userElements.UserPause;
+import vrl.biogas.biogascontrol.elements.userElements.UserStop;
 
 import java.lang.reflect.Method;
 
@@ -27,7 +30,7 @@ public class Iterator implements java.io.Serializable {
 			options = "invokeOnChange=true")BiogasUserControl panel,
 	@ParamInfo(name = "Structure",
 			nullIsValid = false,
-			options = "invokeOnChange=true")Object structure) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException{
+			options = "invokeOnChange=true")Object structure) throws IllegalAccessException, IllegalArgumentException, InvocationTargetException, InterruptedException, IOException{
 		 
 		int starttime = (Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue();
 		int endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue(); 
@@ -35,25 +38,38 @@ public class Iterator implements java.io.Serializable {
 		Method[] methods = structure.getClass().getMethods();
 		Method runMethod = methods[0];
 	    
+		BiogasUserControl.structureName = structure.getClass().getName();
+		
 		BiogasUserControl.iteration = 0;    
-		BiogasUserControl.currenttime = starttime; 
+		BiogasUserControl.currentTime = starttime; 
 		
 		boolean isReady = BiogasUserControl.setupPanelObj.environment_ready;
 		if(isReady) {
 			BiogasUserControl.running.setSelected(true); 
+			BiogasUserControl.wasCancelled = false;
 			
 			System.out.println("Time " + starttime + " --> " + endtime);
-			while(BiogasUserControl.currenttime < endtime) {
-				System.out.println("Current: " + starttime);
+			while(BiogasUserControl.currentTime < endtime) {
+				System.out.println("Current: " + BiogasUserControl.currentTime);
 				BiogasUserControl.simulationPanelObj.iteration.setText(String.valueOf(BiogasUserControl.iteration));
-				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currenttime + 1));
+				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currentTime + 1));
 				runMethod.invoke(structure);  
 				endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue();
-				++ BiogasUserControl.currenttime;
+				System.out.println("endtime before: " + endtime);
+				
+				//Pause-Stop
+				new UserPause().run();
+				new UserStop().run();
+				if(!BiogasUserControl.running.isSelected()) {
+					System.out.println("BREAK THE LOOP");
+					break;
+				}
+				System.out.println("endtime after: " + endtime);
+				++ BiogasUserControl.currentTime;
 				++ BiogasUserControl.iteration;
 			}
-		    
-			BiogasUserControl.running.setSelected(false); 
+		    System.out.println("Finished!");
+			//BiogasUserControl.running.setSelected(false); 
 		}
 		else {
 			JFrame frame = new JFrame();

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
-import vrl.biogas.biogascontrol.elements.*;
+import vrl.biogas.biogascontrol.elements.structureElements.*;
 
 @ComponentInfo(name="2_STAGE", 
 	category="Biogas_Structures", 
