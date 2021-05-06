@@ -5,11 +5,11 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"simpleHydrolysis_stage"},
+		activeReactions={"all"},
 	},
 	numericalSetup={
-		sim_starttime=10,
-		sim_endtime=13,
+		sim_starttime=0,
+		sim_endtime=1,
 	},
 	outputSpecs={
 		customSetting={
@@ -95,9 +95,9 @@ problem={
 		},
 	},
 	inflow={
-		data={"Acetic"},
+		data={"Propionic", "Acetic"},
 		timetable={
-			{0, 0, 0},
+			{0, 0, 0, 0},
 		},
 
 	},	
@@ -133,7 +133,7 @@ problem={
 			inhibitionTerms = {
 				inhibitionAmmonia = false,
 				limitedTrace = {
-					["Nitrogen"] = false,
+					["Nitrogen"] = true, --False in Test.lua
 				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,

@@ -316,7 +316,7 @@ public class MergeFunctions {
 		}
 	}
 	
-	public static String integrate_one_file(
+	private static String integrate_one_file(
 			File reactorDir,
 			String f) throws IOException 
 	{		
@@ -420,6 +420,7 @@ public class MergeFunctions {
 			integratedOnly += "\n";
 		}			
 		String newFileName = fileDir.toString().substring(0, extensionPos) + "_integrated" + fileDir.toString().substring(extensionPos);
+		System.out.println("newFileName: " + newFileName);
 		File newFile = new File(newFileName);
 		FileWriter myWriter = new FileWriter(newFile);
 		myWriter.write(integratedOnly);
@@ -434,6 +435,7 @@ public class MergeFunctions {
 			integratedSum += "\n";
 		}	
 		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum" + fileDir.toString().substring(extensionPos);
+		System.out.println("newFileName: " + newFileName);
 		newFile = new File(newFileName);
 		myWriter = new FileWriter(newFile);
 		myWriter.write(integratedSum);
@@ -448,6 +450,7 @@ public class MergeFunctions {
 			integratedSumFull += "\n";
 		}	
 		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum_fullTimesteps" + fileDir.toString().substring(extensionPos);
+		System.out.println("newFileName: " + newFileName);
 		newFile = new File(newFileName);
 		myWriter = new FileWriter(newFile);
 		myWriter.write(integratedSumFull);
@@ -512,8 +515,11 @@ public class MergeFunctions {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 	
-		File dir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210414_190921");
-		create_outputFiles(dir, "hydrolysis_0");
+		File storage_dir = new File("/home/paul/Schreibtisch/smalltest/testFolderVRL/storage_hydrolysis");
+		File working_dir = new File("/home/paul/Schreibtisch/smalltest/testFolderVRL");
+		String[] reactor_names = {"hydrolyse_0"};
+		
+		merge_all_hydrolysis(storage_dir, working_dir, reactor_names);
 	}
 	
 }

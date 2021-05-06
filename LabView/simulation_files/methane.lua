@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"Methane_Stage"},
+		activeReactions={"Acidogenesis", "all_Acetogenesis", "Methanogenesis"},
 	},
 	numericalSetup={
 		sim_starttime=0,
@@ -52,7 +52,7 @@ problem={
 		},
 	},
 	inflow={
-		data={"Propionic", "Acetic"},
+		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
 			{0, 0, 0, 0},		
 		},

@@ -14,7 +14,7 @@ public class HelperFunctions {
 	static ArrayList<ArrayList<ArrayList<String>>> values;
 	
 	static public boolean read_values_from_reactor(String dir) throws FileNotFoundException{	
-		System.out.println(dir);
+		System.out.println("read_values_from_reactor: " + dir);
 		ArrayList<ArrayList<String>> hydroFile = new ArrayList<ArrayList<String>>();
 		
 		File f = new File(dir);

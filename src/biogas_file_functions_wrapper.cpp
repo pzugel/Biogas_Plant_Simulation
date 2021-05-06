@@ -25,8 +25,15 @@
 #include "file_functions/update_feeding.cpp"
 #include "file_functions/update_inflow.cpp"
 
-//static std::string data_string;
-//static std::string header_string;
+static const std::vector<std::string> output_files{
+	"digestateConcentrations.txt",
+	"subMO_mass.txt",
+	"valveGasFlow.txt",
+	"producedNormVolumeCumulative.txt",
+	"dbg_nitrogenRates.txt",
+	"producedNormVolumeHourly.txt",
+	"dbg_phContribution.txt",
+	"outflow_integratedSum_fullTimesteps.txt"};
 
 static const std::vector<std::string> all_files{
 	"digestateConcentrations.txt",
@@ -40,118 +47,20 @@ static const std::vector<std::string> all_files{
 	"dbg_phContribution.txt",
 	"dbg_reactionrates.txt",
 	"outflow.txt",
-	"reactorState.txt"};
-	
-static const std::vector<std::string> output_files{
-	"digestateConcentrations.txt",
-	"subMO_mass.txt",
-	"valveGasFlow.txt",
-	"producedNormVolumeCumulative.txt",
-	"dbg_nitrogenRates.txt",
-	"producedNormVolumeHourly.txt",
-	"dbg_phContribution.txt"};
+	"reactorState.txt",
+	"dbg_gamma.txt"};
 	
 static const std::vector<std::string> output_files_integration{
 	"dbg_reactionrates.txt",
 	"outflow.txt"};
 	
-static const std::vector<std::string> output_files_nonAdditive{
+static const std::vector<std::string> output_files_nonAdditive = {
 	"dbg_avgEqValues.txt",
 	"gas_Volfraction.txt",
-	"reactorState.txt"};
-
-//dbg_density.txt
-//reactorCODcontent.txt
+	"reactorState.txt",
+	"dbg_gamma.txt"};
 
 extern "C"{
-
-/**
- * Loads a CSV-style *.txt file and removes all header lines 
- * 
- * @param path: Path pointing to a *.txt file
- * @return The plain text without header lines
- */
-const char* remove_header(const char* path)
-{
-	data_string = "";
-	std::regex header ("(^#)|(^[a-zA-Z])");
-	std::ifstream CSVInput(path);
-	for(std::string line; getline(CSVInput,line);)
-	{
-		if(!(std::regex_search(line, header)))
-			data_string += line + "\n";
-	}
-	return data_string.c_str();
-}
-
-/**
- *  Removes all header lines from a .txt file as string
- * 
- * @param path: *.txt file as string
- * @return The plain text without header lines
- */
-const char* remove_header_from_string(const char* file_as_string)
-{
-	data_string = "";
-	header_string = "";
-	std::regex header ("(^#)|(^[a-zA-Z])");
-	std::stringstream STRInput(file_as_string);
-	for(std::string line; getline(STRInput,line);)
-	{
-		if(!(std::regex_search(line, header)))
-			data_string += line + "\n";
-		else
-			header_string += line + "\n";
-	}
-	return data_string.c_str();
-}
-
-/**
- * Loads a CSV-style *.txt file and extracts all header lines 
- * 
- * @param path: Path pointing to a *.txt file
- * @return The plain text header
- */
-const char* get_header(const char* path)
-{
-	header_string = "";
-	std::regex header ("(^#)|(^[a-zA-Z])");
-	std::ifstream CSVInput(path);
-	for(std::string line; getline(CSVInput,line);)
-	{
-		if(std::regex_search(line, header))
-			header_string += line + "\n";
-	}
-	return header_string.c_str();
-}
-
-/**
- * Reads all filenames from an outputFiles.lua  
- * 
- * @param path: Path pointing to outputFiles.lua
- * @return Filenames as string
- */
-const char* read_filenames(const char* path)
-{
-	data_string = "";
-	std::regex filename ("^filename=");
-	std::ifstream LUAOutput(path);
-	if(LUAOutput.good())
-	{
-		for(std::string line; getline(LUAOutput,line);)
-		{
-			line.erase(std::remove_if(line.begin(), line.end(), ::isspace), line.end());
-			if(std::regex_search(line, filename))
-			{
-				boost::replace_all(line, ",", "");
-				boost::replace_all(line, "\"", "");
-				boost::replace_all(line, "filename=", "");
-				data_string += line + "\n";
-			}
-		}
-	}
-	return data_string.c_str();
-}
 
 /**
  * Removes unwanted files from the outputFiles.lua
@@ -209,22 +118,24 @@ void update_outputFiles(const char* outputFiles_path)
 }
 
 /**
- * Iterate over all possible hydrolyse output files as specified
- * in the "hydrolyse_files" vector and call the 
+ * Function called by the storage element
+ * 
+ * First iterate over all possible output files that need integration
+ * as specified in the "output_files_integration" vector and call the 
+ * "merge_files_integration" function.
+ * 
+ * Then iterate over all other possible hydrolyse output files as 
+ * specified in the "output_files" vector and call the 
  * "merge_hydrolysis_files" function to merge all output files for
  * all hydrolyse reactors.
  * 
- * @param dir: Path pointing to the hydrolyse folders
+ * @param working_dir: Path to working directory
  * @param reactor_names: String of names for the hydrolyse reactors
- * @param simulation_starttime: Starttime of the whole simulation
  * @param current_starttime: Current timestep in the simulation
  */
 void merge_all_hydrolysis(
 	const char* working_dir,
-	const char* reactor_names,
-	int simulation_starttime,
-	int current_starttime,
-	bool merge_preexisting)
+	const char* reactor_names)
 {
 	//Write reactor names into vector
 	std::vector<std::string> reactors;
@@ -235,112 +146,96 @@ void merge_all_hydrolysis(
 	}
 	int num_reactors = reactors.size();
 	std::cout << "num_reactors: " << num_reactors << std::endl;
-	//First timestep?
-	bool is_first_timestep = false;
-	if(simulation_starttime == current_starttime)
-		is_first_timestep = true;
-		
+
 	std::string storage_dir = (std::string) working_dir + "/storage_hydrolyse";
 	std::cout << "storage_dir: " << storage_dir << "\n" << std::endl;
 	
-	//Merge hydrolysis files (no integration)
-	for(const auto& f: output_files) {
-		std::string output_file_string = merge_hydrolysis_files(
+	//Merge hydrolysis files with integration
+	for(std::string f: output_files_integration) {
+		std::string output_file_string = merge_files_integration(
 			working_dir, 
-			f.c_str(), 
-			current_starttime,
+			f,
 			reactors);
-		std::ofstream output_file;
-		std::string output_file_name = storage_dir + "/" + f;
+		
+		std::string output_file_name = 	storage_dir + "/" + f;
 		std::cout << output_file_name << std::endl;
-		if(!output_file_string.empty())
-		{
-			if(is_first_timestep){
-				if(merge_preexisting){
-					output_file.open(output_file_name, std::ios_base::app);
-					output_file << output_file_string;
-				}
-				else
-				{
-					output_file.open(output_file_name);
-					output_file << header_string;
-					output_file << output_file_string;
-				}
-			}
-			else{
-				output_file.open(output_file_name, std::ios_base::app);
-				output_file << output_file_string;
-			}
-		}
-		output_file.close();
+		
+		std::ofstream output;
+		output.open(output_file_name);
+		output << output_file_string;
+		output.close();
+		
 		std::cout << output_file_string << std::endl;
 	}
 	
-	std::cout << "Integrating files ...." << std::endl;
-	
-	//Merge hydrolysis files with integration
-	for(const auto& f: output_files_integration) {
-		std::string output_names = "";
-		for(int i=0; i<num_reactors; i++){
-			output_names += (string) working_dir + "/" 
-				+ reactors.at(i) + "/" 
-				+ f;
-			if(i!=num_reactors-1)
-				output_names += "\n";
-		}
-		std::cout << "output_names: " << output_names << std::endl;
-		bool exists = merge_hydrolysis_files_integration(
-			current_starttime, 
-			num_reactors,
-			output_names);
-		if(exists)
-		{
-			std::string output_file_string = get_merged_file();
-			
-			std::ofstream output_file;
-			std::string output_file_name = storage_dir + "/" + f;
-			std::cout << "output_file_name: " << output_file_name << std::endl;
-			std::cout << "output_file_string: " << output_file_string << std::endl;
-			if(is_first_timestep){
+	//Merge hydrolysis files (no integration)
+	for(std::string f: output_files) {
+		std::string output_file_string = merge_hydrolysis_files(
+			working_dir, 
+			f,
+			reactors);
+		
+		std::string output_file_name = 	storage_dir + "/" + f;
+		std::cout << output_file_name << std::endl;
+		
+		std::ofstream output;
+		output.open(output_file_name);
+		output << output_file_string;
+		output.close();
+		
+		std::cout << output_file_string << std::endl;
+	}
+}
+
+/**
+ * Function called by the feedback element
+ * 
+ * First iterate over all possible output files that need integration
+ * as specified in the "output_files_integration" vector and call the 
+ * "merge_files_integration" function.
+ * 
+ * Then iterate over all other possible methane output files as 
+ * specified in the "output_files" vector and call the 
+ * "merge_hydrolysis_files" function to merge all output files for
+ * all hydrolyse reactors.
+ * 
+ * @param methane_dir: Path pointing to the methane folders
+ * @param working_dir: Path to the working directory
+ * @param current_starttime: Current timestep in the simulation
+ */
+void merge_all_methane(
+	const char* working_dir,
+	const char* methane_dir)
+{
+	std::cout << "methane_dir: " << methane_dir << std::endl;		
+		
+	//Merge methane files with integration
+	for(std::string f: output_files_integration) {
+		std::vector<std::string> methaneReactor;
+		methaneReactor.push_back("methane");
+		std::string output_file_string = merge_files_integration(
+				working_dir, 
+				f,  
+				methaneReactor);
 				
-				if(merge_preexisting)
-				{
-					std::ifstream output_file_stream(output_file_name);
-					if(output_file_stream.good()) //merge with previous files
-					{
-						output_file.open(output_file_name, std::ios_base::app);
-						remove_header_from_string(output_file_string.c_str());
-						output_file << data_string;
-					}
-					else //should merge but no previous files found
-					{
-						output_file.open(output_file_name);
-						output_file << output_file_string;
-					}
-				}
-				else //dont merge
-				{
-					output_file.open(output_file_name);
-					output_file << output_file_string;
-				}				
-			}
-			else{
-				output_file.open(output_file_name, std::ios_base::app);
-				remove_header_from_string(output_file_string.c_str());
-				output_file << data_string;
-			}
-			
-			output_file.close();
-			
-		}
+		std::string output_file_name = 	(std::string) methane_dir + "/" + f;
+		std::cout << output_file_name << std::endl;
+		
+		std::ofstream output;
+		output.open(output_file_name);
+		output << output_file_string;
+		output.close();
+		
+		std::cout << output_file_string << std::endl;
 	}
 }
 
 /**
  * Only concatenates files from one single reactor. 
- * No summation,integration or modification of any sort. 
- * This function will only be used to plot the unmodified
- * outputs of the reactor.
+ * No summation,integration or modification of any sort.
+ * 
+ * Function is called by the hydrolysis- and methane reactor
+ * after completion of computations 
  * 
  * @param working_dir: Path pointing to a reactor folder
  * @param simulation_starttime: Starttime of the whole simulation
@@ -352,7 +247,7 @@ void merge_one_reactor(
 	int current_starttime,
 	bool merge_preexisting)
 {	
-	std::string timestep_dir = (std::string) working_dir + "/" + to_string(current_starttime);
+	std::string timestep_dir = (std::string) working_dir + "/" + std::to_string(current_starttime);
 	
 	bool is_first_timestep = false;
 	if(simulation_starttime == current_starttime)
@@ -472,6 +367,47 @@ const char* load_hydrolysis_feeding(const char* hydrolysis_specfile)
 }
 
 /**
+ * Loads a CSV-style *.txt file and removes all header lines 
+ * 
+ * @param path: Path pointing to a *.txt file
+ * @return The plain text without header lines
+ */
+const char* remove_header(const char* path)
+{
+	data_string = "";
+	std::regex header ("(^#)|(^[a-zA-Z])");
+	std::ifstream CSVInput(path);
+	for(std::string line; getline(CSVInput,line);)
+	{
+		//Header lines might begin whith whitespaces --> remove
+		std::string line_noWS = line;
+		line_noWS.erase(remove_if(line_noWS.begin(), line_noWS.end(), isspace), line_noWS.end());
+		if(!(std::regex_search(line_noWS, header)))
+			data_string += line + "\n";
+	}
+	return data_string.c_str();
+}
+
+/**
+ * Loads a CSV-style *.txt file and extracts all header lines 
+ * 
+ * @param path: Path pointing to a *.txt file
+ * @return The plain text header
+ */
+const char* get_header(const char* path)
+{
+	header_string = "";
+	std::regex header ("(^#)|(^[a-zA-Z])");
+	std::ifstream CSVInput(path);
+	for(std::string line; getline(CSVInput,line);)
+	{
+		if(std::regex_search(line, header))
+			header_string += line + "\n";
+	}
+	return header_string.c_str();
+}
+
+/**
  * Reads out pH value from "reactorState.txt" files. We only use this
  * for hydrolysis reactors to display in LabView.
  * 
@@ -512,45 +448,11 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
-	/*
-	const char* reactors = "hydrolyse_0\nhydrolyse_1\n";
-	merge_all_hydrolysis(
-		"/home/paul/Schreibtisch/smalltest/biogas_20210226_162149@2_STAGE_PL",
-		reactors,
-		0,
-		26,
-		false);
-	*/
-	
-	//const char* hydrolysis_specfile = "/home/paul/Schreibtisch/smalltest/feeding_test/hydrolyse_checkpoint.lua";
-	//const char* table = load_hydrolysis_feeding(hydrolysis_specfile);
-	//std::cout << table << std::endl;
-	//double time[] = {1,2,31,4,5};
-	//double amount[] = {11,12,13,14,15};
-	//update_hydrolysis_feeding(hydrolysis_specfile, time, amount, 5);
-	
-	
-	//const char* outflow_infile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/storage_hydrolyse/outflow.txt";
-	//const char* methane_specfile = "/home/paul/Schreibtisch/smalltest/1_STAGE_CONT/tmp/methane/0/methane_checkpoint.lua";
-	//update_methane_inflow(outflow_infile, methane_specfile);
-	
-	//update_outputFiles("/home/paul/Schreibtisch/smalltest/tmp/storage_hydrolyse/outputFiles.lua");
-	
-	/*
-	const char* reactor_state_files = "/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0/reactorState.txt\n/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_1/reactorState.txt";
-	double a[3]; 
-	get_hydrolysis_PH(a, reactor_state_files);
-	std::cout << a[0] << std::endl;
-	std::cout << a[1] << std::endl;
-	*/
-	
-	
-	const char* working_dir = "/home/paul/Schreibtisch/smalltest/biogas_20210226_162149@2_STAGE_PL/methane";
-	merge_one_reactor(
-		working_dir,
-		0,
-		26,
-		false);
+	//const char* storage_dir = "/home/paul/Schreibtisch/smalltest/testFolderLabView/storage_hydrolysis";
+	const char* working_dir = "/home/paul/Schreibtisch/smalltest/testFolderLabView";
+	const char* reactor_names = "hydrolyse_0";
+		
+	merge_all_hydrolysis(working_dir, reactor_names);
 	
 	return 0;
 }

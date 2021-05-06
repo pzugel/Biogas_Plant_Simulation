@@ -47,7 +47,13 @@ functions.h
 /home/paul/Schreibtisch/Biogas_plant_setup/src/file_functions/functions.h
 sstream
 -
+vector
+-
 regex
+-
+iostream
+-
+math.h
 -
 boost/algorithm/string.hpp
 -

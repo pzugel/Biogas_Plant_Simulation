@@ -16,7 +16,6 @@ problem = {
         activeReactions = {
             type = "String[]",
             style = "default",
-            default = "bTest"
         }
     },
     numericalSetup = {
@@ -96,8 +95,6 @@ problem = {
         analysis = {
             type = "Double",
             style = "default",
-			default = 1.0,
-			test = 12,
             tableContent = {
                 values = {"Acetic","Propionic","Butyric","Valeric"}
             }
@@ -110,6 +107,19 @@ problem = {
             }
         }
     },
+	inflow = {
+		data = {
+            type = "String[]",
+            style = "default",
+        },
+		timetable = {
+            type = "Double",
+            style = "default",
+            timeTableContent = {
+                numberEntries = 0
+            }
+        }
+	},
     expert = {
         geometry = {
             grid_name = {

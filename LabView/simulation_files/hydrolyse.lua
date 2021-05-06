@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"simpleHydrolysis_stage"},
+		activeReactions={"all"},
 	},
 	numericalSetup={
 		sim_starttime=0,

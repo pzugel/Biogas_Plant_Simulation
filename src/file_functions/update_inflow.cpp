@@ -110,7 +110,7 @@ void read_outflow_values()
  * 
  * @param fraction: Value to split the inflow
  */
-void write_new_timetable(double fraction)
+void write_new_timetable(double fraction, bool isMethane)
 {
 	output_timetable = {};
 	/*
@@ -125,7 +125,21 @@ void write_new_timetable(double fraction)
 			int column = j;
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
-				col_vector.push_back(outflow_input_values.at(k).at(column));
+				/*
+				 * If we update the specification inflow for the methane we want the hydrolysis outflow to be
+				 * present in the current timestep
+				 * 
+				 * e.g. If we compute the timestep 2.0 -> 3.0 in the hydrolysis reactors we want the outflow
+				 * at timestamp "3.0" to be present in the methane reactor at timestamp "2.0" since we still 
+				 * need to compute timestep 2.0 -> 3.0 in the methane reactor
+				 */
+				 if(header_val.find("Time") != std::string::npos && isMethane){
+					double previousTimestep = dot_conversion(outflow_input_values.at(k).at(column))-1;
+					col_vector.push_back(conv_to_string(previousTimestep));
+				 }
+				 else {
+					col_vector.push_back(outflow_input_values.at(k).at(column));
+				 }				
 			}
 			output_timetable.push_back(col_vector);	
 		}
@@ -224,7 +238,7 @@ void write_methane_inflow(
 	parse_spec_file();
 	read_outflow_header();
 	read_outflow_values();
-	write_new_timetable(1.0);
+	write_new_timetable(1.0, true);
 	write_new_timetable_string();
 	
 	//Replacement in spec file	
@@ -279,7 +293,7 @@ int write_hydrolysis_inflow(
 		specfile_string = mBuf;
 		
 		parse_spec_file();
-		write_new_timetable(fractions[spec_number]);
+		write_new_timetable(fractions[spec_number], false);
 		write_new_timetable_string();
 		
 		std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	

@@ -70,13 +70,14 @@ transformSpecInput()
 	this->input_specModified= this->input;
 
 	this->input_specModified.erase(remove_if(this->input_specModified.begin(), this->input_specModified.end(), isspace), this->input_specModified.end());
-	std::regex str_arr ("\\{\"[a-zA-Z0-9_]+\"\\}");
+	std::regex str_arr ("\\{(\"[a-zA-Z0-9_]+\"(,)?)*\\}");
 	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}");
 
 	std::smatch match_strArr; //Match types Str[]
 	while (regex_search(this->input_specModified, match_strArr, str_arr)) 
 	{
 		std::string matched_str_arr = match_strArr.str(0).substr(1, match_strArr.str(0).length()-2);
+		boost::replace_all(matched_str_arr, ",", "#");
 		boost::replace_all(this->input_specModified, match_strArr.str(0), "$"+matched_str_arr+"?");  
 	} 
 	
