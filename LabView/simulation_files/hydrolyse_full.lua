@@ -1,5 +1,3 @@
--- THIS IS JUST A DEMO
--- Use methane_full.lua
 problem={
 	reactorSetup={
 		operatingTemperature=311.15,
@@ -7,11 +5,11 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"methane_demo"},
+		activeReactions={"all"},
 	},
 	numericalSetup={
 		sim_starttime=0,
-		sim_endtime=3,
+		sim_endtime=1,
 	},
 	outputSpecs={
 		customSetting={
@@ -53,11 +51,55 @@ problem={
 			["MO_AcidoAA"] = 0.99,
 		},
 	},
-	inflow={
-		data={"Butyric", "Acetic"},
-		timetable={
-			{0, 0, 0, 0},		
+	feeding={
+		drymass=0.3649,
+		volatile=0.973,
+		stoidisintegration={
+			["Proteins"] = 0.077697841726619,
+			["Lipids"] = 0.03186022610483,
+			["Carbohydrates"] = 0.65927235354573,
 		},
+		analysis={
+			["Acetic"] = 10713.49*1E-3,
+			["Propionic"] = 745.28*1E-3,
+			["Butyric"] = 443.93*1E-3,
+			["Valeric"] = 35.06*1E-3,
+		},
+		timetable={						
+			{0,	243	},
+			{24, 243},
+			{48, 243},
+			{72, 243},
+			{96, 243},
+			{120, 243},
+			{144, 243},
+			{168, 243},
+			{192, 243},
+			{216, 243},
+			{240, 10*243},
+			{264, 10*243},
+			{288, 10*243},
+			{312, 10*243},
+			{336, 10*243},
+			{360, 243},
+			{384, 243},
+			{408, 243},
+			{432, 243},
+			{456, 243},
+			{480, 243},
+			{504, 243},
+			{528, 243},
+			{552, 243},
+			{576, 243},
+			{600, 243},
+		},
+	},
+	inflow={
+		data={"Propionic", "Acetic"},
+		timetable={
+			{0, 0, 0, 0},
+		},
+
 	},	
 	expert = {
 		geometry = {
@@ -91,7 +133,7 @@ problem={
 			inhibitionTerms = {
 				inhibitionAmmonia = false,
 				limitedTrace = {
-					["Nitrogen"] = true,  --False in Test.lua
+					["Nitrogen"] = true, --False in Test.lua
 				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,

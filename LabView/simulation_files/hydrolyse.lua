@@ -1,3 +1,5 @@
+-- THIS IS JUST A DEMO
+-- Use hydrolyse_full.lua
 problem={
 	reactorSetup={
 		operatingTemperature=311.15,
@@ -5,7 +7,7 @@ problem={
 		realReactorVolume=34.5,
 	},
 	reactionSetup={
-		activeReactions={"all"},
+		activeReactions={"hydrolysis_demo"},
 	},
 	numericalSetup={
 		sim_starttime=0,
@@ -95,7 +97,7 @@ problem={
 		},
 	},
 	inflow={
-		data={"Propionic", "Acetic"},
+		data={"Butyric", "Acetic"},
 		timetable={
 			{0, 0, 0, 0},
 		},

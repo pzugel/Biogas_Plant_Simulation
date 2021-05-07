@@ -94,6 +94,7 @@
 						<Item Name="main_create_environment.vi" Type="VI" URL="../subVI/main_create_environment.vi"/>
 						<Item Name="main_load_environment_check.vi" Type="VI" URL="../subVI/main_load_environment_check.vi"/>
 						<Item Name="main_load_environtment.vi" Type="VI" URL="../subVI/main_load_environtment.vi"/>
+						<Item Name="main_update_env_tree.vi" Type="VI" URL="../subVI/main_update_env_tree.vi"/>
 					</Item>
 					<Item Name="main_auto_cleanup.vi" Type="VI" URL="../subVI/main_auto_cleanup.vi"/>
 					<Item Name="main_break_signal.vi" Type="VI" URL="../subVI/main_break_signal.vi"/>
