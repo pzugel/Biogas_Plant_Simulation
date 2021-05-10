@@ -81,7 +81,9 @@ public class MergeFunctions {
 					f, 
 					reactor_names);
 			
-			File output_file_name = new File(storage_dir, f);
+			String output_file_name = storage_dir + File.separator + f;
+			int extensionPos = output_file_name.lastIndexOf(".");
+			output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
 			System.out.println(output_file_name);
 			
 			Writer output = new BufferedWriter(new FileWriter(output_file_name));
@@ -110,6 +112,7 @@ public class MergeFunctions {
 		}
 	}
 	
+	@SuppressWarnings("unused")
 	public static void merge_all_methane(
 			File methane_dir,
 			File working_dir) throws IOException 
@@ -124,7 +127,7 @@ public class MergeFunctions {
 					working_dir, 
 					f,  
 					methaneReactor);
-			
+			/*
 			File output_file_name = new File(methane_dir, f);
 			System.out.println(output_file_name);
 			
@@ -133,6 +136,7 @@ public class MergeFunctions {
 			output.close();	
 					
 			System.out.println(output_file_string);	
+			*/
 		}
 	}
 	

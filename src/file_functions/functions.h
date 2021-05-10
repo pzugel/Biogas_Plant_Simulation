@@ -34,7 +34,7 @@ extern "C"{
  */
 std::string conv_to_string(double d){
 	std::ostringstream out;
-    out << std::setprecision(14) << d;
+    out << std::setprecision(16) << d;
     return out.str();
 }
 
@@ -49,7 +49,7 @@ double dot_conversion(std::string s){
 	std::istringstream valStream(s);
 	double out;
 	while (valStream)
-		valStream >> std::setprecision(14) >> out;
+		valStream >> std::setprecision(16) >> out;
 	return out;
 }
 

@@ -12,13 +12,13 @@
 #include "functions.h"
 
 /**
- * Reads all hydrolyse output files of all hydrolyse reactors for 
+ * Reads all hydrolysis output files of all hydrolysis reactors for 
  * the current timestep and merges them into the 
- * /storage_hydrolyse folder.  
+ * /storage_hydrolysis folder.  
  * 
- * @param dir: Path pointing to the hydrolyse folders
+ * @param dir: Path pointing to the hydrolysis folders
  * @param filename: Output file to merge, e.g. "subMO_mass.txt"
- * @param reactors: Vector of names for the hydrolyse reactors
+ * @param reactors: Vector of names for the hydrolysis reactors
  * @return File to write as string
  */
 std::string merge_hydrolysis_files(

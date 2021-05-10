@@ -124,13 +124,13 @@ void update_outputFiles(const char* outputFiles_path)
  * as specified in the "output_files_integration" vector and call the 
  * "merge_files_integration" function.
  * 
- * Then iterate over all other possible hydrolyse output files as 
+ * Then iterate over all other possible hydrolysis output files as 
  * specified in the "output_files" vector and call the 
  * "merge_hydrolysis_files" function to merge all output files for
- * all hydrolyse reactors.
+ * all hydrolysis reactors.
  * 
  * @param working_dir: Path to working directory
- * @param reactor_names: String of names for the hydrolyse reactors
+ * @param reactor_names: String of names for the hydrolysis reactors
  * @param current_starttime: Current timestep in the simulation
  */
 void merge_all_hydrolysis(
@@ -147,7 +147,7 @@ void merge_all_hydrolysis(
 	int num_reactors = reactors.size();
 	std::cout << "num_reactors: " << num_reactors << std::endl;
 
-	std::string storage_dir = (std::string) working_dir + "/storage_hydrolyse";
+	std::string storage_dir = (std::string) working_dir + "/storage_hydrolysis";
 	std::cout << "storage_dir: " << storage_dir << "\n" << std::endl;
 	
 	//Merge hydrolysis files with integration
@@ -158,6 +158,10 @@ void merge_all_hydrolysis(
 			reactors);
 		
 		std::string output_file_name = 	storage_dir + "/" + f;
+		std::size_t extensionPos = output_file_name.find_last_of(".");
+		output_file_name = output_file_name.substr(0, extensionPos) 
+			+ "_integrated" 
+			+ output_file_name.substr(extensionPos);
 		std::cout << output_file_name << std::endl;
 		
 		std::ofstream output;
@@ -197,7 +201,7 @@ void merge_all_hydrolysis(
  * Then iterate over all other possible methane output files as 
  * specified in the "output_files" vector and call the 
  * "merge_hydrolysis_files" function to merge all output files for
- * all hydrolyse reactors.
+ * all hydrolysis reactors.
  * 
  * @param methane_dir: Path pointing to the methane folders
  * @param working_dir: Path to the working directory
@@ -217,16 +221,6 @@ void merge_all_methane(
 				working_dir, 
 				f,  
 				methaneReactor);
-				
-		std::string output_file_name = 	(std::string) methane_dir + "/" + f;
-		std::cout << output_file_name << std::endl;
-		
-		std::ofstream output;
-		output.open(output_file_name);
-		output << output_file_string;
-		output.close();
-		
-		std::cout << output_file_string << std::endl;
 	}
 }
 
@@ -319,21 +313,21 @@ void update_methane_inflow(
 }
 
 /**
- * Updates the specification file for the hydrolysis reacors with the current
+ * Updates the specification file for the hydrolysis reacor with the current
  * outflow from the methane reactor
  * 
  * @param outflow_infile: Path pointing the outflow.txt (methane)
- * @param hydrolysis_specfiles: String with the specfiles directories
- * @param fractions: Array with fractional values to split the inflow
+ * @param hydrolysis_specfiles: String with the specfile directory
+ * @param fractions: Fractional value
  */
 void update_hydrolysis_inflow(
 	const char* outflow_infile,
-	const char* hydrolysis_specfiles,
-	double fractions[])
+	const char* hydrolysis_specfile,
+	double fraction)
 {
 	write_hydrolysis_inflow(outflow_infile, 
-		hydrolysis_specfiles, 
-		fractions);
+		hydrolysis_specfile, 
+		fraction);
 }
 
 /**
@@ -448,11 +442,13 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
-	//const char* storage_dir = "/home/paul/Schreibtisch/smalltest/testFolderLabView/storage_hydrolysis";
-	const char* working_dir = "/home/paul/Schreibtisch/smalltest/testFolderLabView";
-	const char* reactor_names = "hydrolyse_0";
-		
-	merge_all_hydrolysis(working_dir, reactor_names);
+	const char* working_dir = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/1_STAGE_2TIMECOPY";
+	//const char* methane_dir = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/1_STAGE_2TIMECOPY/methane";
+	//merge_one_reactor(methane_dir,0,0,false);
+	//merge_one_reactor(methane_dir,0,1,true);
 	
+	//merge_all_methane(working_dir,methane_dir);
+	const char* reactor_names = {"hydrolysis_0"};
+	merge_all_hydrolysis(working_dir,reactor_names);
 	return 0;
 }

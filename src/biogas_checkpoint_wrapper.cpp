@@ -157,8 +157,8 @@ void update_read_checkpoint(const char* spec_dir, const char* checkpoint_dir)
  * Only to test functionality
  */
 int main(){
-	const char* spec = "/home/paul/Schreibtisch/hydrolyse_checkpoint.lua";
-	const char* checkpoint = "/home/paul/Schreibtisch/smalltest/tmp/hydrolyse_0/1/";
+	const char* spec = "/home/paul/Schreibtisch/hydrolysis_checkpoint.lua";
+	const char* checkpoint = "/home/paul/Schreibtisch/smalltest/tmp/hydrolysis_0/1/";
 	double starttime;
 	double endtime;
 	std::cout << "starttime: ";

@@ -41,9 +41,9 @@
 			<Item Name="Elements" Type="Folder">
 				<Item Name="SubVI" Type="Folder">
 					<Item Name="feedback_run.vi" Type="VI" URL="../subVI/feedback_run.vi"/>
-					<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run.vi"/>
-					<Item Name="hydrolyse_reactor_run_parallel.vi" Type="VI" URL="../subVI/hydrolyse_reactor_run_parallel.vi"/>
-					<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../subVI/hydrolyse_reactor_setup.vi"/>
+					<Item Name="hydrolysis_reactor_run.vi" Type="VI" URL="../subVI/hydrolysis_reactor_run.vi"/>
+					<Item Name="hydrolysis_reactor_run_parallel.vi" Type="VI" URL="../subVI/hydrolysis_reactor_run_parallel.vi"/>
+					<Item Name="hydrolysis_reactor_setup.vi" Type="VI" URL="../subVI/hydrolysis_reactor_setup.vi"/>
 					<Item Name="methane_reactor_run.vi" Type="VI" URL="../subVI/methane_reactor_run.vi"/>
 					<Item Name="methane_reactor_setup.vi" Type="VI" URL="../subVI/methane_reactor_setup.vi"/>
 					<Item Name="methane_reactor_update.vi" Type="VI" URL="../subVI/methane_reactor_update.vi"/>
@@ -51,8 +51,8 @@
 					<Item Name="storage_run.vi" Type="VI" URL="../subVI/storage_run.vi"/>
 				</Item>
 				<Item Name="feedback.vi" Type="VI" URL="../elements/feedback.vi"/>
-				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../elements/hydrolyse_reactor.vi"/>
-				<Item Name="hydrolyse_reactor_parallel.vi" Type="VI" URL="../elements/hydrolyse_reactor_parallel.vi"/>
+				<Item Name="hydrolysis_reactor.vi" Type="VI" URL="../elements/hydrolysis_reactor.vi"/>
+				<Item Name="hydrolysis_reactor_parallel.vi" Type="VI" URL="../elements/hydrolysis_reactor_parallel.vi"/>
 				<Item Name="methane_reactor.vi" Type="VI" URL="../elements/methane_reactor.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../elements/storage.vi"/>
 			</Item>
@@ -76,10 +76,10 @@
 					<Item Name="element_editor.vi" Type="VI" URL="../subVI/element_editor.vi"/>
 					<Item Name="element_editor_close.vi" Type="VI" URL="../subVI/element_editor_close.vi"/>
 					<Item Name="element_editor_highlight_validation.vi" Type="VI" URL="../subVI/element_editor_highlight_validation.vi"/>
-					<Item Name="element_editor_hydrolyse_initial.vi" Type="VI" URL="../subVI/element_editor_hydrolyse_initial.vi"/>
-					<Item Name="element_editor_hydroyse_run.vi" Type="VI" URL="../subVI/element_editor_hydroyse_run.vi"/>
+					<Item Name="element_editor_hydrolysis_initial.vi" Type="VI" URL="../subVI/element_editor_hydrolysis_initial.vi"/>
+					<Item Name="element_editor_hydroysis_run.vi" Type="VI" URL="../subVI/element_editor_hydroysis_run.vi"/>
 					<Item Name="element_editor_init_tree.vi" Type="VI" URL="../subVI/element_editor_init_tree.vi"/>
-					<Item Name="element_editor_list_hydrolyse.vi" Type="VI" URL="../subVI/element_editor_list_hydrolyse.vi"/>
+					<Item Name="element_editor_list_hydrolysis.vi" Type="VI" URL="../subVI/element_editor_list_hydrolysis.vi"/>
 					<Item Name="element_editor_load_spec.vi" Type="VI" URL="../subVI/element_editor_load_spec.vi"/>
 					<Item Name="element_editor_load_vali.vi" Type="VI" URL="../subVI/element_editor_load_vali.vi"/>
 					<Item Name="element_editor_methane_run.vi" Type="VI" URL="../subVI/element_editor_methane_run.vi"/>

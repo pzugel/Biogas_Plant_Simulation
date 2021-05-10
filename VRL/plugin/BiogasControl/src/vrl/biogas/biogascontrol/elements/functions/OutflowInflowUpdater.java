@@ -142,6 +142,9 @@ public class OutflowInflowUpdater {
 	private static void write_new_timetable_string(File spec) throws IOException
 	{
 		System.out.println("write_new_timetable_string: " + spec);
+		/*
+		 * Scan indentation
+		 */
 		Scanner lineIter = new Scanner(spec);	
 		String tabs = "";
 		while (lineIter.hasNextLine()) {
@@ -261,9 +264,11 @@ public class OutflowInflowUpdater {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{  
-		File outflow_infile = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210414_190921/storage_hydrolyse/outflow_integratedSum_fullTimesteps.txt");
-		File methane_specfile = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210414_190921/methane/2/methane_checkpoint.lua");
-		write_methane_inflow(outflow_infile, methane_specfile);		
+		File outflow_infile = new File("/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_170729@1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt");
+		File spec = new File("/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_170729@1_STAGE/hydrolysis_0/0/hydrolysis_checkpoint.lua");
+		File[] hydrolysis_specfiles = {spec};
+		double[] fractions = {1.0};
+		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);		
 	}
 
 }

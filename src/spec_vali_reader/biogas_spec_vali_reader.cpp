@@ -109,7 +109,7 @@ readInput(std::string filepath)
 int main()
 {
 	BiogasSpecValiReader* testReader = new BiogasSpecValiReader();
-	std::string specfile = "/home/paul/Schreibtisch/smalltest/3_STAGE_PL_TEST/tmp/hydrolyse_1/0/hydrolyse_checkpoint.lua";
+	std::string specfile = "/home/paul/Schreibtisch/smalltest/3_STAGE_PL_TEST/tmp/hydrolysis_1/0/hydrolysis_checkpoint.lua";
 	testReader->readInput(specfile);
 	testReader->transformSpecInput();
 	testReader->generateSpecs();

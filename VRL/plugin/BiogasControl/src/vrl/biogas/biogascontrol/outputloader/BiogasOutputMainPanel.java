@@ -172,7 +172,7 @@ public class BiogasOutputMainPanel implements Serializable{
 					
 					//Storage
 					if(plotSelect.getSelectedIndex() == 2) {
-						File storageOutputFile = new File(environmentDir, "storage_hydrolyse" + File.separator + "outputFiles.lua");
+						File storageOutputFile = new File(environmentDir, "storage_hydrolysis" + File.separator + "outputFiles.lua");
 						if(storageOutputFile.exists()) {
 							updateTree(storageOutputFile);	
 						} else {

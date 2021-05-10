@@ -23,7 +23,7 @@ static int num_hydrolysis_reactors;
 static std::string hydrolysis_fractions;
 
 static std::string simulation_file;
-static std::string hydrolyse_specification;
+static std::string hydrolysis_specification;
 static std::string methane_specification;
 static std::string working_directory;
 
@@ -58,7 +58,7 @@ const char* get_plant_structure()
 }
 
 /**
- * Getter/setter for the active element, e.g. "Hydrolyse Reactor"
+ * Getter/setter for the active element, e.g. "Hydrolysis Reactor"
  */
 void set_active_element(const char* elem)
 {
@@ -98,16 +98,16 @@ const char* get_simulation_file()
 }
 
 /**
- * Getter/setter for the path to the hydrolyse specification file
+ * Getter/setter for the path to the hydrolysis specification file
  */
-void set_hydrolyse_specification(const char* hydrolyse_spec_file)
+void set_hydrolyse_specification(const char* hydrolysis_spec_file)
 {
-	hydrolyse_specification = (std::string) hydrolyse_spec_file;
+	hydrolysis_specification = (std::string) hydrolysis_spec_file;
 }
 
 const char* get_hydrolyse_specification()
 {
-	return hydrolyse_specification.c_str();
+	return hydrolysis_specification.c_str();
 }
 
 /**

@@ -48,7 +48,7 @@ public class HydrolysisParallel implements SimulationElement, Serializable{
 		
 		String logText = "** Hydrolysis ... \n";
 		for(String name : reactorNames) {
-			logText += "    >" + name + "\n";
+			logText += "    > " + name + "\n";
 		}
 		simPanel.simulationLog.setText(logStart + logText);
 		
