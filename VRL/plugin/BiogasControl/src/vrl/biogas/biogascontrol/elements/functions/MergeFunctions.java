@@ -44,11 +44,11 @@ public class MergeFunctions {
 		"dbg_reactionrates.txt",
 		"outflow.txt"};
 	
-	@SuppressWarnings("unused")
 	private final static String[] output_files_nonAdditive = {
 		"dbg_avgEqValues.txt",
 		"gas_Volfraction.txt",
-		"reactorState.txt"};
+		"reactorState.txt",
+		"dbg_gamma.txt"};
 	
 	public static void merge(String name, int currenttime, File timePath) throws IOException {
 		File basePath = timePath.getParentFile();
@@ -462,68 +462,110 @@ public class MergeFunctions {
 		
 		return integratedSumFull;
 	}
-
-	/*
-	 * Adds the integrated file outflow_integratedSum_fullTimesteps.txt to the outputFiles
-	 * of the hydrolysis storage
-	 */
-	public static void create_outputFiles(File workingDir, String hydrolysisName) throws IOException {
+	
+	public static void copy_outputFiles(File workingDir, String hydrolysisName) throws IOException {
 		File storageDir = new File(workingDir, "storage_hydrolysis");
 		File hydrolysisDir = new File(workingDir, hydrolysisName);
-		File outputFiles = new File(hydrolysisDir, "outputFiles.lua");
 		
-		/*
-		 * Read in outputFiles.lua from hydrolysis reactor 0.
-		 * "outflowString" will contain the outflow.txt entry from outputFiles.lua
-		 */
+		File source_outputFiles = new File(hydrolysisDir, "outputFiles.lua");
+		File destination_outputFiles = new File(storageDir, "outputFiles.lua");
+		Files.copy(source_outputFiles.toPath(), destination_outputFiles.toPath(), StandardCopyOption.REPLACE_EXISTING);
+	}
+	
+	/**
+	 * Updates the names of the integrated files in the outputFiles from the hydrolysis_storage
+	 * @param storageDirectory: Path pointing to storage
+	 */
+	public static void update_outputFiles_integration(File storageDirectory) throws IOException {
+		File outputFiles = new File(storageDirectory, "outputFiles.lua");
+		
 		Scanner lineIter = new Scanner(outputFiles);
-		String previousLine = "";
-		boolean foundOutflow = false;
-		String outflowString = "";
-		String completeFile = "";
+		String fileString = "";
 		while (lineIter.hasNextLine()) {
-			String line = lineIter.nextLine();
-			completeFile += line + "\n";
-			if(line.contains("filename=")) {
-				if(line.contains("outflow.txt")) {
-					foundOutflow = true;
-					outflowString += previousLine + "\n";
-				}
-				else {
-					if(foundOutflow) {
-						outflowString = outflowString.replace(previousLine, "");
-						outflowString = outflowString.substring(0, outflowString.length()-1);
-					}
-					foundOutflow = false;
-				}
-			}
-			
-			if(foundOutflow) {
-				outflowString += line + "\n";
-			}
-			previousLine = line;
+			fileString += lineIter.nextLine() + "\n";
 		}
 		lineIter.close();
 		
-		//Add integration files to the outputFiles.lua
-		String newOutflowEntry = outflowString;
-		newOutflowEntry = newOutflowEntry.replace("outflow.txt", "outflow_integratedSum_fullTimesteps.txt");
-		newOutflowEntry = newOutflowEntry.replace("outflow=", "outflow_integratedSum=");
-		String combinedOutflow = outflowString + newOutflowEntry;
-		completeFile = completeFile.replace(outflowString, combinedOutflow);
+		fileString = fileString.replace("outflow.txt", "outflow_integrated.txt");
+		fileString = fileString.replace("outflow=", "outflow_integrated=");
+		
+		fileString = fileString.replace("dbg_reactionrates.txt", "dbg_reactionrates_integrated.txt");
+		fileString = fileString.replace("reactionRates=", "reactionRates_integrated=");
 		
 		//Write file
-		Writer output = new BufferedWriter(new FileWriter(new File(storageDir, "outputFiles.lua")));
-		output.append(completeFile);
-		output.close();
+		FileWriter myWriter = new FileWriter(outputFiles);
+		myWriter.write(fileString);
+		myWriter.close();
+	}
+	
+	/**
+	 * Removes unwanted files from the outputFiles.lua
+	 * We use this for example to remove "reactorState.txt" out
+	 * of the hydrolysis storage, since the values from this textfile
+	 * cannot be added together (e.g. PH values). They are specific for 
+	 * the hydrolysis reactor and should only be regarded in the 
+	 * according context.
+	 * 
+	 * @param storageDirectory: Path pointing to storage
+	 */
+	public static void update_outputFiles(File storageDirectory) throws IOException
+	{
+		File outputFiles_path = new File(storageDirectory, "outputFiles.lua");
+		String newOutputFiles = "";
+		boolean takeLine = true;
+		
+		String lastLine = "";
+		System.out.println("Updating: " + outputFiles_path);
+		//std::fstream stream(outputFiles_path);
+		if(outputFiles_path.exists())
+		{
+			Scanner myReader = new Scanner(outputFiles_path);
+			while(myReader.hasNextLine()) {
+				String line = myReader.nextLine();
+				
+				if(line.contains("filename") && !takeLine)
+					newOutputFiles += lastLine + "\n";
+					
+				if(line.contains("filename"))
+					takeLine = true;	
+				
+				for(String f: output_files_nonAdditive) {
+					if (line.contains(f)) {
+						takeLine = false;
+						int line_begin = newOutputFiles.indexOf(lastLine);
+						
+						StringBuffer newOutputBuffer = new StringBuffer(newOutputFiles);
+						newOutputBuffer.replace(line_begin, line_begin+lastLine.length()+1, "");
+						newOutputFiles = newOutputBuffer.toString();
+					}
+				}	
+				
+				if(takeLine)
+				{
+					newOutputFiles += line + "\n";
+				}				
+				lastLine = line;
+			}
+			myReader.close();
+		}
+		
+		//If the last file entry was deleted we need to close a paranthesis		
+		if(!takeLine){ 
+			newOutputFiles = newOutputFiles.substring(0, newOutputFiles.length()-2);
+			newOutputFiles += "\n}";
+		}
+				
+		FileWriter myWriter = new FileWriter(outputFiles_path);
+		myWriter.write(newOutputFiles);
+		myWriter.close();
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 	
-		File storage_dir = new File("/home/paul/Schreibtisch/smalltest/testFolderVRL/storage_hydrolysis");
-		File working_dir = new File("/home/paul/Schreibtisch/smalltest/testFolderVRL");
-		String[] reactor_names = {"hydrolyse_0"};
-		
-		merge_all_hydrolysis(storage_dir, working_dir, reactor_names);
+		File workingDir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427");
+		File storageDir = new File(workingDir, "storage_hydrolysis");
+		copy_outputFiles(workingDir, "TEST0");		
+		update_outputFiles(storageDir);
+		update_outputFiles_integration(storageDir);
 	}
 	
 }

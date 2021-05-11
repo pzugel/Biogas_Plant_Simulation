@@ -10,6 +10,7 @@
 		<Item Name="merge all hydrolysis.vi" Type="VI" URL="../VIs/merge all hydrolysis.vi"/>
 		<Item Name="merge all methane.vi" Type="VI" URL="../VIs/merge all methane.vi"/>
 		<Item Name="update output Files.vi" Type="VI" URL="../VIs/update output Files.vi"/>
+		<Item Name="update output Files integration.vi" Type="VI" URL="../VIs/update output Files integration.vi"/>
 		<Item Name="get header.vi" Type="VI" URL="../VIs/get header.vi"/>
 		<Item Name="remove header.vi" Type="VI" URL="../VIs/remove header.vi"/>
 		<Item Name="merge one reactor.vi" Type="VI" URL="../VIs/merge one reactor.vi"/>
@@ -18,5 +19,5 @@
 		<Item Name="get hydrolysis PH.vi" Type="VI" URL="../VIs/get hydrolysis PH.vi"/>
 	</Item>
 	<Item Name="file_functions.dll" Type="Document" URL="../../file_functions.dll"/>
-	<Item Name="libFileFunctions.so" Type="Document" URL="../libFileFunctions.so"/>
+	<Item Name="libFileFunctions.so" Type="Document" URL="../../libFileFunctions.so"/>
 </Library>

@@ -41,7 +41,9 @@ public class UserStorage extends ElementHelperFunctions implements Serializable{
 			System.out.println("firstTimestep?: " + firstTimestep);
 			if(firstTimestep) {
 				String hydrolysisName = reactors[0];
-				MergeFunctions.create_outputFiles(directory, hydrolysisName);
+				MergeFunctions.copy_outputFiles(directory, hydrolysisName);				
+				MergeFunctions.update_outputFiles(storageDirectory);
+				MergeFunctions.update_outputFiles_integration(storageDirectory);
 			}
 			
 			String logEnd = simPanel.simulationLog.getText();

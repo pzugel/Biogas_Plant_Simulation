@@ -48,7 +48,9 @@ public class StorageHydrolysis implements SimulationElement, Serializable{
 			MergeFunctions.merge_all_hydrolysis(storageDirectory, directory, structure.hydrolysisNames());
 			if(structure.firstTimestep()) {
 				String hydrolysisName = structure.hydrolysisNames()[0];
-				MergeFunctions.create_outputFiles(directory, hydrolysisName);
+				MergeFunctions.copy_outputFiles(directory, hydrolysisName);				
+				MergeFunctions.update_outputFiles(storageDirectory);
+				MergeFunctions.update_outputFiles_integration(storageDirectory);
 			}
 			
 			String logEnd = simPanel.simulationLog.getText();

@@ -118,6 +118,49 @@ void update_outputFiles(const char* outputFiles_path)
 }
 
 /**
+ * Updates the names of the integrated files in the outputFiles 
+ * from the hydrolysis_storage
+ * 
+ * @param outputFiles_path: Path pointing to outputFiles.lua
+ */
+void update_outputFiles_integration(const char* outputFiles_path)
+{		
+	std::ifstream outputFiles_stream(outputFiles_path);
+	std::string mBuf((std::istreambuf_iterator<char>(outputFiles_stream)),
+				 std::istreambuf_iterator<char>());
+	std::string outputFiles_string = mBuf;
+	
+	std::string outflow_filename = "outflow.txt";
+	std::string outflow_title = "outflow=";
+	std::string reactionRates_filename = "dbg_reactionrates.txt";
+	std::string reactionRates_title = "reactionRates=";
+	
+	//Replace outflow entry
+	std::size_t outflow_filename_ind = outputFiles_string.find(outflow_filename);	
+	std::size_t outflow_title_ind = outputFiles_string.find(outflow_title);
+	
+	outputFiles_string.replace(outflow_filename_ind, outflow_filename.length(),
+		"outflow_integrated.txt");
+	outputFiles_string.replace(outflow_title_ind, outflow_title.length(), 
+		"outflow_integrated");
+	
+	//Replace dbg_reactionrates entry
+	std::size_t reactionRates_filename_ind = outputFiles_string.find(reactionRates_filename);	
+	std::size_t reactionRates_title_ind = outputFiles_string.find(reactionRates_title);
+	
+	outputFiles_string.replace(reactionRates_filename_ind, reactionRates_filename.length(),
+		"dbg_reactionrates_integrated.txt");
+	outputFiles_string.replace(reactionRates_title_ind, reactionRates_title.length(), 
+		"reactionRates_integrated=");
+	
+	//Write file
+	std::ofstream output_file;
+	output_file.open(outputFiles_path);
+	output_file << outputFiles_string;
+	output_file.close();
+}
+
+/**
  * Function called by the storage element
  * 
  * First iterate over all possible output files that need integration
@@ -442,13 +485,8 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
-	const char* working_dir = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/1_STAGE_2TIMECOPY";
-	//const char* methane_dir = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/1_STAGE_2TIMECOPY/methane";
-	//merge_one_reactor(methane_dir,0,0,false);
-	//merge_one_reactor(methane_dir,0,1,true);
-	
-	//merge_all_methane(working_dir,methane_dir);
-	const char* reactor_names = {"hydrolysis_0"};
-	merge_all_hydrolysis(working_dir,reactor_names);
+	const char* outputFiles_path = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_183828@1_STAGE/storage_hydrolysis/outputFiles.lua";
+	update_outputFiles(outputFiles_path);
+	update_outputFiles_integration(outputFiles_path);
 	return 0;
 }

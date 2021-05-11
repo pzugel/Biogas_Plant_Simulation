@@ -2,6 +2,7 @@ const char* remove_header(const char* path);
 const char* get_header(const char* path);
 const char* read_filenames(const char* path);
 void update_outputFiles(const char* outputFiles_path);
+void update_outputFiles_integration(const char* outputFiles_path);
 void merge_all_hydrolysis(const char* working_dir, const char* reactor_names);
 void merge_all_methane(const char* working_dir, const char* methane_dir);
 void merge_one_reactor(const char* working_dir, int simulation_starttime, int current_starttime, bool merge_preexisting);
