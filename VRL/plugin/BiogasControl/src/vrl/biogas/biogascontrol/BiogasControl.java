@@ -34,6 +34,12 @@ import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.*;
 import vrl.biogas.biogascontrol.structures.Structure;
 
+/**
+ * Main user interface to simulate predefined structures.<br>
+ * Contains the JTabbedPane implementing the panels in {@link vrl.biogas.biogascontrol.panels}
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="MainPanel", 
 	category="Biogas", 
 	description="MainPanel Component")

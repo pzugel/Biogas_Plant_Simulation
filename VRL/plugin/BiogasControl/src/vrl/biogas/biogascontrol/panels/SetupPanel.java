@@ -37,7 +37,12 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
 
-
+/**
+ * JTabbedPane: Setup tab <br>
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel
+ * @author Paul Zügel
+ *
+ */
 public class SetupPanel {
 	private final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd_HHmmss");
 	

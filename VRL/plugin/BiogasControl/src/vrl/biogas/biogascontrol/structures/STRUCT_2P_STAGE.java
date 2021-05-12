@@ -14,6 +14,15 @@ import vrl.biogas.biogascontrol.elements.structureElements.Start;
 import vrl.biogas.biogascontrol.elements.structureElements.Stop;
 import vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis;
 
+/**
+ * Predefined strucutre: 2P_STAGE <br>
+ * Implementing <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.HydrolysisParallel} with 2 Reactors <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis} <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.Methane} Reactor <br>
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="2P_STAGE", 
 category="Biogas_Structures", 
 description="2P_STAGE plant structure")

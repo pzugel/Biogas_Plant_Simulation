@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parsing a specification file
+ * @author Paul Zügel
+ */
 public class SpecificationParser {
 	static String text = "";
 	ArrayList<ValiTableEntry> data;

@@ -3,15 +3,16 @@ package vrl.biogas.biogascontrol.elements.structureElements;
 import java.io.File;
 import java.io.Serializable;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="Start", 
-	category="Biogas_Elements", 
-	description="Start element")
+/**
+ * Biogas element: Start
+ * @author Paul Zügel
+ *
+ */
 public class Start implements SimulationElement, Serializable{	
 	private static final long serialVersionUID = 1L;
 	private Structure structure;

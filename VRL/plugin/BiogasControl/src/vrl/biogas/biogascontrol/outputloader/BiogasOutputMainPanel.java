@@ -39,6 +39,10 @@ import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
 
+/**
+ * Main panel for the outputFiles tree in VRL
+ * @author paul
+ */
 @ComponentInfo(name="BiogasOutputPanel", 
 	category="Biogas", 
 	description="BiogasOutputLoader Component")

@@ -19,6 +19,11 @@ import vrl.biogas.biogascontrol.elements.structureElements.SimulationElement;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
+/**
+ * Runs a {@link vrl.biogas.biogascontrol.elements.structureElements.SimulationElement} in the structure element queue by starting a new thread.
+ * @author Paul Zügel
+ * 
+ */
 public class ElementExecution extends SwingWorker<String, String> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String command;

@@ -11,6 +11,11 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.elements.structureElements.SimulationElement;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 
+/**
+ * Default functions for the {@link vrl.biogas.biogascontrol.structures.Structure} interface to be used by predefined structures
+ * @author Paul Zügel
+ *
+ */
 public class StructureFunctions implements Structure,Serializable{
 	private static final long serialVersionUID = 1L;
 	

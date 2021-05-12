@@ -14,6 +14,10 @@ import java.util.Scanner;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 
+/**
+ * Functions to be called when merging files in the hydrolysis or methane reactor
+ * @author Paul Zügel
+ */
 public class MergeFunctions {
 	
 	private final static String[] output_files = {
@@ -50,6 +54,14 @@ public class MergeFunctions {
 		"reactorState.txt",
 		"dbg_gamma.txt"};
 	
+	/**
+	 * Function called by the hydrolysis or methane reactor after finishing the computations.
+	 * Calls the merge_one_reactor() method. 
+	 * @param name
+	 * @param currenttime
+	 * @param timePath
+	 * @throws IOException
+	 */
 	public static void merge(String name, int currenttime, File timePath) throws IOException {
 		File basePath = timePath.getParentFile();
 		int startTime = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue();
@@ -65,6 +77,14 @@ public class MergeFunctions {
 		merge_one_reactor(basePath.toString(), startTime, currenttime, preexisting);
 	}
 	
+	/**
+	 * Function called by the storage element. Merges all files from all hydrolysis reactors and timesteps 
+	 * via merge_hydrolysis_files() and integrates via merge_files_integration()
+	 * @param storage_dir
+	 * @param working_dir
+	 * @param reactor_names	Names of the reactors to be merged
+	 * @throws IOException
+	 */
 	public static void merge_all_hydrolysis(
 			File storage_dir,
 			File working_dir,
@@ -76,11 +96,13 @@ public class MergeFunctions {
 		//Merge hydrolysis files with integration
 		for(String f: output_files_integration) {
 			
+			//Writes file to the hydrolysis paths
 			String output_file_string = merge_files_integration(
 					working_dir, 
 					f, 
 					reactor_names);
 			
+			//Write the file to the storage
 			String output_file_name = storage_dir + File.separator + f;
 			int extensionPos = output_file_name.lastIndexOf(".");
 			output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
@@ -112,6 +134,12 @@ public class MergeFunctions {
 		}
 	}
 	
+	/**
+	 * Called by the methane elements to integrate files needed in the feedback loop
+	 * @param methane_dir
+	 * @param working_dir
+	 * @throws IOException
+	 */
 	@SuppressWarnings("unused")
 	public static void merge_all_methane(
 			File methane_dir,
@@ -127,19 +155,17 @@ public class MergeFunctions {
 					working_dir, 
 					f,  
 					methaneReactor);
-			/*
-			File output_file_name = new File(methane_dir, f);
-			System.out.println(output_file_name);
-			
-			Writer output = new BufferedWriter(new FileWriter(output_file_name));
-			output.append(output_file_string);
-			output.close();	
-					
-			System.out.println(output_file_string);	
-			*/
 		}
 	}
 	
+	/**
+	 * Called by hydrolysis and methane to integrate files for all reactors defined in "reactors"
+	 * @param dir
+	 * @param filename
+	 * @param reactors
+	 * @return
+	 * @throws IOException
+	 */
 	private static String merge_files_integration(
 			File dir, 
 			String filename,
@@ -156,6 +182,15 @@ public class MergeFunctions {
 		return output_file_string;
 	}
 	
+	/**
+	 * Used for the hydrolysis storage to sum up files from all hydrolysis reactors.
+	 * Needs to check if entries that need to be merged exist in all files.
+	 * @param dir
+	 * @param filename
+	 * @param reactors
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	private static String merge_hydrolysis_files(
 			File dir, 
 			String filename, 
@@ -254,7 +289,15 @@ public class MergeFunctions {
 		return output_file_string;
 	}
 	
-	public static void merge_one_reactor(
+	/**
+	 * Called by hydrolysis and methane. Only concat the files from different timesteps.
+	 * @param working_dir
+	 * @param simulation_starttime
+	 * @param current_starttime
+	 * @param merge_preexisting
+	 * @throws IOException
+	 */
+	private static void merge_one_reactor(
 			String working_dir,
 			int simulation_starttime,
 			int current_starttime,
@@ -320,6 +363,16 @@ public class MergeFunctions {
 		}
 	}
 	
+	/**
+	 * Integrates a single file "f" and writes out
+	 * --> f_integrated
+	 * --> f_integratedSum
+	 * --> f_integratedSum_fullTimesteps
+	 * @param reactorDir
+	 * @param f
+	 * @return
+	 * @throws IOException
+	 */
 	private static String integrate_one_file(
 			File reactorDir,
 			String f) throws IOException 
@@ -463,6 +516,12 @@ public class MergeFunctions {
 		return integratedSumFull;
 	}
 	
+	/**
+	 * Copy outputFiles.lua to the hydrolysis storage
+	 * @param workingDir
+	 * @param hydrolysisName
+	 * @throws IOException
+	 */
 	public static void copy_outputFiles(File workingDir, String hydrolysisName) throws IOException {
 		File storageDir = new File(workingDir, "storage_hydrolysis");
 		File hydrolysisDir = new File(workingDir, hydrolysisName);
@@ -474,7 +533,8 @@ public class MergeFunctions {
 	
 	/**
 	 * Updates the names of the integrated files in the outputFiles from the hydrolysis_storage
-	 * @param storageDirectory: Path pointing to storage
+	 * @param storageDirectory
+	 * @throws IOException
 	 */
 	public static void update_outputFiles_integration(File storageDirectory) throws IOException {
 		File outputFiles = new File(storageDirectory, "outputFiles.lua");
@@ -505,8 +565,8 @@ public class MergeFunctions {
 	 * cannot be added together (e.g. PH values). They are specific for 
 	 * the hydrolysis reactor and should only be regarded in the 
 	 * according context.
-	 * 
-	 * @param storageDirectory: Path pointing to storage
+	 * @param storageDirectory
+	 * @throws IOException
 	 */
 	public static void update_outputFiles(File storageDirectory) throws IOException
 	{
@@ -561,11 +621,16 @@ public class MergeFunctions {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 	
+		/*
 		File workingDir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427");
 		File storageDir = new File(workingDir, "storage_hydrolysis");
 		copy_outputFiles(workingDir, "TEST0");		
 		update_outputFiles(storageDir);
 		update_outputFiles_integration(storageDir);
+		*/
+		File methane_dir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427/methane");
+		File working_dir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427");
+		merge_all_methane(methane_dir, working_dir);
 	}
 	
 }

@@ -12,6 +12,12 @@ import javax.swing.WindowConstants;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 
+/**
+ * Hydrolysis selector panel. Drop down Combo box to be displayed when
+ * user is prompted to select a hydrolysis reactor.
+ * @author Paul Zügel
+ *
+ */
 public class HydrolysisSelector {
 	
 	public JButton okBtn;

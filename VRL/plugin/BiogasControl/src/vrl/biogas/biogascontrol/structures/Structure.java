@@ -6,12 +6,15 @@ import java.util.concurrent.ExecutionException;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 
-
+/**
+ * Interface for predefined structures
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="Structure", 
 	category="Biogas_Structures", 
 	description="Structure interface")
 public interface Structure {	
-	//public static ArrayList<SimulationElement> reactorQueue = null;
 	
 	public int numHydrolysis();
 	public String name();

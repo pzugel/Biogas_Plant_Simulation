@@ -9,15 +9,16 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementParallelExecution;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="HydrolysisParallel", 
-	category="Biogas_Elements", 
-	description="Hydrolysis parallel reactor")
+/**
+ * Biogas element: Parallel Hydrolysis
+ * @author Paul Zügel
+ *
+ */
 public class HydrolysisParallel implements SimulationElement, Serializable{
 	private static final long serialVersionUID = 1L;
 	private Structure structure;

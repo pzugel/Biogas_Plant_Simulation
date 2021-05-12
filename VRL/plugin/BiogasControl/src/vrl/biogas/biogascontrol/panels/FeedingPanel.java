@@ -31,6 +31,12 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.elements.functions.UpdateFeeding;
 
+/**
+ * JTabbedPane: Feeding tab <br>
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel
+ * @author Paul Zügel
+ *
+ */
 public class FeedingPanel{
 
 	private JPanel feedingPanel;

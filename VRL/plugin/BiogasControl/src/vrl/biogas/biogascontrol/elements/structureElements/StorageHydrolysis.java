@@ -4,16 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.functions.MergeFunctions;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="Storage", 
-	category="Biogas_Elements", 
-	description="Hydrolysis reactor")
+/**
+ * Biogas element: Storage Hydrolysis
+ * @author Paul Zügel
+ *
+ */
 public class StorageHydrolysis implements SimulationElement, Serializable{
 	private static final long serialVersionUID = 1L;
 	private File storageDirectory;

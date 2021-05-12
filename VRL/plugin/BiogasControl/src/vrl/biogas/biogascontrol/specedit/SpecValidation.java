@@ -6,6 +6,10 @@ import java.util.regex.Pattern;
 
 import javax.swing.tree.TreePath;
 
+/**
+ * Validation methods for lua specification files
+ * @author Paul Zügel
+ */
 public class SpecValidation {
 	
 	private String validationMessage = "";

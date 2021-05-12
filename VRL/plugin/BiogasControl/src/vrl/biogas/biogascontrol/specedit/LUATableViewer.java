@@ -1,7 +1,10 @@
 package vrl.biogas.biogascontrol.specedit;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControlClass;
+import vrl.biogas.biogascontrol.specedit.treetable.MyAbstractTreeTableModel;
+import vrl.biogas.biogascontrol.specedit.treetable.MyTreeTable;
+import vrl.biogas.biogascontrol.specedit.treetable.MyTreeTableCellRenderer;
+import vrl.biogas.biogascontrol.specedit.treetable.TableCellListener;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -25,9 +28,10 @@ import javax.swing.JScrollPane;
 import javax.swing.WindowConstants;
 import javax.swing.tree.TreePath;
 
-@ComponentInfo(name="Initializer", 
-category="Biogas", 
-description="JTreeTable Component")
+/**
+ * Creates the JPanel for the specification lua table
+ * @author Paul Zügel
+ */
 public class LUATableViewer implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -190,31 +194,6 @@ public class LUATableViewer implements Serializable{
         });
 	}
 	
-	/*
-	@MethodInfo(name="Files", valueStyle = "multi-out", hide=false,
-			 hideCloseIcon=true, num=1)
-	@OutputInfo(style = "multi-out",
-	            elemNames = {"SimFile", "Parameters"},
-	            elemTypes = {File.class, List.class})
-	public Object[] loadFiles(
-			 @ParamGroupInfo(group = "Files")
-			 @ParamInfo(name = "Validation File",nullIsValid = false,style = "load-dialog",
-		  		options = "endings=[\"lua\"]; invokeOnChange=true") java.io.File valfile,
-			 @ParamGroupInfo(group = "Files")
-			 @ParamInfo(name = "Specification File",nullIsValid = true,style = "load-dialog",
-		  		options = "endings=[\"lua\"]; invokeOnChange=true") java.io.File specfile,
-			 @ParamGroupInfo(group = "Files")
-			 @ParamInfo(name = "Simulation File",nullIsValid = false,style = "load-dialog",
-		  		options = "endings=[\"lua\"]; invokeOnChange=true") java.io.File simfile,
-			 @ParamInfo(name = "Show Validation") boolean showvali){
-		 valFile = valfile;
-		 specFile = specfile;
-		 simFile = simfile;
-		 showVali = showvali;
-		 return new Object[] {simFile, parameters};
-	}
-	*/
-	
 	private static void addTreeListener() {
 		AbstractAction action = new AbstractAction()
         {
@@ -243,21 +222,5 @@ public class LUATableViewer implements Serializable{
             }
         };
         new TableCellListener(myTreeTable, action);
-	}
-	
-	public static void main(String args[]) throws IOException{
-
-		System.out.println("Main:");
-		
-		//valFile = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/simulation_files/hydro_vali.lua");
-		specFile = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/simulation_files/hydrolyse.lua");
-		editor();
-		
-		JFrame frame = new JFrame("");
-		frame.add(panel);
-		frame.setSize(200, 300);
-		frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
-		frame.setVisible(true);
-	}
-	
+	}	
 }

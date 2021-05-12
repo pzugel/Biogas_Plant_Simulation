@@ -7,6 +7,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser for validation files
+ * @author Paul Zügel
+ */
 public class ValidationParser {
 	static String text = "";
 	private List<ValiTableEntry> parameters;

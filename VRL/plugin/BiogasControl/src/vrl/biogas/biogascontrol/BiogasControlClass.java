@@ -26,6 +26,11 @@ import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 
+/**
+ * Parent class for the main panels {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl}
+ * 
+ * @author Paul Zügel
+ */
 public class BiogasControlClass {
 		
 	private final int ONE_SECOND = 1000;

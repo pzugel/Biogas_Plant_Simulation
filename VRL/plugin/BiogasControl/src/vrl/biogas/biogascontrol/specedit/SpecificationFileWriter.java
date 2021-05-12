@@ -7,6 +7,10 @@ import java.io.PrintWriter;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Write a new specification file from the data in the TreeTable
+ * @author Paul Zügel
+ */
 public class SpecificationFileWriter {
 
 	public SpecificationFileWriter(File path, List<ValiTableEntry> parameters) throws IOException {

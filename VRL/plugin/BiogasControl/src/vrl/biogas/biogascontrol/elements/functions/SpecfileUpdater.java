@@ -7,8 +7,18 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Functions to update specification files
+ * @author Paul Zügel
+ */
 public class SpecfileUpdater {
 
+	/**
+	 * Update starttime in specification. Increases the sim_starttime entry by 1.
+	 * @param spec_dir
+	 * @param starttime
+	 * @throws IOException
+	 */
 	public static void update_starttime(File spec_dir, int starttime) throws IOException
 	{
 		String output_spec = "";
@@ -44,6 +54,12 @@ public class SpecfileUpdater {
 		myWriter.close();		
 	}
 	
+	/**
+	 * Update endtime in specification. Increases the sim_endtime entry by 1.
+	 * @param spec_dir
+	 * @param endtime
+	 * @throws IOException
+	 */
 	public static void update_endtime(File spec_dir, int endtime) throws IOException
 	{
 		String output_spec = "";
@@ -79,6 +95,13 @@ public class SpecfileUpdater {
 		myWriter.close();		
 	}
 	
+	/**
+	 * Sets "doReadCheckpoint" entry in specification to true and writes the checkpoint
+	 * path pointing to the folder of the previous timestep.
+	 * @param spec_dir
+	 * @param checkpoint_dir
+	 * @throws IOException
+	 */
 	public static void update_read_checkpoint(File spec_dir, File checkpoint_dir) throws IOException
 	{
 		String checkpointString = checkpoint_dir.toString() + File.separator;
@@ -124,13 +147,5 @@ public class SpecfileUpdater {
 		FileWriter myWriter = new FileWriter(spec_dir);
 		myWriter.write(output_spec);
 		myWriter.close();	
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{ 
-		//File spec_dir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210319_144634/hydrolyse_0/1/hydrolysis_checkpoint.lua");
-		//update_starttime(spec_dir, 1);
-		//update_endtime(spec_dir, 2);
-		//File checkpointDir = new File("/home/paul/Schreibtisch/smalltestmethane/biogasVRL_20210319_144634/hydrolyse_0/0");
-		//update_read_checkpoint(spec_dir, checkpointDir);
 	}
 }

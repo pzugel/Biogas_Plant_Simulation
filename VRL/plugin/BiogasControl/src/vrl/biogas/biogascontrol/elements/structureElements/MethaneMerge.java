@@ -4,16 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.functions.MergeFunctions;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="MethaneMerge", 
-	category="Biogas_Elements", 
-	description="Methane merger")
+/**
+ * Biogas element: Methane merge
+ * @author Paul Zügel
+ *
+ */
 public class MethaneMerge implements SimulationElement, Serializable{
 private static final long serialVersionUID = 1L;
 

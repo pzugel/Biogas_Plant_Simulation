@@ -4,11 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
-
-@ComponentInfo(name="SimulationElement", 
-	category="Biogas_Elements", 
-	description="Element interface")
+/**
+ * Interface for simulation elements
+ * @author Paul Zügel
+ *
+ */
 public interface SimulationElement{
 	public String name();
 	public File path();

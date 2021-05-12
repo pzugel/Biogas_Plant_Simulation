@@ -8,6 +8,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Reader for a biogas output file
+ * @author paul
+ */
 public class CSVReader {
 
 	static private List<List<Double>> data;

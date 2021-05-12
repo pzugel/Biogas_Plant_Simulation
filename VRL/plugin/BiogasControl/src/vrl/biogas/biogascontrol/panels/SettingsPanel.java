@@ -33,6 +33,12 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.specedit.LUATableViewer;
 
+/**
+ * JTabbedPane: Settings tab <br>
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel
+ * @author Paul Zügel
+ *
+ */
 public class SettingsPanel {
 	
 	public JPanel settingsPanel;

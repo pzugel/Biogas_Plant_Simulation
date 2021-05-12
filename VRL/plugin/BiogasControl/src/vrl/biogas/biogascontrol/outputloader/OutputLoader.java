@@ -8,6 +8,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Parser for outputFiles.lua file
+ * @author paul
+ */
 public class OutputLoader {
 
 	static String input;

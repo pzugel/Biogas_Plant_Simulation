@@ -15,10 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JComponent;
 
 /**
- * Parent type for plot typerepresentations. Can also be used directly as type
- * representation by returning <code>JFreeChart</code> objects.
- * 
- * @author Michael Hoffer <info@michaelhoffer.de>
+ * Parent type for lua table typerepresentations. 
+ * @author Paul Zügel
  */
 @TypeInfo(type = JComponent.class, input = true, output = true, style = "default")
 public class LUATableType extends TypeRepresentationBase implements java.io.Serializable {

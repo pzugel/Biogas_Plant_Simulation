@@ -7,14 +7,21 @@ import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
 import eu.mihosoft.vrl.annotation.ObjectInfo;
 import eu.mihosoft.vrl.annotation.ParamInfo;
-import vrl.biogas.biogascontrol.elements.userElements.UserPause;
-import vrl.biogas.biogascontrol.elements.userElements.UserStop;
+import vrl.biogas.biogascontrol.elements.userStructureElements.execution.UserPause;
+import vrl.biogas.biogascontrol.elements.userStructureElements.execution.UserStop;
 
 import java.lang.reflect.Method;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
+/**
+ * Simulation iterator to be used with the {@link vrl.biogas.biogascontrol.BiogasUserControl}.<br>
+ * Used to starts the simulation.
+ * 
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="SimulationIterator", 
 	category="Biogas", 
 	description="SimulationIterator component")

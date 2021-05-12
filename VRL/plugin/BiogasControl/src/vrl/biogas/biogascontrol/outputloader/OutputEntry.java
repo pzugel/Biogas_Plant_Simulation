@@ -1,5 +1,9 @@
 package vrl.biogas.biogascontrol.outputloader;
 
+/**
+ * Class representing a file entry in the outputFiles.lua file
+ * @author paul
+ */
 public class OutputEntry {
 	public OutputEntry(){};
 

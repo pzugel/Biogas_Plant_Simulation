@@ -13,7 +13,12 @@ import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
 
-
+/**
+ * JTabbedPane: Plant tab <br>
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel 
+ * @author Paul Zügel
+ *
+ */
 public class PlantPanel{
 	
 	private JPanel plantPanel;

@@ -15,22 +15,40 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 
+
+/**
+ * Setup functions used by the biogas elements: {@link vrl.biogas.biogascontrol.elements.structureElements.Hydrolysis}, 
+ * {@link vrl.biogas.biogascontrol.elements.structureElements.Methane}<br>
+ * Write summary function.
+ * @author Paul Zügel
+ */
 public class ElementFunctions {
 
-	public static void hydrolysisSetup(File directory, int currentTime, boolean firstTimestep, String[] reactors) throws IOException {
+	/**
+	 * Setup for the hydrolysis reactors
+	 * 
+	 * Creates the needed paths for the current timestep, copies the specification and updates them.
+	 * 
+	 * @param workingDirectory
+	 * @param currentTime 
+	 * @param firstTimestep
+	 * @param reactors	String array containing the reactor names
+	 * @throws IOException
+	 */
+	public static void hydrolysisSetup(File workingDirectory, int currentTime, boolean firstTimestep, String[] reactors) throws IOException {
 		System.out.println("Not Cancelled");
 		
 		//Write reactors to ArrayList
 		ArrayList<File> specDirs = new ArrayList<File>();		
 		for(String reactor : reactors) {
-			File reactorDir = new File(directory, reactor);
+			File reactorDir = new File(workingDirectory, reactor);
 			specDirs.add(new File(reactorDir, String.valueOf(currentTime) + File.separator + "hydrolysis_checkpoint.lua"));
 		}			
 		
 		//Iterate hydrolysis reactors
 		for(String reactor : reactors) {
 			System.out.println("reactor: " + reactor);
-			final File reactorPath = new File(directory, reactor);	
+			final File reactorPath = new File(workingDirectory, reactor);	
 			final File currentTimePath = new File(reactorPath, String.valueOf(currentTime));
 			final File previousTimePath = new File(reactorPath, String.valueOf(currentTime-1));
 			
@@ -40,7 +58,7 @@ public class ElementFunctions {
 				System.out.println("create dir");
 			}
 			SetupPanel setPanel = BiogasControlClass.setupPanelObj;
-			setPanel.update_tree(directory);
+			setPanel.update_tree(workingDirectory);
 			
 			try {			
 				//Copy specification files
@@ -81,7 +99,7 @@ public class ElementFunctions {
 		//Update inflow in hydrolysis specification
 		File[] specDirsArr = new File[specDirs.size()];
 		specDirs.toArray(specDirsArr);
-		final File methanePath = new File(directory, "methane");
+		final File methanePath = new File(workingDirectory, "methane");
 		File outflowFile = new File(methanePath, "outflow_integratedSum_fullTimesteps.txt");
 		if(!firstTimestep) {
 			System.out.println("Not first timestep --> OutflowInflowUpdater");
@@ -93,6 +111,14 @@ public class ElementFunctions {
 		}
 	}
 	
+	/**
+	 * Setup for the methane reactor
+	 * 
+	 * Creates the needed paths for the current timestep, copies the specification and updates them.
+	 * 
+	 * @param workingDirectory
+	 * @param currentTime
+	 */
 	public static void methaneSetup(File workingDirectory, int currentTime) {
 		File methaneDirectory = new File(workingDirectory, "methane");
 		File storageDirectory = new File(workingDirectory, "storage_hydrolysis");
@@ -137,9 +163,19 @@ public class ElementFunctions {
 		} 
 	}
 	
-	public static void writeSummary(File dir, boolean finished, String structureName, int numHydrolysis, int currentTime) throws IOException {
+	/**
+	 * Writes the simulation summary at the end of a simulation
+	 * 
+	 * @param workingDirectory
+	 * @param finished	Has the simulation finished properly?
+	 * @param structureName
+	 * @param numHydrolysis
+	 * @param currentTime
+	 * @throws IOException
+	 */
+	public static void writeSummary(File workingDirectory, boolean finished, String structureName, int numHydrolysis, int currentTime) throws IOException {
 		String summary = "FINISHED=" + finished + "\n";
-		summary += "WORKING_DIR=" + dir + "\n";
+		summary += "WORKING_DIR=" + workingDirectory + "\n";
 		summary += "STRUCTURE=" + structureName + "\n";
 		summary += "NUM_HYDROLYSIS=" + numHydrolysis + "\n";
 		summary += "STARTTIME=" + BiogasControl.settingsPanelObj.simStarttime.getValue() + "\n";
@@ -148,7 +184,7 @@ public class ElementFunctions {
 		summary += "PREEXISTING=" + BiogasControl.setupPanelObj.mergePreexisting + "\n";
 		summary += "RUNTIME=" + BiogasControl.simulationPanelObj.runtime.getText() + "\n";
 		
-		File summaryFile = new File(dir, "simulation_summary.txt");		
+		File summaryFile = new File(workingDirectory, "simulation_summary.txt");		
 		
 		//File summaryFile = new File(summary);
 		if (!summaryFile.exists()) { //Create summary

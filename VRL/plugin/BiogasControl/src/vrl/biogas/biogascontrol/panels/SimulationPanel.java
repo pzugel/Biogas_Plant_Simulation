@@ -17,6 +17,12 @@ import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasControl;
 
+/**
+ * JTabbedPane: Simulation tab <br>
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel
+ * @author Paul Zügel
+ *
+ */
 public class SimulationPanel {
 	public JPanel simulationPanel;
 	

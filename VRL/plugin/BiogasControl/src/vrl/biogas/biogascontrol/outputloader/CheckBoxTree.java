@@ -22,6 +22,10 @@ import java.awt.event.MouseEvent;
 import java.util.EventObject;
 
  
+/**
+ * Class representing the checkbox tree for outputFiles.lua
+ * @author paul
+ */
 public class CheckBoxTree extends JTree {
 	private static final long serialVersionUID = 1L;
 

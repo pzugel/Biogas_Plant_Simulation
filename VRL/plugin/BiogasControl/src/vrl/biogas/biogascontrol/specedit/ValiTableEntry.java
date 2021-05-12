@@ -2,6 +2,10 @@ package vrl.biogas.biogascontrol.specedit;
 
 import javax.swing.tree.TreePath;
 
+/**
+ * Type for an entry in a validation file
+ * @author Paul Zügel
+ */
 public class ValiTableEntry {
 	int indent = 0;
 	String name = "";

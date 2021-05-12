@@ -6,6 +6,15 @@ import java.util.ArrayList;
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.elements.structureElements.*;
 
+/**
+ * Predefined strucutre: 2_STAGE <br>
+ * Implementing <br>
+ *&emsp;- 2 {@link vrl.biogas.biogascontrol.elements.structureElements.Hydrolysis} Reactors <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis} <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.Methane} Reactor <br>
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="2_STAGE", 
 	category="Biogas_Structures", 
 	description="2_STAGE plant structure")

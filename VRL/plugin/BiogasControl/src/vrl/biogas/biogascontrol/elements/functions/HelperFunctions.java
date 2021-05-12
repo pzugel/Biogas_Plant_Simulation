@@ -7,12 +7,22 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Helper functions to be used when working with biogas files
+ * @author Paul Zügel
+ */
 public class HelperFunctions {
 	
 	static String data_string;
 	static String header_string;
 	static ArrayList<ArrayList<ArrayList<String>>> values;
 	
+	/**
+	 * Writes values from an output file into an arraylist
+	 * @param dir
+	 * @return	File could be read?
+	 * @throws FileNotFoundException
+	 */
 	static public boolean read_values_from_reactor(String dir) throws FileNotFoundException{	
 		System.out.println("read_values_from_reactor: " + dir);
 		ArrayList<ArrayList<String>> hydroFile = new ArrayList<ArrayList<String>>();
@@ -46,6 +56,11 @@ public class HelperFunctions {
 		return true;
 	}
 	
+	/**
+	 * Reads in a biogas output file as string and removes the header
+	 * @param file_as_string
+	 * @return	File string without header
+	 */
 	static public String remove_header_from_string(String file_as_string)
 	{
 		data_string = "";
@@ -67,6 +82,12 @@ public class HelperFunctions {
 		return data_string;
 	}
 	
+	/**
+	 * Reads in a biogas output file by filepath and removes the header
+	 * @param path
+	 * @return	File as string, without header
+	 * @throws FileNotFoundException
+	 */
 	static public String remove_header(File path) throws FileNotFoundException
 	{
 		data_string = "";		
@@ -83,6 +104,12 @@ public class HelperFunctions {
 		return data_string;
 	}
 	
+	/**
+	 * Reads in a biogas output file by filepath and returns the header
+	 * @param path
+	 * @return	Header of the file
+	 * @throws FileNotFoundException
+	 */
 	static public String get_header(File path) throws FileNotFoundException
 	{
 		header_string = "";

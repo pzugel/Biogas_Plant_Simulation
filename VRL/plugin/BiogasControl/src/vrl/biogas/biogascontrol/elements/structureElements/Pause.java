@@ -4,14 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="Pause", 
-	category="Biogas_Elements", 
-	description="Pause element")
+/**
+ * Biogas element: Pause
+ * @author Paul Zügel
+ *
+ */
 public class Pause implements SimulationElement{	
 	private Structure structure;
 	

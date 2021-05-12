@@ -7,17 +7,20 @@ import eu.mihosoft.vrl.system.PluginDependency;
 import eu.mihosoft.vrl.system.PluginIdentifier;
 import eu.mihosoft.vrl.system.VPluginAPI;
 import eu.mihosoft.vrl.system.VPluginConfigurator;
-import vrl.biogas.biogascontrol.elements.userElements.UserHydrolysis;
-import vrl.biogas.biogascontrol.elements.userElements.UserMethane;
-import vrl.biogas.biogascontrol.elements.userElements.UserStart;
-import vrl.biogas.biogascontrol.elements.userElements.UserStorage;
+import vrl.biogas.biogascontrol.elements.userStructureElements.UserHydrolysis;
+import vrl.biogas.biogascontrol.elements.userStructureElements.UserMethane;
+import vrl.biogas.biogascontrol.elements.userStructureElements.UserStart;
+import vrl.biogas.biogascontrol.elements.userStructureElements.UserStorage;
 import vrl.biogas.biogascontrol.outputloader.BiogasOutputMainPanel;
 import vrl.biogas.biogascontrol.outputloader.BiogasPlotter;
 import vrl.biogas.biogascontrol.structures.*;
 
-/*
- * Eclipse: Export as runnable JAR
- * -> Package required libraries into generated JAR
+/**
+ * Plugin Configurator to export Eclipse project into VRL plugin<br>
+ * Select "Export as runnable JAR" - Check "Package required libraries into generated JAR"<br>
+ * 
+ * @author Paul Zügel, Michael Hoffer
+ *
  */
 public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	public BiogasControlPluginConfigurator() {

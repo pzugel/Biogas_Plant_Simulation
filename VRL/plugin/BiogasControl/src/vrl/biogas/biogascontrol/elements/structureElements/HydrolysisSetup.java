@@ -8,6 +8,11 @@ import vrl.biogas.biogascontrol.elements.functions.ElementFunctions;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementRunner;
 import vrl.biogas.biogascontrol.structures.Structure;
 
+/**
+ * Biogas element: Hydrolysis
+ * @author Paul Zügel
+ *
+ */
 public class HydrolysisSetup implements SimulationElement, Serializable{
 	private static final long serialVersionUID = 1L;
 	private Structure structure;

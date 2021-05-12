@@ -11,6 +11,12 @@ import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.elements.functions.MergeFunctions;
 import vrl.biogas.biogascontrol.structures.Structure;
 
+/**
+ * Runs the {@link vrl.biogas.biogascontrol.elements.structureElements.HydrolysisParallel} element in the structure element
+ * queue by starting a new thread.
+ * @author Paul Zügel
+ * 
+ */
 public class ElementParallelExecution extends SwingWorker<String, String> implements Serializable{
 	private static final long serialVersionUID = 1L;
 	private String command;

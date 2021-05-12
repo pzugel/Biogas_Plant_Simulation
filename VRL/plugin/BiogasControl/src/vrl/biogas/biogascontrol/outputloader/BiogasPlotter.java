@@ -32,6 +32,10 @@ import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 
+/**
+ * Main panel for the plotter in VRL
+ * @author paul
+ */
 @ComponentInfo(name = "BiogasPlotter", category = "Biogas")
 @ObjectInfo(name = "BiogasPlotter")
 public class BiogasPlotter implements Serializable {  

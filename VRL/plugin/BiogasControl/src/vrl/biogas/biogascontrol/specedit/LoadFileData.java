@@ -1,10 +1,20 @@
 package vrl.biogas.biogascontrol.specedit;
 
 import javax.swing.JFrame;
+
+import vrl.biogas.biogascontrol.specedit.treetable.MyAbstractTreeTableModel;
+import vrl.biogas.biogascontrol.specedit.treetable.MyDataModel;
+import vrl.biogas.biogascontrol.specedit.treetable.MyDataNode;
+import vrl.biogas.biogascontrol.specedit.treetable.MyTreeTable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Loads the validation data into the tree 
+ * @author Paul Zügel
+ */
 public class LoadFileData extends JFrame implements Serializable{
 	private static final long serialVersionUID=1; 
 	public MyAbstractTreeTableModel treeTableModel;

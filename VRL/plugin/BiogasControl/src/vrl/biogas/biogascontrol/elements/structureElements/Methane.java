@@ -3,16 +3,17 @@ package vrl.biogas.biogascontrol.elements.structureElements;
 import java.io.File;
 import java.io.Serializable;
 
-import eu.mihosoft.vrl.annotation.ComponentInfo;
 import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.elements.functions.ElementFunctions;
 import vrl.biogas.biogascontrol.elements.structureElements.execution.ElementExecution;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
 import vrl.biogas.biogascontrol.structures.Structure;
 
-@ComponentInfo(name="Methane", 
-	category="Biogas_Elements", 
-	description="Methane reactor")
+/**
+ * Biogas element: Methane
+ * @author Paul Zügel
+ *
+ */
 public class Methane implements SimulationElement, Serializable{
 	private static final long serialVersionUID = 1L;
 	private File methaneDirectory;

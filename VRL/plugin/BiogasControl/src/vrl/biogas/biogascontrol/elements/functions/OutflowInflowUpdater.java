@@ -8,6 +8,10 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Updates the inflow values in specification files.
+ * @author Paul Zügel
+ */
 public class OutflowInflowUpdater {
 	
 	private static ArrayList<String> outflow_input_header;
@@ -17,6 +21,12 @@ public class OutflowInflowUpdater {
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
 	
+	/**
+	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
+	 * and the values into "inflow_timetable_string"
+	 * @param spec
+	 * @throws IOException
+	 */
 	private static void parse_spec_file(File spec) throws IOException
 	{ 
 		System.out.println("parse_spec_file: " + spec);
@@ -52,6 +62,10 @@ public class OutflowInflowUpdater {
 		}
 	}
 	
+	/**
+	 * Parses header from an integrated "outflow" file and writes them to "outflow_input_header"
+	 * @param header 
+	 */
 	private static void read_outflow_header(String header)
 	{		
 		outflow_input_header = new ArrayList<String>();
@@ -62,6 +76,10 @@ public class OutflowInflowUpdater {
 		}
 	}
 	
+	/**
+	 * Parses the data from an integrated "outflow" file (without header) and write values to "outflow_input_values"
+	 * @param data
+	 */
 	private static void read_outflow_values(String data)
 	{
 		outflow_input_values = new ArrayList<ArrayList<String>>();
@@ -80,6 +98,12 @@ public class OutflowInflowUpdater {
 		lineIter.close();
 	}
 	
+	/**
+	 * Constructing the new inflow timetable "output_timetable" by matching the values from 
+	 * the integrated "outflow" file and the parameters defined in the "inflow" timetable from the specification.
+	 * @param fraction
+	 * @param isMethane
+	 */
 	private static void write_new_timetable(double fraction, boolean isMethane)
 	{
 		System.out.println("write_new_timetable: " + fraction);
@@ -139,6 +163,11 @@ public class OutflowInflowUpdater {
 		}
 	}
 	
+	/**
+	 * Turns the "output_timetable" constructed by the write_new_timetable() method into string
+	 * @param spec
+	 * @throws IOException
+	 */
 	private static void write_new_timetable_string(File spec) throws IOException
 	{
 		System.out.println("write_new_timetable_string: " + spec);
@@ -203,6 +232,13 @@ public class OutflowInflowUpdater {
 		
 	}
 	
+	/**
+	 * Function called by the methane element to update the inflow in the methane specification by
+	 * reading out the integrated outflow file from the hydrolysis reactor.
+	 * @param outflow_infile - Path pointing to the hydrolysis storage outflow file
+	 * @param methane_specfile
+	 * @throws IOException
+	 */
 	public static void write_methane_inflow(
 			File outflow_infile,
 			File methane_specfile) throws IOException
@@ -230,6 +266,14 @@ public class OutflowInflowUpdater {
 		myWriter.close();
 	}
 	
+	/**
+	 * Function called by the hydrolysis (setup) element to update the inflow in the hydrolysis 
+	 * specification by reading out the integrated outflow file from the methane reactor.
+	 * @param outflow_infile - Path pointing to the methane outflow file
+	 * @param hydrolysis_specfiles
+	 * @param fractions
+	 * @throws IOException
+	 */
 	public static void write_hydrolysis_inflow(
 			File outflow_infile,
 			File[] hydrolysis_specfiles,
@@ -262,13 +306,4 @@ public class OutflowInflowUpdater {
 			++specNum;
 		}
 	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{  
-		File outflow_infile = new File("/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_170729@1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt");
-		File spec = new File("/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_170729@1_STAGE/hydrolysis_0/0/hydrolysis_checkpoint.lua");
-		File[] hydrolysis_specfiles = {spec};
-		double[] fractions = {1.0};
-		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);		
-	}
-
 }

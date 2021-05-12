@@ -11,15 +11,18 @@ import java.util.regex.Pattern;
 
 import javafx.util.Pair;
 
+/**
+ * Update functions for the hydrolysis feeding
+ * @author Paul Zügel
+ */
 public class UpdateFeeding {
 	
 	private static String feeding_timetable_string;
 	
 	/**
 	 * Read the feeding timetable from a hydrolysis specification
-	 * 
-	 * @param hydrolysis_specfile: Path pointing the the specification
-	 * @throws FileNotFoundException 
+	 * @param hydrolysis_specfile
+	 * @throws FileNotFoundException
 	 */
 	private static void read_feeding_timetable(File hydrolysis_specfile) throws FileNotFoundException
 	{
@@ -86,13 +89,10 @@ public class UpdateFeeding {
 	
 	/**
 	 * Updates the feeding timetable in a specification file 
-	 * for a hydrolysis reacote
-	 * 
-	 * @param hydrolysis_specfile: Path pointing the the specification
-	 * @param time: Timestamp time
-	 * @param amount: Timestamp amount
-	 * @param number_timestamps: size of arrays time and amount
-	 * @throws IOException 
+	 * for a hydrolysis reactor
+	 * @param hydrolysis_specfile
+	 * @param table - New table to be written into specification
+	 * @throws IOException
 	 */
 	public static void update_feeding_timetable(
 		File hydrolysis_specfile,

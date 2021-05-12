@@ -14,6 +14,15 @@ import vrl.biogas.biogascontrol.elements.structureElements.Start;
 import vrl.biogas.biogascontrol.elements.structureElements.Stop;
 import vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis;
 
+/**
+ * Predefined strucutre: 3_STAGE <br>
+ * Implementing <br>
+ *&emsp;- 3 {@link vrl.biogas.biogascontrol.elements.structureElements.Hydrolysis} Reactors <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis} <br>
+ *&emsp;- {@link vrl.biogas.biogascontrol.elements.structureElements.Methane} Reactor <br>
+ * @author Paul Zügel
+ *
+ */
 @ComponentInfo(name="3_STAGE", 
 	category="Biogas_Structures", 
 	description="3_STAGE plant structure")

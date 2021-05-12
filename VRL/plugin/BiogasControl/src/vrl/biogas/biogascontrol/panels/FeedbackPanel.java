@@ -31,6 +31,12 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 
+/**
+ * JTabbedPane: Feedback tab <br> 
+ * Displayed in the {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl} panel
+ * @author Paul Zügel
+ *
+ */
 public class FeedbackPanel {
 
 	public JPanel feedbackPanel;

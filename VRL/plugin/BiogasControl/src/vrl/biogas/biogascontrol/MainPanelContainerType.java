@@ -15,10 +15,9 @@ import eu.mihosoft.vrl.reflection.TypeRepresentationBase;
 import eu.mihosoft.vrl.visual.TransparentPanel;
 
 /**
- * Parent type for plot typerepresentations. Can also be used directly as type
- * representation by returning <code>JFreeChart</code> objects.
+ * Type representation in VRL for the main panels {@link vrl.biogas.biogascontrol.BiogasControl}/{@link vrl.biogas.biogascontrol.BiogasUserControl}. 
  * 
- * @author Michael Hoffer <info@michaelhoffer.de>
+ * @author Michael Hoffer, Paul Zügel
  */
 @ComponentInfo(name="MainPanelContainerType", category="Biogas", description="MainPanelContainerType")
 @TypeInfo(type = JComponent.class, input = true, output = true, style = "default")
