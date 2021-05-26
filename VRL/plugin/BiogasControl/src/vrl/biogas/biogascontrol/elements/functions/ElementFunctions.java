@@ -145,7 +145,7 @@ public class ElementFunctions {
 						StandardCopyOption.REPLACE_EXISTING);
 				SpecfileUpdater.update_read_checkpoint(methaneFile, previousTimePath);			
 			} else { //first timestep			
-				Files.copy(new File(methaneDirectory, "methane.lua").toPath(), 
+				Files.copy(new File(methaneDirectory, "methane_startfile.lua").toPath(), 
 						methaneFile.toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 			}

@@ -8,7 +8,6 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -27,7 +26,6 @@ import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.panels.FeedbackPanel;
 import vrl.biogas.biogascontrol.panels.FeedingPanel;
-import vrl.biogas.biogascontrol.panels.PlantPanel;
 import vrl.biogas.biogascontrol.panels.SettingsPanel;
 import vrl.biogas.biogascontrol.panels.SetupPanel;
 import vrl.biogas.biogascontrol.panels.SimulationPanel;
@@ -88,7 +86,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
         JPanel simulationPanel = simulationPanelObj.getPanel();
         JPanel setupPanel = setupPanelObj.getPanel();
         JPanel settingsPanel = settingsPanelObj.getPanel();
-        JPanel plantPanel = (new PlantPanel()).getPanel();
+        //JPanel structurePanel = (new StructurePanel()).getPanel();
         JPanel feedbackPanel = feedbackPanelObj.getPanel();
         JPanel feedingPanel = feedingPanelObj.getPanel();
         JTabbedPane tab_panel = new JTabbedPane();	
@@ -96,7 +94,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
         tab_panel.addTab("Simulation", simulationPanel);
         tab_panel.addTab("Setup", setupPanel);
         tab_panel.addTab("Settings", settingsPanel);
-        tab_panel.addTab("Plant", plantPanel);
+        //tab_panel.addTab("Structure", structurePanel);
         tab_panel.addTab("Feedback", feedbackPanel);
         tab_panel.addTab("Feeding", feedingPanel);   
 
@@ -108,8 +106,6 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
             	0.03, 
             	0.82, //Tabbed pane
             	TableLayoutConstants.FILL}};
-        final JButton startBtn = new JButton("Start");
-        startBtn.setBackground(BUTTON_BLUE);
         panel.setLayout(new TableLayout(size));
         
         panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
@@ -187,4 +183,5 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		frame.setVisible(true);	
 	}
+	
 }

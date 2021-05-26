@@ -1,10 +1,12 @@
 package vrl.biogas.biogascontrol.elements.userStructureElements;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.concurrent.ExecutionException;
 
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
@@ -26,6 +28,20 @@ import vrl.biogas.biogascontrol.elements.userStructureElements.execution.UserPar
 	category="Biogas_UserElements")
 public class UserHydrolysis extends ElementHelperFunctions implements Serializable{
 	private static final long serialVersionUID=1L;
+	
+	@MethodInfo(name="Icon", hide=false, hideCloseIcon=false, interactive=true, num=1)
+	public BufferedImage icon() {
+		File iconPath = new File(BiogasUserControl.projectPath, "icons");
+		File hydroIcon_path = new File(iconPath, "hydrolysis_muha.png");
+		
+		BufferedImage img = null;
+		try {
+		    img = ImageIO.read(hydroIcon_path);
+		} catch (IOException e) {
+		}
+
+		return img; 
+	}
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException, ExecutionException{

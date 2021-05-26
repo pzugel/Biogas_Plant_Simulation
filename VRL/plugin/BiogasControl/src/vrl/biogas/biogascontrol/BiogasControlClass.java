@@ -116,7 +116,8 @@ public class BiogasControlClass {
 					setupPanelObj.createBtn.setEnabled(true);
 					setupPanelObj.loadBtn.setEnabled(true);
 					setupPanelObj.openBtn.setEnabled(true);
-					setupPanelObj.clearBtn.setEnabled(true);					
+					setupPanelObj.clearBtn.setEnabled(true);	
+					startBtn.setEnabled(true);
 				} else {
 					timerStartTime = System.currentTimeMillis();
 					timer.start();					
@@ -126,6 +127,7 @@ public class BiogasControlClass {
 					setupPanelObj.loadBtn.setEnabled(false);
 					setupPanelObj.openBtn.setEnabled(false);
 					setupPanelObj.clearBtn.setEnabled(false);
+					startBtn.setEnabled(false);
 				}
 			}	
 		});
@@ -153,5 +155,8 @@ public class BiogasControlClass {
 				}
 			}
 		});
+		
+		startBtn = new JButton("Start");
+        startBtn.setBackground(BUTTON_BLUE);
 	}
 }

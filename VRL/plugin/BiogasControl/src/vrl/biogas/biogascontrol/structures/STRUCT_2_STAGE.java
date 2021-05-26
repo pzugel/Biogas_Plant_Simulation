@@ -15,7 +15,7 @@ import vrl.biogas.biogascontrol.elements.structureElements.*;
  * @author Paul Zügel
  *
  */
-@ComponentInfo(name="2_STAGE", 
+@ComponentInfo(name="STRUCT_2_STAGE", 
 	category="Biogas_Structures", 
 	description="2_STAGE plant structure")
 public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Serializable {
@@ -28,7 +28,7 @@ public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Seri
 	
 	@Override
 	public String name() {
-		return "2_STAGE";
+		return "STRUCT_2_STAGE";
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class STRUCT_2_STAGE extends StructureFunctions implements Structure,Seri
 	
 	@Override
 	public String[] hydrolysisNames() {
-		return new String[] {"hydrolyse_0", "hydrolyse_1"};
+		return new String[] {"hydrolysis_0", "hydrolysis_1"};
 	}
 	
 	@Override

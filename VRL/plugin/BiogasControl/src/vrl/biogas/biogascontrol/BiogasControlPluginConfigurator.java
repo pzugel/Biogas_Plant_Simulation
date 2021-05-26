@@ -50,7 +50,7 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	   if (api instanceof VPluginAPI) {
 		   VPluginAPI vapi = (VPluginAPI) api;
 	       vapi.addTypeRepresentation(MainPanelContainerType.class);
-	       
+
 	       //Main
 	       vapi.addComponent(BiogasControl.class);	
 	       
@@ -68,7 +68,6 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       
 	       //For user defined strucutres
 	       vapi.addComponent(BiogasUserControl.class);
-	       vapi.addComponent(Iterator.class);
 	       
 	       //User elements
 	       vapi.addComponent(UserStart.class);	

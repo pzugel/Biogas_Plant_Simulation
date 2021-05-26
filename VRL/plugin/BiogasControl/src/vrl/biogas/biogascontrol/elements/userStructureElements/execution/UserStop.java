@@ -11,7 +11,7 @@ import vrl.biogas.biogascontrol.panels.SimulationPanel;
 
 /**
  * Execution of the "Stop" function in a user defined structure.
- * Called by the {@link vrl.biogas.biogascontrol.Iterator} at the end of every iteration.
+ * Called by the {@link vrl.biogas.biogascontrol.UserStructureIterator} at the end of every iteration.
  * @author Paul Zügel
  *
  */

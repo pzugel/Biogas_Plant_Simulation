@@ -19,13 +19,13 @@
 				<Item Name="storage.vi" Type="VI" URL="../../elements/storage.vi"/>
 			</Item>
 			<Item Name="Structures" Type="Folder">
-				<Item Name="1_STAGE.vi" Type="VI" URL="../../structures/1_STAGE.vi"/>
-				<Item Name="2_STAGE.vi" Type="VI" URL="../../structures/2_STAGE.vi"/>
-				<Item Name="2_STAGE_PL.vi" Type="VI" URL="../../structures/2_STAGE_PL.vi"/>
-				<Item Name="3_STAGE.vi" Type="VI" URL="../../structures/3_STAGE.vi"/>
-				<Item Name="3_STAGE_PL.vi" Type="VI" URL="../../structures/3_STAGE_PL.vi"/>
-				<Item Name="SIMPLE_HYDROLYSIS.vi" Type="VI" URL="../../structures/SIMPLE_HYDROLYSIS.vi"/>
 				<Item Name="STRUCT.vit" Type="VI" URL="../../structures/STRUCT.vit"/>
+				<Item Name="STRUCT_1_STAGE.vi" Type="VI" URL="../../structures/STRUCT_1_STAGE.vi"/>
+				<Item Name="STRUCT_2_STAGE.vi" Type="VI" URL="../../structures/STRUCT_2_STAGE.vi"/>
+				<Item Name="STRUCT_2_STAGE_PL.vi" Type="VI" URL="../../structures/STRUCT_2_STAGE_PL.vi"/>
+				<Item Name="STRUCT_3_STAGE.vi" Type="VI" URL="../../structures/STRUCT_3_STAGE.vi"/>
+				<Item Name="STRUCT_3_STAGE_PL.vi" Type="VI" URL="../../structures/STRUCT_3_STAGE_PL.vi"/>
+				<Item Name="STRUCT_SIMPLE_HYDROLYSIS.vi" Type="VI" URL="../../structures/STRUCT_SIMPLE_HYDROLYSIS.vi"/>
 			</Item>
 		</Item>
 		<Item Name="write_png.vi" Type="VI" URL="../write_png.vi"/>
@@ -50,10 +50,11 @@
 				<Item Name="imagedata.ctl" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/imagedata.ctl"/>
 			</Item>
 			<Item Name="feedback_run.vi" Type="VI" URL="../../subVI/feedback_run.vi"/>
-			<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../../subVI/hydrolyse_reactor_repetition_check.vi"/>
-			<Item Name="hydrolyse_reactor_run.vi" Type="VI" URL="../../subVI/hydrolyse_reactor_run.vi"/>
-			<Item Name="hydrolyse_reactor_run_parallel.vi" Type="VI" URL="../../subVI/hydrolyse_reactor_run_parallel.vi"/>
-			<Item Name="hydrolyse_reactor_setup.vi" Type="VI" URL="../../subVI/hydrolyse_reactor_setup.vi"/>
+			<Item Name="hydrolysis_reactor.vi" Type="VI" URL="../../elements/hydrolysis_reactor.vi"/>
+			<Item Name="hydrolysis_reactor_parallel.vi" Type="VI" URL="../../elements/hydrolysis_reactor_parallel.vi"/>
+			<Item Name="hydrolysis_reactor_run.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_run.vi"/>
+			<Item Name="hydrolysis_reactor_run_parallel.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_run_parallel.vi"/>
+			<Item Name="hydrolysis_reactor_setup.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_setup.vi"/>
 			<Item Name="libCheckpointUpdate.lvlib" Type="Library" URL="../../lib/libCheckpointUpdate/libCheckpointUpdate.lvlib"/>
 			<Item Name="libFileFunctions.lvlib" Type="Library" URL="../../lib/libFileFunctions/libFileFunctions.lvlib"/>
 			<Item Name="libSimulationControl.lvlib" Type="Library" URL="../../lib/libSimulationControl/libSimulationControl.lvlib"/>

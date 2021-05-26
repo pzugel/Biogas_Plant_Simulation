@@ -82,6 +82,7 @@
 					<Item Name="element_editor_list_hydrolysis.vi" Type="VI" URL="../subVI/element_editor_list_hydrolysis.vi"/>
 					<Item Name="element_editor_load_spec.vi" Type="VI" URL="../subVI/element_editor_load_spec.vi"/>
 					<Item Name="element_editor_load_vali.vi" Type="VI" URL="../subVI/element_editor_load_vali.vi"/>
+					<Item Name="element_editor_methane_initial.vi" Type="VI" URL="../subVI/element_editor_methane_initial.vi"/>
 					<Item Name="element_editor_methane_run.vi" Type="VI" URL="../subVI/element_editor_methane_run.vi"/>
 					<Item Name="element_editor_save.vi" Type="VI" URL="../subVI/element_editor_save.vi"/>
 					<Item Name="element_editor_save_as.vi" Type="VI" URL="../subVI/element_editor_save_as.vi"/>

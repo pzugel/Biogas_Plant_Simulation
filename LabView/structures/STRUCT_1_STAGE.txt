@@ -1,0 +1,5 @@
+name=STRUCT_1_STAGE
+hydrolysis_stages=1
+storage=1
+methane=1
+feedback=1

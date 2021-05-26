@@ -143,7 +143,7 @@ public class SettingsPanel {
         JButton hydrolysis_edit = new JButton("Edit");
         hydrolysis_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         hydrolysis_path = new JTextField(5);
-        hydrolysis_path.setText(new File(simulationFilesPath, "hydrolyse.lua").toString());
+        hydrolysis_path.setText(new File(simulationFilesPath, "hydrolysis.lua").toString());
         hydrolysis_path.setEditable(false);
         JButton open_hydrolysis_edit = new JButton("...");
         open_hydrolysis_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
@@ -157,7 +157,7 @@ public class SettingsPanel {
         //ICONS
 		File iconPath = new File(BiogasControlClass.projectPath, "icons");
 		
-		File hydroIcon_path = new File(iconPath, "hydrolyse_reactor.png");
+		File hydroIcon_path = new File(iconPath, "hydrolysis_reactor.png");
 		File methIcon_path = new File(iconPath, "methane_reactor.png");
 		File runIcon_path = new File(iconPath, "run.png");
         ImageIcon hydroIcon = new ImageIcon(hydroIcon_path.toString());
@@ -165,14 +165,14 @@ public class SettingsPanel {
         ImageIcon runIcon = new ImageIcon(runIcon_path.toString());
         
         elementsPanel.add(new JLabel(hydroIcon), new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(methane_path, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(open_methane_edit, new TableLayoutConstraints(4, 0, 4, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(methane_edit, new TableLayoutConstraints(6, 0, 6, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(hydrolysis_path, new TableLayoutConstraints(2, 0, 2, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(open_hydrolysis_edit, new TableLayoutConstraints(4, 0, 4, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(hydrolysis_edit, new TableLayoutConstraints(6, 0, 6, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
         elementsPanel.add(new JLabel(methIcon), new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(hydrolysis_path, new TableLayoutConstraints(2, 2, 2, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(open_hydrolysis_edit, new TableLayoutConstraints(4, 2, 4, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        elementsPanel.add(hydrolysis_edit, new TableLayoutConstraints(6, 2, 6, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(methane_path, new TableLayoutConstraints(2, 2, 2, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(open_methane_edit, new TableLayoutConstraints(4, 2, 4, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        elementsPanel.add(methane_edit, new TableLayoutConstraints(6, 2, 6, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
         elementsPanel.add(new JLabel(runIcon), new TableLayoutConstraints(0, 4, 0, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         elementsPanel.add(simulation_path, new TableLayoutConstraints(2, 4, 2, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
@@ -240,6 +240,10 @@ public class SettingsPanel {
 								
 								File hydrolysisPath = new File(BiogasControlClass.workingDirectory, reactor);
 								
+								/*
+								 * If the simulation is running we check whether a chekpoint has already been created.
+								 * If yes we edit the chkpoint, if not we edit the startfile.
+								 */
 								if(BiogasControlClass.running.isSelected()) {
 									File hydrolysisTimePath;
 									
@@ -257,7 +261,21 @@ public class SettingsPanel {
 									}
 									
 								} else {
-									LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
+									System.out.println("Not running");
+									/*
+									 * If we load an environment we would like the editor to display the checkpoint
+									 * file from the previous timestep.
+									 * Otherwise we take the startfile.
+									 */
+									if(BiogasControlClass.setupPanelObj.mergePreexisting) {
+										System.out.println("Merge preexisting");
+										int previousTimestep = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue() - 1;
+										File hydrolysisTimePath = new File(hydrolysisPath, String.valueOf(previousTimestep));
+										System.out.println("hydrolysisTimePath: " + hydrolysisTimePath);
+										LUATableViewer.specFile = new File(hydrolysisTimePath, "hydrolysis_checkpoint.lua");
+									} else {
+										LUATableViewer.specFile = new File(hydrolysisPath, "hydrolysis_startfile.lua");
+									}										
 								}
 															
 								LUATableViewer.editor();
@@ -276,6 +294,11 @@ public class SettingsPanel {
 				else { //Load Base File
 					try {
 						LUATableViewer.specFile = new File(hydrolysis_path.getText());
+						
+						JOptionPane.showMessageDialog(settingsPanel,
+								"You are about to change the base specification file. Please proceed with care.",
+							    "Warning",
+							    JOptionPane.WARNING_MESSAGE);
 						
 						LUATableViewer.editor();
 						JFrame frame = new JFrame("Hydrolysis base file");
@@ -296,10 +319,13 @@ public class SettingsPanel {
 		methane_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				System.out.println("Click methane edit");
 				if(BiogasControlClass.setupPanelObj.environment_ready) {
 					File methanePath = new File(BiogasControlClass.workingDirectory, "methane");
 					
+					/*
+					 * If the simulation is running we check whether a chekpoint has already been created.
+					 * If yes we edit the chkpoint, if not we edit the startfile.
+					 */
 					if(BiogasControlClass.running.isSelected()) {
 						File methaneTimePath;
 						
@@ -313,11 +339,22 @@ public class SettingsPanel {
 						if(specFile.exists()) {
 							LUATableViewer.specFile = specFile;
 						} else {
-							LUATableViewer.specFile = new File(methanePath, "methane.lua");
+							LUATableViewer.specFile = new File(methanePath, "methane_startfile.lua");
 						}
 						
 					} else {
-						LUATableViewer.specFile = new File(methanePath, "methane.lua");
+						/*
+						 * If we load an environment we would like the editor to display the checkpoint
+						 * file from the previous timestep.
+						 * Otherwise we take the startfile.
+						 */
+						if(BiogasControlClass.setupPanelObj.mergePreexisting) {						
+							int previousTimestep = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue() - 1;
+							File methaneTimePath = new File(methanePath, String.valueOf(previousTimestep));							
+							LUATableViewer.specFile = new File(methaneTimePath, "methane_checkpoint.lua");
+						} else {
+							LUATableViewer.specFile = new File(methanePath, "methane_startfile.lua");
+						}	
 					}
 					
 					try {
@@ -335,6 +372,11 @@ public class SettingsPanel {
 				else { //Load Base File
 					try {
 						LUATableViewer.specFile = new File(methane_path.getText());
+						
+						JOptionPane.showMessageDialog(settingsPanel,
+								"You are about to change the base specification file. Please proceed with care.",
+							    "Warning",
+							    JOptionPane.WARNING_MESSAGE);
 						
 						LUATableViewer.editor();
 						JFrame frame = new JFrame("Methane base file");

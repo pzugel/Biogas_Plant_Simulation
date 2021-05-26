@@ -23,7 +23,7 @@ import vrl.biogas.biogascontrol.elements.structureElements.StorageHydrolysis;
  * @author Paul Zügel
  *
  */
-@ComponentInfo(name="1_STAGE", 
+@ComponentInfo(name="STRUCT_1_STAGE", 
 	category="Biogas_Structures", 
 	description="1_STAGE plant structure")
 public class STRUCT_1_STAGE extends StructureFunctions implements Structure,Serializable {
@@ -36,7 +36,7 @@ public class STRUCT_1_STAGE extends StructureFunctions implements Structure,Seri
 	
 	@Override
 	public String name() {
-		return "1_STAGE";
+		return "STRUCT_1_STAGE";
 	}
 	
 	@Override
@@ -56,7 +56,7 @@ public class STRUCT_1_STAGE extends StructureFunctions implements Structure,Seri
 	
 	@Override
 	public String[] hydrolysisNames() {
-		return new String[] {"TEST0"};
+		return new String[] {"hydrolysis_0"};
 	}
 	
 	@Override

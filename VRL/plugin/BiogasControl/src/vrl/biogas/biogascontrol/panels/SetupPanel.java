@@ -298,8 +298,8 @@ public class SetupPanel {
 					BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
 		        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
 				    this.environment_path = path;
-				    environment_ready = true;
-				    mergePreexisting = true;
+				    this.environment_ready = true;
+				    this.mergePreexisting = true;
 				    update_tree(path);
 				}
 				else {
@@ -352,7 +352,7 @@ public class SetupPanel {
 					methaneDir.mkdirs();
 				}
 				Files.copy(new File(simulationFiles, "methane.lua").toPath(),
-						new File(methaneDir, "methane.lua").toPath(), 
+						new File(methaneDir, "methane_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 				newRoot.add(new DefaultMutableTreeNode("methane"));
 			}
@@ -387,7 +387,7 @@ public class SetupPanel {
 				methaneDir.mkdirs();
 			}
 			Files.copy(new File(simulationFiles, "methane.lua").toPath(),
-					new File(methaneDir, "methane.lua").toPath(), 
+					new File(methaneDir, "methane_startfile.lua").toPath(), 
 					StandardCopyOption.REPLACE_EXISTING);
 			newRoot.add(new DefaultMutableTreeNode("methane"));
 			
