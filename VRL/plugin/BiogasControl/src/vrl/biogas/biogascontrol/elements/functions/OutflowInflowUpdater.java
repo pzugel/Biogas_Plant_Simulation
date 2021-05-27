@@ -20,6 +20,7 @@ public class OutflowInflowUpdater {
 	private static String inflow_timetable_string;
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
+	private static double dtStart;
 	
 	/**
 	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
@@ -31,6 +32,7 @@ public class OutflowInflowUpdater {
 	{ 
 		System.out.println("parse_spec_file: " + spec);
 		spec_inflowData_vec = new ArrayList<String>();
+		
 		//String content = Files.readString(spec.toPath(), StandardCharsets.US_ASCII); //Not compatible with groovy
 		String content = "";
 		Scanner lineIter = new Scanner(spec);		
@@ -59,6 +61,17 @@ public class OutflowInflowUpdater {
 				System.out.println("timetable m.group(0): " + m.group(0));
 				inflow_timetable_string = m.group(0);
 			}	
+		}
+		
+		Pattern dtPattern = Pattern.compile("dtStart(\\s)*=(\\s)*[0-9.]+");
+		Matcher dtMatcher = dtPattern.matcher(content);
+		if(dtMatcher.find()) {
+			String dtStartString = dtMatcher.group(0);
+			int startInd = dtStartString.indexOf('=');
+			dtStartString = dtStartString.substring(startInd+1);
+			dtStart = Double.valueOf(dtStartString);
+		} else {
+			dtStart = 0;
 		}
 	}
 	
@@ -124,12 +137,22 @@ public class OutflowInflowUpdater {
 					 * e.g. If we compute the timestep 2.0 -> 3.0 in the hydrolysis reactors we want the outflow
 					 * at timestamp "3.0" to be present in the methane reactor at timestamp "2.0" since we still 
 					 * need to compute timestep 2.0 -> 3.0 in the methane reactor
+					 * 
+					 * We also need to add a time offset dtStart as defined in the specification
 					 */
-					if(val.contains("Time") && isMethane) {
-						double previousTimestep = Double.parseDouble(outflow_input_values.get(k).get(column))-1;
-						colList.add(String.valueOf(previousTimestep));
+					if(val.contains("Time")) {
+						if(isMethane) {
+							double previousTimestep = Double.parseDouble(outflow_input_values.get(k).get(column))-1+dtStart;
+							colList.add(String.valueOf(previousTimestep));
+						} else {
+							double timeOffset = Double.parseDouble(outflow_input_values.get(k).get(column))+dtStart;
+							colList.add(String.valueOf(timeOffset));
+						}
+						
 					} else {
-						colList.add(outflow_input_values.get(k).get(column));
+						//Fractional "all liquid"
+						double allLiquidFraction = Double.parseDouble(outflow_input_values.get(k).get(column))*fraction;
+						colList.add(String.valueOf(allLiquidFraction));
 					}
 				}
 				output_timetable.add(colList);	
@@ -305,5 +328,15 @@ public class OutflowInflowUpdater {
 			myWriter.close();
 			++specNum;
 		}
+	}
+	
+	public static void main(String args[]) throws IOException, InterruptedException{
+		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/methane/outflow_integratedSum_fullTimesteps.txt");
+		
+		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/hydrolysis_0/1/hydrolysis_checkpoint.lua");
+		File spec1 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/hydrolysis_1/1/hydrolysis_checkpoint.lua");
+		double[] fractions = {0.66, 0.33};
+		File[] hydrolysis_specfiles = {spec0, spec1};
+		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);
 	}
 }

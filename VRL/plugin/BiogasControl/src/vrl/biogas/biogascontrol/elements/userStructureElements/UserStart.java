@@ -35,12 +35,18 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 				
 				if(firstTimestep) {
 					BiogasUserControl.simulationFile = BiogasUserControl.settingsPanelObj.simulation_path.getText();
-					BiogasUserControl.simulationPanelObj.simulationLog.setText("**************************************\n" 
-							+ "** New Simulation\n"
-							+ "** Hydrolysis File: " + BiogasUserControl.settingsPanelObj.hydrolysis_path.getText() + "\n"
+					String logText = "**************************************\n";
+					if(BiogasUserControl.setupPanelObj.mergePreexisting) {
+						logText += "** Continue Simulation\n";
+					}
+					else {
+						logText += "** New Simulation\n";
+					}
+					logText += "** Hydrolysis File: " + BiogasUserControl.settingsPanelObj.hydrolysis_path.getText() + "\n"
 							+ "** Methane File: " + BiogasUserControl.settingsPanelObj.methane_path.getText() + "\n"
 							+ "** Simulation File: " + BiogasUserControl.simulationFile + "\n"
-							+ "**************************************\n");
+							+ "**************************************\n";
+					BiogasUserControl.simulationPanelObj.simulationLog.setText(logText);
 					BiogasUserControl.iteration = 0;
 				}
 				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currentTime + 1));

@@ -44,7 +44,6 @@ import vrl.biogas.biogascontrol.structures.Structure;
 @ObjectInfo(name = "BiogasControl")
 public class BiogasControl extends BiogasControlClass implements Serializable{
 	private static final long serialVersionUID = 1L;
-
 	static public Structure struct;
 	
 	@MethodInfo(name="Main", hide=false,
@@ -119,12 +118,18 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 			public void actionPerformed(ActionEvent arg0) {
 				if(setupPanelObj.environment_ready) {
 					simulationFile = settingsPanelObj.simulation_path.getText();
-					simulationPanelObj.simulationLog.setText("**************************************\n" 
-							+ "** New Simulation\n"
-							+ "** Hydrolysis File: " + settingsPanelObj.hydrolysis_path.getText() + "\n"
+					String logText = "**************************************\n";
+					if(setupPanelObj.mergePreexisting) {
+						logText += "** Continue Simulation\n";
+					}
+					else {
+						logText += "** New Simulation\n";
+					}
+					logText += "** Hydrolysis File: " + settingsPanelObj.hydrolysis_path.getText() + "\n"
 							+ "** Methane File: " + settingsPanelObj.methane_path.getText() + "\n"
 							+ "** Simulation File: " + simulationFile + "\n"
-							+ "**************************************\n");
+							+ "**************************************\n";
+					simulationPanelObj.simulationLog.setText(logText);
 					int starttime = (Integer) settingsPanelObj.simStarttime.getValue();
 					iteration = 0;												
 					
@@ -176,8 +181,8 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		
 	    JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.control(new STRUCT_1_STAGE(), p);	    
-	    
+	    b.mainControl(new STRUCT_2_STAGE(), p);	    
+
 		frame.add(panel);
 		frame.setSize(600, 600);
 		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

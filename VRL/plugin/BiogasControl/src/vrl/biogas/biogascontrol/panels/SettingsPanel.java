@@ -397,7 +397,14 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new hydrolysis base file");
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);				
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);	
+				File startDir;
+				if(userDefined) {
+					startDir = new File(BiogasUserControl.projectPath, "simulation_files");
+				} else {
+					startDir = new File(BiogasControl.projectPath, "simulation_files");
+				}
+				fileChooser.setCurrentDirectory(startDir);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("LUA FILES", "*.lua", "lua");
 				fileChooser.setFileFilter(filter);
 				
@@ -418,7 +425,14 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new methane base file");
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);				
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				File startDir;
+				if(userDefined) {
+					startDir = new File(BiogasUserControl.projectPath, "simulation_files");
+				} else {
+					startDir = new File(BiogasControl.projectPath, "simulation_files");
+				}
+				fileChooser.setCurrentDirectory(startDir);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("LUA FILES", "*.lua", "lua");
 				fileChooser.setFileFilter(filter);
 				
@@ -438,7 +452,14 @@ public class SettingsPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new simulation file");
-				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);				
+				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+				File startDir;
+				if(userDefined) {
+					startDir = new File(BiogasUserControl.projectPath, "simulation_files");
+				} else {
+					startDir = new File(BiogasControl.projectPath, "simulation_files");
+				}
+				fileChooser.setCurrentDirectory(startDir);
 				FileNameExtensionFilter filter = new FileNameExtensionFilter("LUA FILES", "*.lua", "lua");
 				fileChooser.setFileFilter(filter);
 				

@@ -139,19 +139,23 @@ void update_outputFiles_integration(const char* outputFiles_path)
 	std::size_t outflow_filename_ind = outputFiles_string.find(outflow_filename);	
 	std::size_t outflow_title_ind = outputFiles_string.find(outflow_title);
 	
-	outputFiles_string.replace(outflow_filename_ind, outflow_filename.length(),
-		"outflow_integrated.txt");
-	outputFiles_string.replace(outflow_title_ind, outflow_title.length(), 
-		"outflow_integrated");
+	if(outflow_filename_ind != std::string::npos){		
+		outputFiles_string.replace(outflow_filename_ind, outflow_filename.length(),
+			"outflow_integrated.txt");
+		outputFiles_string.replace(outflow_title_ind, outflow_title.length(), 
+			"outflow_integrated");
+	}
 	
 	//Replace dbg_reactionrates entry
 	std::size_t reactionRates_filename_ind = outputFiles_string.find(reactionRates_filename);	
 	std::size_t reactionRates_title_ind = outputFiles_string.find(reactionRates_title);
 	
-	outputFiles_string.replace(reactionRates_filename_ind, reactionRates_filename.length(),
-		"dbg_reactionrates_integrated.txt");
-	outputFiles_string.replace(reactionRates_title_ind, reactionRates_title.length(), 
-		"reactionRates_integrated=");
+	if(reactionRates_filename_ind != std::string::npos){	
+		outputFiles_string.replace(reactionRates_filename_ind, reactionRates_filename.length(),
+			"dbg_reactionrates_integrated.txt");
+		outputFiles_string.replace(reactionRates_title_ind, reactionRates_title.length(), 
+			"reactionRates_integrated=");
+	}
 	
 	//Write file
 	std::ofstream output_file;
@@ -199,20 +203,23 @@ void merge_all_hydrolysis(
 			working_dir, 
 			f,
 			reactors);
-		
-		std::string output_file_name = 	storage_dir + "/" + f;
-		std::size_t extensionPos = output_file_name.find_last_of(".");
-		output_file_name = output_file_name.substr(0, extensionPos) 
-			+ "_integrated" 
-			+ output_file_name.substr(extensionPos);
-		std::cout << output_file_name << std::endl;
-		
-		std::ofstream output;
-		output.open(output_file_name);
-		output << output_file_string;
-		output.close();
-		
-		std::cout << output_file_string << std::endl;
+			
+		//If file does not exist an empty string is returned
+		if(output_file_string != ""){
+			std::string output_file_name = 	storage_dir + "/" + f;
+			std::size_t extensionPos = output_file_name.find_last_of(".");
+			output_file_name = output_file_name.substr(0, extensionPos) 
+				+ "_integrated" 
+				+ output_file_name.substr(extensionPos);
+			std::cout << output_file_name << std::endl;
+			
+			std::ofstream output;
+			output.open(output_file_name);
+			output << output_file_string;
+			output.close();
+			
+			std::cout << output_file_string << std::endl;
+		}
 	}
 	
 	//Merge hydrolysis files (no integration)
@@ -221,16 +228,19 @@ void merge_all_hydrolysis(
 			working_dir, 
 			f,
 			reactors);
-		
-		std::string output_file_name = 	storage_dir + "/" + f;
-		std::cout << output_file_name << std::endl;
-		
-		std::ofstream output;
-		output.open(output_file_name);
-		output << output_file_string;
-		output.close();
-		
-		std::cout << output_file_string << std::endl;
+			
+		//If file does not exist an empty string is returned
+		if(output_file_string != ""){ 
+			std::string output_file_name = 	storage_dir + "/" + f;
+			std::cout << output_file_name << std::endl;
+			
+			std::ofstream output;
+			output.open(output_file_name);
+			output << output_file_string;
+			output.close();
+			
+			std::cout << output_file_string << std::endl;
+		}
 	}
 }
 
@@ -485,8 +495,9 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
-	const char* outputFiles_path = "/home/paul/Schreibtisch/smalltestmethane/LabVIEW/biogas_20210510_183828@1_STAGE/storage_hydrolysis/outputFiles.lua";
-	update_outputFiles(outputFiles_path);
-	update_outputFiles_integration(outputFiles_path);
+	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/methane/outflow_integratedSum_fullTimesteps.txt";
+	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/hydrolysis_1/1/hydrolysis_checkpoint.lua";
+	double fraction = 0.5;
+	update_hydrolysis_inflow(outflow_infile, hydrolysis_specfile, fraction);
 	return 0;
 }

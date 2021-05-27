@@ -109,11 +109,11 @@ public class BiogasOutputMainPanel implements Serializable{
         model.setRoot(emptyNode);
         
 	    final JScrollPane treeScrollPane = new JScrollPane(tree);	    
-	    JButton clearBtn = new JButton("Clear");
+	    //JButton clearBtn = new JButton("Clear");
 	    
 	    mainPanel.add(upperPanel, new TableLayoutConstraints(0, 0, 0, 0, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
         mainPanel.add(treeScrollPane, new TableLayoutConstraints(0, 1, 0, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        mainPanel.add(clearBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
+        //mainPanel.add(clearBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
 	    
 	    MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(mainPanel);
@@ -209,6 +209,8 @@ public class BiogasOutputMainPanel implements Serializable{
 			}
 	    });
 	    
+	    //There are some issues here - Button not aktually needed
+	    /*
 	    clearBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -231,9 +233,9 @@ public class BiogasOutputMainPanel implements Serializable{
 				//model.reload();
 				mainPanel.revalidate();
 				mainPanel.repaint();
-			}
-			
+			}			
 	    });
+	    */
 	    
 		return cont;
 	}

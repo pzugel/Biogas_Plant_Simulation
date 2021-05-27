@@ -342,7 +342,7 @@ public class SetupPanel {
 		this.mergePreexisting = false;
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
-		File simulationFiles = new File(BiogasControlClass.projectPath, "simulation_files");
+		//File simulationFiles = new File(BiogasControlClass.projectPath, "simulation_files");
 		
 		if(!userDefined) {
 			//Methane
@@ -351,7 +351,8 @@ public class SetupPanel {
 				if (!methaneDir.exists()){
 					methaneDir.mkdirs();
 				}
-				Files.copy(new File(simulationFiles, "methane.lua").toPath(),
+				File methaneSpecfile = new File(BiogasControl.settingsPanelObj.methane_path.getText());
+				Files.copy(methaneSpecfile.toPath(),
 						new File(methaneDir, "methane_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 				newRoot.add(new DefaultMutableTreeNode("methane"));
@@ -365,7 +366,8 @@ public class SetupPanel {
 				if (!hydroDir.exists()){
 					hydroDir.mkdirs();
 				}	
-				Files.copy(new File(simulationFiles, "hydrolysis.lua").toPath(), 
+				File hydrolysisSpecfile = new File(BiogasControl.settingsPanelObj.hydrolysis_path.getText());
+				Files.copy(hydrolysisSpecfile.toPath(), 
 						new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 				newRoot.add(new DefaultMutableTreeNode(names[i]));
@@ -386,7 +388,8 @@ public class SetupPanel {
 			if (!methaneDir.exists()){
 				methaneDir.mkdirs();
 			}
-			Files.copy(new File(simulationFiles, "methane.lua").toPath(),
+			File methaneSpecfile = new File(BiogasUserControl.settingsPanelObj.methane_path.getText());
+			Files.copy(methaneSpecfile.toPath(),
 					new File(methaneDir, "methane_startfile.lua").toPath(), 
 					StandardCopyOption.REPLACE_EXISTING);
 			newRoot.add(new DefaultMutableTreeNode("methane"));
@@ -399,7 +402,8 @@ public class SetupPanel {
 				if (!hydroDir.exists()){
 					hydroDir.mkdirs();
 				}	
-				Files.copy(new File(simulationFiles, "hydrolysis.lua").toPath(), 
+				File hydrolysisSpecfile = new File(BiogasUserControl.settingsPanelObj.hydrolysis_path.getText());
+				Files.copy(hydrolysisSpecfile.toPath(), 
 						new File(hydroDir, "hydrolysis_startfile.lua").toPath(), 
 						StandardCopyOption.REPLACE_EXISTING);
 				newRoot.add(new DefaultMutableTreeNode("hydrolysis_" + i));

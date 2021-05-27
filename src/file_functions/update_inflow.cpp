@@ -18,6 +18,7 @@ static std::vector<std::string> outflow_input_header; //Holds header from outflo
 static std::vector<std::vector<std::string>> outflow_input_values; //Holds values from outflow.txt
 static std::vector<std::vector<std::string>> output_timetable; //Holds new inflow for the methane spec
 static std::string timetable_replacement; //Holds new inflow (as string) for the methane spec
+static double dtStart; //dtStart parameter as defined in a specification
 
 /**
  * Reads the methane specification file and stores the inflow "data"
@@ -53,6 +54,23 @@ void parse_spec_file()
 		std::smatch match_timetable;
 		if(std::regex_search(inflow_string, match_timetable, timetable))
 			inflow_timetable_string = match_timetable[0];
+	}
+	
+	std::regex dtStartPattern ("dtStart(\\s)*=(\\s)*[0-9.]+");
+	std::smatch match_dtStart;
+	if(std::regex_search(specfile_string, match_dtStart, dtStartPattern))
+	{
+		std::string dtStartString = match_dtStart[0];
+		size_t startInd = dtStartString.find('=');
+		if(startInd != std::string::npos){
+			dtStartString = dtStartString.substr(startInd+1);
+			dtStart = dot_conversion(dtStartString);
+		} else {
+			dtStart = 0.0;
+		}
+	}
+	else {
+		dtStart = 0.0;
 	}
 }
 
@@ -132,13 +150,22 @@ void write_new_timetable(double fraction, bool isMethane)
 				 * e.g. If we compute the timestep 2.0 -> 3.0 in the hydrolysis reactors we want the outflow
 				 * at timestamp "3.0" to be present in the methane reactor at timestamp "2.0" since we still 
 				 * need to compute timestep 2.0 -> 3.0 in the methane reactor
+				 * 
+				 * We also need to add a time offset dtStart as defined in the specification
 				 */
-				 if(header_val.find("Time") != std::string::npos && isMethane){
-					double previousTimestep = dot_conversion(outflow_input_values.at(k).at(column))-1;
-					col_vector.push_back(conv_to_string(previousTimestep));
+				 if(header_val.find("Time") != std::string::npos){
+					 if(isMethane) {
+						double previousTimestep = dot_conversion(outflow_input_values.at(k).at(column))-1+dtStart;
+						col_vector.push_back(conv_to_string(previousTimestep));
+					} else {
+						double timeOffset = dot_conversion(outflow_input_values.at(k).at(column))+dtStart;
+						col_vector.push_back(conv_to_string(timeOffset));
+					}					
 				 }
 				 else {
-					col_vector.push_back(outflow_input_values.at(k).at(column));
+					//Fractional "all liquid"
+					double allLiquidFraction = dot_conversion(outflow_input_values.at(k).at(column))*fraction;
+					col_vector.push_back(conv_to_string(allLiquidFraction));
 				 }				
 			}
 			output_timetable.push_back(col_vector);	

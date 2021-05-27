@@ -101,18 +101,20 @@ public class MergeFunctions {
 					working_dir, 
 					f, 
 					reactor_names);
-			
-			//Write the file to the storage
-			String output_file_name = storage_dir + File.separator + f;
-			int extensionPos = output_file_name.lastIndexOf(".");
-			output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
-			System.out.println(output_file_name);
-			
-			Writer output = new BufferedWriter(new FileWriter(output_file_name));
-			output.append(output_file_string);
-			output.close();	
-					
-			System.out.println(output_file_string);	
+			//If file does not exist an empty string is returned
+			if(!output_file_string.isEmpty()){
+				//Write the file to the storage
+				String output_file_name = storage_dir + File.separator + f;
+				int extensionPos = output_file_name.lastIndexOf(".");
+				output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
+				System.out.println(output_file_name);
+				
+				Writer output = new BufferedWriter(new FileWriter(output_file_name));
+				output.append(output_file_string);
+				output.close();	
+						
+				System.out.println(output_file_string);	
+			}
 		}
 		
 		//Merge hydrolysis files (no integration)
@@ -123,14 +125,17 @@ public class MergeFunctions {
 				f, 
 				reactor_names);
 			
-			File output_file_name = new File(storage_dir, f);
-			System.out.println(output_file_name);
-			
-			Writer output = new BufferedWriter(new FileWriter(output_file_name));
-			output.append(output_file_string);
-			output.close();		
-			
-			System.out.println(output_file_string);		
+			//If file does not exist an empty string is returned
+			if(!output_file_string.isEmpty()){
+				File output_file_name = new File(storage_dir, f);
+				System.out.println(output_file_name);
+				
+				Writer output = new BufferedWriter(new FileWriter(output_file_name));
+				output.append(output_file_string);
+				output.close();		
+				
+				System.out.println(output_file_string);	
+			}
 		}
 	}
 	
@@ -176,9 +181,9 @@ public class MergeFunctions {
 		}
 		
 		int extensionPos = filename.lastIndexOf(".");
-		String newFileName = filename.substring(0, extensionPos) + "_integrated" + filename.substring(extensionPos);	
+		String newFileName = filename.substring(0, extensionPos) + "_integrated" + filename.substring(extensionPos);
 		String output_file_string = merge_hydrolysis_files(dir, newFileName, reactors);
-				
+			
 		return output_file_string;
 	}
 	
@@ -383,6 +388,10 @@ public class MergeFunctions {
 		HelperFunctions.values = new ArrayList<ArrayList<ArrayList<String>>>();
 		File fileDir = new File(reactorDir, f);
 		System.out.println("fileDir: " + fileDir);
+		if(!fileDir.exists()) {
+			System.out.println("file does not exist!");
+			return "";
+		}
 		HelperFunctions.read_values_from_reactor(fileDir.toString());
 		
 		ArrayList<ArrayList<String>> values = HelperFunctions.values.get(0);				
@@ -628,9 +637,10 @@ public class MergeFunctions {
 		update_outputFiles(storageDir);
 		update_outputFiles_integration(storageDir);
 		*/
-		File methane_dir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427/methane");
-		File working_dir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427");
-		merge_all_methane(methane_dir, working_dir);
+		File storage_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822/storage_hydrolysis");
+		File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822");
+		String[] reactor_names = {"hydrolysis_0"};
+		merge_all_hydrolysis(storage_dir,working_dir,reactor_names);
 	}
 	
 }

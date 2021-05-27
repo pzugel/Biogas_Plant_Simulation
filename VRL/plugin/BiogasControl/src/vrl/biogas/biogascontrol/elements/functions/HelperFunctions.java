@@ -90,17 +90,19 @@ public class HelperFunctions {
 	 */
 	static public String remove_header(File path) throws FileNotFoundException
 	{
-		data_string = "";		
-		Pattern p = Pattern.compile("(^#)|(^[a-zA-Z])");		
-		
-		Scanner lineIter = new Scanner(path);
-		while(lineIter.hasNextLine()) {
-			String line = lineIter.nextLine();
-			Matcher m = p.matcher(line);
-			if(!m.find())
-				data_string += line + "\n";
+		data_string = "";
+		if(path.exists()) {
+			Pattern p = Pattern.compile("(^#)|(^[a-zA-Z])");		
+			
+			Scanner lineIter = new Scanner(path);
+			while(lineIter.hasNextLine()) {
+				String line = lineIter.nextLine();
+				Matcher m = p.matcher(line);
+				if(!m.find())
+					data_string += line + "\n";
+			}
+			lineIter.close();
 		}
-		lineIter.close();
 		return data_string;
 	}
 	
@@ -113,16 +115,18 @@ public class HelperFunctions {
 	static public String get_header(File path) throws FileNotFoundException
 	{
 		header_string = "";
-		Pattern p = Pattern.compile("(^#)|(^[a-zA-Z])");
-		
-		Scanner lineIter = new Scanner(path);
-		while(lineIter.hasNextLine()) {
-			String line = lineIter.nextLine();
-			Matcher m = p.matcher(line);
-			if(m.find())
-				header_string += line + "\n";
+		if(path.exists()) {
+			Pattern p = Pattern.compile("(^#)|(^[a-zA-Z])");
+			
+			Scanner lineIter = new Scanner(path);
+			while(lineIter.hasNextLine()) {
+				String line = lineIter.nextLine();
+				Matcher m = p.matcher(line);
+				if(m.find())
+					header_string += line + "\n";
+			}
+			lineIter.close();	
 		}
-		lineIter.close();
 		return header_string;
 	}
 

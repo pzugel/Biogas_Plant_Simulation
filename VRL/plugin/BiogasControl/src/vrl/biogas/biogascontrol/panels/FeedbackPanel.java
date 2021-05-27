@@ -1,6 +1,7 @@
 package vrl.biogas.biogascontrol.panels;
 
-import java.awt.FlowLayout;
+import java.awt.Dimension;
+import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -9,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -69,8 +71,18 @@ public class FeedbackPanel {
 		sliderList = new ArrayList<JSlider>();
 		//dialList = new ArrayList<DialPlot>();
 		
-		JPanel sliderPanel = new JPanel();
-		sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		final JPanel sliderPanel = new JPanel();
+		double[] sliderCols = new double[numHydrolysis+1];
+		double colSize = 1./(numHydrolysis+1);
+		for(int i=0; i<numHydrolysis; i++) {
+			sliderCols[i] = colSize;
+			System.out.println("sliderCol[" + i + "]: " + colSize);
+		}
+		sliderCols[numHydrolysis] = TableLayoutConstants.FILL;
+		System.out.println("sliderCols: " + sliderCols);
+		double sliderPanelSize[][] ={sliderCols,{TableLayoutConstants.FILL}};
+		sliderPanel.setLayout(new TableLayout(sliderPanelSize));
+		//sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		for(int i=0; i<numHydrolysis; i++) {
 			final JPanel singleSlider = new JPanel();
 			
@@ -106,7 +118,7 @@ public class FeedbackPanel {
 			singleSlider.add(slider, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 			singleSlider.add(legend, new TableLayoutConstraints(0, 3, 0, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 			
-			sliderPanel.add(singleSlider);
+			sliderPanel.add(singleSlider, new TableLayoutConstraints(i, 0, i, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 			
 			slider.addChangeListener(new ChangeListener() {
 				@Override
@@ -115,10 +127,14 @@ public class FeedbackPanel {
 					computeFractions();
 					if(allZero()) {
 						slider.setValue(10);
+						slider.updateUI();				    
+						
 						JOptionPane.showMessageDialog(feedbackPanel,
 							    "Sliders cannot all be zero!",
 							    "Warning",
 							    JOptionPane.WARNING_MESSAGE);
+						
+						
 					}
 				}	
 			});	
@@ -142,7 +158,8 @@ public class FeedbackPanel {
 		if(numHydrolysis == 1) {
 			JSlider slider = sliderList.get(0);
 			slider.setEnabled(false);
-			sliderPanel.add(new JLabel("<html><body>Single hydrolysis reactor.<br> Outflow cannot be split.</body></html>"));
+			sliderPanel.add(new JLabel("<html><body>Single hydrolysis reactor.<br> Outflow cannot be split.</body></html>"),
+					new TableLayoutConstraints(1, 0, 1, 0, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 		}
 	}
 	

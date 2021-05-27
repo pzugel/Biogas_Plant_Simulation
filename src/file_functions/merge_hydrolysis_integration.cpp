@@ -29,6 +29,11 @@ std::string integrate_one_file(
 	values.clear();
 	std::string fileDir = reactorDir + "/" + f;
 	std::cout << "fileDir: " << fileDir << std::endl;
+	std::ifstream fileStream(fileDir.c_str());
+	if(!fileStream.good()){
+		std::cout << "file does not exist!" << std::endl;
+		return "";
+	}
 	read_values_from_reactor(fileDir);
 	
 	std::vector<std::vector<std::string>> singleFileValue = values.at(0);
