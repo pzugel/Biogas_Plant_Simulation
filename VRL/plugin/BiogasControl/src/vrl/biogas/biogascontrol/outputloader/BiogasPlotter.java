@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.JCheckBox;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.WindowConstants;
 
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -36,8 +32,8 @@ import vrl.biogas.biogascontrol.MainPanelContainerType;
  * Main panel for the plotter in VRL
  * @author paul
  */
-@ComponentInfo(name = "BiogasPlotter", category = "Biogas")
-@ObjectInfo(name = "BiogasPlotter")
+@ComponentInfo(name = "PlotDisplay", category = "Biogas")
+@ObjectInfo(name = "PlotDisplay")
 public class BiogasPlotter implements Serializable {  
   private static final long serialVersionUID = 1;
   
@@ -155,6 +151,7 @@ public class BiogasPlotter implements Serializable {
     return cont;
   }
   
+  /*
   public static void main(String args[]) throws IOException, InterruptedException, IllegalAccessException, IllegalArgumentException, InvocationTargetException{  
 	  BiogasPlotter plotter = new BiogasPlotter();
 
@@ -169,4 +166,5 @@ public class BiogasPlotter implements Serializable {
 	  frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 	  frame.setVisible(true);
   }
+  */
 }

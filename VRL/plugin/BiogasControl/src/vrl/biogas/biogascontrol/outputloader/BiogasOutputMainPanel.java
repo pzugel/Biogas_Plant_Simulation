@@ -43,10 +43,10 @@ import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
  * Main panel for the outputFiles tree in VRL
  * @author paul
  */
-@ComponentInfo(name="BiogasOutputPanel", 
+@ComponentInfo(name="BiogasPlotter", 
 	category="Biogas", 
 	description="BiogasOutputLoader Component")
-@ObjectInfo(name = "BiogasOutputPanel")
+@ObjectInfo(name = "BiogasPlotter")
 public class BiogasOutputMainPanel implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
@@ -59,7 +59,7 @@ public class BiogasOutputMainPanel implements Serializable{
 	
 	@MethodInfo(name="Load", hide=false, interactive=true, num=1)
 	public JComponent loadBiogas(
-			@ParamInfo(name = "BiogasControlPlugin",
+			@ParamInfo(name = "ControlPanel",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") BiogasControl main) throws FileNotFoundException {	
 		userDefined = false;
@@ -68,7 +68,7 @@ public class BiogasOutputMainPanel implements Serializable{
 	
 	@MethodInfo(name="LoadUserDefined", hide=false, interactive=true, num=1)
 	public JComponent loadBiogasUser(
-			@ParamInfo(name = "BiogasUserControlPlugin",
+			@ParamInfo(name = "ControlPanel",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=true") BiogasUserControl main) throws FileNotFoundException {	
 		userDefined = true;

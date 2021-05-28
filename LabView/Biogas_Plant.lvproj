@@ -141,6 +141,7 @@
 		</Item>
 		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
+		<Item Name="main_getPh.vi" Type="VI" URL="../subVI/main_getPh.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>
