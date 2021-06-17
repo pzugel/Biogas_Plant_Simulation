@@ -16,6 +16,7 @@
 #include <regex>
 #include <iostream>
 #include <math.h>
+#include <cmath>
 #include <boost/algorithm/string.hpp>
 
 std::string integrate_one_file(
@@ -41,45 +42,32 @@ std::string integrate_one_file(
 	
 	int timesteps = singleFileValue.size();
 	int numValues = singleFileValue.at(0).size();
-	std::cout << "timesteps: " << timesteps << std::endl;
 	
 	for(int i=0; i<timesteps; i++) { //time iteration
-		std::cout << "time: " << i << std::endl;
-		double x2 = dot_conversion(singleFileValue.at(i).at(0)); //current time
-					
 		std::vector<std::string> line;
-		line.push_back(singleFileValue.at(i).at(0));
 		
-		for(int j=1; j<numValues; j++) { //parameter iteration
+		double previous_time;
+		if(i == 0) { 
+			previous_time = floor(dot_conversion(singleFileValue.at(0).at(0)));//First timestep
+		}
+		else {
+			previous_time = dot_conversion(singleFileValue.at(i-1).at(0)); //Previous timestep
+		}
 			
-			//Integrate via trapezoid
-			double x1;
-			double f_x1;
+		double time = dot_conversion(singleFileValue.at(i).at(0)); //Time [h]
+		double stepsize = time-previous_time;
+		double all_liquid = std::abs(dot_conversion(singleFileValue.at(i).at(1))); //All Liquid [L/h]
+		double liquid_per_timestep = all_liquid * stepsize; //Liquid in L			
+		
+		line.push_back(conv_to_string(time));
+		line.push_back(conv_to_string(liquid_per_timestep));
+		
+		for(int j=2; j<numValues; j++) { //parameter iteration
 			
-			if(i == 0) { //First timestep
-				x1 = floor(dot_conversion(singleFileValue.at(0).at(0)));
-				f_x1 = 0.0;
-			}
-			else {
-				x1 = dot_conversion(singleFileValue.at(i-1).at(0)); //previous timestep
-				f_x1 = dot_conversion(singleFileValue.at(i-1).at(j)); 
-			}
+			double amount = dot_conversion(singleFileValue.at(i).at(j)); //[g/L]
 			
-			double h = x2-x1; //trapezoid width
-			double f_x2 = dot_conversion(singleFileValue.at(i).at(j)); 
-			
-			std::cout << "x1: " << x1 << std::endl;
-			std::cout << "x2: " << x2 << std::endl;
-			std::cout << "f_x1: " << f_x1 << std::endl;
-			std::cout << "f_x2: " << f_x2 << std::endl;
-			/*
-			 * Trapezoid
-			 * 
-			 * With stepsize h = (x2-x1)
-			 * T(f) = h * [f(x1)+f(x2)]/2
-			 */
-			double T_f = h*(f_x1+f_x2)*0.5;
-			line.push_back(conv_to_string(T_f));
+			double amount_in_grams = amount * liquid_per_timestep; //g
+			line.push_back(conv_to_string(amount_in_grams));
 		}
 		integratedValues.push_back(line);
 	}				
@@ -94,14 +82,28 @@ std::string integrate_one_file(
 	std::vector<std::string> sumLines;
 	for(int i=0; i<integratedValues.at(0).size(); i++) {
 		sumLines.push_back("0.0"); //Initialize
+	
 	}
+	double firstTimestep = dot_conversion(integratedValues.at(0).at(0));
+	int firstTimestepFull = (int) firstTimestep;
 	for(std::vector<std::string> line : integratedValues) {	
 		sumLines.at(0) = line.at(0);
+		
+		double currentTime = dot_conversion(line.at(0));
+		int currentTimeFull = (int) currentTime;
+			
 		for(int i=1; i<line.size(); i++) {			
 			double sum = dot_conversion(sumLines.at(i)) + dot_conversion(line.at(i));
 			sumLines.at(i) = conv_to_string(sum);
 		}
 		integratedValuesSum.push_back(sumLines);
+		
+		if(currentTimeFull != firstTimestepFull) {
+			firstTimestepFull = currentTimeFull;
+			for(int i=0; i<sumLines.size(); i++) {
+				sumLines.at(i) = "0.0"; //Reset
+			}
+		}
 	}
 	
 	/*

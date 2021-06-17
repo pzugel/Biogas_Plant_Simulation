@@ -9,7 +9,7 @@ problem={
 	},
 	numericalSetup={
 		sim_starttime=0,
-		sim_endtime=3,
+		sim_endtime=1,
 	},
 	outputSpecs={
 		customSetting={
@@ -52,9 +52,9 @@ problem={
 		},
 	},
 	inflow={
-		data={"Butyric","Propionic","Valeric","Acetic"},
+		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
-			{0,0,0,0},
+			{0,0,0,0,0,0},
 		},
 	},
 	expert={
@@ -78,7 +78,7 @@ problem={
 		},
 		timestep={
 			dtStart=0.2,
-			dtMax=1,
+			dtMax=0.8,
 			dtMin=0.00001,
 		},
 		reactionSetup={

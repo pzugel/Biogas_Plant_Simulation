@@ -8,6 +8,7 @@ import java.io.Serializable;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -51,7 +52,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 	public JComponent mainControl(
 			@ParamInfo(name = "Structure",
 		    	nullIsValid = false,
-		    	options = "invokeOnChange=true") Structure structure,
+		    	options = "invokeOnChange=false") Structure structure,
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
 	    		options = "invokeOnChange=false") Path projectDir)
@@ -63,15 +64,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		return cont;		
 	}
 	
-	@MethodInfo(hide=true)
-	private JPanel control(
-			@ParamInfo(name = "Structure",
-		    	nullIsValid = false,
-		    	options = "invokeOnChange=true") Structure structure,
-			@ParamInfo(name = "Directory",
-	    		nullIsValid = false,
-	    		options = "invokeOnChange=true") Path projectDir)
-		    			throws IOException, InterruptedException{
+	private JPanel control(Structure structure, Path projectDir) throws IOException, InterruptedException{
 		struct = structure;
 		projectPath = new File(projectDir.toString()).getParentFile();
 		System.out.println("projectPath: " + projectPath);
@@ -107,12 +100,16 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
             	TableLayoutConstants.FILL}};
         panel.setLayout(new TableLayout(size));
         
+        // Important to create new startButton --> Otherwise causes bugs when changing the structure
+        startBtn = new JButton("Start");
+        
         panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 	    
+        startBtn.setBackground(BUTTON_BLUE);
 	    startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

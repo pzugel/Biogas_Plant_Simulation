@@ -12,6 +12,7 @@ import java.nio.file.Path;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -55,7 +56,7 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 	public JComponent mainControl(
 			@ParamInfo(name = "Directory",
 	    		nullIsValid = false,
-	    		options = "invokeOnChange=false") Path projectDir,
+	    		options = "invokeOnChange=true") Path projectDir,
 			@ParamInfo(name = "#Hydrolysis",
 				nullIsValid = false,
 				options = "invokeOnChange=true") int numHydrolysis,
@@ -70,7 +71,6 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 		return cont;		
 	}
 	
-	@MethodInfo(hide=true)
 	private JPanel control(Path projectDir,int numHydro, final Object structure) throws IOException, InterruptedException{
 		wasCancelled = false;
 		numHydrolysis = numHydro;	
@@ -101,25 +101,6 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
         tab_panel.addTab("Feedback", feedbackPanel);
         tab_panel.addTab("Feeding", feedingPanel);   
         
-        /*
-        panel = new JPanel();
-        double size[][] =
-            {{0.02, 0.31, 0.01, 0.31, 0.01, 0.31, 0.01, TableLayoutConstants.FILL},
-             {0.04, 
-            	0.06, //Buttons
-            	0.03, 
-            	0.82, //Panel
-            	TableLayoutConstants.FILL}};
-
-        
-        panel.setLayout(new TableLayout(size));
-        
-        panel.add(pauseBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        panel.add(stopBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        panel.add(breakBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        panel.add(tab_panel, new TableLayoutConstraints(1, 3, 5, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));        	
-		*/
-        
         panel = new JPanel();
         double size[][] =
             {{0.02, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, 0.23, 0.01, TableLayoutConstants.FILL},
@@ -130,12 +111,16 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
             	TableLayoutConstants.FILL}};
         panel.setLayout(new TableLayout(size));
         
+        // Important to create new startButton --> Otherwise causes bugs when changing the structure
+        startBtn = new JButton("Start");
+        
         panel.add(startBtn, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(pauseBtn, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(stopBtn, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(breakBtn, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         panel.add(tab_panel, new TableLayoutConstraints(1, 3, 7, 3, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-        
+               
+        startBtn.setBackground(BUTTON_BLUE);
         startBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {

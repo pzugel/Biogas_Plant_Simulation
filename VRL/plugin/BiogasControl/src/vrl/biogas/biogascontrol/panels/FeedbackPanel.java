@@ -1,7 +1,5 @@
 package vrl.biogas.biogascontrol.panels;
 
-import java.awt.Dimension;
-import java.awt.EventQueue;
 import java.util.ArrayList;
 
 import javax.swing.JLabel;
@@ -10,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 

@@ -66,7 +66,7 @@ public class StructureFunctions implements Structure,Serializable{
 
 	@Override
 	public void run(int currentStarttime) throws IOException { 
-		System.out.println("2_STAGE_STRUCT");
+		System.out.println("run(" + currentStarttime + ")");
 		breakRun = false;
 		time = currentStarttime;
 		fillQueue();

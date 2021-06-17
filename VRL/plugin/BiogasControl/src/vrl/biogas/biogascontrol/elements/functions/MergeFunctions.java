@@ -40,12 +40,11 @@ public class MergeFunctions {
 		"dbg_nitrogenRates.txt",
 		"producedNormVolumeHourly.txt",
 		"dbg_phContribution.txt",
-		"dbg_reactionrates.txt",
 		"outflow.txt",
-		"reactorState.txt"};
+		"reactorState.txt",
+		"dbg_reactionrates.txt"};
 	
 	private final static String[] output_files_integration ={
-		"dbg_reactionrates.txt",
 		"outflow.txt"};
 	
 	private final static String[] output_files_nonAdditive = {
@@ -399,44 +398,33 @@ public class MergeFunctions {
 		
 		int timesteps = values.size();
 		int numValues = values.get(0).size();
-		System.out.println("timesteps: " + timesteps);
-		for(int i=0; i<timesteps; i++) { //time iteration
-			System.out.println("time: " + i);
-			double x2 = Double.valueOf(values.get(i).get(0)); //current time
-						
-			ArrayList<String> line = new ArrayList<String>();
-			line.add(values.get(i).get(0));
+
+		for(int i=0; i<timesteps; i++) { //time iteration							
+			ArrayList<String> line = new ArrayList<String>();			
 			
-			for(int j=1; j<numValues; j++) { //parameter iteration
+			double previous_time;
+			if(i == 0) { 
+				previous_time = Math.floor(Double.valueOf(values.get(0).get(0))); //First timestep
+			}
+			else {
+				previous_time = Double.valueOf(values.get(i-1).get(0)); //Previous timestep
+			}
+			
+			double time = Double.valueOf(values.get(i).get(0)); //Time [h]
+			double stepsize = time-previous_time;
+			//TODO Negativ values are possible here - We take the absolute
+			double all_liquid = Math.abs(Double.valueOf(values.get(i).get(1))); //All Liquid [L/h] 
+			double liquid_per_timestep = all_liquid * stepsize; //Liquid in L
+			
+			line.add(String.valueOf(time));
+			line.add(String.valueOf(liquid_per_timestep));
+			
+			for(int j=2; j<numValues; j++) { //parameter iteration
 				
-				//Integrate via trapezoid
-				double x1;
-				double f_x1;
+				double amount = Double.valueOf(values.get(i).get(j)); //[g/L]
 				
-				if(i == 0) { //First timestep
-					x1 = Math.floor(Double.valueOf(values.get(0).get(0)));
-					f_x1 = 0.0;
-				}
-				else {
-					x1 = Double.valueOf(values.get(i-1).get(0)); //previous timestep
-					f_x1 = Double.valueOf(values.get(i-1).get(j)); 
-				}
-				
-				double h = x2-x1; //trapezoid width
-				double f_x2 = Double.valueOf(values.get(i).get(j)); 
-				
-				System.out.println("x1: " + x1);
-				System.out.println("x2: " + x2);
-				System.out.println("f_x1: " + f_x1);
-				System.out.println("f_x2: " + f_x2);
-				/*
-				 * Trapezoid
-				 * 
-				 * With stepsize h = (x2-x1)
-				 * T(f) = h * [f(x1)+f(x2)]/2
-				 */
-				double T_f = h*(f_x1+f_x2)*0.5;
-				line.add(String.valueOf(T_f));
+				double amount_in_grams = amount * liquid_per_timestep; //g
+				line.add(String.valueOf(amount_in_grams));
 			}
 			integratedValues.add(line);
 		}				
@@ -452,14 +440,41 @@ public class MergeFunctions {
 		for(int i=0; i<integratedValues.get(0).size(); i++) {
 			sumLines.add("0.0"); //Initialize
 		}
+		
+		// THIS VERSION SUMS ONLY OVER HOURLY INTERVALS		
+		double firstTimestep = Double.valueOf(integratedValues.get(0).get(0));
+		int firstTimestepFull = (int) firstTimestep;
+		for(ArrayList<String> line : integratedValues) {			
+			sumLines.set(0, line.get(0)); //Add time entry
+			
+			double currentTime = Double.valueOf(line.get(0));
+			int currentTimeFull = (int) currentTime;
+			
+			for(int i=1; i<line.size(); i++) {			
+				double sum = Double.valueOf(sumLines.get(i)) + Double.valueOf(line.get(i));
+				sumLines.set(i, String.valueOf(sum));
+			}
+			integratedValuesSum.add(new ArrayList<String>(sumLines));
+			
+			if(currentTimeFull != firstTimestepFull) {
+				firstTimestepFull = currentTimeFull;
+				for(int i=0; i<sumLines.size(); i++) {
+					sumLines.set(i, "0.0"); //Reset
+				}
+			}
+		}
+		
+		// THIS VERSION SUMS OVER ALL TIMESTEPS AND IGNORES THE HOURLY INTERVALS
+		/*
 		for(ArrayList<String> line : integratedValues) {	
-			sumLines.set(0, line.get(0));
+			sumLines.set(0, line.get(0)); //Add time entry
 			for(int i=1; i<line.size(); i++) {			
 				double sum = Double.valueOf(sumLines.get(i)) + Double.valueOf(line.get(i));
 				sumLines.set(i, String.valueOf(sum));
 			}
 			integratedValuesSum.add(new ArrayList<String>(sumLines));
 		}
+		*/
 		
 		/*
 		 * Now take only the full steps
@@ -558,8 +573,8 @@ public class MergeFunctions {
 		fileString = fileString.replace("outflow.txt", "outflow_integrated.txt");
 		fileString = fileString.replace("outflow=", "outflow_integrated=");
 		
-		fileString = fileString.replace("dbg_reactionrates.txt", "dbg_reactionrates_integrated.txt");
-		fileString = fileString.replace("reactionRates=", "reactionRates_integrated=");
+		//fileString = fileString.replace("dbg_reactionrates.txt", "dbg_reactionrates_integrated.txt");
+		//fileString = fileString.replace("reactionRates=", "reactionRates_integrated=");
 		
 		//Write file
 		FileWriter myWriter = new FileWriter(outputFiles);
@@ -637,10 +652,13 @@ public class MergeFunctions {
 		update_outputFiles(storageDir);
 		update_outputFiles_integration(storageDir);
 		*/
-		File storage_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822/storage_hydrolysis");
-		File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822");
-		String[] reactor_names = {"hydrolysis_0"};
-		merge_all_hydrolysis(storage_dir,working_dir,reactor_names);
+		//File storage_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822/storage_hydrolysis");
+		//File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822");
+		//String[] reactor_names = {"hydrolysis_0"};
+		//merge_all_hydrolysis(storage_dir,working_dir,reactor_names);
+		File reactorDir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210531_193022/hydrolysis_0");
+		String f = "outflow.txt";
+		integrate_one_file(reactorDir,f);
 	}
 	
 }

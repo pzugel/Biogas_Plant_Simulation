@@ -63,13 +63,17 @@
 				<Item Name="libSimulationControl.lvlib" Type="Library" URL="../lib/libSimulationControl/libSimulationControl.lvlib"/>
 				<Item Name="libSpecValiReader.lvlib" Type="Library" URL="../lib/libSpecValiReader/libSpecValiReader.lvlib"/>
 			</Item>
+			<Item Name="Obsolete Code" Type="Folder">
+				<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
+				<Item Name="main_getPh.vi" Type="VI" URL="../subVI/main_getPh.vi"/>
+			</Item>
 			<Item Name="Structures" Type="Folder">
-				<Item Name="1_STAGE.vi" Type="VI" URL="../structures/1_STAGE.vi"/>
-				<Item Name="2_STAGE.vi" Type="VI" URL="../structures/2_STAGE.vi"/>
-				<Item Name="2_STAGE_PL.vi" Type="VI" URL="../structures/2_STAGE_PL.vi"/>
-				<Item Name="3_STAGE.vi" Type="VI" URL="../structures/3_STAGE.vi"/>
-				<Item Name="3_STAGE_PL.vi" Type="VI" URL="../structures/3_STAGE_PL.vi"/>
-				<Item Name="SIMPLE_HYDROLYSIS.vi" Type="VI" URL="../structures/SIMPLE_HYDROLYSIS.vi"/>
+				<Item Name="STRUCT_1_STAGE.vi" Type="VI" URL="../structures/STRUCT_1_STAGE.vi"/>
+				<Item Name="STRUCT_2_STAGE.vi" Type="VI" URL="../structures/STRUCT_2_STAGE.vi"/>
+				<Item Name="STRUCT_2_STAGE_PL.vi" Type="VI" URL="../structures/STRUCT_2_STAGE_PL.vi"/>
+				<Item Name="STRUCT_3_STAGE.vi" Type="VI" URL="../structures/STRUCT_3_STAGE.vi"/>
+				<Item Name="STRUCT_3_STAGE_PL.vi" Type="VI" URL="../structures/STRUCT_3_STAGE_PL.vi"/>
+				<Item Name="STRUCT_SIMPLE_HYDROLYSIS.vi" Type="VI" URL="../structures/STRUCT_SIMPLE_HYDROLYSIS.vi"/>
 			</Item>
 			<Item Name="SubVI" Type="Folder">
 				<Item Name="Element Editor" Type="Folder">
@@ -139,9 +143,7 @@
 				</Item>
 			</Item>
 		</Item>
-		<Item Name="hydrolyse_reactor_repetition_check.vi" Type="VI" URL="../subVI/hydrolyse_reactor_repetition_check.vi"/>
 		<Item Name="main.vi" Type="VI" URL="../main.vi"/>
-		<Item Name="main_getPh.vi" Type="VI" URL="../subVI/main_getPh.vi"/>
 		<Item Name="Dependencies" Type="Dependencies">
 			<Item Name="vi.lib" Type="Folder">
 				<Item Name="Application Directory.vi" Type="VI" URL="/&lt;vilib&gt;/Utility/file.llb/Application Directory.vi"/>

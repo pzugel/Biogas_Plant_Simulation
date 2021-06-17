@@ -61,6 +61,9 @@ public class BiogasControlClass {
 	public static FeedingPanel feedingPanelObj;	
 	
 	BiogasControlClass(){		
+		startBtn = new JButton("Start");
+        startBtn.setBackground(BUTTON_BLUE);
+        
 		pauseBtn = new JToggleButton("Pause");
 		pauseBtn.setBackground(BUTTON_BLUE);
 		pauseBtn.addChangeListener(new ChangeListener() {
@@ -155,8 +158,5 @@ public class BiogasControlClass {
 				}
 			}
 		});
-		
-		startBtn = new JButton("Start");
-        startBtn.setBackground(BUTTON_BLUE);
 	}
 }

@@ -95,9 +95,9 @@ problem={
 		},
 	},
 	inflow={
-		data={"Propionic", "Acetic"},
+		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
-			{0, 0, 0, 0},
+			{0, 0, 0, 0, 0, 0},
 		},
 
 	},	
@@ -124,7 +124,7 @@ problem={
 		
 		timestep = {
 			dtStart = 0.2,
-			dtMax = 1,
+			dtMax = 0.8,
 			dtMin = 0.00001,
 		},
 		

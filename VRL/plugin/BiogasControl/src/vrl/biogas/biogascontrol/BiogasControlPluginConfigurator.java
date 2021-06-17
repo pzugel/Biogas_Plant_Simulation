@@ -25,19 +25,15 @@ import vrl.biogas.biogascontrol.structures.*;
 public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	public BiogasControlPluginConfigurator() {
 	    //specify the plugin name and version
-	   setIdentifier(new PluginIdentifier("MainPanel-Plugin", "0.1"));
+	   setIdentifier(new PluginIdentifier("VRLBiogas-Plugin", "0.1"));
        
 	   // describe the plugin
 	   setDescription("Plugin for the control of a UG4-Biogasmodel");
 
 	   // copyright info
-	   setCopyrightInfo("Sample-Plugin",
+	   setCopyrightInfo("VRLBiogas-Plugin",
 	           "(c) Paul Zügel - GCSC 2021",
-	           "https://github.com/pzugel/Biogas_Plant_Simulation", "GNU Lesser General Public License", 
-	           "This program is distributed in the hope that it will be useful,\n" + 
-	           "but WITHOUT ANY WARRANTY; without even the implied warranty of\n" + 
-	           "MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the\n" + 
-	           "GNU Lesser General Public License for more details.");
+	           "https://github.com/pzugel/Biogas_Plant_Simulation", "", "");
 	   
 	   // add dependency - DO NOT REMOVE
 	   addDependency(new PluginDependency("VRL-JFreeChart", "0.2.5.1", VersionInfo.UNDEFINED)); 

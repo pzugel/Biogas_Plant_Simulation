@@ -395,6 +395,18 @@ public class SettingsPanel {
 		open_hydrolysis_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				boolean envReady;
+				if(userDefined) {
+					envReady = BiogasUserControl.setupPanelObj.environment_ready;
+				} else {
+					envReady = BiogasControl.setupPanelObj.environment_ready;
+				}
+				if(envReady) {
+					JOptionPane.showMessageDialog(settingsPanel,
+							"Changing the base file now won't affect the simulation since the working environment was already created!",
+						    "Warning",
+						    JOptionPane.WARNING_MESSAGE);
+				}
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new hydrolysis base file");
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);	
@@ -423,6 +435,18 @@ public class SettingsPanel {
 		open_methane_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
+				boolean envReady;
+				if(userDefined) {
+					envReady = BiogasUserControl.setupPanelObj.environment_ready;
+				} else {
+					envReady = BiogasControl.setupPanelObj.environment_ready;
+				}
+				if(envReady) {
+					JOptionPane.showMessageDialog(settingsPanel,
+							"Changing the base file now won't affect the simulation since the working environment was already created!",
+						    "Warning",
+						    JOptionPane.WARNING_MESSAGE);
+				}
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new methane base file");
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);

@@ -25,10 +25,13 @@ import vrl.biogas.biogascontrol.BiogasControl;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.io.Writer;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.sql.Timestamp;
@@ -36,6 +39,8 @@ import java.text.SimpleDateFormat;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * JTabbedPane: Setup tab <br>
@@ -205,7 +210,11 @@ public class SetupPanel {
 				if (result == JFileChooser.APPROVE_OPTION) {
 					File selectedPath = dirChooser.getSelectedFile();
 					File summary = new File(selectedPath, "simulation_summary.txt");
-					load_environment(summary, selectedPath, userDefined);					
+					try {
+						load_environment(summary, selectedPath, userDefined);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}					
 				}
 				else
 					System.out.println("Invalid path!");
@@ -260,7 +269,7 @@ public class SetupPanel {
 	}
 	
 	//TODO Will the strucutre be correct (when loading from LabView project)? What if project was userDefined?
-	void load_environment(File summary, File path, boolean userDefined) {
+	void load_environment(File summary, File path, boolean userDefined) throws IOException {
 		String endtime = "";
 		try {
 		    boolean finished = false;
@@ -320,11 +329,18 @@ public class SetupPanel {
 					}
 				}
 			}
-			else
-				JOptionPane.showMessageDialog(setupPanel,
-				    "The simulation from the selected environment seems not to have finished properly.",
-				    "Warning",
-				    JOptionPane.WARNING_MESSAGE);
+			else {
+				int doRepair = JOptionPane.showConfirmDialog(setupPanel,
+				    "The simulation from the selected environment seems not to have finished properly.\n"
+				    + "Do you wish to try and repair it?",
+				    "Broken environment ERROR",
+				    JOptionPane.ERROR_MESSAGE,
+				    JOptionPane.YES_NO_OPTION);
+			
+				if (doRepair == JOptionPane.YES_OPTION) {
+				    repair_environment(summary, path);
+				} 
+			}
 		} catch (FileNotFoundException e) {
 			JOptionPane.showMessageDialog(setupPanel,
 				    "Path is not a valid biogas environment!",
@@ -419,5 +435,142 @@ public class SetupPanel {
 		}
 		environment_tree_model.setRoot(newRoot);
 		environment_tree_model.reload();
+	}
+	
+	void repair_environment(File summary, File path) throws IOException {
+		String[] elements = path.list(new FilenameFilter() {
+			@Override
+			public boolean accept(File current, String name) {
+				return new File(current, name).isDirectory();
+			}
+		});
+		System.out.println("Elements: " + Arrays.toString(elements));
+		
+		/*
+		 * Check at which timesteps every element finished and get the minimum
+		 * Determin the endtime
+		 */
+		int numTimesteps = Integer.MAX_VALUE;
+		int endtime = Integer.MAX_VALUE;
+		for(String elem : elements) {
+			File elemPath = new File(path, elem);
+			String[] elementFolders = elemPath.list(new FilenameFilter() {
+				@Override
+				public boolean accept(File current, String name) {
+					return new File(current, name).isDirectory();
+				}
+			});
+			int numFolders = elementFolders.length;
+			
+			int maxFolder = Integer.MIN_VALUE;
+			for(String folderName : elementFolders) {
+				maxFolder = Math.max(maxFolder, Integer.valueOf(folderName));
+			}
+			maxFolder += 1;
+			
+			if(elem.contains("hydrolysis") && !elem.contains("storage")){
+				numTimesteps = Math.min(numTimesteps, numFolders);
+				endtime = Math.min(endtime, maxFolder);
+			} else if(elem.contains("methane")) {
+				numTimesteps = Math.min(numTimesteps, numFolders);
+				endtime = Math.min(endtime, maxFolder);
+			}
+			
+			
+		}
+		System.out.println("All elements should have " + numTimesteps + " timesteps with endtime at " + endtime);
+		
+		/*
+		 * Remove timesteps from elements that surpassed the minimum timestep 
+		 */
+		int maxFolderNumber = endtime - 1;
+		for(String elem : elements) {
+			File elemPath = new File(path, elem);
+			String[] elementFolders = elemPath.list(new FilenameFilter() {
+				@Override
+				public boolean accept(File current, String name) {
+					return new File(current, name).isDirectory();
+				}
+			});
+			int numFolders = elementFolders.length;
+			if(numFolders > numTimesteps) {
+				System.out.println("Element " + elem + " has too many timesteps!");
+				//int maxTime = Integer.MIN_VALUE;
+				for(String timeFolder : elementFolders) {
+					if(Integer.valueOf(timeFolder) > maxFolderNumber) {
+						File timePath = new File(elemPath, timeFolder);
+						System.out.println("Delete Folder: " + timePath);
+						String[] subFiles = timePath.list();
+						for(String file : subFiles){
+						    File currentFile = new File(timePath.getPath(), file);
+						    currentFile.delete();
+						}
+						timePath.delete();
+					}
+				}				
+			}
+		}
+		
+		/*
+		 * Remove timesteps from all files that surpassed the predetermined endtime 
+		 */
+		for(String elem : elements) {
+			System.out.println("Checking " + elem + " files: ");
+			File elemPath = new File(path, elem);
+			String[] pathnames = elemPath.list();
+			for (String pathname : pathnames) {
+				int etxPos = pathname.lastIndexOf('.');
+				if(pathname.substring(etxPos+1).equals("txt")) {
+					System.out.println("--> Checking " + pathname);
+					File filePath = new File(elemPath, pathname);
+					if(filePath.exists()) {
+						Scanner lineIter = new Scanner(filePath);
+						String fileString = "";
+						while(lineIter.hasNextLine()) {
+							
+							String line = lineIter.nextLine();
+							Pattern p = Pattern.compile("^[0-9.]+");
+							Matcher m = p.matcher(line);
+							if(m.find()) {
+								String timeStamp = m.group(0); 
+								if(!(Double.valueOf(timeStamp)>endtime)) {
+									fileString += line + "\n";
+								} else {
+									System.out.println("\t --> Removed timestamp " + timeStamp);
+								}
+							} else {
+								fileString += line + "\n";
+							}
+						}
+						lineIter.close();
+						
+						Writer output = new BufferedWriter(new FileWriter(filePath));
+						output.append(fileString);
+						output.close();
+					}
+					
+				}
+			}
+		}
+		
+		//TODO Fix simulationSummary
+		
+		JOptionPane.showMessageDialog(setupPanel,
+			    "Repair precedure done, try to reload the environment!",
+			    "Done",
+			    JOptionPane.INFORMATION_MESSAGE);
+		
+	}
+	
+	void check_environment(File path) {
+		
+	}
+	
+	public static void main(String args[]) throws IOException, InterruptedException{
+		File path = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/2STAGE");
+		File summary = new File(path, "simulation_summary.txt");
+		SetupPanel p = new SetupPanel();
+		p.repair_environment(summary, path);
+
 	}
 }
