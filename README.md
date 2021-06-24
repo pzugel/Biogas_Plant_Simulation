@@ -6,7 +6,7 @@ This projects contains two applications using VRL.Studio and LabVIEW. Both appli
 This document should give a broad overview on how to setup both applications on your local system. For an introduction into the usage we refer to the provided handbook.
 
 * [Prerequisites](#prerequisites)
-* [Using VRL.Studio](#using-vrl.studio)
+* [Using VRL.Studio](#using-vrlstudio)
 * [Using LabVIEW](#using-labview)
 
 # Prerequisites
