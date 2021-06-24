@@ -1,0 +1,13 @@
+const char* remove_header(const char* path);
+const char* get_header(const char* path);
+const char* read_filenames(const char* path);
+void update_outputFiles(const char* outputFiles_path);
+void update_outputFiles_integration(const char* outputFiles_path);
+void merge_all_hydrolysis(const char* working_dir, const char* reactor_names);
+void merge_all_methane(const char* working_dir, const char* methane_dir);
+void merge_one_reactor(const char* working_dir, int simulation_starttime, int current_starttime, bool merge_preexisting);
+void update_methane_inflow(const char* outflow_infile, const char* methane_specfile);
+void update_hydrolysis_inflow(const char* outflow_infile, const char* hydrolysis_specfile, double fraction);
+const char* get_hydrolysis_PH(const char* reactor_state_files);
+void update_hydrolysis_feeding(const char* hydrolysis_specfile, const char* time, const char* amount, int number_timestamps);
+const char* load_hydrolysis_feeding(const char* hydrolysis_specfile);

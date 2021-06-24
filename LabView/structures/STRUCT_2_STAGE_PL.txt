@@ -1,5 +1,0 @@
-name=STRUCT_2_STAGE_PL
-hydrolysis_stages=2
-storage=1
-methane=1
-feedback=1

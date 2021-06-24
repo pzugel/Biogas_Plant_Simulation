@@ -3,10 +3,15 @@ package vrl.biogas.biogascontrol.elements.structureElements.execution;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.SwingWorker;
+import javax.swing.WindowConstants;
 
+import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.elements.functions.MergeFunctions;
 import vrl.biogas.biogascontrol.structures.Structure;
@@ -50,15 +55,25 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
 		Process proc;
 		try {
 			proc = Runtime.getRuntime().exec(command, null, timeDirectory);
-			proc.waitFor(); 
-			return String.valueOf(proc.exitValue());
+			
+			Scanner s = new Scanner(proc.getInputStream());
+	    	StringBuilder procText = new StringBuilder();
+	    	while(s.hasNextLine()) {
+	    		procText.append(s.nextLine());
+				procText.append("\n");
+	    	}
+	    	s.close();
+	    	int exitVal = proc.waitFor(); 	
+	    	System.out.println(procText);
+	    	
+			return String.valueOf(exitVal);
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 		
-    	return "";
+    	return "1";
     }
 
     @Override
@@ -72,7 +87,15 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
 	    		} catch (IOException e) {
 	    			e.printStackTrace();
 	    		}
-	    	}	
+	    	} else if(exitValue != 0) {
+	    		JFrame frame = new JFrame();   		
+				frame.setLocationRelativeTo(BiogasControl.panel);
+				frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
+				JOptionPane.showMessageDialog(frame,
+					    "Something went wrong!",
+					    "UG Error",
+					    JOptionPane.ERROR_MESSAGE);
+	    	}
     	
     	} catch (NumberFormatException e1) {
 			e1.printStackTrace();

@@ -1,10 +1,9 @@
 package vrl.biogas.biogascontrol.elements.structureElements.execution;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.Serializable;
+import java.util.Scanner;
 import java.util.concurrent.ExecutionException;
 
 import javax.swing.JFrame;
@@ -50,20 +49,23 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 	public String doInBackground() throws IOException, InterruptedException {
     	
     	Process proc = Runtime.getRuntime().exec(command, null, timeDirectory);
-    	proc.waitFor(); 	
+    	Scanner s = new Scanner(proc.getInputStream());
+    	StringBuilder procText = new StringBuilder();
+    	while(s.hasNextLine()) {
+    		procText.append(s.nextLine());
+			procText.append("\n");
+    	}
+    	s.close();
+    	int exitVal = proc.waitFor(); 	
+    	System.out.println(procText);
     	
     	//Check if execution throws any errors
-    	final int exitVal =  proc.exitValue(); //TODO Does not show console error
     	if(exitVal != 0 && !structure.wasCancelled()) {
-    		BufferedReader errBuffer = new BufferedReader(new InputStreamReader(proc.getErrorStream())); 
-    		String errOutput = "";
-    		if(errBuffer.readLine() != null)
-    			errOutput += errBuffer.readLine();
     		JFrame frame = new JFrame();   		
 			frame.setLocationRelativeTo(BiogasControl.panel);
 			frame.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
 			JOptionPane.showMessageDialog(frame,
-				    "Something went wrong! \n" + errOutput.toString(),
+				    "Something went wrong!",
 				    "UG Error",
 				    JOptionPane.ERROR_MESSAGE);
 			structure.cancelRun();

@@ -37,6 +37,7 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	   
 	   // add dependency - DO NOT REMOVE
 	   addDependency(new PluginDependency("VRL-JFreeChart", "0.2.5.1", VersionInfo.UNDEFINED)); 
+	   exportPackage("vrl.biogas.biogascontrol");
 	}
 
 	@Override

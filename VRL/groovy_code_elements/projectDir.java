@@ -11,9 +11,21 @@ public class projectDir implements java.io.Serializable {
 	public Path projectDirectory(){
 		File scriptDir = new File(getClass().protectionDomain.codeSource.location.path);
 		dir = scriptDir.toString();
-		int start = dir.lastIndexOf("/home");
+		String os = System.getProperty("os.name");
 		int end = dir.indexOf(".vrlp");
-		dir = dir.substring(start,end+5);
+		int start;
+		
+		if(os.contains("Windows")){
+		  String home = System.getProperty("user.home");
+		  String homeReplace = home.replaceAll(":", "");
+		  start = dir.lastIndexOf(homeReplace);
+		  dir = dir.substring(start,end+5);
+		  dir = dir.replace(homeReplace, home);
+		} else if(os.contains("Linux")){
+		  start = dir.lastIndexOf("/home");
+		  dir = dir.substring(start,end+5);
+		}
+
 		System.out.println("dir: " + dir);
 		return Paths.get(dir);
 	}

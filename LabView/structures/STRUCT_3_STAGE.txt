@@ -1,5 +1,0 @@
-name=STRUCT_3_STAGE
-hydrolysis_stages=3
-storage=1
-methane=1
-feedback=1

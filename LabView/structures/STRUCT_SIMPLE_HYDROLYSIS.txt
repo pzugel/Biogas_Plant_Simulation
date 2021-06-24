@@ -1,5 +1,0 @@
-name=STRUCT_SIMPLE_HYDROLYSIS
-hydrolysis_stages=1
-storage=1
-methane=0
-feedback=0

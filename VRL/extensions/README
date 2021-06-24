@@ -1,2 +1,5 @@
-Move all to 
-".../VRL-Studio/.application/lib"
+External libraries contained in the project.
+
+TableLayout
+https://www.oracle.com/java/technologies/tablelayout.html
+

@@ -8,6 +8,5 @@
 	</classpathentry>
 	<classpathentry exported="true" kind="lib" path="/home/paul/Schreibtisch/Biogas_plant_setup/VRL/extensions/VRL-JFreeChart.jar" sourcepath="/home/paul/Schreibtisch/Biogas_plant_setup/VRL/extensions/VRL-JFreeChart.jar"/>
 	<classpathentry exported="true" kind="lib" path="/home/paul/Schreibtisch/VRL-Studio/.application/VRL-Studio.jar"/>
-	<classpathentry exported="true" kind="lib" path="/home/paul/Schreibtisch/Biogas_plant_setup/VRL/extensions/tablelayout.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
