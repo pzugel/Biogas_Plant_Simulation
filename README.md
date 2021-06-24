@@ -27,8 +27,6 @@ ughub install Biogas
 ughub install biogas_app
 ```
 
-If you are using Windows you will also need to instlall [MinGW](http://mingw-w64.org/doku.php) for the LabVIEW project.
-
 Finally clone this repository to some place on your machine:
 ```
 git clone https://github.com/pzugel/Biogas_Plant_Simulation
@@ -76,6 +74,8 @@ cmake --build .
 
 ### Windows
 
+For Windows systems you need [MinGW](http://mingw-w64.org/doku.php) as well as a [Boost](https://www.boost.org/users/history/version_1_67_0.html) to compile the library files. For the boost directory simply use `C:\Program Files\boost_1_67_0`. If the following lines fail please check the `CMakeLists.txt` file.
+
 ```
 cd LabVIEW
 mkdir build
@@ -84,7 +84,7 @@ cmake .. -G "MinGW Makefiles"
 cmake --build .
 ```
 
-This should create some **.dll** or **.so** files in your *LabView/lib* directory.
+This should create some **.dll** or **.so** files in your `LabView\lib` directory.
 
 ## Run
 
