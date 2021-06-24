@@ -5,9 +5,9 @@ This projects contains two applications using VRL.Studio and LabVIEW. Both appli
 # Contents
 This document should give a broad overview on how to setup both applications on your local system. For an introduction into the usage we refer to the provided handbook.
 
-* [Prerequisites](#-prerequisites)
-* [Using VRL.Studio](#-using-vrl.studio)
-* [Using LabVIEW](#-using-labview)
+* [Prerequisites](#prerequisites)
+* [Using VRL.Studio](#using-vrl.studio)
+* [Using LabVIEW](#using-labview)
 
 # Prerequisites
 For both applications you need a running **UG4** installation on your local machine. Please use the **ughub** paket manager and follow the provided installation steps: https://github.com/UG4/ughub
