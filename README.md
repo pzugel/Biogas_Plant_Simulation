@@ -92,4 +92,4 @@ To start the application simply open the LabView project file
 
 > LabView/Biogas_Plant.lvproj
 
-From there select the *main.vi* and run it.
+From there select the *main.vi* and run it.  
