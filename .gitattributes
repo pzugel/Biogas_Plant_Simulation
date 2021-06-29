@@ -1,4 +1,5 @@
 # .gitattributes file which reclassifies `.js` files as Java:
-# *.html linguist-language=Java
+#*.html linguist-language=Java
+*.html linguist-detectable=false
 
 VRL/plugin/BiogasControl/doc/* linguist-vendored=true
