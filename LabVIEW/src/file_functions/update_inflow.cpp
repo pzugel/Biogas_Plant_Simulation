@@ -19,6 +19,7 @@ static std::vector<std::vector<std::string>> outflow_input_values; //Holds value
 static std::vector<std::vector<std::string>> output_timetable; //Holds new inflow for the methane spec
 static std::string timetable_replacement; //Holds new inflow (as string) for the methane spec
 static double dtStart; //dtStart parameter as defined in a specification
+static int sim_starttime; //sim_starttime as defined in a specification
 
 /**
  * Reads the methane specification file and stores the inflow "data"
@@ -71,6 +72,23 @@ void parse_spec_file()
 	}
 	else {
 		dtStart = 0.0;
+	}
+	
+	std::regex simstarttimePattern ("sim_starttime(\\s)*=(\\s)*[0-9.]+");
+	std::smatch match_simstarttime;
+	if(std::regex_search(specfile_string, match_simstarttime, simstarttimePattern))
+	{
+		std::string simstarttimeString = match_simstarttime[0];
+		size_t startInd = simstarttimeString.find('=');
+		if(startInd != std::string::npos){
+			simstarttimeString = simstarttimeString.substr(startInd+1);
+			sim_starttime = (int) dot_conversion(simstarttimeString);
+		} else {
+			sim_starttime = 0.0;
+		}
+	}
+	else {
+		sim_starttime = 0.0;
 	}
 }
 
@@ -227,20 +245,26 @@ void write_new_timetable_string()
 	std::string tabs = "";
 	for(int i=0; i<num_tabs; i++)
 		tabs += "\t";
-		
+	
+	std::cout << "write_new_timetable_string" << std::endl;
+	
+	
+	int numLines = output_timetable.at(0).size();
+	int numEntries = output_timetable.size();
+	std::cout << "numLines: " << numLines << std::endl;
+	std::cout << "sim_starttime: " << sim_starttime << std::endl;
+	std::cout << "numEntries: " << numEntries << std::endl;
+	
 	timetable_replacement = "timetable={\n";
-	for(int i=0; i<output_timetable.at(0).size(); i++){
-		timetable_replacement += tabs + "{";
-		for(int j=0; j<output_timetable.size(); j++)
-		{
-			timetable_replacement += output_timetable.at(j).at(i);
-			if(j!=output_timetable.size()-1)
-				timetable_replacement += ", ";
-		}
-		timetable_replacement += "},\n";
+	timetable_replacement += tabs + "{";
+	for(int i=0; i<numEntries; i++){
+		std::cout << "output_timetable.at(i).at(sim_starttime-1):" << output_timetable.at(i).at(sim_starttime-1) << std::endl;
+		timetable_replacement += output_timetable.at(i).at(sim_starttime-1);
+		if(i!=numEntries-1)
+			timetable_replacement += ", ";
 	}
-	tabs.erase(0,1);
-	timetable_replacement += tabs + "},";
+	timetable_replacement += "},\n";
+	timetable_replacement += tabs.substr(1) + "},";
 	std::cout << "timetable_replacement: " << timetable_replacement << std::endl;
 }
 

@@ -22,7 +22,6 @@ We refer to this path as `$UGPATH`.
 Make sure to also install the following UG plugins:
 ```
 cd $UGPATH
-ughub install ConvectionDiffusion
 ughub install Biogas
 ughub install biogas_app
 ```
@@ -69,6 +68,7 @@ First download [LabVIEW](https://www.ni.com/de-de/support/downloads/software-pro
 cd LabVIEW
 mkdir build
 cd build
+cmake ..
 cmake --build .
 ```
 

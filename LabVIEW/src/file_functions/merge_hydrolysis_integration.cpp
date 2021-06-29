@@ -122,9 +122,13 @@ std::string integrate_one_file(
 	 * Write out different files
 	 */
 	std::size_t extensionPos = fileDir.find_last_of(".");
+	std::string header = get_header(fileDir.c_str());
+	std::string integrated_header = header;
+	boost::replace_all(integrated_header, "L/h", "L");
+	boost::replace_all(integrated_header, "g/L", "g");
 	
 	//Only integrated
-	std::string integratedOnly = get_header(fileDir.c_str());
+	std::string integratedOnly = integrated_header;
 	for(int i=0; i<integratedValues.size(); i++) {
 		for(int j=0; j<integratedValues.at(0).size(); j++) {
 			integratedOnly += integratedValues.at(i).at(j) + "\t";
@@ -139,7 +143,7 @@ std::string integrate_one_file(
 	output_file.close();
 	
 	//Integrated and summed
-	std::string integratedSum = get_header(fileDir.c_str());
+	std::string integratedSum = header;
 	for(int i=0; i<integratedValuesSum.size(); i++) {
 		for(int j=0; j<integratedValuesSum.at(0).size(); j++) {
 			integratedSum += integratedValuesSum.at(i).at(j) + "\t";
@@ -153,7 +157,7 @@ std::string integrate_one_file(
 	output_file.close();
 	
 	//Integrated and summed - only full timesteps
-	std::string integratedSumFull = get_header(fileDir.c_str());
+	std::string integratedSumFull = header;
 	for(int i=0; i<integratedValuesSumFull.size(); i++) {
 		for(int j=0; j<integratedValuesSumFull.at(0).size(); j++) {
 			integratedSumFull += integratedValuesSumFull.at(i).at(j) + "\t";

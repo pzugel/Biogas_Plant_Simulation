@@ -21,7 +21,7 @@ public class OutflowInflowUpdater {
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
 	private static double dtStart;
-	
+	private static int sim_starttime;
 	/**
 	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
 	 * and the values into "inflow_timetable_string"
@@ -63,6 +63,7 @@ public class OutflowInflowUpdater {
 			}	
 		}
 		
+		//Find dtStart
 		Pattern dtPattern = Pattern.compile("dtStart(\\s)*=(\\s)*[0-9.]+");
 		Matcher dtMatcher = dtPattern.matcher(content);
 		if(dtMatcher.find()) {
@@ -72,6 +73,20 @@ public class OutflowInflowUpdater {
 			dtStart = Double.valueOf(dtStartString);
 		} else {
 			dtStart = 0;
+			System.out.println("Could not find dtStart entry in specfile!");
+		}
+		
+		//Find sim_starttime
+		Pattern starttimePattern = Pattern.compile("sim_starttime(\\s)*=(\\s)*[0-9.]+");
+		Matcher starttimeMatcher = starttimePattern.matcher(content);
+		if(starttimeMatcher.find()) {
+			String starttimeString = starttimeMatcher.group(0);
+			int startInd = starttimeString.indexOf('=');
+			starttimeString = starttimeString.substring(startInd+1);
+			sim_starttime = Integer.valueOf(starttimeString);
+		} else {
+			sim_starttime = 0;
+			System.out.println("Could not find sim_starttime entry in specfile!");
 		}
 	}
 	
@@ -240,10 +255,11 @@ public class OutflowInflowUpdater {
 		int numLines = output_timetable.get(0).size();
 		int numEntries = output_timetable.size();
 		System.out.println("numLines: " + numLines);
+		System.out.println("sim_starttime: " + sim_starttime);
 		System.out.println("numEntries: " + numEntries);
 		for(int i=0; i<numEntries; i++){
-			System.out.println("output_timetable.get(i).get(numLines): " + output_timetable.get(i).get(numLines-1));
-			timetable_replacement += output_timetable.get(i).get(numLines-1);
+			System.out.println("output_timetable.get(i).get(sim_starttime-1): " + output_timetable.get(i).get(sim_starttime-1));
+			timetable_replacement += output_timetable.get(i).get(sim_starttime-1);
 			if(i!=numEntries-1)
 				timetable_replacement += ", ";
 		}
@@ -331,12 +347,11 @@ public class OutflowInflowUpdater {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{
-		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/methane/outflow_integratedSum_fullTimesteps.txt");
+		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/STRUCT_1_STAGE_40h/methane/outflow_integratedSum_fullTimesteps.txt");
 		
-		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/hydrolysis_0/1/hydrolysis_checkpoint.lua");
-		File spec1 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210527_171214/hydrolysis_1/1/hydrolysis_checkpoint.lua");
-		double[] fractions = {0.66, 0.33};
-		File[] hydrolysis_specfiles = {spec0, spec1};
+		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/STRUCT_1_STAGE_40h/hydrolysis_0/36/hydrolysis_checkpoint.lua");
+		double[] fractions = {1.00};
+		File[] hydrolysis_specfiles = {spec0};
 		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);
 	}
 }

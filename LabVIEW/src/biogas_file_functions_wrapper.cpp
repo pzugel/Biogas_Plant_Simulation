@@ -495,7 +495,10 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
-	std::string reactorDir = "/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210609_112927_copy/hydrolysis_0";
-	std::string f = "outflow.txt";
-	integrate_one_file(reactorDir, f);
+	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/VRL/Full/STRUCT_1_STAGE_40h/methane/outflow_integratedSum_fullTimesteps.txt";	
+	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/VRL/Full/STRUCT_1_STAGE_40h/hydrolysis_0/15/hydrolysis_checkpoint.lua";
+	double fraction = 1.0;
+
+	write_hydrolysis_inflow(outflow_infile,hydrolysis_specfile,fraction);
+	return 0;
 }

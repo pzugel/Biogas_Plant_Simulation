@@ -488,12 +488,39 @@ public class MergeFunctions {
 		}
 		
 		/*
+		 * Once we have the full timesteps (for one hour each) 
+		 * the "All Liquid" value in [L] are actually in [L/h]
+		 * since we have hourly intervals.
+		 * 
+		 * We can now recompute every parameter in [g/L] by simply dividing
+		 * the grams with the "All Liquid" value.
+		 * 
+		 * We do this because for the inflow we expect all 
+		 * parameters in [g/L] and the total amount in [L/h] 
+		 * 
+		 * TODO Not sure if we have to do this!
+		 */
+		for(ArrayList<String> line : integratedValuesSumFull) {
+			int line_size = line.size();
+			double all_liquid = Double.valueOf(line.get(1));
+			for(int j=2; j<line_size; j++) {
+				double gram = Double.valueOf(line.get(j));
+				double gram_per_liter = gram/all_liquid;
+				line.set(j, String.valueOf(gram_per_liter));
+			}
+		}
+		
+		/*
 		 * Write out different files
 		 */
 		int extensionPos = fileDir.toString().lastIndexOf(".");
+		String header = HelperFunctions.get_header(fileDir);
+		String integratedHeader = header;
+		integratedHeader = integratedHeader.replaceAll("L/h", "L");
+		integratedHeader = integratedHeader.replaceAll("g/L", "g");
 		
 		//Only integrated
-		String integratedOnly = HelperFunctions.get_header(fileDir);
+		String integratedOnly = integratedHeader;
 		for(int i=0; i<integratedValues.size(); i++) {
 			for(int j=0; j<integratedValues.get(0).size(); j++) {
 				integratedOnly += integratedValues.get(i).get(j) + "\t";
@@ -508,7 +535,7 @@ public class MergeFunctions {
 		myWriter.close();
 		
 		//Integrated and summed
-		String integratedSum = HelperFunctions.get_header(fileDir);
+		String integratedSum = header;
 		for(int i=0; i<integratedValuesSum.size(); i++) {
 			for(int j=0; j<integratedValuesSum.get(0).size(); j++) {
 				integratedSum += integratedValuesSum.get(i).get(j) + "\t";
@@ -523,7 +550,7 @@ public class MergeFunctions {
 		myWriter.close();
 		
 		//Integrated and summed - only full timesteps
-		String integratedSumFull = HelperFunctions.get_header(fileDir);
+		String integratedSumFull = header;
 		for(int i=0; i<integratedValuesSumFull.size(); i++) {
 			for(int j=0; j<integratedValuesSumFull.get(0).size(); j++) {
 				integratedSumFull += integratedValuesSumFull.get(i).get(j) + "\t";
@@ -644,21 +671,10 @@ public class MergeFunctions {
 		myWriter.close();
 	}
 	
-	public static void main(String args[]) throws IOException, InterruptedException{ 	
-		/*
-		File workingDir = new File("/home/paul/Schreibtisch/smalltestmethane/VRL/biogasVRL_20210510_174427");
-		File storageDir = new File(workingDir, "storage_hydrolysis");
-		copy_outputFiles(workingDir, "TEST0");		
-		update_outputFiles(storageDir);
-		update_outputFiles_integration(storageDir);
-		*/
-		//File storage_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822/storage_hydrolysis");
-		//File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210527_141822");
-		//String[] reactor_names = {"hydrolysis_0"};
-		//merge_all_hydrolysis(storage_dir,working_dir,reactor_names);
-		File reactorDir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210531_193022/hydrolysis_0");
+	public static void main(String args[]) throws IOException, InterruptedException{ 
+		File reactorDir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210628_121939/hydrolysis_0");
 		String f = "outflow.txt";
-		integrate_one_file(reactorDir,f);
+		integrate_one_file(reactorDir, f);
 	}
 	
 }
