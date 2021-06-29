@@ -1,3 +1,5 @@
 # exclude .html files
 *.html linguist-detectable=false
+*.js linguist-detectable=false
+*.lua linguist-detectable=false
 
