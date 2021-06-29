@@ -421,7 +421,7 @@ public class MergeFunctions {
 			
 			for(int j=2; j<numValues; j++) { //parameter iteration
 				
-				double amount = Double.valueOf(values.get(i).get(j)); //[g/L]
+				double amount = Math.abs(Double.valueOf(values.get(i).get(j))); //[g/L]
 				
 				double amount_in_grams = amount * liquid_per_timestep; //g
 				line.add(String.valueOf(amount_in_grams));

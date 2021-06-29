@@ -1,4 +1,4 @@
-# exclude .html files
+# exclude auto-generated files and documentation
 *.html linguist-detectable=false
 *.js linguist-detectable=false
 *.lua linguist-detectable=false

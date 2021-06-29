@@ -64,7 +64,7 @@ std::string integrate_one_file(
 		
 		for(int j=2; j<numValues; j++) { //parameter iteration
 			
-			double amount = dot_conversion(singleFileValue.at(i).at(j)); //[g/L]
+			double amount = std::abs(dot_conversion(singleFileValue.at(i).at(j))); //[g/L]
 			
 			double amount_in_grams = amount * liquid_per_timestep; //g
 			line.push_back(conv_to_string(amount_in_grams));

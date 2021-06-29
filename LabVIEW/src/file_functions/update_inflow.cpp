@@ -230,7 +230,7 @@ void write_new_timetable(double fraction, bool isMethane)
  * This new string will replace the old timetable in the methane
  * specification file.
  */
-void write_new_timetable_string()
+void write_new_timetable_string(bool isMethane)
 {
 	std::smatch match_inflow_tabs;
 	std::regex inflow_tabs ("inflow");
@@ -258,8 +258,13 @@ void write_new_timetable_string()
 	timetable_replacement = "timetable={\n";
 	timetable_replacement += tabs + "{";
 	for(int i=0; i<numEntries; i++){
-		std::cout << "output_timetable.at(i).at(sim_starttime-1):" << output_timetable.at(i).at(sim_starttime-1) << std::endl;
-		timetable_replacement += output_timetable.at(i).at(sim_starttime-1);
+		
+		if(isMethane){
+			timetable_replacement += output_timetable.at(i).at(sim_starttime);
+		}
+		else {
+			timetable_replacement += output_timetable.at(i).at(sim_starttime-1);
+		}		
 		if(i!=numEntries-1)
 			timetable_replacement += ", ";
 	}
@@ -290,7 +295,7 @@ void write_methane_inflow(
 	read_outflow_header();
 	read_outflow_values();
 	write_new_timetable(1.0, true);
-	write_new_timetable_string();
+	write_new_timetable_string(true);
 	
 	//Replacement in spec file	
 	std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
@@ -342,7 +347,7 @@ int write_hydrolysis_inflow(
 	
 	parse_spec_file();
 	write_new_timetable(fraction, false);
-	write_new_timetable_string();
+	write_new_timetable_string(false);
 	
 	std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
 	specfile_string.replace(timetable_pos, inflow_timetable_string.size(), timetable_replacement);

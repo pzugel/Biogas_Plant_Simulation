@@ -206,7 +206,7 @@ public class OutflowInflowUpdater {
 	 * @param spec
 	 * @throws IOException
 	 */
-	private static void write_new_timetable_string(File spec) throws IOException
+	private static void write_new_timetable_string(File spec, boolean isMethane) throws IOException
 	{
 		System.out.println("write_new_timetable_string: " + spec);
 		/*
@@ -258,8 +258,12 @@ public class OutflowInflowUpdater {
 		System.out.println("sim_starttime: " + sim_starttime);
 		System.out.println("numEntries: " + numEntries);
 		for(int i=0; i<numEntries; i++){
-			System.out.println("output_timetable.get(i).get(sim_starttime-1): " + output_timetable.get(i).get(sim_starttime-1));
-			timetable_replacement += output_timetable.get(i).get(sim_starttime-1);
+			if(isMethane) {
+				timetable_replacement += output_timetable.get(i).get(sim_starttime);
+			} else {
+				timetable_replacement += output_timetable.get(i).get(sim_starttime-1);
+			}
+			
 			if(i!=numEntries-1)
 				timetable_replacement += ", ";
 		}
@@ -288,7 +292,7 @@ public class OutflowInflowUpdater {
 		read_outflow_header(header);
 		read_outflow_values(data);
 		write_new_timetable(1.0, true);		
-		write_new_timetable_string(methane_specfile);
+		write_new_timetable_string(methane_specfile, true);
 		
 		//Replacement in spec file	
 		String specString = "";
@@ -327,7 +331,7 @@ public class OutflowInflowUpdater {
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
 			write_new_timetable(fractions[specNum], false);
-			write_new_timetable_string(spec);
+			write_new_timetable_string(spec, false);
 			System.out.println("spec: " + spec);
 			//Replacement in spec file	
 			String specString = "";

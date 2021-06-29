@@ -154,9 +154,9 @@ public class ElementFunctions {
 			System.out.println("outflowFile: " + outflowFile.toString());
 			
 			//Update specification
-			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);
 			SpecfileUpdater.update_starttime(methaneFile, currentTime);
 			SpecfileUpdater.update_endtime(methaneFile, currentTime+1);
+			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);			
 		}
 		catch (IOException e) {
 			e.printStackTrace();
