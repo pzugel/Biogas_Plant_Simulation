@@ -13,8 +13,8 @@
 		<Item Name="Biogas_Plant_Structure_Editor" Type="Folder">
 			<Item Name="Elements" Type="Folder">
 				<Item Name="feedback.vi" Type="VI" URL="../../elements/feedback.vi"/>
-				<Item Name="hydrolyse_reactor.vi" Type="VI" URL="../../elements/hydrolyse_reactor.vi"/>
-				<Item Name="hydrolyse_reactor_parallel.vi" Type="VI" URL="../../elements/hydrolyse_reactor_parallel.vi"/>
+				<Item Name="hydrolysis_reactor.vi" Type="VI" URL="../../elements/hydrolysis_reactor.vi"/>
+				<Item Name="hydrolysis_reactor_parallel.vi" Type="VI" URL="../../elements/hydrolysis_reactor_parallel.vi"/>
 				<Item Name="methane_reactor.vi" Type="VI" URL="../../elements/methane_reactor.vi"/>
 				<Item Name="storage.vi" Type="VI" URL="../../elements/storage.vi"/>
 			</Item>
@@ -50,8 +50,6 @@
 				<Item Name="imagedata.ctl" Type="VI" URL="/&lt;vilib&gt;/picture/picture.llb/imagedata.ctl"/>
 			</Item>
 			<Item Name="feedback_run.vi" Type="VI" URL="../../subVI/feedback_run.vi"/>
-			<Item Name="hydrolysis_reactor.vi" Type="VI" URL="../../elements/hydrolysis_reactor.vi"/>
-			<Item Name="hydrolysis_reactor_parallel.vi" Type="VI" URL="../../elements/hydrolysis_reactor_parallel.vi"/>
 			<Item Name="hydrolysis_reactor_run.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_run.vi"/>
 			<Item Name="hydrolysis_reactor_run_parallel.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_run_parallel.vi"/>
 			<Item Name="hydrolysis_reactor_setup.vi" Type="VI" URL="../../subVI/hydrolysis_reactor_setup.vi"/>
