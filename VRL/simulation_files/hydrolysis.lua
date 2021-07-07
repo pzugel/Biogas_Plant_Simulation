@@ -1,8 +1,8 @@
 problem={
-	reactorSetup={
-		operatingTemperature=311.15,
+	reactorSetup={ -- ATB
+		operatingTemperature=328,15, --55°C (thermophil)
 		reactorType="Downflow",
-		realReactorVolume=34.5,
+		realReactorVolume=100,
 	},
 	reactionSetup={
 		activeReactions={"all"},
@@ -97,7 +97,7 @@ problem={
 	inflow={
 		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
-			{0, 0, 0, 0, 0, 0},
+			{0.2, 10, 0, 0, 0, 0.5},
 		},
 
 	},	
@@ -124,12 +124,12 @@ problem={
 		
 		timestep = {
 			dtStart = 0.2,
-			dtMax = 0.8,
+			dtMax = 1,
 			dtMin = 0.00001,
 		},
 		
 		reactionSetup = {
-			thermodynModell = false,
+			thermodynModell = false,  --True in Test.lua
 			inhibitionTerms = {
 				inhibitionAmmonia = false,
 				limitedTrace = {
@@ -137,7 +137,7 @@ problem={
 				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,
-				inhibitionPH = false,
+				inhibitionPH = true,  --False in Test.lua
 			},
 		},
 	},

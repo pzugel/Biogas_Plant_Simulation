@@ -56,7 +56,8 @@ std::string integrate_one_file(
 			
 		double time = dot_conversion(singleFileValue.at(i).at(0)); //Time [h]
 		double stepsize = time-previous_time;
-		double all_liquid = std::abs(dot_conversion(singleFileValue.at(i).at(1))); //All Liquid [L/h]
+		//TODO Negativ values are possible here!
+		double all_liquid = dot_conversion(singleFileValue.at(i).at(1)); //All Liquid [L/h]
 		double liquid_per_timestep = all_liquid * stepsize; //Liquid in L			
 		
 		line.push_back(conv_to_string(time));
@@ -64,7 +65,7 @@ std::string integrate_one_file(
 		
 		for(int j=2; j<numValues; j++) { //parameter iteration
 			
-			double amount = std::abs(dot_conversion(singleFileValue.at(i).at(j))); //[g/L]
+			double amount = dot_conversion(singleFileValue.at(i).at(j)); //[g/L]
 			
 			double amount_in_grams = amount * liquid_per_timestep; //g
 			line.push_back(conv_to_string(amount_in_grams));
@@ -115,6 +116,30 @@ std::string integrate_one_file(
 		double time_rest;
 		if (std::modf(time, &time_rest) == 0.0) { //Is full timestep?
 			integratedValuesSumFull.push_back(line);
+		}
+	}
+	
+	/*
+	 * Once we have the full timesteps (for one hour each) 
+	 * the "All Liquid" value in [L] are actually in [L/h]
+	 * since we have hourly intervals.
+	 * 
+	 * We can now recompute every parameter in [g/L] by simply dividing
+	 * the grams with the "All Liquid" value.
+	 * 
+	 * We do this because for the inflow we expect all 
+	 * parameters in [g/L] and the total amount in [L/h] 
+	 */
+	for(std::vector<std::string> line : integratedValuesSumFull) {
+		int line_size = line.size();
+		double all_liquid = dot_conversion(line.at(1));
+		for(int j=2; j<line_size; j++) {
+			double gram = dot_conversion(line.at(j));
+			double gram_per_liter = 0.0;
+			if(all_liquid > 0.0) {
+				gram_per_liter = gram/all_liquid;
+			}
+			line.at(j) = conv_to_string(gram_per_liter);
 		}
 	}
 	

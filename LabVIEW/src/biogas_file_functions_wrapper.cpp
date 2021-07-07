@@ -496,15 +496,8 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  */
 int main(){
 	
-	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210629_145411@STRUCT_1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt";	
-	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210629_145411@STRUCT_1_STAGE/hydrolysis_0/1/hydrolysis_checkpoint.lua";
-	double fraction = 1.0;
-	
-	write_hydrolysis_inflow(outflow_infile,hydrolysis_specfile,fraction);
-	
-	//const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210629_143026@STRUCT_1_STAGE/storage_hydrolysis/outflow_integratedSum_fullTimesteps.txt";	
-	//const char* methane_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210629_143026@STRUCT_1_STAGE/methane/0/methane_checkpoint.lua";
-
-	//write_methane_inflow(outflow_infile, methane_specfile);
+	const char* reactorDir = "/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h";
+	const char* f = "outflow.txt";
+	integrate_one_file(reactorDir, f);
 	return 0;
 }

@@ -1,8 +1,8 @@
 problem={
-	reactorSetup={
-		operatingTemperature=311.15,
+	reactorSetup={ -- ATB
+		operatingTemperature=311.15, -- 38°C (mesophil)
 		reactorType="Downflow",
-		realReactorVolume=34.5,
+		realReactorVolume=32.12,
 	},
 	reactionSetup={
 		activeReactions={"Acidogenesis","all_Acetogenesis","Methanogenesis"},

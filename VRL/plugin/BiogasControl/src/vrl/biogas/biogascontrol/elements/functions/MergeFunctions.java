@@ -412,16 +412,16 @@ public class MergeFunctions {
 			
 			double time = Double.valueOf(values.get(i).get(0)); //Time [h]
 			double stepsize = time-previous_time;
-			//TODO Negativ values are possible here - We take the absolute
-			double all_liquid = Math.abs(Double.valueOf(values.get(i).get(1))); //All Liquid [L/h] 
+			//TODO Negativ values are possible here!
+			double all_liquid = Double.valueOf(values.get(i).get(1)); //All Liquid [L/h] 
 			double liquid_per_timestep = all_liquid * stepsize; //Liquid in L
-			
+
 			line.add(String.valueOf(time));
 			line.add(String.valueOf(liquid_per_timestep));
 			
 			for(int j=2; j<numValues; j++) { //parameter iteration
 				
-				double amount = Math.abs(Double.valueOf(values.get(i).get(j))); //[g/L]
+				double amount = Double.valueOf(values.get(i).get(j)); //[g/L]
 				
 				double amount_in_grams = amount * liquid_per_timestep; //g
 				line.add(String.valueOf(amount_in_grams));
@@ -444,7 +444,7 @@ public class MergeFunctions {
 		// THIS VERSION SUMS ONLY OVER HOURLY INTERVALS		
 		double firstTimestep = Double.valueOf(integratedValues.get(0).get(0));
 		int firstTimestepFull = (int) firstTimestep;
-		for(ArrayList<String> line : integratedValues) {			
+		for(ArrayList<String> line : integratedValues) {
 			sumLines.set(0, line.get(0)); //Add time entry
 			
 			double currentTime = Double.valueOf(line.get(0));
@@ -459,7 +459,7 @@ public class MergeFunctions {
 			if(currentTimeFull != firstTimestepFull) {
 				firstTimestepFull = currentTimeFull;
 				for(int i=0; i<sumLines.size(); i++) {
-					sumLines.set(i, "0.0"); //Reset
+					sumLines.set(i, "0.0"); //Reset	
 				}
 			}
 		}
@@ -483,10 +483,11 @@ public class MergeFunctions {
 		for(ArrayList<String> line : integratedValuesSum) {
 			double time = Double.valueOf(line.get(0));
 			if ((time == Math.floor(time)) && !Double.isInfinite(time)) { //Is full timestep?
-				integratedValuesSumFull.add(line);
+				ArrayList<String> lineCopy = new ArrayList<String>(line); //Copy the line, otherwise there will be reference issues
+				integratedValuesSumFull.add(lineCopy);
 			}
 		}
-		
+
 		/*
 		 * Once we have the full timesteps (for one hour each) 
 		 * the "All Liquid" value in [L] are actually in [L/h]
@@ -497,19 +498,22 @@ public class MergeFunctions {
 		 * 
 		 * We do this because for the inflow we expect all 
 		 * parameters in [g/L] and the total amount in [L/h] 
-		 * 
-		 * TODO Not sure if we have to do this!
 		 */
 		for(ArrayList<String> line : integratedValuesSumFull) {
 			int line_size = line.size();
 			double all_liquid = Double.valueOf(line.get(1));
+			
 			for(int j=2; j<line_size; j++) {
 				double gram = Double.valueOf(line.get(j));
-				double gram_per_liter = gram/all_liquid;
+				double gram_per_liter = 0.0;
+				
+				if(all_liquid > 0.0) {
+					gram_per_liter = gram/all_liquid;
+				}
 				line.set(j, String.valueOf(gram_per_liter));
 			}
 		}
-		
+
 		/*
 		 * Write out different files
 		 */
@@ -672,7 +676,7 @@ public class MergeFunctions {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 
-		File reactorDir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210628_121939/hydrolysis_0");
+		File reactorDir = new File("/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h");
 		String f = "outflow.txt";
 		integrate_one_file(reactorDir, f);
 	}

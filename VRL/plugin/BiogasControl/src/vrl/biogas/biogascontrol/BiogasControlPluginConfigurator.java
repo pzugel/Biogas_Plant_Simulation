@@ -11,8 +11,8 @@ import vrl.biogas.biogascontrol.elements.userStructureElements.UserHydrolysis;
 import vrl.biogas.biogascontrol.elements.userStructureElements.UserMethane;
 import vrl.biogas.biogascontrol.elements.userStructureElements.UserStart;
 import vrl.biogas.biogascontrol.elements.userStructureElements.UserStorage;
-import vrl.biogas.biogascontrol.outputloader.BiogasOutputMainPanel;
 import vrl.biogas.biogascontrol.outputloader.BiogasPlotter;
+import vrl.biogas.biogascontrol.outputloader.PlotDisplay;
 import vrl.biogas.biogascontrol.structures.*;
 
 /**
@@ -60,8 +60,8 @@ public class BiogasControlPluginConfigurator extends VPluginConfigurator{
 	       
 	       //For the BiogasPlotter
 	       vapi.addComponent(MainPanelContainerType.class); // Check if needed
+	       vapi.addComponent(PlotDisplay.class);
 	       vapi.addComponent(BiogasPlotter.class);
-	       vapi.addComponent(BiogasOutputMainPanel.class);
 	       
 	       //For user defined strucutres
 	       vapi.addComponent(BiogasUserControl.class);
