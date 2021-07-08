@@ -61,9 +61,7 @@ public class PlotDisplay implements Serializable {
     JPanel checkBoxPanel = new JPanel();
     checkBoxPanel.setLayout(new GridLayout(list.size()+2, 0));
     checkBoxPanel.add(new JLabel("Enable/Disable Plots:"));
-    System.out.println("list size: " + list.size());
     for(final ArrayList<Trajectory> tList : list){
-    	System.out.println("tList size: " + tList.size());
     	JPanel plotCheckerPanel = new JPanel();
     	final JPanel singlePlotPanel = new JPanel();
     	//double singlePlotSize[][] = {{0.8, 0.2},{TableLayoutConstants.FILL}};

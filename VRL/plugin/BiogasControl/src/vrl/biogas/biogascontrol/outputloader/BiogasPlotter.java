@@ -7,15 +7,20 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -38,6 +43,7 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
+import vrl.biogas.biogascontrol.structures.STRUCT_1_STAGE;
 
 /**
  * Main panel for the outputFiles tree in VRL
@@ -270,24 +276,24 @@ public class BiogasPlotter implements Serializable{
 		model.reload();
 	}
 	
+	/*
+	 * Get all paths to the output files for selected parameters 
+	 */
 	private static DefaultMutableTreeNode[] fetchPaths(JTree tree) {
 		ArrayList<DefaultMutableTreeNode> sel = new ArrayList<DefaultMutableTreeNode>();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) ((DefaultTreeModel) tree.getModel()).getRoot();
 		int numFiles = root.getChildCount();
-		System.out.println("numFiles: " + numFiles);
 		for(int i=0; i<numFiles; i++) {
 			DefaultMutableTreeNode fileNode = (DefaultMutableTreeNode) root.getChildAt(i);	    
 			int numParams = fileNode.getChildCount();
-			
 			for(int j=0; j<numParams; j++) {
 				DefaultMutableTreeNode paramNode = (DefaultMutableTreeNode) fileNode.getChildAt(j);
 				Object userObject = paramNode.getUserObject();
 				
-				if(userObject instanceof TreeNodeCheckBox) {
+				if(userObject instanceof TreeNodeCheckBox) {										
 					boolean isSelected = ((TreeNodeCheckBox) userObject).isSelected();
-					System.out.println("userObject: " + isSelected);
 					if(isSelected) {
-						sel.add(paramNode);
+						sel.add(paramNode);						
 					}
 				}
 			}
@@ -316,6 +322,7 @@ public class BiogasPlotter implements Serializable{
 				OutputEntry treeEntry = userNodeObject.getEntry();
 				if(treeEntry.isValue()) {
 					filenames.add(treeEntry.getFilename());
+					
 				} 		
 			}			
 		}
@@ -329,11 +336,13 @@ public class BiogasPlotter implements Serializable{
 				if(treeEntry.isValue()) {
 					File f = new File(filepath.getParent(), treeEntry.getFilename());
 					
+					/*
 					System.out.println("Plotting from File: " + f);
 					System.out.println("--> x value " + treeEntry.getXValueName() + treeEntry.getXValueUnit() 
 						+ " from column " + treeEntry.getXValueColumn());
 					System.out.println("--> y value " + treeEntry.getName() + treeEntry.getUnit() 
 						+ " from column " + treeEntry.getColumn());
+					*/
 					
 					CSVReader reader = new CSVReader(f);
 					List<Double> col = reader.getCol(treeEntry.getColumn());
@@ -342,7 +351,7 @@ public class BiogasPlotter implements Serializable{
 					Trajectory t = new Trajectory(treeEntry.getName());
 					for(int i=0; i<col.size(); i++) {			
 						t.add(x_col.get(i), col.get(i));
-						System.out.println("\t --> " + x_col.get(i) + ", " + col.get(i));
+						//System.out.println("\t --> " + x_col.get(i) + ", " + col.get(i));
 					}
 					t.setTitle(treeEntry.getFilename());
 					t.setxAxisLabel(treeEntry.getXValueName() + treeEntry.getXValueUnit());
@@ -364,12 +373,13 @@ public class BiogasPlotter implements Serializable{
 		// Match the filenames to the correct collection of series and create the chart
 		ArrayList<ArrayList<Trajectory>> outList = new ArrayList<ArrayList<Trajectory>>();
 		for(String name: filenames) {
-			System.out.println("Merging trajectories for " + name);
+			System.out.println("Trajectories for " + name);
 			ArrayList<Trajectory> fileOutput= new ArrayList<Trajectory>();
 			for(Pair<OutputEntry, Trajectory> pair : dataSetList) {
 				if(pair.getFirst().getFilename().equals(name)){
 					fileOutput.add(pair.getSecond());
-					System.out.println("\t--> adding trajectory " + pair.getSecond().getLabel());
+					
+					System.out.println("\t--> " + pair.getSecond().getLabel() + " " + pair.getSecond().getyAxisLabel());
 				}
 			}
 			outList.add(fileOutput);
@@ -427,4 +437,50 @@ public class BiogasPlotter implements Serializable{
 		a.add(thirdPlot);
 		return a;
 	}		
+	
+	@SuppressWarnings("static-access")
+	public static void main(String args[]) throws IOException, InterruptedException{  
+		String names = "^[a-zA-Z0-9_\\[\\]\\s\"]+=\\{";
+		String line = "[\"AllLiquid\"]={";
+		Matcher names_matcher = Pattern.compile(names).matcher(line);
+		if(names_matcher.find()) {
+			System.out.println("FOUND");
+		} else {
+			System.out.println("NOT FOUND");
+		}
+		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
+		Path p = Paths.get(f.getPath());
+		
+	    JFrame frame = new JFrame();
+	    BiogasControl b = new BiogasControl();
+	    b.mainControl(new STRUCT_1_STAGE(), p);	 		
+	    b.setupPanelObj.loadBtn.doClick();    
+	    
+	    BiogasPlotter plotter = new BiogasPlotter();
+	    plotter.loadBiogas(b);
+	    JButton plotBtn = new JButton("Plot");
+	    mainPanel.add(plotBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));  
+	    plotBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					getValues();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+	    	
+	    });
+	    
+	    frame.add(mainPanel);	  
+	    frame.setSize(300, 500);
+	    frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+	    frame.setVisible(true);
+	  }
 }

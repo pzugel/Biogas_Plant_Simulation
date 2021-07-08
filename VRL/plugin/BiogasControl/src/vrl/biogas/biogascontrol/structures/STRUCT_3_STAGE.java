@@ -61,8 +61,6 @@ public class STRUCT_3_STAGE extends StructureFunctions implements Structure,Seri
 	
 	@Override
 	public void fillQueue() {
-		System.out.println("fillQueue()");
-		
 		reactorQueue = new ArrayList<SimulationElement>();
 		reactorQueue.add(new Start(this));
 		reactorQueue.add(new HydrolysisSetup(this));

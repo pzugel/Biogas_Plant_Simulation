@@ -40,6 +40,7 @@ public File path() {
 
 @Override
 public void run() throws IOException {
+	System.out.println("--> Methane merge");
 	SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 	
 	if(!structure.wasCancelled()) {

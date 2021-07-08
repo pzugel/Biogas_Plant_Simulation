@@ -39,6 +39,7 @@ public class StorageHydrolysis implements SimulationElement, Serializable{
 
 	@Override
 	public void run() throws IOException {
+		System.out.println("--> Storage hydrolysis");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Storage");

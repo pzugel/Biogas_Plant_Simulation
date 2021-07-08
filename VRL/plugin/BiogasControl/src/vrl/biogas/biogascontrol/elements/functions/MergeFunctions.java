@@ -66,12 +66,12 @@ public class MergeFunctions {
 		int startTime = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue();
 		boolean preexisting = BiogasControl.setupPanelObj.mergePreexisting;		
 		
-		System.out.println("********************************************************************************");
-		System.out.println("Merge " + name);
-		System.out.println("Preexisting? " + preexisting);
-		System.out.println("\t---> " + timePath);
-		System.out.println("\t---> " + basePath);
-		System.out.println("********************************************************************************");
+		System.out.println("\n\t********************************************************************************");
+		System.out.println("\tMerge " + name);
+		System.out.println("\tPreexisting? " + preexisting);
+		System.out.println("\t\t---> " + timePath);
+		System.out.println("\t\t---> " + basePath);
+		System.out.println("\t********************************************************************************");
 		
 		merge_one_reactor(basePath.toString(), startTime, currenttime, preexisting);
 	}
@@ -88,9 +88,7 @@ public class MergeFunctions {
 			File storage_dir,
 			File working_dir,
 			String[] reactor_names) throws IOException 
-	{			
-		
-		System.out.println("Storage dir: " + storage_dir.toString());			
+	{					
 		
 		//Merge hydrolysis files with integration
 		for(String f: output_files_integration) {
@@ -106,13 +104,11 @@ public class MergeFunctions {
 				String output_file_name = storage_dir + File.separator + f;
 				int extensionPos = output_file_name.lastIndexOf(".");
 				output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
-				System.out.println(output_file_name);
 				
 				Writer output = new BufferedWriter(new FileWriter(output_file_name));
 				output.append(output_file_string);
 				output.close();	
 						
-				System.out.println(output_file_string);	
 			}
 		}
 		
@@ -127,13 +123,10 @@ public class MergeFunctions {
 			//If file does not exist an empty string is returned
 			if(!output_file_string.isEmpty()){
 				File output_file_name = new File(storage_dir, f);
-				System.out.println(output_file_name);
 				
 				Writer output = new BufferedWriter(new FileWriter(output_file_name));
 				output.append(output_file_string);
 				output.close();		
-				
-				System.out.println(output_file_string);	
 			}
 		}
 	}
@@ -148,9 +141,7 @@ public class MergeFunctions {
 	public static void merge_all_methane(
 			File methane_dir,
 			File working_dir) throws IOException 
-	{			
-		
-		System.out.println("methane_dir: " + methane_dir.toString());			
+	{					
 		
 		//Merge methane files with integration
 		for(String f: output_files_integration) {
@@ -287,8 +278,6 @@ public class MergeFunctions {
 				output_file_string += "\n";
 			}			
 		}
-		else
-			System.out.println("Nothing to add up!");
 				
 		return output_file_string;
 	}
@@ -381,14 +370,14 @@ public class MergeFunctions {
 			File reactorDir,
 			String f) throws IOException 
 	{		
-		System.out.println("integrate_one_file");
-		System.out.println("f --> " + f);
+		System.out.println("\t integrate_one_file");
+		System.out.println("\t f --> " + f);
 		
 		HelperFunctions.values = new ArrayList<ArrayList<ArrayList<String>>>();
 		File fileDir = new File(reactorDir, f);
-		System.out.println("fileDir: " + fileDir);
+		System.out.println("\t fileDir: " + fileDir);
 		if(!fileDir.exists()) {
-			System.out.println("file does not exist!");
+			System.out.println("\t file does not exist!");
 			return "";
 		}
 		HelperFunctions.read_values_from_reactor(fileDir.toString());
@@ -532,7 +521,6 @@ public class MergeFunctions {
 			integratedOnly += "\n";
 		}			
 		String newFileName = fileDir.toString().substring(0, extensionPos) + "_integrated" + fileDir.toString().substring(extensionPos);
-		System.out.println("newFileName: " + newFileName);
 		File newFile = new File(newFileName);
 		FileWriter myWriter = new FileWriter(newFile);
 		myWriter.write(integratedOnly);
@@ -547,7 +535,6 @@ public class MergeFunctions {
 			integratedSum += "\n";
 		}	
 		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum" + fileDir.toString().substring(extensionPos);
-		System.out.println("newFileName: " + newFileName);
 		newFile = new File(newFileName);
 		myWriter = new FileWriter(newFile);
 		myWriter.write(integratedSum);
@@ -562,7 +549,6 @@ public class MergeFunctions {
 			integratedSumFull += "\n";
 		}	
 		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum_fullTimesteps" + fileDir.toString().substring(extensionPos);
-		System.out.println("newFileName: " + newFileName);
 		newFile = new File(newFileName);
 		myWriter = new FileWriter(newFile);
 		myWriter.write(integratedSumFull);
@@ -630,7 +616,7 @@ public class MergeFunctions {
 		boolean takeLine = true;
 		
 		String lastLine = "";
-		System.out.println("Updating: " + outputFiles_path);
+		System.out.println("\t Updating: " + outputFiles_path);
 		//std::fstream stream(outputFiles_path);
 		if(outputFiles_path.exists())
 		{

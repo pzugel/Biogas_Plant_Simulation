@@ -42,6 +42,7 @@ public class Hydrolysis implements SimulationElement, Serializable{
 
 	@Override
 	public void run() {
+		System.out.println("--> Hydrolysis");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Hydrolysis");

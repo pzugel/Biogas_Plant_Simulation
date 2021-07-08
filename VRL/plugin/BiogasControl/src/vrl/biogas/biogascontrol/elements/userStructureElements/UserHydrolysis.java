@@ -45,6 +45,7 @@ public class UserHydrolysis extends ElementHelperFunctions implements Serializab
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException, ExecutionException{
+		System.out.println("--> Hydrolysis");	
 		int numHydrolysis = BiogasUserControl.numHydrolysis;
 		
 		//Log
@@ -79,7 +80,6 @@ public class UserHydrolysis extends ElementHelperFunctions implements Serializab
 	}
 	
 	private void hydrolysisSetup() throws IOException{
-		System.out.println("Run hydrolysis setup");	
 		File directory = BiogasUserControl.workingDirectory;
 		int currentTime = BiogasUserControl.currentTime;
 		boolean firstTimestep = ((Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue() == BiogasUserControl.currentTime);

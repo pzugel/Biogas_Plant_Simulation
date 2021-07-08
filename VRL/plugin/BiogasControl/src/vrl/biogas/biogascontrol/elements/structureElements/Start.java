@@ -33,7 +33,7 @@ public class Start implements SimulationElement, Serializable{
 	
 	@Override
 	public void run() throws InterruptedException {
-		System.out.println("Start here!");
+		System.out.println("--> Start");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		BiogasControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasControl.struct.currentTime() + 1));
 		String log = simPanel.simulationLog.getText();
@@ -43,7 +43,6 @@ public class Start implements SimulationElement, Serializable{
 		if(cleanUp) {
 			cleanUp();
 		}
-		System.out.println("Start done!");
 		ElementRunner myRunnable = new ElementRunner(structure);
 		Thread t = new Thread(myRunnable);
 		t.start();	

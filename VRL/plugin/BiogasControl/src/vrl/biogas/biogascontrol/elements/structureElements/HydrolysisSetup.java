@@ -35,8 +35,7 @@ public class HydrolysisSetup implements SimulationElement, Serializable{
 
 	@Override
 	public void run() throws IOException, InterruptedException {
-		System.out.println("Run hydrolysis setup");	
-		
+		System.out.println("--> Hydrolysis Setup");
 		if(!structure.wasCancelled()) {
 			int currentTime = structure.currentTime();
 			boolean firstTimestep = structure.firstTimestep();

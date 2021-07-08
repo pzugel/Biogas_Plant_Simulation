@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -36,8 +35,6 @@ public class ElementFunctions {
 	 * @throws IOException
 	 */
 	public static void hydrolysisSetup(File workingDirectory, int currentTime, boolean firstTimestep, String[] reactors) throws IOException {
-		System.out.println("Not Cancelled");
-		
 		//Write reactors to ArrayList
 		ArrayList<File> specDirs = new ArrayList<File>();		
 		for(String reactor : reactors) {
@@ -47,7 +44,6 @@ public class ElementFunctions {
 		
 		//Iterate hydrolysis reactors
 		for(String reactor : reactors) {
-			System.out.println("reactor: " + reactor);
 			final File reactorPath = new File(workingDirectory, reactor);	
 			final File currentTimePath = new File(reactorPath, String.valueOf(currentTime));
 			final File previousTimePath = new File(reactorPath, String.valueOf(currentTime-1));
@@ -55,7 +51,6 @@ public class ElementFunctions {
 			//Create directory
 			if (!currentTimePath.exists()){
 				currentTimePath.mkdirs();
-				System.out.println("create dir");
 			}
 			SetupPanel setPanel = BiogasControlClass.setupPanelObj;
 			setPanel.update_tree(workingDirectory);
@@ -102,12 +97,11 @@ public class ElementFunctions {
 		final File methanePath = new File(workingDirectory, "methane");
 		File outflowFile = new File(methanePath, "outflow_integratedSum_fullTimesteps.txt");
 		if(!firstTimestep) {
-			System.out.println("Not first timestep --> OutflowInflowUpdater");
-			// TODO Check if this works!
-			System.out.println("outflowFile: " + outflowFile);
-			System.out.println("specDirsArr: " + Arrays.toString(specDirsArr));
-			System.out.println("fractions: " + Arrays.toString(fractionsArr));
+			System.out.println("\t Not first timestep - OutflowInflowUpdater");
 			OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractionsArr);
+		} else {
+			System.out.println("\t First timestep - InitialInflowUpdate");
+			OutflowInflowUpdater.write_inital_hydrolysis_inflow(specDirsArr);
 		}
 	}
 	
@@ -120,14 +114,13 @@ public class ElementFunctions {
 	 * @param currentTime
 	 */
 	public static void methaneSetup(File workingDirectory, int currentTime) {
+		
 		File methaneDirectory = new File(workingDirectory, "methane");
 		File storageDirectory = new File(workingDirectory, "storage_hydrolysis");
 		
 		SetupPanel setPanel = BiogasControlClass.setupPanelObj;
 		final File currentTimePath = new File(methaneDirectory, String.valueOf(currentTime));
 		final File previousTimePath = new File(methaneDirectory, String.valueOf(currentTime-1));
-		System.out.println("Running methane");
-		System.out.println("currentTimePath : " + currentTimePath);
 		
 		//Create directory
 		if (!currentTimePath.exists()){
@@ -151,7 +144,6 @@ public class ElementFunctions {
 			}
 			
 			File outflowFile = new File(storageDirectory, "outflow_integratedSum_fullTimesteps.txt");
-			System.out.println("outflowFile: " + outflowFile.toString());
 			
 			//Update specification
 			SpecfileUpdater.update_starttime(methaneFile, currentTime);

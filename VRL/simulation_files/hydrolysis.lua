@@ -97,7 +97,7 @@ problem={
 	inflow={
 		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
-			{0.2, 10, 0, 0, 0, 0.5},
+			{1, 10, 1, 1, 1, 1},
 		},
 
 	},	
@@ -137,7 +137,7 @@ problem={
 				},
 				limitedMOSpace = false,
 				competitiveAcidUptake = false,
-				inhibitionPH = true,  --False in Test.lua
+				inhibitionPH = false,
 			},
 		},
 	},

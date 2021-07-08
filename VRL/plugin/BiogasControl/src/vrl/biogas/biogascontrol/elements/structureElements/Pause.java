@@ -32,8 +32,9 @@ public class Pause implements SimulationElement{
 	
 	@Override
 	public void run() throws IOException, InterruptedException, ExecutionException {
+		System.out.println("--> Pause");
 		final SimulationPanel simPanel = BiogasControl.simulationPanelObj;
-		System.out.println("Pause here!");
+		
 		simPanel.activeElement.setText("Pause");
 		String logStart = simPanel.simulationLog.getText();
 		simPanel.simulationLog.setText(logStart + "** Pause ... ");

@@ -24,7 +24,6 @@ public class HelperFunctions {
 	 * @throws FileNotFoundException
 	 */
 	static public boolean read_values_from_reactor(String dir) throws FileNotFoundException{	
-		System.out.println("read_values_from_reactor: " + dir);
 		ArrayList<ArrayList<String>> hydroFile = new ArrayList<ArrayList<String>>();
 		
 		File f = new File(dir);
@@ -34,14 +33,12 @@ public class HelperFunctions {
 			Scanner lineIter = new Scanner(vals);
 			while(lineIter.hasNextLine()) {
 				String line = lineIter.nextLine();
-				//System.out.println("LINE: " + line);
 				
 				ArrayList<String> valArr = new ArrayList<String>();
 				Scanner valIter = new Scanner(line);
 				while(valIter.hasNext()) {
 					String val = valIter.next();
 					valArr.add(val);
-					//System.out.println("VAL: " + val);
 				}
 				valIter.close();
 				hydroFile.add(valArr);
@@ -50,7 +47,6 @@ public class HelperFunctions {
 			values.add(hydroFile);
 		}
 		else {
-			System.out.println("File does not exist!");
 			return false;
 		}
 		return true;

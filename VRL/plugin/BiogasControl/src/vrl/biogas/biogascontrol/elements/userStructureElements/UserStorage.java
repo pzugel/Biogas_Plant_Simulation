@@ -41,7 +41,7 @@ public class UserStorage extends ElementHelperFunctions implements Serializable{
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=true, interactive=false, num=1)
 	public void run() throws IOException{
-		
+		System.out.println("--> Storage");
 		if(!BiogasUserControl.wasCancelled) {
 			
 			boolean firstTimestep = ((Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue() == BiogasUserControl.currentTime);
@@ -49,18 +49,10 @@ public class UserStorage extends ElementHelperFunctions implements Serializable{
 			
 			simPanel.activeElement.setText("Storage");
 			log("** Storage ... ");
-			System.out.println("Running storage");
-		
-			System.out.println("was not cancelled");
 			File directory = BiogasUserControl.workingDirectory;
 			File storageDirectory = new File(directory, "storage_hydrolysis");
 			String[] reactors = BiogasUserControl.hydrolysisNames;
-			System.out.println("directory: " + directory);
-			System.out.println("storageDirectory: " + storageDirectory);
-			System.out.println("reactors: " + Arrays.toString(reactors));
 			MergeFunctions.merge_all_hydrolysis(storageDirectory, directory, reactors);
-			System.out.println("done with merge!!");
-			System.out.println("firstTimestep?: " + firstTimestep);
 			if(firstTimestep) {
 				String hydrolysisName = reactors[0];
 				MergeFunctions.copy_outputFiles(directory, hydrolysisName);				

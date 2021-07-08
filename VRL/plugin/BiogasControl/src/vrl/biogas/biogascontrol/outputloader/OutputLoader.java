@@ -95,11 +95,11 @@ public class OutputLoader {
 
 		readXValues(x_Names, x_Units, x_Cols);
 
-		String param = "^[a-zA-Z0-9_]+=";
+		String param = "^[a-zA-Z0-9_\\[\\]\\s\"]+=";
 		String filename = "^filename=";
 		String col = "^col=";
 		String unit = "^unit=";
-		String names = "^[a-zA-Z0-9_]+=\\{";
+		String names = "^[a-zA-Z0-9_\\[\\]\\s\"]+=\\{";
 		String y_value = "^y=\\{";
 
 		modifyInput();
@@ -143,6 +143,10 @@ public class OutputLoader {
 						entries.get(ind).setIsValue(true);
 						
 						line = line.replaceAll("=\\{", "");
+						System.out.println("line: " + line);
+						if(line.contains("AllLiquid")) {
+							line = "All Liquid";
+						}
 						entries.get(ind).setName(line);
 						entries.get(ind).setFilename(lastFileName);
 					}

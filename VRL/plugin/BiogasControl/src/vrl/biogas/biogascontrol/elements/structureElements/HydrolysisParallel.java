@@ -39,6 +39,7 @@ public class HydrolysisParallel implements SimulationElement, Serializable{
 
 	@Override
 	public void run() throws IOException, InterruptedException, ExecutionException {
+		System.out.println("--> Hydrolysis parallel");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		String[] reactorNames = structure.hydrolysisNames();

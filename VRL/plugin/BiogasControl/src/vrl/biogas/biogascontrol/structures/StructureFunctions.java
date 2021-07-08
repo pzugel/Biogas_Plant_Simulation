@@ -66,7 +66,6 @@ public class StructureFunctions implements Structure,Serializable{
 
 	@Override
 	public void run(int currentStarttime) throws IOException { 
-		System.out.println("run(" + currentStarttime + ")");
 		breakRun = false;
 		time = currentStarttime;
 		fillQueue();
@@ -77,9 +76,8 @@ public class StructureFunctions implements Structure,Serializable{
 
 	@Override
 	public void runNext() throws IOException, ExecutionException {
-		System.out.println("runNext()");
+		System.out.println("\n++++++ Structure runNext() ++++++");
 		if(hasNext() && !breakRun) {
-			System.out.println("queue size before: " + reactorQueue.size());
 			try {
 				reactorQueue.get(0).run();
 			} catch (IOException e) {
@@ -88,7 +86,6 @@ public class StructureFunctions implements Structure,Serializable{
 				e.printStackTrace();
 			}  
 			reactorQueue.remove(0);
-			System.out.println("queue size after: " + reactorQueue.size());
 		}
 	}
 
@@ -114,7 +111,10 @@ public class StructureFunctions implements Structure,Serializable{
 
 	@Override
 	public boolean firstTimestep() {
-		return (time == (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue());
+		//TODO Not nice but works
+		File hydrolysisDir = new File(directory(), hydrolysisNames()[0]);
+		File previousTimeStep = new File(hydrolysisDir, String.valueOf(time - 1));
+		return !previousTimeStep.exists();		
 	}
 
 	@Override

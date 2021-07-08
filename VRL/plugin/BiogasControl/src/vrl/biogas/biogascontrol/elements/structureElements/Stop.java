@@ -34,7 +34,7 @@ public class Stop implements SimulationElement, Serializable{
 	
 	@Override
 	public void run() throws IOException {
-		System.out.println("Stop here!");
+		System.out.println("--> Stop");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Stop");
@@ -51,7 +51,7 @@ public class Stop implements SimulationElement, Serializable{
 				ElementFunctions.writeSummary(BiogasControl.workingDirectory, true, structName, numHydrolysis, currentTime);
 				BiogasControl.running.setSelected(false);
 				BiogasControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
-				System.out.println("Simulation stopped!");
+				System.out.println("\t Simulation stopped!");
 				
 				String logEnd = simPanel.simulationLog.getText();
 				simPanel.simulationLog.setText(logEnd + "Stopped!\n");
@@ -80,9 +80,9 @@ public class Stop implements SimulationElement, Serializable{
 			            }
 			        };
 			        
-			        System.out.println("Endtime not reached!");
-					System.out.println("\tendtime: " + endtime);
-					System.out.println("\tcurrent: " + structure.currentTime());
+			        System.out.println("\t Endtime not reached!");
+					System.out.println("\t --> endtime: " + endtime);
+					System.out.println("\t --> current: " + structure.currentTime());
 					
 			        Thread threadObject = new Thread(runnable);
 			        threadObject.start();			        

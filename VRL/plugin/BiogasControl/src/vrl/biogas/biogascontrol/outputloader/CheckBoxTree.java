@@ -108,6 +108,7 @@ class CheckBoxTreeNodeRenderer implements TreeCellRenderer {
 				Object userObject = ((DefaultMutableTreeNode) value).getUserObject();
 				if (userObject instanceof TreeNodeCheckBox) {
 					TreeNodeCheckBox node = (TreeNodeCheckBox) userObject;
+					node.getEntry().setName(node.getText());
 					checkBoxRenderer.setText(node.getText());
 					checkBoxRenderer.setSelected(node.isSelected());
 					checkBoxRenderer.setEntry(node.getEntry());
@@ -155,8 +156,13 @@ class CheckBoxTreeNodeEditor extends AbstractCellEditor implements TreeCellEdito
  
 	public Component getTreeCellEditorComponent(JTree tree, Object value, boolean selected, boolean expanded, boolean leaf, int row) {
 	   
-		if (((DefaultMutableTreeNode) value).getUserObject() instanceof OutputEntry) {
+		if (((DefaultMutableTreeNode) value).getUserObject() instanceof OutputEntry) {			
 			userObject = (OutputEntry) ((DefaultMutableTreeNode) value).getUserObject();
+		} 
+		
+		if (((DefaultMutableTreeNode) value).getUserObject() instanceof TreeNodeCheckBox) {		
+			TreeNodeCheckBox node = (TreeNodeCheckBox) ((DefaultMutableTreeNode) value).getUserObject();			
+			userObject = node.getEntry();
 		}
 	   
 		Component editor = renderer.getTreeCellRendererComponent(tree, value, true, expanded, leaf, row, true);

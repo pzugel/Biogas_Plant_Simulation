@@ -28,7 +28,7 @@ public class OutputEntry {
 		return this.indent;
 	}
 	public void setIndent(int ind) {
-		indent = ind;
+		this.indent = ind;
 	}
 
 	
@@ -36,7 +36,7 @@ public class OutputEntry {
 		return this.isValue;
 	}
 	public void setIsValue(boolean isVal) {
-		isValue = isVal;
+		this.isValue = isVal;
 	}
 
 	
@@ -44,7 +44,7 @@ public class OutputEntry {
 		return this.name;
 	}
 	public void setName(String n) {
-		name = n;
+		this.name = n;
 	}
 	
 	
@@ -52,7 +52,7 @@ public class OutputEntry {
 		return this.filename;
 	}
 	public void setFilename(String file) {
-		filename = file;
+		this.filename = file;
 	}
 	
 	
@@ -60,7 +60,7 @@ public class OutputEntry {
 		return this.column;
 	}
 	public void setColumn(int col) {
-		column = col;
+		this.column = col;
 	}
 	
 	
@@ -68,7 +68,7 @@ public class OutputEntry {
 		return this.unit;
 	}
 	public void setUnit(String u) {
-		unit = u;
+		this.unit = u;
 	}
 	
 	
@@ -76,7 +76,7 @@ public class OutputEntry {
 		return this.xValueColumn;
 	}
 	public void setXValueColumn(int xcol) {
-		xValueColumn = xcol;
+		this.xValueColumn = xcol;
 	}
 	
 	
@@ -84,7 +84,7 @@ public class OutputEntry {
 		return this.xValueUnit;
 	}
 	public void setXValueUnit(String unit) {
-		xValueUnit = unit;
+		this.xValueUnit = unit;
 	}
 	
 	
@@ -92,6 +92,6 @@ public class OutputEntry {
 		return this.xValueName;
 	}
 	public void setXValueName(String name) {
-		xValueName = name;
+		this.xValueName = name;
 	}
 };

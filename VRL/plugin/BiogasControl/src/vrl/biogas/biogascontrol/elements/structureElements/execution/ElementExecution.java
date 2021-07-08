@@ -36,8 +36,9 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		File ugshell = new File(new File(ugpath, "bin").getAbsolutePath(), "ugshell");
 		
 		final String cmd = ugshell + " -ex " + BiogasControlClass.simulationFile + " -p " + specification.toString();
-		System.out.println("directory: " + currentTimePath);
-		System.out.println("cmd: " + cmd);
+		System.out.println("\t +++ Execution");
+		System.out.println("\t +++ directory: " + currentTimePath);
+		System.out.println("\t +++ cmd: " + cmd);
 		
 		command = cmd;
 		timeDirectory = currentTimePath;
@@ -57,7 +58,7 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
     	}
     	s.close();
     	int exitVal = proc.waitFor(); 	
-    	System.out.println(procText);
+    	//System.out.println(procText); //Prints ugshell output
     	
     	//Check if execution throws any errors
     	if(exitVal != 0 && !structure.wasCancelled()) {

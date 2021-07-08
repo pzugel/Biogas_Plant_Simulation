@@ -42,9 +42,9 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
 		File specDir = new File(timeDirectory, "hydrolysis_checkpoint.lua");
 		final String cmd = ugshell + " -ex " + BiogasControlClass.simulationFile + " -p " + specDir;
 		
-		System.out.println("timeDir: " + timeDirectory);
-		System.out.println("specDir: " + specDir);
-		System.out.println("command: " + cmd);
+		System.out.println("\t +++ Parallel Execution");
+		System.out.println("\t +++ timeDirectory: " + timeDirectory);
+		System.out.println("\t +++ cmd: " + cmd);
 		command = cmd;
 		structure = struct;
 	}

@@ -40,7 +40,7 @@ public class UserMethane extends ElementHelperFunctions implements Serializable{
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
-		
+		System.out.println("--> Methane");
 		if(!BiogasUserControl.wasCancelled) {
 
 			BiogasUserControl.simulationPanelObj.activeElement.setText("Methane");

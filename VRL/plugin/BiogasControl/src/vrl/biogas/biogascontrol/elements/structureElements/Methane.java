@@ -36,6 +36,7 @@ public class Methane implements SimulationElement, Serializable{
 
 	@Override
 	public void run() {
+		System.out.println("--> Methane");
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 				
 		simPanel.activeElement.setText("Methane");

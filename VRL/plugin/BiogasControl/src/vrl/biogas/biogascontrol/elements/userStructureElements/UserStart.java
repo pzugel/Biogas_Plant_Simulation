@@ -26,11 +26,10 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=true, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
+		System.out.println("--> Start");
 		boolean firstTimestep = ((Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue() == BiogasUserControl.currentTime);
 		
 		if(!BiogasUserControl.wasCancelled) {
-			System.out.println("UserStart not cancelled!");
-			System.out.println("UserStart firstTimestep?: " + firstTimestep);
 			if(BiogasUserControl.setupPanelObj.environment_ready) {
 				
 				if(firstTimestep) {
@@ -70,7 +69,6 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 	}
 	
 	private void cleanUp() {
-		System.out.println("cleanUp()");
 		int currentTime = BiogasUserControl.currentTime;
 		int previousTime = currentTime-2;
 		File directory = BiogasUserControl.workingDirectory;
@@ -78,7 +76,6 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 		//Methane
 		File methanePath = new File(directory, "methane");
 		File methaneTimePath = new File(methanePath, String.valueOf(previousTime));
-		System.out.println("methaneTimePath: " + methaneTimePath);
 		if(methaneTimePath.exists()) {
 			String[] files = methaneTimePath.list();
 			for(String f: files){
@@ -92,7 +89,6 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 		for(String name : BiogasUserControl.hydrolysisNames) {
 			File hydroPath = new File(directory, name);
 			File hydroTimePath = new File(hydroPath, String.valueOf(previousTime));
-			System.out.println("hydroTimePath: " + hydroTimePath);
 			if(hydroTimePath.exists()) {
 				String[] files = hydroTimePath.list();
 				for(String f: files){

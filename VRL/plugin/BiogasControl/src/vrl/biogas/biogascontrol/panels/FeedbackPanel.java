@@ -73,10 +73,8 @@ public class FeedbackPanel {
 		double colSize = 1./(numHydrolysis+1);
 		for(int i=0; i<numHydrolysis; i++) {
 			sliderCols[i] = colSize;
-			System.out.println("sliderCol[" + i + "]: " + colSize);
 		}
 		sliderCols[numHydrolysis] = TableLayoutConstants.FILL;
-		System.out.println("sliderCols: " + sliderCols);
 		double sliderPanelSize[][] ={sliderCols,{TableLayoutConstants.FILL}};
 		sliderPanel.setLayout(new TableLayout(sliderPanelSize));
 		//sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
@@ -167,11 +165,9 @@ public class FeedbackPanel {
 		}
 		
 		ArrayList<Double> fractions = new ArrayList<Double>();
-		System.out.println("******************************");
 		for(JSlider slider : sliderList) {
 			double fract = (double) slider.getValue()/sum;
 			fractions.add(fract);
-			System.out.println("fract: " + fract);
 		}
 		
 		return fractions;
