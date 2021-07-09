@@ -97,7 +97,7 @@ problem={
 	inflow={
 		data={"Butyric", "Propionic", "Valeric", "Acetic"},
 		timetable={
-			{0, 0, 0, 0, 0, 0},
+			{1, 10, 1, 1, 1, 1},
 		},
 
 	},	
@@ -124,7 +124,7 @@ problem={
 		
 		timestep = {
 			dtStart = 0.2,
-			dtMax = 0.8,
+			dtMax = 1,
 			dtMin = 0.00001,
 		},
 		

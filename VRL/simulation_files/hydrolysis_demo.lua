@@ -126,7 +126,7 @@ problem={
 		
 		timestep = {
 			dtStart = 0.2,
-			dtMax = 0.2,
+			dtMax = 1,
 			dtMin = 0.00001,
 		},
 		

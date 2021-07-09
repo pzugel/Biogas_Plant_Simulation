@@ -15,9 +15,9 @@
 		<Item Name="remove header.vi" Type="VI" URL="../VIs/remove header.vi"/>
 		<Item Name="merge one reactor.vi" Type="VI" URL="../VIs/merge one reactor.vi"/>
 		<Item Name="load hydrolysis feeding.vi" Type="VI" URL="../VIs/load hydrolysis feeding.vi"/>
+		<Item Name="update initial hydrolysis inflow.vi" Type="VI" URL="../VIs/update initial hydrolysis inflow.vi"/>
 		<Item Name="update hydrolysis feeding.vi" Type="VI" URL="../VIs/update hydrolysis feeding.vi"/>
 		<Item Name="get hydrolysis PH.vi" Type="VI" URL="../VIs/get hydrolysis PH.vi"/>
 	</Item>
-	<Item Name="file_functions.dll" Type="Document" URL="../../file_functions.dll"/>
 	<Item Name="libFileFunctions.so" Type="Document" URL="../../libFileFunctions.so"/>
 </Library>

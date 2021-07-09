@@ -50,6 +50,5 @@
 			<Item Name="set num hydrolysis reactors.vi" Type="VI" URL="../VIs/set num hydrolysis reactors.vi"/>
 		</Item>
 	</Item>
-	<Item Name="simulation_control.dll" Type="Document" URL="../../simulation_control.dll"/>
 	<Item Name="libSimulationControl.so" Type="Document" URL="../../libSimulationControl.so"/>
 </Library>

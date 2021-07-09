@@ -16,5 +16,4 @@
 		<Item Name="read LUA Table.vi" Type="VI" URL="../VIs/read LUA Table.vi"/>
 	</Item>
 	<Item Name="libSpecValiReader.so" Type="Document" URL="../../libSpecValiReader.so"/>
-	<Item Name="spec_vali_reader.dll" Type="Document" URL="../../spec_vali_reader.dll"/>
 </Library>

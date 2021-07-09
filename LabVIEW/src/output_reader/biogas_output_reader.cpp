@@ -164,11 +164,11 @@ readOutputFiles()
 	std::vector<std::string> x_Cols = {};
 	this->readXValues(&x_Names, &x_Units, &x_Cols);
 
-	std::regex param ("^[a-zA-Z0-9_]+=");
+	std::regex param ("^[a-zA-Z0-9_\\[\\]\\s\"]+=");
 	std::regex filename ("^filename=");
 	std::regex col ("^col=");
 	std::regex unit ("^unit=");
-	std::regex names ("^[a-zA-Z0-9_]+=\\{");
+	std::regex names ("^[a-zA-Z0-9_\\[\\]\\s\"]+=\\{");
 	std::regex y_value ("^y=\\{");
 
 	this->modifyInput();
@@ -201,6 +201,10 @@ readOutputFiles()
 					this->entries[ind].indent = 1;
 					this->entries[ind].glyph = 37;
 					boost::replace_all(line, "={", "");
+					if(line.find("AllLiquid") != std::string::npos) 
+					{
+						line = "All Liquid";
+					}
 					this->entries[ind].leftCell = line;
 					this->entries[ind].filename = lastFileName;
 				}

@@ -185,7 +185,7 @@ public class OutflowInflowUpdater {
 	 * @param spec
 	 * @throws IOException
 	 */
-	private static void write_new_timetable_string(File spec, boolean isMethane) throws IOException
+	private static void write_new_timetable_string(File spec) throws IOException
 	{
 		/*
 		 * Scan indentation
@@ -234,11 +234,7 @@ public class OutflowInflowUpdater {
 		int numEntries = output_timetable.size();
 
 		for(int i=0; i<numEntries; i++){
-			if(isMethane) {
-				timetable_replacement += output_timetable.get(i).get(numLines-1);
-			} else {
-				timetable_replacement += output_timetable.get(i).get(numLines-1);
-			}
+			timetable_replacement += output_timetable.get(i).get(numLines-1);
 			
 			if(i!=numEntries-1)
 				timetable_replacement += ", ";
@@ -269,7 +265,7 @@ public class OutflowInflowUpdater {
 		read_outflow_header(header);
 		read_outflow_values(data);
 		write_new_timetable(1.0, true);		
-		write_new_timetable_string(methane_specfile, true);
+		write_new_timetable_string(methane_specfile);
 		
 		//Replacement in spec file	
 		String specString = "";
@@ -291,8 +287,7 @@ public class OutflowInflowUpdater {
 	 * Change the inflow time to sim_starttime
 	 * @param hydrolysis_specfile
 	 */
-	private static void write_new_initial_timetable_string(
-			File hydrolysis_specfile)
+	private static void write_new_initial_timetable_string()
 	{		
 		String inflowString = inflow_timetable_string;
 		
@@ -302,10 +297,11 @@ public class OutflowInflowUpdater {
 			String found = m.group(0);
 			int indexStart = found.indexOf("{");
 			int indexEnd = found.indexOf(",");
-			String newStart = found.substring(0, indexStart+1) 
-					+ String.valueOf(sim_starttime+1) 
-					+ found.substring(indexEnd);
+			
 			if(indexStart > 0 && indexEnd > 0) {
+				String newStart = found.substring(0, indexStart+1) 
+						+ String.valueOf(sim_starttime+1) 
+						+ found.substring(indexEnd);
 				inflowString = inflowString.replace(found, newStart);
 			}
 			timetable_replacement = inflowString;
@@ -324,7 +320,7 @@ public class OutflowInflowUpdater {
 		System.out.println("\t Write initial Hydrolysis inflow");
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
-			write_new_initial_timetable_string(spec);
+			write_new_initial_timetable_string();
 			String specString = "";
 			Scanner lineIter = new Scanner(spec);		
 			while (lineIter.hasNextLine()) {
@@ -363,7 +359,7 @@ public class OutflowInflowUpdater {
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
 			write_new_timetable(fractions[specNum], false);
-			write_new_timetable_string(spec, false);
+			write_new_timetable_string(spec);
 			//Replacement in spec file	
 			String specString = "";
 			Scanner lineIter = new Scanner(spec);		

@@ -10,5 +10,4 @@
 		<Item Name="read Output Files.vi" Type="VI" URL="../VIs/read Output Files.vi"/>
 	</Item>
 	<Item Name="libOutputReader.so" Type="Document" URL="../../libOutputReader.so"/>
-	<Item Name="output_reader.dll" Type="Document" URL="../../output_reader.dll"/>
 </Library>

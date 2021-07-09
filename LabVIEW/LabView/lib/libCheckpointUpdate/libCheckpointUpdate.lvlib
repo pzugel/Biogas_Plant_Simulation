@@ -8,6 +8,5 @@
 		<Item Name="update read checkpoint.vi" Type="VI" URL="../VIs/update read checkpoint.vi"/>
 		<Item Name="update starttime.vi" Type="VI" URL="../VIs/update starttime.vi"/>
 	</Item>
-	<Item Name="checkpoint_update.dll" Type="Document" URL="../../checkpoint_update.dll"/>
 	<Item Name="libCheckpointUpdate.so" Type="Document" URL="../../libCheckpointUpdate.so"/>
 </Library>

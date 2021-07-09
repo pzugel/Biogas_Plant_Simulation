@@ -11,10 +11,7 @@
 
 #include "biogas_spec_vali_reader.h"
 #include <string>
-#include <vector>
-#include <fstream>	
-#include <regex>
-#include <boost/algorithm/string.hpp>
+#include <fstream>
 
 #include "biogas_vali_data_generate.cpp"
 #include "biogas_spec_data_generate.cpp"

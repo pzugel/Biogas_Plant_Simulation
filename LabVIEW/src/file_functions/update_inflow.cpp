@@ -18,7 +18,6 @@ static std::vector<std::string> outflow_input_header; //Holds header from outflo
 static std::vector<std::vector<std::string>> outflow_input_values; //Holds values from outflow.txt
 static std::vector<std::vector<std::string>> output_timetable; //Holds new inflow for the methane spec
 static std::string timetable_replacement; //Holds new inflow (as string) for the methane spec
-static double dtStart; //dtStart parameter as defined in a specification
 static int sim_starttime; //sim_starttime as defined in a specification
 
 /**
@@ -55,23 +54,6 @@ void parse_spec_file()
 		std::smatch match_timetable;
 		if(std::regex_search(inflow_string, match_timetable, timetable))
 			inflow_timetable_string = match_timetable[0];
-	}
-	
-	std::regex dtStartPattern ("dtStart(\\s)*=(\\s)*[0-9.]+");
-	std::smatch match_dtStart;
-	if(std::regex_search(specfile_string, match_dtStart, dtStartPattern))
-	{
-		std::string dtStartString = match_dtStart[0];
-		size_t startInd = dtStartString.find('=');
-		if(startInd != std::string::npos){
-			dtStartString = dtStartString.substr(startInd+1);
-			dtStart = dot_conversion(dtStartString);
-		} else {
-			dtStart = 0.0;
-		}
-	}
-	else {
-		dtStart = 0.0;
 	}
 	
 	std::regex simstarttimePattern ("sim_starttime(\\s)*=(\\s)*[0-9.]+");
@@ -162,21 +144,20 @@ void write_new_timetable(double fraction, bool isMethane)
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
 				/*
-				 * If we update the specification inflow for the methane we want the hydrolysis outflow to be
-				 * present in the current timestep
+				 * Here we need to distinguish methane and hydrolysis reactors
 				 * 
-				 * e.g. If we compute the timestep 2.0 -> 3.0 in the hydrolysis reactors we want the outflow
-				 * at timestamp "3.0" to be present in the methane reactor at timestamp "2.0" since we still 
-				 * need to compute timestep 2.0 -> 3.0 in the methane reactor
+				 * e.g. If we compute the timestep 2.0 -> 3.0 in any reactor we need to set the 
+				 * inflow timestep to "3.0". Now if we take the methane outflow of a computed step from
+				 * 2.0 -> 3.0 we need to add one the timestep when feeding it back to the hydrolysis reactor
 				 * 
 				 * We also need to add a time offset dtStart as defined in the specification
 				 */
 				 if(header_val.find("Time") != std::string::npos){
 					 if(isMethane) {
-						double previousTimestep = dot_conversion(outflow_input_values.at(k).at(column))-1+dtStart;
+						double previousTimestep = dot_conversion(outflow_input_values.at(k).at(column));
 						col_vector.push_back(conv_to_string(previousTimestep));
 					} else {
-						double timeOffset = dot_conversion(outflow_input_values.at(k).at(column))+dtStart;
+						double timeOffset = dot_conversion(outflow_input_values.at(k).at(column))+1;
 						col_vector.push_back(conv_to_string(timeOffset));
 					}					
 				 }
@@ -230,7 +211,7 @@ void write_new_timetable(double fraction, bool isMethane)
  * This new string will replace the old timetable in the methane
  * specification file.
  */
-void write_new_timetable_string(bool isMethane)
+void write_new_timetable_string()
 {
 	std::smatch match_inflow_tabs;
 	std::regex inflow_tabs ("inflow");
@@ -258,13 +239,7 @@ void write_new_timetable_string(bool isMethane)
 	timetable_replacement = "timetable={\n";
 	timetable_replacement += tabs + "{";
 	for(int i=0; i<numEntries; i++){
-		
-		if(isMethane){
-			timetable_replacement += output_timetable.at(i).at(sim_starttime);
-		}
-		else {
-			timetable_replacement += output_timetable.at(i).at(sim_starttime-1);
-		}		
+		timetable_replacement += output_timetable.at(i).at(numLines-1);	
 		if(i!=numEntries-1)
 			timetable_replacement += ", ";
 	}
@@ -295,7 +270,7 @@ void write_methane_inflow(
 	read_outflow_header();
 	read_outflow_values();
 	write_new_timetable(1.0, true);
-	write_new_timetable_string(true);
+	write_new_timetable_string();
 	
 	//Replacement in spec file	
 	std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
@@ -336,10 +311,7 @@ int write_hydrolysis_inflow(
 		std::cout << std::endl; 
 	}
 	
-	std::string spec_file = (std::string) hydrolysis_specfile;
-
-	std::cout << "spec_file: " << spec_file << std::endl;
-	
+	std::string spec_file = (std::string) hydrolysis_specfile;	
 	std::ifstream hydrolysis_specfile_stream(spec_file);
 	std::string mBuf((std::istreambuf_iterator<char>(hydrolysis_specfile_stream)),
 				 std::istreambuf_iterator<char>());
@@ -347,11 +319,10 @@ int write_hydrolysis_inflow(
 	
 	parse_spec_file();
 	write_new_timetable(fraction, false);
-	write_new_timetable_string(false);
+	write_new_timetable_string();
 	
 	std::size_t timetable_pos = specfile_string.find(inflow_timetable_string);	
 	specfile_string.replace(timetable_pos, inflow_timetable_string.size(), timetable_replacement);
-	std::cout << specfile_string << std::endl;
 	
 	std::ofstream new_spec;
 	new_spec.open (spec_file);
@@ -359,4 +330,53 @@ int write_hydrolysis_inflow(
 	new_spec.close();
 
 	return 0;
+}
+
+/**
+ * Change the inflow time to sim_starttime
+ * @param hydrolysis_specfile
+ */
+void write_new_initial_timetable_string()
+{
+	std::string inflowString = inflow_timetable_string;
+	std::regex inflowDataPattern ("(\\s)*\\{[0-9.,(\\s)eE-]+\\}(,)?");
+	std::smatch match_inflowData;
+	if(std::regex_search(inflowString, match_inflowData, inflowDataPattern)){
+		std::string found = match_inflowData[0];
+		std::size_t indexStart = found.find("{");
+		std::size_t indexEnd = found.find(",");
+
+		if(indexStart > 0 && indexEnd > 0) {
+			std::string newStart = found.substr(0, indexStart+1) 
+				+ conv_to_string(sim_starttime+1) 
+				+ found.substr(indexEnd);
+			boost::replace_all(inflowString, found, newStart);
+		}
+		timetable_replacement = inflowString;
+	}
+}
+
+/**
+ * Function called only once at the beginning of the simulation to set the initial
+ * inflow according to the sim_starttime
+ * @param hydrolysis_specfile 
+ */
+void write_inital_hydrolysis_inflow(
+		const char* hydrolysis_specfile)
+{
+	std::string spec_file = (std::string) hydrolysis_specfile;	
+	std::ifstream hydrolysis_specfile_stream(spec_file);
+	std::string mBuf((std::istreambuf_iterator<char>(hydrolysis_specfile_stream)),
+				 std::istreambuf_iterator<char>());
+	specfile_string = mBuf;	
+	
+	parse_spec_file();
+	write_new_initial_timetable_string();
+	boost::replace_all(specfile_string, inflow_timetable_string, timetable_replacement);
+
+	//Write to file
+	std::ofstream new_spec;
+	new_spec.open (hydrolysis_specfile);
+	new_spec << specfile_string;
+	new_spec.close();
 }

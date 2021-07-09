@@ -143,7 +143,6 @@ public class OutputLoader {
 						entries.get(ind).setIsValue(true);
 						
 						line = line.replaceAll("=\\{", "");
-						System.out.println("line: " + line);
 						if(line.contains("AllLiquid")) {
 							line = "All Liquid";
 						}

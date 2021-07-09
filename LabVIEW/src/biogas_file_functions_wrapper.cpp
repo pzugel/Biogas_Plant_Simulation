@@ -384,6 +384,18 @@ void update_hydrolysis_inflow(
 }
 
 /**
+ * Updates the specification file in the very first timestep by
+ * adjusting the inflow time to the starttime
+ * 
+ * @param hydrolysis_specfiles: String with the specfile directory
+ */
+void update_initial_hydrolysis_inflow(
+	const char* hydrolysis_specfile)
+{
+	write_inital_hydrolysis_inflow(hydrolysis_specfile);
+}
+
+/**
  * Updates the feeding timetable in a specification file 
  * for a hydrolysis reacote
  * 
@@ -496,8 +508,15 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  */
 int main(){
 	
-	const char* reactorDir = "/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h";
-	const char* f = "outflow.txt";
-	integrate_one_file(reactorDir, f);
+	//const char* reactorDir = "/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h";
+	//const char* f = "outflow.txt";
+	//integrate_one_file(reactorDir, f);
+	
+	//const char* hydroSpec = "/home/paul/Schreibtisch/hydrolysis_checkpoint.lua";
+	//write_inital_hydrolysis_inflow(hydroSpec);
+	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt";
+	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/hydrolysis_0/3/hydrolysis_checkpoint.lua";
+	double fraction = 1.0;
+	update_hydrolysis_inflow(outflow_infile,hydrolysis_specfile,fraction);
 	return 0;
 }
