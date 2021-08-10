@@ -66,7 +66,7 @@ public class UpdateFeeding {
 	 * Returns feeding timetable formatted into a CSV styls string
 	 * to be loaded into LabView
 	 * 
-	 * @param hydrolysis_specfile: Path pointing the the specification
+	 * @param hydrolysis_specfile - Path pointing the the specification
 	 * @throws FileNotFoundException 
 	 */
 	public static ArrayList<Pair<String, String>> get_feeding_timetable(File hydrolysis_specfile) throws FileNotFoundException

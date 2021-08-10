@@ -1,11 +1,11 @@
 problem={
 	reactorSetup={ -- ATB
-		operatingTemperature=328,15, --55°C (thermophil)
+		operatingTemperature=328.15, --55°C (thermophil)
 		reactorType="Downflow",
 		realReactorVolume=100,
 	},
 	reactionSetup={
-		activeReactions={"all"},
+		activeReactions={"allwithSAO"},
 	},
 	numericalSetup={
 		sim_starttime=0,
@@ -65,42 +65,20 @@ problem={
 			["Butyric"] = 443.93*1E-3,
 			["Valeric"] = 35.06*1E-3,
 		},
-		timetable={						
-			{0,	243	},
+		timetable={	
+			{ 0, 243},					
 			{24, 243},
 			{48, 243},
 			{72, 243},
 			{96, 243},
-			{120, 243},
-			{144, 243},
-			{168, 243},
-			{192, 243},
-			{216, 243},
-			{240, 10*243},
-			{264, 10*243},
-			{288, 10*243},
-			{312, 10*243},
-			{336, 10*243},
-			{360, 243},
-			{384, 243},
-			{408, 243},
-			{432, 243},
-			{456, 243},
-			{480, 243},
-			{504, 243},
-			{528, 243},
-			{552, 243},
-			{576, 243},
-			{600, 243},
 		},
 	},
 	inflow={
-		data={"Butyric", "Propionic", "Valeric", "Acetic"},
+		data={"MS", "Butyric", "AA", "Propionic", "Valeric", "LCFA", "Acetic"},
 		timetable={
-			{1, 10, 1, 1, 1, 1},
+			{1, 10, 0.004, 0.0025, 0.001, 0.003, 0.0007, 0.003, 1.50},
 		},
-
-	},	
+	},
 	expert = {
 		geometry = {
 			grid_name = "TestGeom2D.ugx",

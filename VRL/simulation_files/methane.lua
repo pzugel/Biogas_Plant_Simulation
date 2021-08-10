@@ -5,7 +5,7 @@ problem={
 		realReactorVolume=32.12,
 	},
 	reactionSetup={
-		activeReactions={"Acidogenesis","all_Acetogenesis","Methanogenesis"},
+		activeReactions={"Acidogenesis","Acetogenesis","Methanogenesis"},
 	},
 	numericalSetup={
 		sim_starttime=0,
@@ -49,9 +49,9 @@ problem={
 		},
 	},
 	inflow={
-		data={"Butyric", "Propionic", "Valeric", "Acetic"},
+		data={"MS", "Butyric", "AA", "Propionic", "Valeric", "LCFA", "Acetic"},
 		timetable={
-			{0,0,0,0,0,0},
+			{0, 0, 0, 0, 0, 0, 0, 0, 0},
 		},
 	},
 	expert={
@@ -75,7 +75,7 @@ problem={
 		},
 		timestep={
 			dtStart=0.2,
-			dtMax=0.8,
+			dtMax=1,
 			dtMin=0.00001,
 		},
 		reactionSetup={

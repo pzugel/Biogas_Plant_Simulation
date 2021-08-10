@@ -2,9 +2,9 @@
 -- Use hydrolysis.lua for full simulation
 problem={
 	reactorSetup={
-		operatingTemperature=311.15,
+		operatingTemperature=328.15, --55°C (thermophil)
 		reactorType="Downflow",
-		realReactorVolume=34.5,
+		realReactorVolume=40,
 	},
 	reactionSetup={
 		activeReactions={"hydrolysis_demo"}, --"Hydrolysis_Carbohydrates", "Acidogenesis_MS

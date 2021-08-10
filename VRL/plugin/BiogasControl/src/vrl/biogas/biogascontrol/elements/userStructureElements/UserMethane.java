@@ -65,7 +65,7 @@ public class UserMethane extends ElementHelperFunctions implements Serializable{
     			e.printStackTrace();
     		}
 	    	
-	    	MergeFunctions.merge_all_methane(methaneDirectory, BiogasUserControl.workingDirectory);
+	    	MergeFunctions.merge_all_methane(methaneDirectory);
 	    	log("Done!\n");
 		}
 	}

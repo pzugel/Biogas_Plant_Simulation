@@ -2,9 +2,9 @@
 -- Use methane.lua for full simulation
 problem={
 	reactorSetup={
-		operatingTemperature=311.15,
+		operatingTemperature=311.15, -- 38°C (mesophil)
 		reactorType="Downflow",
-		realReactorVolume=34.5,
+		realReactorVolume=70,
 	},
 	reactionSetup={
 		activeReactions={"methane_demo"}, --"Butyric_Degradation", "aceto_Methanogenesis"

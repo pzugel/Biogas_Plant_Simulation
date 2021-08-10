@@ -3,6 +3,8 @@ package vrl.biogas.biogascontrol.outputloader;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -13,21 +15,22 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JTree;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
+import javax.swing.tree.TreePath;
 
 import eu.mihosoft.vrl.annotation.ComponentInfo;
 import eu.mihosoft.vrl.annotation.MethodInfo;
@@ -81,6 +84,12 @@ public class BiogasPlotter implements Serializable{
 		return load(BiogasUserControl.numHydrolysis);
 	}
 	
+	/**
+	 * Initialize the BiogasPlotter panel
+	 * @param numHydrolysis
+	 * @return
+	 * @throws FileNotFoundException
+	 */
 	private JComponent load(final int numHydrolysis) throws FileNotFoundException {		
 		mainPanel = new JPanel(new BorderLayout());
 		
@@ -122,11 +131,13 @@ public class BiogasPlotter implements Serializable{
 	    MainPanelContainerType cont = new MainPanelContainerType();
 	    cont.setViewValue(mainPanel);
 	    
+	    /*
+	     * Initialize the tree on mouseclick event
+	     */
 	    loadBtn.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				boolean isReady = BiogasControlClass.setupPanelObj.environment_ready;
-				//boolean isReady = false; //TODO For debug
 				if(!isReady && plotSelect.getSelectedIndex() != 3) {
 					JOptionPane.showMessageDialog(mainPanel,
 						    "There is currently no simulation to load.",
@@ -210,6 +221,42 @@ public class BiogasPlotter implements Serializable{
 						System.out.println("Invalid path!");
 				}
 				
+				/*
+				 * Add MouseEvent to generate a PopUp-Menu for right clicking a file in the tree.
+				 * Allows to select/deselect all parameters of the selected file.
+				 */
+				MouseAdapter ml = new MouseAdapter() {
+				     public void mousePressed(MouseEvent e) {
+				         TreePath selPath = tree.getPathForLocation(e.getX(), e.getY());
+				         if(e.getButton() == MouseEvent.BUTTON3) {
+				        	 if(selPath != null) {
+				        		 final DefaultMutableTreeNode node = (DefaultMutableTreeNode) selPath.getLastPathComponent();
+					        	 if(!node.isLeaf()) {
+					        		 JPopupMenu menu = new JPopupMenu();
+						        	 JMenuItem selAll = new JMenuItem("Select All");
+						        	 JMenuItem unselAll = new JMenuItem("Unselect All");
+						        	 menu.add(selAll);
+						        	 menu.add(unselAll);
+						        	 menu.show(e.getComponent(), e.getX(), e.getY());
+						        	 
+						        	 selAll.addActionListener(new ActionListener() {
+										@Override
+										public void actionPerformed(ActionEvent arg0) {
+											selectAll(node);
+										}							 
+						        	 });
+						        	 unselAll.addActionListener(new ActionListener() {
+											@Override
+											public void actionPerformed(ActionEvent arg0) {
+												unselectAll(node);
+											}							        		 
+						        	 });
+					        	 }
+				        	 }
+				         }
+				     }
+				 };
+				 tree.addMouseListener(ml);			
 			}
 	    });
 	    
@@ -276,10 +323,14 @@ public class BiogasPlotter implements Serializable{
 		model.reload();
 	}
 	
-	/*
-	 * Get all paths to the output files for selected parameters 
+
+	/**
+	 * Return all selected nodes from the tree.
+	 * Called by getValues() function.
+	 * @param tree
+	 * @return List of selected nodes
 	 */
-	private static DefaultMutableTreeNode[] fetchPaths(JTree tree) {
+	private static DefaultMutableTreeNode[] getSelectedNodes(JTree tree) {
 		ArrayList<DefaultMutableTreeNode> sel = new ArrayList<DefaultMutableTreeNode>();
 		DefaultMutableTreeNode root = (DefaultMutableTreeNode) ((DefaultTreeModel) tree.getModel()).getRoot();
 		int numFiles = root.getChildCount();
@@ -304,11 +355,18 @@ public class BiogasPlotter implements Serializable{
 		return returnArr;
 	}
 	
+	/**
+	 * Reads all selected parameters from the Tree, loads the according *.txt files
+	 * and generates a trajectory for each file
+	 * @return Array of Trajectories
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
 	@MethodInfo(name="Plot", hide=false, valueName="Trajectory[][]", hideCloseIcon=true, num=1)
 	public static ArrayList<ArrayList<Trajectory>> getValues() throws IOException, InterruptedException {		
 		
 		Set<String> filenames = new HashSet<String>();
-		DefaultMutableTreeNode[] sel = fetchPaths(tree);
+		DefaultMutableTreeNode[] sel = getSelectedNodes(tree);
 		if(sel.length == 0) {
 			System.out.println("Nothing to plot.");
 			return null;
@@ -388,6 +446,11 @@ public class BiogasPlotter implements Serializable{
 		return outList;
 	}
 	
+	
+	/**
+	 * Some example plots to demonstrate in the PlotDisplay
+	 * @return Sample Trajectory
+	 */
 	@MethodInfo(name="SamplePlot", hide=true, valueName="Trajectory[][]", hideCloseIcon=false)
 	public static ArrayList<ArrayList<Trajectory>> samplePlot() {
 		Trajectory t1 = new Trajectory("T1");
@@ -438,44 +501,89 @@ public class BiogasPlotter implements Serializable{
 		return a;
 	}		
 	
+
+	/**
+	 * Select all subparameters from a selected node in the Tree.
+	 * Called via PopUp Menu by right clicking a file entry in the Tree.
+	 * @param node - The selected node
+	 */
+	private void selectAll(DefaultMutableTreeNode node) {
+		TreePath path = new TreePath(node.getPath());
+		tree.expandPath(path);
+		
+		for(int i=0; i<node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			Object userObject = child.getUserObject();
+			
+			if(userObject instanceof TreeNodeCheckBox) {										
+				((TreeNodeCheckBox) userObject).setSelected(true);
+			} 
+			
+			if(userObject instanceof OutputEntry) {	
+				OutputEntry obj = (OutputEntry) userObject;
+				TreeNodeCheckBox newNode = new TreeNodeCheckBox(obj.getName(), null, true, obj);
+				child.setUserObject(newNode);
+			}
+		}
+		
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		model.reload(node);	
+	}
+	
+	/**
+	 * Unselect all subparameters from a selected node in the Tree.
+	 * Called via PopUp Menu by right clicking a file entry in the Tree.
+	 * @param node - The selected node
+	 */
+	private void unselectAll(DefaultMutableTreeNode node) {
+		for(int i=0; i<node.getChildCount(); i++) {
+			DefaultMutableTreeNode child = (DefaultMutableTreeNode) node.getChildAt(i);
+			Object userObject = child.getUserObject();
+			
+			if(userObject instanceof TreeNodeCheckBox) {										
+				((TreeNodeCheckBox) userObject).setSelected(false);
+			} 
+			
+			if(userObject instanceof OutputEntry) {	
+				OutputEntry obj = (OutputEntry) userObject;
+				TreeNodeCheckBox newNode = new TreeNodeCheckBox(obj.getName(), null, false, obj);
+				child.setUserObject(newNode);
+			}
+		}
+		
+		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
+		model.reload(node);		
+	}
+	 
+	
 	@SuppressWarnings("static-access")
 	public static void main(String args[]) throws IOException, InterruptedException{  
-		String names = "^[a-zA-Z0-9_\\[\\]\\s\"]+=\\{";
-		String line = "[\"AllLiquid\"]={";
-		Matcher names_matcher = Pattern.compile(names).matcher(line);
-		if(names_matcher.find()) {
-			System.out.println("FOUND");
-		} else {
-			System.out.println("NOT FOUND");
-		}
 		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
 		Path p = Paths.get(f.getPath());
 		
 	    JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.mainControl(new STRUCT_1_STAGE(), p);	 		
-	    b.setupPanelObj.loadBtn.doClick();    
+	    b.mainControl(new STRUCT_1_STAGE(), p);	 
+	    
+	    File envPath = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210708_150956");
+	    File summary = new File(envPath, "simulation_summary.txt");
+	    b.setupPanelObj.load_environment(summary, envPath, false);
 	    
 	    BiogasPlotter plotter = new BiogasPlotter();
 	    plotter.loadBiogas(b);
 	    JButton plotBtn = new JButton("Plot");
 	    mainPanel.add(plotBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));  
 	    plotBtn.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				try {
 					getValues();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				} catch (InterruptedException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-				
-			}
-	    	
+			}	    	
 	    });
 	    
 	    frame.add(mainPanel);	  

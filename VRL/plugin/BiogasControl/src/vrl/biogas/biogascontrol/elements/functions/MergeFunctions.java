@@ -23,7 +23,6 @@ public class MergeFunctions {
 	private final static String[] output_files = {
 		"digestateConcentrations.txt",
 		"subMO_mass.txt",
-		"valveGasFlow.txt",
 		"producedNormVolumeCumulative.txt",
 		"dbg_nitrogenRates.txt",
 		"producedNormVolumeHourly.txt",
@@ -53,22 +52,27 @@ public class MergeFunctions {
 		"reactorState.txt",
 		"dbg_gamma.txt"};
 	
+	private static ArrayList<ArrayList<Double>> mergedArray;
+	
 	/**
 	 * Function called by the hydrolysis or methane reactor after finishing the computations.
-	 * Calls the merge_one_reactor() method. 
-	 * @param name
-	 * @param currenttime
-	 * @param timePath
+	 * Calls the merge_one_reactor() method to concat all files from all timesteps.
+	 * 
+	 * @param reactor_name Name of the reactor to be merged, e.g. hydrolysis_0
+	 * @param currenttime Current time of the simulation
+	 * @param timePath Joined path from the reactor name and the current timestep
 	 * @throws IOException
 	 */
-	public static void merge(String name, int currenttime, File timePath) throws IOException {
+	public static void merge(String reactor_name, int currenttime, File timePath) throws IOException {
 		File basePath = timePath.getParentFile();
 		int startTime = (Integer) BiogasControlClass.settingsPanelObj.simStarttime.getValue();
 		boolean preexisting = BiogasControl.setupPanelObj.mergePreexisting;		
 		
 		System.out.println("\n\t********************************************************************************");
-		System.out.println("\tMerge " + name);
-		System.out.println("\tPreexisting? " + preexisting);
+		System.out.println("\tMerge " + reactor_name);
+		System.out.println("\tPreexisting?: " + preexisting);
+		System.out.println("\tStartTime: " + startTime);
+		System.out.println("\tCurrentTime: " + currenttime);
 		System.out.println("\t\t---> " + timePath);
 		System.out.println("\t\t---> " + basePath);
 		System.out.println("\t********************************************************************************");
@@ -78,9 +82,13 @@ public class MergeFunctions {
 	
 	/**
 	 * Function called by the storage element. Merges all files from all hydrolysis reactors and timesteps 
-	 * via merge_hydrolysis_files() and integrates via merge_files_integration()
-	 * @param storage_dir
-	 * @param working_dir
+	 * via merge_hydrolysis_files() and integrates via merge_files_integration().
+	 * 
+	 * Also calls merge_storage_outflow() to merge the outflow files of all hydrolysis reactors, which 
+	 * needs to be done separately.
+	 * 
+	 * @param storage_dir Path to the "storage_hydrolysis"
+	 * @param working_dir Working directory
 	 * @param reactor_names	Names of the reactors to be merged
 	 * @throws IOException
 	 */
@@ -90,29 +98,14 @@ public class MergeFunctions {
 			String[] reactor_names) throws IOException 
 	{					
 		
-		//Merge hydrolysis files with integration
-		for(String f: output_files_integration) {
-			
-			//Writes file to the hydrolysis paths
-			String output_file_string = merge_files_integration(
-					working_dir, 
-					f, 
-					reactor_names);
-			//If file does not exist an empty string is returned
-			if(!output_file_string.isEmpty()){
-				//Write the file to the storage
-				String output_file_name = storage_dir + File.separator + f;
-				int extensionPos = output_file_name.lastIndexOf(".");
-				output_file_name = output_file_name.substring(0, extensionPos) + "_integrated" + output_file_name.substring(extensionPos);	
-				
-				Writer output = new BufferedWriter(new FileWriter(output_file_name));
-				output.append(output_file_string);
-				output.close();	
-						
+		for(String f: output_files_integration) {			
+			//Integrate outflow files in each hydrolysis reactor
+			for(String r : reactor_names) {
+				integrate_one_file(new File(working_dir, r),f);		
 			}
 		}
-		
-		//Merge hydrolysis files (no integration)
+			
+		//Merge hydrolysis files in each reactor (no integration)
 		for(String f: output_files) {
 			
 			String output_file_string = merge_hydrolysis_files(
@@ -129,81 +122,101 @@ public class MergeFunctions {
 				output.close();		
 			}
 		}
+		
+		merge_storage_outflow(storage_dir, working_dir, reactor_names);
 	}
 	
 	/**
-	 * Called by the methane elements to integrate files needed in the feedback loop
-	 * @param methane_dir
-	 * @param working_dir
+	 * Used for the storage_hydrolysis. Called by the merge_all_hydrolysis() function to merge 
+	 * the outflow files out all hydrolysis reactors. We add the "outflow_integratedSum_fullTimesteps" 
+	 * files from all hydrolysis reactors and recompute the rates in [L/h] and [g/L]. The result will
+	 * be written into the "outflow_integratedSum_Rates" file. This file can be used to update the 
+	 * inflow for the methane specifications.
+	 * 
+	 * @param storage_dir Path to the "storage_hydrolysis"
+	 * @param working_dir Working directory
+	 * @param reactor_names Names of the hydrolysis reactors
 	 * @throws IOException
 	 */
-	@SuppressWarnings("unused")
-	public static void merge_all_methane(
-			File methane_dir,
-			File working_dir) throws IOException 
-	{					
+	private static void merge_storage_outflow(File storage_dir, File working_dir, String[] reactor_names) throws IOException {
 		
+		//Writes "mergedArray" which contains the sum of all "outflow_integratedSum_fullTimesteps" files
+		merge_hydrolysis_files(working_dir, "outflow_integratedSum_fullTimesteps.txt", reactor_names);
+				
+		//This part is the same as in the integrate_one_file() function
+		for(ArrayList<Double> line : mergedArray) {
+			int line_size = line.size();
+			double all_liquid = line.get(1); //In [L/h] - But since h=1 it can be read as [L]
+			
+			for(int j=2; j<line_size; j++) {
+				double gram = line.get(j);
+				double gram_per_liter = 0.0;
+				
+				if(all_liquid > 0.0) {
+					gram_per_liter = gram/all_liquid; //Recompute [g/L]
+				}
+				line.set(j, gram_per_liter);
+			}
+		}
+		
+		File pathOfFirstReactor = new File(working_dir, reactor_names[0]);
+		File pathOfFirstOutflow = new File(pathOfFirstReactor, "outflow_integratedSum_Rates.txt");
+		String output_file_string = HelperFunctions.get_header(pathOfFirstOutflow);
+		for(ArrayList<Double> line : mergedArray) {
+			for(Double d : line) {
+				output_file_string += String.valueOf(d) + "\t";
+			}
+			output_file_string += "\n";
+		}	
+			
+		File newFile = new File(storage_dir, "outflow_integratedSum_Rates.txt");
+		FileWriter myWriter = new FileWriter(newFile);
+		myWriter.write(output_file_string);
+		myWriter.close();
+		
+	}
+	
+	/**
+	 * Called by the methane element to integrate the outflow files.
+	 * 
+	 * @param methane_dir Path to the methane element
+	 * @throws IOException
+	 */
+	public static void merge_all_methane(File methane_dir) throws IOException 
+	{							
 		//Merge methane files with integration
 		for(String f: output_files_integration) {
-			String methaneReactor[] = {"methane"};
-			String output_file_string = merge_files_integration(
-					working_dir, 
-					f,  
-					methaneReactor);
+			integrate_one_file(methane_dir, f);
 		}
-	}
-	
-	/**
-	 * Called by hydrolysis and methane to integrate files for all reactors defined in "reactors"
-	 * @param dir
-	 * @param filename
-	 * @param reactors
-	 * @return
-	 * @throws IOException
-	 */
-	private static String merge_files_integration(
-			File dir, 
-			String filename,
-			String[] reactors) throws IOException
-	{
-		for(String r : reactors) {
-			integrate_one_file(new File(dir, r),filename);		
-		}
-		
-		int extensionPos = filename.lastIndexOf(".");
-		String newFileName = filename.substring(0, extensionPos) + "_integrated" + filename.substring(extensionPos);
-		String output_file_string = merge_hydrolysis_files(dir, newFileName, reactors);
-			
-		return output_file_string;
 	}
 	
 	/**
 	 * Used for the hydrolysis storage to sum up files from all hydrolysis reactors.
 	 * Needs to check if entries that need to be merged exist in all files.
-	 * @param dir
-	 * @param filename
-	 * @param reactors
-	 * @return
+	 * 
+	 * @param working_dir Working directory
+	 * @param filename Name of the file to be merged
+	 * @param reactor_names Names of the hydrolysis reactors
+	 * @return output_file_string
 	 * @throws FileNotFoundException
 	 */
 	private static String merge_hydrolysis_files(
-			File dir, 
+			File working_dir, 
 			String filename, 
-			String[] reactors) throws FileNotFoundException
-	{	
-		int num_reactors = reactors.length;
-		String working_dir = dir.toString();
+			String[] reactor_names) throws FileNotFoundException
+	{
+		int num_reactors = reactor_names.length;
 		String output_file_string = "";
 		HelperFunctions.values = new ArrayList<ArrayList<ArrayList<String>>>();
 		
 		//Add header to new file
-		String dir_for_header = working_dir + File.separator  + reactors[0] + File.separator  + filename;
+		String dir_for_header = working_dir.toString() + File.separator  + reactor_names[0] + File.separator  + filename;
 		output_file_string += HelperFunctions.get_header(new File(dir_for_header)); 
 		
 		
 		//Write data into "values" vector - Check if file exists for every reactor
 		boolean allExist = true;
-		for(String d: reactors) {
+		for(String d: reactor_names) {
 			String file_direction = working_dir + File.separator
 				+ d + File.separator 
 				+  filename;
@@ -271,23 +284,24 @@ public class MergeFunctions {
 			}
 			
 			//Write output array to string
+			mergedArray = outputValues;
 			for(ArrayList<Double> line : outputValues) {
 				for(Double d : line) {
 					output_file_string += String.valueOf(d) + "\t";
 				}
 				output_file_string += "\n";
 			}			
-		}
-				
+		}	
 		return output_file_string;
 	}
 	
 	/**
 	 * Called by hydrolysis and methane. Only concat the files from different timesteps.
-	 * @param working_dir
-	 * @param simulation_starttime
-	 * @param current_starttime
-	 * @param merge_preexisting
+	 * 
+	 * @param working_dir Working directory
+	 * @param simulation_starttime Starttime
+	 * @param current_starttime Current time
+	 * @param merge_preexisting Do prior simulation files exist? 
 	 * @throws IOException
 	 */
 	private static void merge_one_reactor(
@@ -307,7 +321,7 @@ public class MergeFunctions {
 			File outputFilesDst = new File(working_dir, "outputFiles.lua");
 			Files.copy(outputFiles.toPath(), outputFilesDst.toPath(), StandardCopyOption.REPLACE_EXISTING);			
 		}
-		
+
 		for(String f: all_files) {
 			File input_file_name = new File(timestep_dir, f);
 			File output_file_name = new File(working_dir, f);
@@ -361,8 +375,10 @@ public class MergeFunctions {
 	 * --> f_integrated
 	 * --> f_integratedSum
 	 * --> f_integratedSum_fullTimesteps
-	 * @param reactorDir
-	 * @param f
+	 * --> f_integrated_merged
+	 * 
+	 * @param reactorDir Path to reactor
+	 * @param f File to be merged
 	 * @return
 	 * @throws IOException
 	 */
@@ -403,7 +419,7 @@ public class MergeFunctions {
 			double stepsize = time-previous_time;
 			//TODO Negativ values are possible here!
 			double all_liquid = Double.valueOf(values.get(i).get(1)); //All Liquid [L/h] 
-			double liquid_per_timestep = all_liquid * stepsize; //Liquid in L
+			double liquid_per_timestep = all_liquid * stepsize; //Liquid in [L]
 
 			line.add(String.valueOf(time));
 			line.add(String.valueOf(liquid_per_timestep));
@@ -412,7 +428,7 @@ public class MergeFunctions {
 				
 				double amount = Double.valueOf(values.get(i).get(j)); //[g/L]
 				
-				double amount_in_grams = amount * liquid_per_timestep; //g
+				double amount_in_grams = amount * liquid_per_timestep; //[g]
 				line.add(String.valueOf(amount_in_grams));
 			}
 			integratedValues.add(line);
@@ -429,8 +445,7 @@ public class MergeFunctions {
 		for(int i=0; i<integratedValues.get(0).size(); i++) {
 			sumLines.add("0.0"); //Initialize
 		}
-		
-		// THIS VERSION SUMS ONLY OVER HOURLY INTERVALS		
+			
 		double firstTimestep = Double.valueOf(integratedValues.get(0).get(0));
 		int firstTimestepFull = (int) firstTimestep;
 		for(ArrayList<String> line : integratedValues) {
@@ -452,18 +467,6 @@ public class MergeFunctions {
 				}
 			}
 		}
-		
-		// THIS VERSION SUMS OVER ALL TIMESTEPS AND IGNORES THE HOURLY INTERVALS
-		/*
-		for(ArrayList<String> line : integratedValues) {	
-			sumLines.set(0, line.get(0)); //Add time entry
-			for(int i=1; i<line.size(); i++) {			
-				double sum = Double.valueOf(sumLines.get(i)) + Double.valueOf(line.get(i));
-				sumLines.set(i, String.valueOf(sum));
-			}
-			integratedValuesSum.add(new ArrayList<String>(sumLines));
-		}
-		*/
 		
 		/*
 		 * Now take only the full steps
@@ -488,19 +491,22 @@ public class MergeFunctions {
 		 * We do this because for the inflow we expect all 
 		 * parameters in [g/L] and the total amount in [L/h] 
 		 */
+		ArrayList<ArrayList<String>> integratedValuesMerged = new ArrayList<ArrayList<String>>();
 		for(ArrayList<String> line : integratedValuesSumFull) {
-			int line_size = line.size();
-			double all_liquid = Double.valueOf(line.get(1));
+			ArrayList<String> lineCopy = new ArrayList<String>(line);
+			int line_size = lineCopy.size();
+			double all_liquid = Double.valueOf(lineCopy.get(1)); //In [L/h] - But since h=1 it can be read as [L]
 			
 			for(int j=2; j<line_size; j++) {
-				double gram = Double.valueOf(line.get(j));
+				double gram = Double.valueOf(lineCopy.get(j));
 				double gram_per_liter = 0.0;
 				
 				if(all_liquid > 0.0) {
-					gram_per_liter = gram/all_liquid;
+					gram_per_liter = gram/all_liquid; //Recompute [g/L]
 				}
-				line.set(j, String.valueOf(gram_per_liter));
+				lineCopy.set(j, String.valueOf(gram_per_liter));
 			}
+			integratedValuesMerged.add(lineCopy);
 		}
 
 		/*
@@ -527,7 +533,7 @@ public class MergeFunctions {
 		myWriter.close();
 		
 		//Integrated and summed
-		String integratedSum = header;
+		String integratedSum = integratedHeader;
 		for(int i=0; i<integratedValuesSum.size(); i++) {
 			for(int j=0; j<integratedValuesSum.get(0).size(); j++) {
 				integratedSum += integratedValuesSum.get(i).get(j) + "\t";
@@ -541,7 +547,7 @@ public class MergeFunctions {
 		myWriter.close();
 		
 		//Integrated and summed - only full timesteps
-		String integratedSumFull = header;
+		String integratedSumFull = integratedHeader;
 		for(int i=0; i<integratedValuesSumFull.size(); i++) {
 			for(int j=0; j<integratedValuesSumFull.get(0).size(); j++) {
 				integratedSumFull += integratedValuesSumFull.get(i).get(j) + "\t";
@@ -554,12 +560,27 @@ public class MergeFunctions {
 		myWriter.write(integratedSumFull);
 		myWriter.close();
 		
-		return integratedSumFull;
+		//Recomputed [g/L]
+		String integratedMerged = header;
+		for(int i=0; i<integratedValuesMerged.size(); i++) {
+			for(int j=0; j<integratedValuesMerged.get(0).size(); j++) {
+				integratedMerged += integratedValuesMerged.get(i).get(j) + "\t";
+			}
+			integratedMerged += "\n";
+		}	
+		newFileName = fileDir.toString().substring(0, extensionPos) + "_integratedSum_Rates" + fileDir.toString().substring(extensionPos);
+		newFile = new File(newFileName);
+		myWriter = new FileWriter(newFile);
+		myWriter.write(integratedMerged);
+		myWriter.close();
+		
+		return integratedMerged;
 	}
 	
 	/**
 	 * Copy outputFiles.lua to the hydrolysis storage
-	 * @param workingDir
+	 * 
+	 * @param workingDir Working directory
 	 * @param hydrolysisName
 	 * @throws IOException
 	 */
@@ -574,11 +595,12 @@ public class MergeFunctions {
 	
 	/**
 	 * Updates the names of the integrated files in the outputFiles from the hydrolysis_storage
-	 * @param storageDirectory
+	 * 
+	 * @param storage_dir Path to the "storage_hydrolysis"
 	 * @throws IOException
 	 */
-	public static void update_outputFiles_integration(File storageDirectory) throws IOException {
-		File outputFiles = new File(storageDirectory, "outputFiles.lua");
+	public static void update_outputFiles_integration(File storage_dir) throws IOException {
+		File outputFiles = new File(storage_dir, "outputFiles.lua");
 		
 		Scanner lineIter = new Scanner(outputFiles);
 		String fileString = "";
@@ -606,12 +628,13 @@ public class MergeFunctions {
 	 * cannot be added together (e.g. PH values). They are specific for 
 	 * the hydrolysis reactor and should only be regarded in the 
 	 * according context.
-	 * @param storageDirectory
+	 * 
+	 * @param storage_dir Path to the "storage_hydrolysis"
 	 * @throws IOException
 	 */
-	public static void update_outputFiles(File storageDirectory) throws IOException
+	public static void update_outputFiles(File storage_dir) throws IOException
 	{
-		File outputFiles_path = new File(storageDirectory, "outputFiles.lua");
+		File outputFiles_path = new File(storage_dir, "outputFiles.lua");
 		String newOutputFiles = "";
 		boolean takeLine = true;
 		
@@ -662,9 +685,22 @@ public class MergeFunctions {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{ 
-		File reactorDir = new File("/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h");
-		String f = "outflow.txt";
-		integrate_one_file(reactorDir, f);
+		//File reactorDir = new File("/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h");
+		//String f = "outflow.txt";
+		//integrate_one_file(reactorDir, f);
+		
+		//File methane_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_144519/methane");
+		//File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_144519");
+		//merge_all_methane(methane_dir, working_dir);
+		
+		/*
+		File storageDirectory = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_141226/storage_hydrolysis");
+		File directory = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_141226");
+		String[] hydrolysisNames = {"hydrolysis_0", "hydrolysis_1"};
+		merge_all_hydrolysis(storageDirectory, directory, hydrolysisNames);
+		*/
+		
+		integrate_one_file(new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_154255/hydrolysis_0"), "outflow.txt");
 	}
 	
 }

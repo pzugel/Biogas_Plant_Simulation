@@ -21,6 +21,7 @@ public class OutflowInflowUpdater {
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
 	private static int sim_starttime;
+	
 	/**
 	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
 	 * and the values into "inflow_timetable_string"
@@ -130,9 +131,8 @@ public class OutflowInflowUpdater {
 					 * 
 					 * e.g. If we compute the timestep 2.0 -> 3.0 in any reactor we need to set the 
 					 * inflow timestep to "3.0". Now if we take the methane outflow of a computed step from
-					 * 2.0 -> 3.0 we need to add one the timestep when feeding it back to the hydrolysis reactor
-					 * 
-					 * We also need to add a time offset dtStart as defined in the specification
+					 * 2.0 -> 3.0 we need to add one to the timestep when feeding it back to the hydrolysis reactor
+					 * to be present at time 4.0 in the hydrolysis.
 					 */
 					if(val.contains("Time")) {
 						if(isMethane) {
@@ -145,7 +145,11 @@ public class OutflowInflowUpdater {
 						
 					} else {
 						//Fractional "all liquid"
-						double allLiquidFraction = Double.parseDouble(outflow_input_values.get(k).get(column))*fraction;
+						//TODO This is just a Test. We set the inflow as constat 10l/h
+						//Actually should be as the commented out code below
+						double allLiquidFraction = 10*fraction;
+						
+						//double allLiquidFraction = Double.parseDouble(outflow_input_values.get(k).get(column))*fraction;
 						colList.add(String.valueOf(allLiquidFraction));
 					}
 				}
@@ -185,7 +189,7 @@ public class OutflowInflowUpdater {
 	 * @param spec
 	 * @throws IOException
 	 */
-	private static void write_new_timetable_string(File spec) throws IOException
+	private static void write_new_timetable_string(File spec, boolean isMethane) throws IOException
 	{
 		/*
 		 * Scan indentation
@@ -207,27 +211,10 @@ public class OutflowInflowUpdater {
 		
 		tabs += "\t\t";
 		timetable_replacement = "timetable={\n";
-		/*
-		 * We might want to keep this. This old version adds all old inflow values to the specification aswell.
-		 * BUT it does not split on old (history) values
-		 */
-		/*
-		for(int i=0; i<output_timetable.get(0).size(); i++){
-			timetable_replacement += tabs + "{";
-			for(int j=0; j<output_timetable.size(); j++)
-			{
-				System.out.println("output_timetable.get(" + j + ").get(" + i + "): " + output_timetable.get(j).get(i));
-				timetable_replacement += output_timetable.get(j).get(i);
-				if(j!=output_timetable.size()-1)
-					timetable_replacement += ", ";
-			}
-			timetable_replacement += "},\n";
-		}
-		*/
+
 		
 		/*
-		 * This newer version only adds the inflow of the current timestep to the specification.
-		 * This might suffice.
+		 * Adds the inflow of the current timestep to the specification.
 		 */
 		timetable_replacement += tabs + "{";
 		int numLines = output_timetable.get(0).size();
@@ -265,7 +252,7 @@ public class OutflowInflowUpdater {
 		read_outflow_header(header);
 		read_outflow_values(data);
 		write_new_timetable(1.0, true);		
-		write_new_timetable_string(methane_specfile);
+		write_new_timetable_string(methane_specfile, true);
 		
 		//Replacement in spec file	
 		String specString = "";
@@ -359,7 +346,7 @@ public class OutflowInflowUpdater {
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
 			write_new_timetable(fractions[specNum], false);
-			write_new_timetable_string(spec);
+			write_new_timetable_string(spec, false);
 			//Replacement in spec file	
 			String specString = "";
 			Scanner lineIter = new Scanner(spec);		
@@ -378,18 +365,16 @@ public class OutflowInflowUpdater {
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{
+		/*
 		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_125847/methane/outflow_integratedSum_fullTimesteps.txt");
 		
 		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_125847/hydrolysis_0/2/hydrolysis_checkpoint.lua");
 		double[] fractions = {1.00};
 		File[] hydrolysis_specfiles = {spec0};
 		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);
-		
-		//File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_124622/storage_hydrolysis/outflow_integratedSum_fullTimesteps.txt");
-		//File methane_specfile = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_124622/methane/1/methane_checkpoint.lua");
-		//write_methane_inflow(outflow_infile, methane_specfile);
-		
-		
-		
+		*/
+		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/TEST_ON_ME/storage_hydrolysis/outflow_integratedSum_fullTimesteps.txt");
+		File methane_specfile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/TEST_ON_ME/methane/28/methane_checkpoint.lua");
+		write_methane_inflow(outflow_infile, methane_specfile);
 	}
 }

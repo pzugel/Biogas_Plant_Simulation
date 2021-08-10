@@ -14,7 +14,7 @@ public class ElementHelperFunctions {
 	/**
 	 * Returns the ugshell command for a specification file
 	 * @param specification
-	 * @return
+	 * @return command
 	 */
 	public String getCMD(File specification){
 		String home = System.getProperty("user.home");

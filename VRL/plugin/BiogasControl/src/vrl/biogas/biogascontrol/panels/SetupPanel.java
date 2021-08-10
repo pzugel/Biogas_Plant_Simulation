@@ -269,7 +269,8 @@ public class SetupPanel {
 	}
 	
 	//TODO Will the strucutre be correct (when loading from LabView project)? What if project was userDefined?
-	void load_environment(File summary, File path, boolean userDefined) throws IOException {
+	//TODO Should be private - Public only for testing
+	public void load_environment(File summary, File path, boolean userDefined) throws IOException {
 		String endtime = "";
 		try {
 		    boolean finished = false;

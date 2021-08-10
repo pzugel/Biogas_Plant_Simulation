@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 /**
  * Reader for a biogas output file
- * @author paul
+ * @author Paul Zügel
  */
 public class CSVReader {
 

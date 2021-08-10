@@ -24,7 +24,8 @@ import java.util.EventObject;
  
 /**
  * Class representing the checkbox tree for outputFiles.lua
- * @author paul
+ * @author https://javawiki.sowas.com/doku.php?id=swing:jtree-checkbox
+ * @author Paul Zügel
  */
 public class CheckBoxTree extends JTree {
 	private static final long serialVersionUID = 1L;

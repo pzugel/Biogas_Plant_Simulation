@@ -129,6 +129,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 					simulationPanelObj.simulationLog.setText(logText);
 					int starttime = (Integer) settingsPanelObj.simStarttime.getValue();
 					iteration = 0;												
+					simulationPanelObj.iteration.setText("0");
 					
 					try {
 						running.setSelected(true);

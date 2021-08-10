@@ -19,11 +19,9 @@ public class MethaneMerge implements SimulationElement, Serializable{
 private static final long serialVersionUID = 1L;
 
 private File methaneDirectory;
-private File directory;
 private Structure structure;
 
 public MethaneMerge(Structure struct) {
-	directory = struct.directory();
 	structure = struct;
 	methaneDirectory = new File(struct.directory(), "methane");
 }
@@ -44,7 +42,7 @@ public void run() throws IOException {
 	SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 	
 	if(!structure.wasCancelled()) {
-		MergeFunctions.merge_all_methane(methaneDirectory, directory);
+		MergeFunctions.merge_all_methane(methaneDirectory);
 		
 		ElementRunner myRunnable = new ElementRunner(structure);
 		Thread t = new Thread(myRunnable);

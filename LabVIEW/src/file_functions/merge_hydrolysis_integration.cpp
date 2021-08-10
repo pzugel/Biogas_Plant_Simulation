@@ -130,17 +130,20 @@ std::string integrate_one_file(
 	 * We do this because for the inflow we expect all 
 	 * parameters in [g/L] and the total amount in [L/h] 
 	 */
+	std::vector<std::vector<std::string>> integratedValuesMerged;
 	for(std::vector<std::string> line : integratedValuesSumFull) {
-		int line_size = line.size();
-		double all_liquid = dot_conversion(line.at(1));
+		std::vector<std::string> lineCopy = line;
+		int line_size = lineCopy.size();
+		double all_liquid = dot_conversion(lineCopy.at(1));
 		for(int j=2; j<line_size; j++) {
-			double gram = dot_conversion(line.at(j));
+			double gram = dot_conversion(lineCopy.at(j));
 			double gram_per_liter = 0.0;
 			if(all_liquid > 0.0) {
 				gram_per_liter = gram/all_liquid;
 			}
-			line.at(j) = conv_to_string(gram_per_liter);
+			lineCopy.at(j) = conv_to_string(gram_per_liter);
 		}
+		integratedValuesMerged.push_back(lineCopy);
 	}
 	
 	/*
@@ -168,7 +171,7 @@ std::string integrate_one_file(
 	output_file.close();
 	
 	//Integrated and summed
-	std::string integratedSum = header;
+	std::string integratedSum = integrated_header;
 	for(int i=0; i<integratedValuesSum.size(); i++) {
 		for(int j=0; j<integratedValuesSum.at(0).size(); j++) {
 			integratedSum += integratedValuesSum.at(i).at(j) + "\t";
@@ -182,7 +185,7 @@ std::string integrate_one_file(
 	output_file.close();
 	
 	//Integrated and summed - only full timesteps
-	std::string integratedSumFull = header;
+	std::string integratedSumFull = integrated_header;
 	for(int i=0; i<integratedValuesSumFull.size(); i++) {
 		for(int j=0; j<integratedValuesSumFull.at(0).size(); j++) {
 			integratedSumFull += integratedValuesSumFull.at(i).at(j) + "\t";
@@ -195,23 +198,63 @@ std::string integrate_one_file(
 	output_file << integratedSumFull;
 	output_file.close();
 	
+	//Recomputed [g/L] 
+	std::string integratedMerged = header;
+	for(int i=0; i<integratedValuesMerged.size(); i++) {
+		for(int j=0; j<integratedValuesMerged.at(0).size(); j++) {
+			integratedMerged += integratedValuesMerged.at(i).at(j) + "\t";
+		}
+		integratedMerged += "\n";
+	}	
+	newFileName = fileDir.substr(0, extensionPos) + "_integratedSum_Rates" + fileDir.substr(extensionPos);	
+	std::cout << "newFileName: " << newFileName << std::endl;
+	output_file.open(newFileName);
+	output_file << integratedMerged;
+	output_file.close();
+	
 	return integratedSumFull;
 }
 
-std::string  merge_files_integration(
-	const char* dir, 
-	std::string filename,
-	std::vector<std::string> reactors)
-{
-	for(std::string r : reactors) {
-		std::string reactor_dir = (std::string) dir + "/" + r;
-		integrate_one_file(reactor_dir, filename);		
-	}
+void merge_storage_outflow(
+	std::string storage_dir, 
+	std::string working_dir, 
+	std::vector<std::string> reactor_names)
+{	
+	std::string sumOfOutflows = merge_hydrolysis_files(working_dir, "outflow_integratedSum_fullTimesteps.txt", reactor_names);
+	
+	//This part is the same as in the integrate_one_file() function
+	for(int i=0; i<mergedArray.size(); i++) {
+		std::vector<double> line = mergedArray.at(i);
+		int line_size = line.size();
+		double all_liquid = line.at(1); //In [L/h] - But since h=1 it can be read as [L]
 		
-	std::size_t extensionPos = filename.find_last_of(".");
-	std::string newFileName = filename.substr(0, extensionPos) + "_integrated" + filename.substr(extensionPos);
-	std::cout << newFileName << std::endl;	
-	std::string output_file_string = merge_hydrolysis_files(dir, newFileName, reactors);
+		for(int j=2; j<line_size; j++) {
+			double gram = line.at(j);
+			double gram_per_liter = 0.0;
 			
-	return output_file_string;
+			if(all_liquid > 0.0) {
+				gram_per_liter = gram/all_liquid;
+			}
+			line.at(j) = gram_per_liter;
+		}
+		mergedArray.at(i) = line;
+	}
+	
+	std::string pathOfFirstReactor = (std::string) working_dir + "/" + reactor_names.at(0);
+	std::string pathOfFirstOutflow = pathOfFirstReactor + "/" + "outflow_integratedSum_Rates.txt";
+	std::string output_file_string = (std::string) get_header(pathOfFirstOutflow.c_str());
+
+	for(std::vector<double> line : mergedArray) {
+		for(double d : line) {
+			std::cout << "d: " << d << std::endl;
+			output_file_string += conv_to_string(d) + "\t";
+		}
+		output_file_string += "\n";
+	}	
+
+	std::string newFile = (std::string) storage_dir + "/" + "outflow_integratedSum_Rates.txt";
+	std::ofstream output_file;
+	output_file.open(newFile);
+	output_file << output_file_string;
+	output_file.close();	
 }

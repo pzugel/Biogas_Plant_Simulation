@@ -28,7 +28,6 @@
 static const std::vector<std::string> output_files{
 	"digestateConcentrations.txt",
 	"subMO_mass.txt",
-	"valveGasFlow.txt",
 	"producedNormVolumeCumulative.txt",
 	"dbg_nitrogenRates.txt",
 	"producedNormVolumeHourly.txt",
@@ -198,30 +197,13 @@ void merge_all_hydrolysis(
 	std::cout << "storage_dir: " << storage_dir << "\n" << std::endl;
 	
 	//Merge hydrolysis files with integration
-	for(std::string f: output_files_integration) {
-		std::string output_file_string = merge_files_integration(
-			working_dir, 
-			f,
-			reactors);
-			
-		//If file does not exist an empty string is returned
-		if(output_file_string != ""){
-			std::string output_file_name = 	storage_dir + "/" + f;
-			std::size_t extensionPos = output_file_name.find_last_of(".");
-			output_file_name = output_file_name.substr(0, extensionPos) 
-				+ "_integrated" 
-				+ output_file_name.substr(extensionPos);
-			std::cout << output_file_name << std::endl;
-			
-			std::ofstream output;
-			output.open(output_file_name);
-			output << output_file_string;
-			output.close();
-			
-			std::cout << output_file_string << std::endl;
+	for(std::string f : output_files_integration) {
+		for(std::string r : reactors) {
+			std::string reactor_dir = (std::string) working_dir + "/" + r;
+			integrate_one_file(reactor_dir, f);		
 		}
 	}
-	
+
 	//Merge hydrolysis files (no integration)
 	for(std::string f: output_files) {
 		std::string output_file_string = merge_hydrolysis_files(
@@ -242,38 +224,24 @@ void merge_all_hydrolysis(
 			std::cout << output_file_string << std::endl;
 		}
 	}
+	
+	merge_storage_outflow(storage_dir, (std::string) working_dir, reactors);
 }
 
 /**
- * Function called by the feedback element
+ * Called by the methane element to integrate the outflow files.
  * 
- * First iterate over all possible output files that need integration
- * as specified in the "output_files_integration" vector and call the 
- * "merge_files_integration" function.
- * 
- * Then iterate over all other possible methane output files as 
- * specified in the "output_files" vector and call the 
- * "merge_hydrolysis_files" function to merge all output files for
- * all hydrolysis reactors.
- * 
- * @param methane_dir: Path pointing to the methane folders
- * @param working_dir: Path to the working directory
- * @param current_starttime: Current timestep in the simulation
+ * @param methane_dir Path to the methane element
+ * @throws IOException
  */
 void merge_all_methane(
-	const char* working_dir,
 	const char* methane_dir)
 {
 	std::cout << "methane_dir: " << methane_dir << std::endl;		
 		
 	//Merge methane files with integration
-	for(std::string f: output_files_integration) {
-		std::vector<std::string> methaneReactor;
-		methaneReactor.push_back("methane");
-		std::string output_file_string = merge_files_integration(
-				working_dir, 
-				f,  
-				methaneReactor);
+	for(std::string f : output_files_integration) {
+		integrate_one_file(methane_dir, f);		
 	}
 }
 
@@ -397,7 +365,7 @@ void update_initial_hydrolysis_inflow(
 
 /**
  * Updates the feeding timetable in a specification file 
- * for a hydrolysis reacote
+ * for a hydrolysis reactor
  * 
  * @param hydrolysis_specfile: Path pointing the the specification
  * @param time: Timestamp time
@@ -507,16 +475,28 @@ const char* get_hydrolysis_PH(const char* reactor_state_files)
  * Only to test functionality
  */
 int main(){
+	/*
+	const char* reactorDir = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/TEST_FOLDER/hydrolysis_0";
+	const char* f = "outflow.txt";
+	integrate_one_file(reactorDir, f);
+	*/
 	
-	//const char* reactorDir = "/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h";
-	//const char* f = "outflow.txt";
-	//integrate_one_file(reactorDir, f);
+	/*
+	const char* working_dir = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/TEST_FOLDER";
+	const char* reactor_names = "hydrolysis_0\nhydrolysis_1";
+	merge_all_hydrolysis(working_dir, reactor_names);
+	*/
+	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210715_120455@STRUCT_2_STAGE_PL/storage_hydrolysis/outflow_integratedSum_Rates.txt";
+	const char* methane_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210715_120455@STRUCT_2_STAGE_PL/methane/0/methane_checkpoint.lua";
+	write_methane_inflow(outflow_infile,methane_specfile);
 	
 	//const char* hydroSpec = "/home/paul/Schreibtisch/hydrolysis_checkpoint.lua";
 	//write_inital_hydrolysis_inflow(hydroSpec);
+	/*
 	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt";
 	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/hydrolysis_0/3/hydrolysis_checkpoint.lua";
 	double fraction = 1.0;
 	update_hydrolysis_inflow(outflow_infile,hydrolysis_specfile,fraction);
 	return 0;
+	*/
 }

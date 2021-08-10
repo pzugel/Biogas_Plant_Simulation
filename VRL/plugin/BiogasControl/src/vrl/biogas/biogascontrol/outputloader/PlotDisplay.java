@@ -35,7 +35,7 @@ import vrl.biogas.biogascontrol.MainPanelContainerType;
 
 /**
  * Main panel for the plotter in VRL
- * @author paul
+ * @author Paul Zügel
  */
 @ComponentInfo(name = "PlotDisplay", category = "Biogas")
 @ObjectInfo(name = "PlotDisplay")
@@ -186,8 +186,7 @@ public class PlotDisplay implements Serializable {
 	  PlotDisplay plotter = new PlotDisplay();
 
 	  ArrayList<ArrayList<Trajectory>> trajectories = BiogasPlotter.samplePlot();
-	  plotter.plot(trajectories); 
-	  //JPanel panel = (JPanel) cont.getViewValue();
+	  plotter.plot(trajectories);
 	  
 	  javax.swing.JFrame frame = new javax.swing.JFrame(); 
     

@@ -11,6 +11,7 @@
 
 #include "functions.h"
 
+static std::vector<std::vector<double>> mergedArray;
 /**
  * Reads all hydrolysis output files of all hydrolysis reactors for 
  * the current timestep and merges them into the 
@@ -22,12 +23,11 @@
  * @return File to write as string
  */
 std::string merge_hydrolysis_files(
-	const char* dir,  
+	std::string working_dir,  
 	std::string filename,
 	std::vector<std::string> reactors)
 {	
 	int num_reactors = reactors.size();
-	std::string working_dir = (std::string) dir;
 	std::string output_file_string = "";
 	values.clear();
 	
@@ -106,6 +106,7 @@ std::string merge_hydrolysis_files(
 		}
 		
 		//Write output array to string
+		mergedArray = outputValues;
 		for(std::vector<double> line : outputValues) {
 			for(double d : line) {
 				output_file_string += conv_to_string(d) + "\t";

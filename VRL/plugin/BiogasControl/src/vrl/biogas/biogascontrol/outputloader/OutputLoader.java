@@ -9,8 +9,9 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * Parser for outputFiles.lua file
- * @author paul
+ * Parser for an outputFiles.lua file.
+ * The content is saves in the "entries" List.
+ * @author Paul Zügel
  */
 public class OutputLoader {
 
@@ -23,6 +24,11 @@ public class OutputLoader {
 		filepath = file;
 	}
 	
+	/**
+	 * Load the outputFiles.lua and execute "readOutputFiles" function
+	 * to parse the file.
+	 * @throws FileNotFoundException
+	 */
 	public void load() throws FileNotFoundException
 	{
 		input = "";
@@ -46,6 +52,12 @@ public class OutputLoader {
 		readOutputFiles();
 	}
 
+	/**
+	 * Get the name, unit and column of the x values
+	 * @param x_Names
+	 * @param x_Units
+	 * @param x_Cols
+	 */
 	private void readXValues(List<String> x_Names, List<String> x_Units, List<Integer> x_Cols){
 		String x_value = "x=\\{[a-zA-Z0-9_]+=\\{unit=\"[a-zA-Z0-9\\^\\[\\]]+\",col=[0-9]+";
 
@@ -73,6 +85,9 @@ public class OutputLoader {
 		}
 	}
 	
+	/**
+	 * Modify the input for easier parsing.
+	 */
 	private void modifyInput() {
 		String x_value = "x=\\{[a-zA-Z0-9_]+=\\{unit=\"[a-zA-Z0-9\\^\\[\\]]+\",col=[0-9]+";
 		String keys = "keys=\\{";
@@ -85,6 +100,10 @@ public class OutputLoader {
 		input = input.replaceAll(",", ",\n");
 	}
 	
+	/**
+	 * Construct the "entries" List by paring the outputFiles.lua
+	 * via regular expressions.
+	 */
 	private void readOutputFiles()
 	{	
 		entries = new ArrayList<OutputEntry>();
@@ -200,6 +219,10 @@ public class OutputLoader {
 		scanner.close();
 	}
 
+	/**
+	 * Getter for "entries" List
+	 * @return entries
+	 */
 	public List<OutputEntry> getData(){
 		return entries;
 	}

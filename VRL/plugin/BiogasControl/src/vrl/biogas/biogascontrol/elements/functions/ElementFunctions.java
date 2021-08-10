@@ -95,7 +95,7 @@ public class ElementFunctions {
 		File[] specDirsArr = new File[specDirs.size()];
 		specDirs.toArray(specDirsArr);
 		final File methanePath = new File(workingDirectory, "methane");
-		File outflowFile = new File(methanePath, "outflow_integratedSum_fullTimesteps.txt");
+		File outflowFile = new File(methanePath, "outflow_integratedSum_Rates.txt");
 		if(!firstTimestep) {
 			System.out.println("\t Not first timestep - OutflowInflowUpdater");
 			OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractionsArr);
@@ -143,7 +143,7 @@ public class ElementFunctions {
 						StandardCopyOption.REPLACE_EXISTING);
 			}
 			
-			File outflowFile = new File(storageDirectory, "outflow_integratedSum_fullTimesteps.txt");
+			File outflowFile = new File(storageDirectory, "outflow_integratedSum_Rates.txt");
 			
 			//Update specification
 			SpecfileUpdater.update_starttime(methaneFile, currentTime);
