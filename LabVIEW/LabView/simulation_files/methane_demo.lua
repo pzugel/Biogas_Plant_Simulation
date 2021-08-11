@@ -53,7 +53,7 @@ problem={
 	inflow={
 		data={"Butyric", "Acetic"},
 		timetable={
-			{0, 0, 0, 0},		
+			{1, 10, 0.0025, 1.5},		
 		},
 	},	
 	expert = {

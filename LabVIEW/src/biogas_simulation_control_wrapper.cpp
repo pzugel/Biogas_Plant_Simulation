@@ -32,6 +32,8 @@ static double sim_endtime;
 static double sim_currenttime;
 static double paused_time;
 
+static double const_flow_value;
+
 static bool merge_preexisting;
 
 /**
@@ -220,11 +222,16 @@ void add_to_sim_log(const char* log)
  * Sets the iteration count and adds a new line to the simulation log
  * 
  * @param iter: The iteration counter
+ * @param time: The current time
  */
-void set_interation_log(int iter)
+void set_interation_log(int iter, int time)
 {
 	iteration = iter;
-	sim_log += "Iteration: " + std::to_string(iter) + "\n";
+	sim_log += "Iteration: " 
+			+ std::to_string(iter) 
+			+ " (Time " 
+			+ std::to_string(time) 
+			+ ")\n";
 }
 
 /**
@@ -269,6 +276,20 @@ void set_hydrolysis_fractions(const char* fract)
 const char* get_hydrolysis_fractions()
 {
 	return hydrolysis_fractions.c_str();
+}
+
+/**
+ * Getter/setter for the constant flow value
+ * 
+ */
+void set_flow_value(double val)
+{
+	const_flow_value = val;
+}
+
+double get_flow_value()
+{
+	return const_flow_value;
 }
 
 /**

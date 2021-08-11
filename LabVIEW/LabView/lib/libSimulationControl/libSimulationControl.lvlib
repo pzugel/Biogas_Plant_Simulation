@@ -25,10 +25,12 @@
 			<Item Name="get sim starttime.vi" Type="VI" URL="../VIs/get sim starttime.vi"/>
 			<Item Name="get simulation file.vi" Type="VI" URL="../VIs/get simulation file.vi"/>
 			<Item Name="get working directory.vi" Type="VI" URL="../VIs/get working directory.vi"/>
+			<Item Name="get flow value.vi" Type="VI" URL="../VIs/get flow value.vi"/>
 		</Item>
 		<Item Name="Log" Type="Folder">
 			<Item Name="add to sim log.vi" Type="VI" URL="../VIs/add to sim log.vi"/>
 			<Item Name="get sim log.vi" Type="VI" URL="../VIs/get sim log.vi"/>
+			<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>
 			<Item Name="set sim log.vi" Type="VI" URL="../VIs/set sim log.vi"/>
 		</Item>
 		<Item Name="Setters" Type="Folder">
@@ -36,7 +38,6 @@
 			<Item Name="reset paused time.vi" Type="VI" URL="../VIs/reset paused time.vi"/>
 			<Item Name="set active element.vi" Type="VI" URL="../VIs/set active element.vi"/>
 			<Item Name="set hydrolyse specification.vi" Type="VI" URL="../VIs/set hydrolyse specification.vi"/>
-			<Item Name="set interation log.vi" Type="VI" URL="../VIs/set interation log.vi"/>
 			<Item Name="set iteration.vi" Type="VI" URL="../VIs/set iteration.vi"/>
 			<Item Name="set methane specification.vi" Type="VI" URL="../VIs/set methane specification.vi"/>
 			<Item Name="set plant structure.vi" Type="VI" URL="../VIs/set plant structure.vi"/>
@@ -48,6 +49,7 @@
 			<Item Name="set hydrolysis fractions.vi" Type="VI" URL="../VIs/set hydrolysis fractions.vi"/>
 			<Item Name="set merge preexisting.vi" Type="VI" URL="../VIs/set merge preexisting.vi"/>
 			<Item Name="set num hydrolysis reactors.vi" Type="VI" URL="../VIs/set num hydrolysis reactors.vi"/>
+			<Item Name="set flow value.vi" Type="VI" URL="../VIs/set flow value.vi"/>
 		</Item>
 	</Item>
 	<Item Name="libSimulationControl.so" Type="Document" URL="../../libSimulationControl.so"/>

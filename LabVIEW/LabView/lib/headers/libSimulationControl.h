@@ -14,7 +14,7 @@ void set_active_element(const char* elem);
 
 int get_iteration();
 void set_iteration(int iter);
-void set_interation_log(int iter);
+void set_interation_log(int iter, int time);
 
 void set_simulation_file(const char* sim_file);
 const char* get_simulation_file();
@@ -48,6 +48,9 @@ int get_num_hydrolysis_reactors();
 
 void set_hydrolysis_fractions(const char* fract);
 const char* get_hydrolysis_fractions();
+
+void set_flow_value(double val);
+double get_flow_value();
 
 void set_merge_preexisting(bool merge);
 bool get_merge_preexisting();

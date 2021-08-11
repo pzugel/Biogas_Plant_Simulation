@@ -19,6 +19,7 @@ static std::vector<std::vector<std::string>> outflow_input_values; //Holds value
 static std::vector<std::vector<std::string>> output_timetable; //Holds new inflow for the methane spec
 static std::string timetable_replacement; //Holds new inflow (as string) for the methane spec
 static int sim_starttime; //sim_starttime as defined in a specification
+static int flow; //constant flow value
 
 /**
  * Reads the methane specification file and stores the inflow "data"
@@ -163,7 +164,11 @@ void write_new_timetable(double fraction, bool isMethane)
 				 }
 				 else {
 					//Fractional "all liquid"
-					double allLiquidFraction = dot_conversion(outflow_input_values.at(k).at(column))*fraction;
+					//This line sets the inflow to a constant value
+					double allLiquidFraction = flow*fraction;
+					
+					//Old version - Gets flow from previous "all liquid" outflow value
+					//double allLiquidFraction = dot_conversion(outflow_input_values.at(k).at(column))*fraction;
 					col_vector.push_back(conv_to_string(allLiquidFraction));
 				 }				
 			}
@@ -253,11 +258,14 @@ void write_new_timetable_string()
  * 
  * @param outflow_infile: Path pointing the outflow.txt (storage_hydrolysis)
  * @param methane_specfile: Path pointing the methane spec file 
+ * @param flowVal: Constant flow value
  */
 void write_methane_inflow(
 	const char* outflow_infile,
-	const char* methane_specfile)
+	const char* methane_specfile,
+	int flowVal)
 {
+	flow = flowVal;
 	std::ifstream methane_specfile_stream(methane_specfile);
 	std::string mBuf((std::istreambuf_iterator<char>(methane_specfile_stream)),
                  std::istreambuf_iterator<char>());
@@ -290,12 +298,15 @@ void write_methane_inflow(
  * @param outflow_infile: Path pointing the outflow.txt (methane)
  * @param hydrolysis_specfiles: String with the specfile direction
  * @param fractions: fractional value to split the inflow
+ * @param flowVal: Constant flow value
  */
 int write_hydrolysis_inflow(
 	const char* outflow_infile,
 	const char* hydrolysis_specfile,
-	double fraction)
+	double fraction,
+	int flowVal)
 {	
+	flow = flowVal;
 	get_header(outflow_infile);
 	remove_header(outflow_infile);
 	read_outflow_header();
@@ -344,11 +355,13 @@ void write_new_initial_timetable_string()
 	if(std::regex_search(inflowString, match_inflowData, inflowDataPattern)){
 		std::string found = match_inflowData[0];
 		std::size_t indexStart = found.find("{");
-		std::size_t indexEnd = found.find(",");
-
+		std::size_t indexEnd = found.find(",", found.find(",") + 1);
+		
 		if(indexStart > 0 && indexEnd > 0) {
 			std::string newStart = found.substr(0, indexStart+1) 
-				+ conv_to_string(sim_starttime+1) 
+				+ conv_to_string(sim_starttime+1)
+				+ ", "
+				+ conv_to_string(flow) 
 				+ found.substr(indexEnd);
 			boost::replace_all(inflowString, found, newStart);
 		}
@@ -360,10 +373,14 @@ void write_new_initial_timetable_string()
  * Function called only once at the beginning of the simulation to set the initial
  * inflow according to the sim_starttime
  * @param hydrolysis_specfile 
+ * @param flowVal: Constant flow value
  */
 void write_inital_hydrolysis_inflow(
-		const char* hydrolysis_specfile)
+		const char* hydrolysis_specfile,
+		int flowVal)
 {
+	flow = flowVal;
+		
 	std::string spec_file = (std::string) hydrolysis_specfile;	
 	std::ifstream hydrolysis_specfile_stream(spec_file);
 	std::string mBuf((std::istreambuf_iterator<char>(hydrolysis_specfile_stream)),

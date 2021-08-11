@@ -325,12 +325,14 @@ void merge_one_reactor(
  * 
  * @param outflow_infile: Path pointing the outflow.txt
  * @param methane_specfile: Path pointing the methane spec file 
+ * @param flowVal: Constant flow value
  */
 void update_methane_inflow(
 	const char* outflow_infile,
-	const char* methane_specfile)
+	const char* methane_specfile,
+	int flowVal)
 {
-	write_methane_inflow(outflow_infile, methane_specfile);
+	write_methane_inflow(outflow_infile, methane_specfile, flowVal);
 }
 
 /**
@@ -340,15 +342,18 @@ void update_methane_inflow(
  * @param outflow_infile: Path pointing the outflow.txt (methane)
  * @param hydrolysis_specfiles: String with the specfile directory
  * @param fractions: Fractional value
+ * @param flowVal: Constant flow value
  */
 void update_hydrolysis_inflow(
 	const char* outflow_infile,
 	const char* hydrolysis_specfile,
-	double fraction)
+	double fraction,
+	int flowVal)
 {
 	write_hydrolysis_inflow(outflow_infile, 
 		hydrolysis_specfile, 
-		fraction);
+		fraction,
+		flowVal);
 }
 
 /**
@@ -356,11 +361,13 @@ void update_hydrolysis_inflow(
  * adjusting the inflow time to the starttime
  * 
  * @param hydrolysis_specfiles: String with the specfile directory
+ * @param flowVal: Constant flow value
  */
 void update_initial_hydrolysis_inflow(
-	const char* hydrolysis_specfile)
+	const char* hydrolysis_specfile,
+	int flowVal)
 {
-	write_inital_hydrolysis_inflow(hydrolysis_specfile);
+	write_inital_hydrolysis_inflow(hydrolysis_specfile, flowVal);
 }
 
 /**
@@ -485,13 +492,15 @@ int main(){
 	const char* working_dir = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/TEST_FOLDER";
 	const char* reactor_names = "hydrolysis_0\nhydrolysis_1";
 	merge_all_hydrolysis(working_dir, reactor_names);
-	*/
+	
 	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210715_120455@STRUCT_2_STAGE_PL/storage_hydrolysis/outflow_integratedSum_Rates.txt";
 	const char* methane_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210715_120455@STRUCT_2_STAGE_PL/methane/0/methane_checkpoint.lua";
-	write_methane_inflow(outflow_infile,methane_specfile);
+	write_methane_inflow(outflow_infile,methane_specfile, 15);
+	*/
 	
-	//const char* hydroSpec = "/home/paul/Schreibtisch/hydrolysis_checkpoint.lua";
-	//write_inital_hydrolysis_inflow(hydroSpec);
+	const char* hydroSpec = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210715_121637@STRUCT_2_STAGE_PL/hydrolysis_0/0/hydrolysis_checkpoint.lua";
+	write_inital_hydrolysis_inflow(hydroSpec, 28);
+	
 	/*
 	const char* outflow_infile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/methane/outflow_integratedSum_fullTimesteps.txt";
 	const char* hydrolysis_specfile = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210709_130625@STRUCT_1_STAGE/hydrolysis_0/3/hydrolysis_checkpoint.lua";
