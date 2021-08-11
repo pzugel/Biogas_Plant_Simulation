@@ -93,15 +93,16 @@ public class ElementFunctions {
 		
 		//Update inflow in hydrolysis specification
 		File[] specDirsArr = new File[specDirs.size()];
+		int flowVal = (Integer) BiogasControlClass.settingsPanelObj.flowValue.getValue();
 		specDirs.toArray(specDirsArr);
 		final File methanePath = new File(workingDirectory, "methane");
 		File outflowFile = new File(methanePath, "outflow_integratedSum_Rates.txt");
 		if(!firstTimestep) {
 			System.out.println("\t Not first timestep - OutflowInflowUpdater");
-			OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractionsArr);
+			OutflowInflowUpdater.write_hydrolysis_inflow(outflowFile, specDirsArr, fractionsArr, flowVal);
 		} else {
 			System.out.println("\t First timestep - InitialInflowUpdate");
-			OutflowInflowUpdater.write_inital_hydrolysis_inflow(specDirsArr);
+			OutflowInflowUpdater.write_inital_hydrolysis_inflow(specDirsArr, flowVal);
 		}
 	}
 	
@@ -144,11 +145,12 @@ public class ElementFunctions {
 			}
 			
 			File outflowFile = new File(storageDirectory, "outflow_integratedSum_Rates.txt");
+			int flowVal = (Integer) BiogasControlClass.settingsPanelObj.flowValue.getValue();
 			
 			//Update specification
 			SpecfileUpdater.update_starttime(methaneFile, currentTime);
 			SpecfileUpdater.update_endtime(methaneFile, currentTime+1);
-			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile);			
+			OutflowInflowUpdater.write_methane_inflow(outflowFile, methaneFile, flowVal);			
 		}
 		catch (IOException e) {
 			e.printStackTrace();

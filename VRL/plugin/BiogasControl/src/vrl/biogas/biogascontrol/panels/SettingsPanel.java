@@ -44,6 +44,7 @@ public class SettingsPanel {
 	public JPanel settingsPanel;
 	public JSpinner simStarttime;
 	public JSpinner simEndtime;
+	public JSpinner flowValue;
 	public JCheckBox autoCleanup;
 	
 	public JTextField hydrolysis_path;
@@ -67,11 +68,13 @@ public class SettingsPanel {
 	private void createPanel(final boolean userDefined) {
 		SpinnerModel startModel = new SpinnerNumberModel(0, 0, 1000, 1);
 		SpinnerModel endModel = new SpinnerNumberModel(1, 1, 1000, 1);
-		 
+		SpinnerModel flowModel = new SpinnerNumberModel(10, 5, 1000, 1); 
 		
 		simStarttime = new JSpinner(startModel);
 		simEndtime = new JSpinner(endModel);
+		flowValue = new JSpinner(flowModel);
 		autoCleanup = new JCheckBox("Off/On");
+		
 		
 		JLabel simStarttimeLabel = new JLabel("Starttime");
 		simStarttimeLabel.setLabelFor(simStarttime);
@@ -79,14 +82,17 @@ public class SettingsPanel {
 		JLabel simEndtimeLabel = new JLabel("Endtime");
 		simEndtimeLabel.setLabelFor(simEndtime);
 		
+		JLabel flowLabel = new JLabel("Flow [L/h]");
+		flowLabel.setLabelFor(flowValue);
+		
 		JLabel autoCleanupLabel = new JLabel("Auto cleanup?");
 		autoCleanupLabel.setLabelFor(autoCleanup);
 		
 		JLabel text = new JLabel("<html><body>If you want the hydrolysis reactors to start with different"
 				+ "<br>initial values, you need to set up a working environtment first.</body></html>");
 		
-        double size[][] =
-            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.18, 0.3, TableLayoutConstants.FILL},
+        double header_size[][] =
+            {{0.06, 0.18, 0.04, 0.18, 0.04, 0.18, 0.04, 0.18, TableLayoutConstants.FILL},
              {0.06, 
             	0.05, //Label 1
             	0.06, //Spinner 2
@@ -95,7 +101,7 @@ public class SettingsPanel {
             	0.02,
             	0.41, //Elements Panel 6 
             	TableLayoutConstants.FILL}};
-        settingsPanel.setLayout(new TableLayout(size));
+        settingsPanel.setLayout(new TableLayout(header_size));
         settingsPanel.setBorder(BiogasControlClass.BORDER);
         
         JPanel line = new JPanel() {
@@ -110,15 +116,20 @@ public class SettingsPanel {
             }
         };
         
-        
+        //Labels
 		settingsPanel.add(simStarttimeLabel, new TableLayoutConstraints(1, 1, 1, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 		settingsPanel.add(simEndtimeLabel, new TableLayoutConstraints(3, 1, 3, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-		settingsPanel.add(autoCleanupLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(flowLabel, new TableLayoutConstraints(5, 1, 5, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(autoCleanupLabel, new TableLayoutConstraints(7, 1, 7, 1, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		
+		//Fields
 		settingsPanel.add(simStarttime, new TableLayoutConstraints(1, 2, 1, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
 		settingsPanel.add(simEndtime, new TableLayoutConstraints(3, 2, 3, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-		settingsPanel.add(autoCleanup, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
-		settingsPanel.add(text, new TableLayoutConstraints(1, 4, 6, 4, TableLayoutConstants.CENTER, TableLayoutConstants.FULL));
-		settingsPanel.add(line, new TableLayoutConstraints(1, 3, 6, 3, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
+		settingsPanel.add(flowValue, new TableLayoutConstraints(5, 2, 5, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		settingsPanel.add(autoCleanup, new TableLayoutConstraints(7, 2, 7, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+		
+		settingsPanel.add(text, new TableLayoutConstraints(1, 4, 8, 4, TableLayoutConstants.CENTER, TableLayoutConstants.FULL));
+		settingsPanel.add(line, new TableLayoutConstraints(1, 3, 8, 3, TableLayoutConstants.CENTER, TableLayoutConstants.CENTER));
 		
 		JPanel elementsPanel = new JPanel();
         double elements_size[][] =
@@ -178,7 +189,7 @@ public class SettingsPanel {
         elementsPanel.add(simulation_path, new TableLayoutConstraints(2, 4, 2, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         elementsPanel.add(open_simulation_edit, new TableLayoutConstraints(4, 4, 4, 4, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
-        settingsPanel.add(elementsPanel, new TableLayoutConstraints(1, 6, 6, 6, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
+        settingsPanel.add(elementsPanel, new TableLayoutConstraints(1, 6, 8, 6, TableLayoutConstants.FULL, TableLayoutConstants.FULL));
         
 		simStarttime.addChangeListener(new ChangeListener() {
 			@Override

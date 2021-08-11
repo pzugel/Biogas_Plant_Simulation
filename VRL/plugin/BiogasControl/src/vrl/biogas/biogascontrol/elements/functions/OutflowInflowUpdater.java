@@ -21,6 +21,7 @@ public class OutflowInflowUpdater {
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
 	private static int sim_starttime;
+	private static int flow;
 	
 	/**
 	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
@@ -145,10 +146,10 @@ public class OutflowInflowUpdater {
 						
 					} else {
 						//Fractional "all liquid"
-						//TODO This is just a Test. We set the inflow as constat 10l/h
-						//Actually should be as the commented out code below
-						double allLiquidFraction = 10*fraction;
+						//TODO This line sets the inflow to a constant value
+						double allLiquidFraction = flow*fraction;
 						
+						//Old version - Gets flow from previous "all liquid" outflow value
 						//double allLiquidFraction = Double.parseDouble(outflow_input_values.get(k).get(column))*fraction;
 						colList.add(String.valueOf(allLiquidFraction));
 					}
@@ -239,13 +240,16 @@ public class OutflowInflowUpdater {
 	 * reading out the integrated outflow file from the hydrolysis reactor.
 	 * @param outflow_infile - Path pointing to the hydrolysis storage outflow file
 	 * @param methane_specfile
+	 * @param flowVal
 	 * @throws IOException
 	 */
 	public static void write_methane_inflow(
 			File outflow_infile,
-			File methane_specfile) throws IOException
+			File methane_specfile,
+			int flowVal) throws IOException
 	{
 		System.out.println("\t Write Methane inflow");
+		flow = flowVal;
 		String header = HelperFunctions.get_header(outflow_infile);
 		String data = HelperFunctions.remove_header(outflow_infile);
 		parse_spec_file(methane_specfile);
@@ -279,15 +283,17 @@ public class OutflowInflowUpdater {
 		String inflowString = inflow_timetable_string;
 		
 		Pattern p = Pattern.compile("(\\s)*\\{[0-9.,(\\s)eE-]+\\}(,)?");
-		Matcher m = p.matcher(inflowString);		
+		Matcher m = p.matcher(inflowString);
 		if(m.find()) {
 			String found = m.group(0);
 			int indexStart = found.indexOf("{");
-			int indexEnd = found.indexOf(",");
+			int indexEnd = found.indexOf(",", found.indexOf(",") + 1); //Second occurence of ","
 			
 			if(indexStart > 0 && indexEnd > 0) {
 				String newStart = found.substring(0, indexStart+1) 
-						+ String.valueOf(sim_starttime+1) 
+						+ String.valueOf(sim_starttime+1)
+						+ ", "
+						+ flow
 						+ found.substring(indexEnd);
 				inflowString = inflowString.replace(found, newStart);
 			}
@@ -299,12 +305,15 @@ public class OutflowInflowUpdater {
 	 * Function called only once at the beginning of the simulation to set the initial
 	 * inflow according to the sim_starttime
 	 * @param hydrolysis_specfiles
+	 * @param flowVal
 	 * @throws IOException 
 	 */
 	public static void write_inital_hydrolysis_inflow(
-			File[] hydrolysis_specfiles) throws IOException 
+			File[] hydrolysis_specfiles,
+			int flowVal) throws IOException 
 	{
 		System.out.println("\t Write initial Hydrolysis inflow");
+		flow = flowVal;
 		for(File spec : hydrolysis_specfiles) {
 			parse_spec_file(spec);
 			write_new_initial_timetable_string();
@@ -329,14 +338,17 @@ public class OutflowInflowUpdater {
 	 * @param outflow_infile - Path pointing to the methane outflow file
 	 * @param hydrolysis_specfiles
 	 * @param fractions
+	 * @param flowVal
 	 * @throws IOException
 	 */
 	public static void write_hydrolysis_inflow(
 			File outflow_infile,
 			File[] hydrolysis_specfiles,
-			double[] fractions) throws IOException
+			double[] fractions,
+			int flowVal) throws IOException
 	{	
 		System.out.println("\t Write Hydrolysis inflow");
+		flow = flowVal;
 		String header = HelperFunctions.get_header(outflow_infile);
 		String data = HelperFunctions.remove_header(outflow_infile);
 		read_outflow_header(header);
@@ -373,8 +385,8 @@ public class OutflowInflowUpdater {
 		File[] hydrolysis_specfiles = {spec0};
 		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);
 		*/
-		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/TEST_ON_ME/storage_hydrolysis/outflow_integratedSum_fullTimesteps.txt");
-		File methane_specfile = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/TEST_ON_ME/methane/28/methane_checkpoint.lua");
-		write_methane_inflow(outflow_infile, methane_specfile);
+		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210811_120506/hydrolysis_0/0/hydrolysis_checkpoint.lua");
+		File[] hydrolysis_specfiles = {spec0};
+		write_inital_hydrolysis_inflow(hydrolysis_specfiles, 15);
 	}
 }
