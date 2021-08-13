@@ -45,7 +45,7 @@ public class UserHydrolysis extends ElementHelperFunctions implements Serializab
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException, ExecutionException{
-		System.out.println("--> Hydrolysis");	
+		System.out.println("--> UserHydrolysis");	
 		int numHydrolysis = BiogasUserControl.numHydrolysis;
 		
 		//Log

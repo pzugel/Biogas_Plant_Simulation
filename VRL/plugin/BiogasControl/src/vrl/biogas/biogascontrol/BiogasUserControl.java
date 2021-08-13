@@ -74,7 +74,7 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 	private JPanel control(Path projectDir,int numHydro, final Object structure) throws IOException, InterruptedException{
 		wasCancelled = false;
 		numHydrolysis = numHydro;	
-		structureName = "";
+		structureName = "USER_STRUCTURE_" + numHydro;
 		projectPath = new File(projectDir.toString()).getParentFile();
 		hydrolysisNames = new String[numHydro];
 		for(int i=0; i<numHydro; i++) {

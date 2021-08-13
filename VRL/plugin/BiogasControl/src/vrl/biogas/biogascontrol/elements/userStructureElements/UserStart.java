@@ -26,7 +26,7 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=true, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
-		System.out.println("--> Start");
+		System.out.println("--> UserStart");
 		boolean firstTimestep = ((Integer) BiogasUserControl.settingsPanelObj.simStarttime.getValue() == BiogasUserControl.currentTime);
 		
 		if(!BiogasUserControl.wasCancelled) {

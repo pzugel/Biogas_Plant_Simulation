@@ -31,7 +31,7 @@ public class UserParallelExecution extends SwingWorker<String, String>{
 		
 		ElementHelperFunctions helper = new ElementHelperFunctions();
 		command = helper.getCMD(hydolysisFile);
-		System.out.println("cmd: " + command);		
+		System.out.println("\t cmd: " + command);		
 	}
 	
 	@Override
@@ -47,7 +47,7 @@ public class UserParallelExecution extends SwingWorker<String, String>{
 	    	}
 	    	s.close();
 	    	int exitVal = proc.waitFor(); 	
-	    	System.out.println(procText);
+	    	//System.out.println(procText);
 	    	
         	return String.valueOf(exitVal);
 		} catch (IOException e) {

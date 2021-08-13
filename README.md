@@ -61,7 +61,7 @@ Biogas_user_plant_setup.vrlp
 
 ## Installation
 
-First download [LabVIEW](https://www.ni.com/de-de/support/downloads/software-products/download.labview.html) from the *Nation Instruments* website. Make sure to use at least Version 2019. Now you need to compile some libraries on your local machine.
+First download [LabVIEW](https://www.ni.com/de-de/support/downloads/software-products/download.labview.html) from the *Nation Instruments* website. Make sure to use at least Version 2019. Now you need to compile some libraries on your local machine using [CMake](https://cmake.org/download/).
 
 ### Linux
 ```

@@ -120,7 +120,6 @@ public class BiogasControlClass {
 					setupPanelObj.loadBtn.setEnabled(true);
 					setupPanelObj.openBtn.setEnabled(true);
 					setupPanelObj.clearBtn.setEnabled(true);	
-					settingsPanelObj.flowValue.setEnabled(true);
 					startBtn.setEnabled(true);
 				} else {
 					timerStartTime = System.currentTimeMillis();

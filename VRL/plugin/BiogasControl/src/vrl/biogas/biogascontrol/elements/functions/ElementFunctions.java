@@ -167,17 +167,23 @@ public class ElementFunctions {
 	 * @param currentTime
 	 * @throws IOException
 	 */
-	public static void writeSummary(File workingDirectory, boolean finished, String structureName, int numHydrolysis, int currentTime) throws IOException {
+	public static void writeSummary(
+			File workingDirectory, 
+			boolean finished, 
+			String structureName, 
+			int numHydrolysis, 
+			double flowValue, 
+			int currentTime) throws IOException {
 		String summary = "FINISHED=" + finished + "\n";
 		summary += "WORKING_DIR=" + workingDirectory + "\n";
 		summary += "STRUCTURE=" + structureName + "\n";
 		summary += "NUM_HYDROLYSIS=" + numHydrolysis + "\n";
+		summary += "FLOW_VALUE=" + flowValue + "\n";
 		summary += "STARTTIME=" + BiogasControl.settingsPanelObj.simStarttime.getValue() + "\n";
 		int endtime = currentTime+1;
 		summary += "ENDTIME=" + endtime + "\n";
 		summary += "PREEXISTING=" + BiogasControl.setupPanelObj.mergePreexisting + "\n";
 		summary += "RUNTIME=" + BiogasControl.simulationPanelObj.runtime.getText() + "\n";
-		
 		File summaryFile = new File(workingDirectory, "simulation_summary.txt");		
 		
 		//File summaryFile = new File(summary);

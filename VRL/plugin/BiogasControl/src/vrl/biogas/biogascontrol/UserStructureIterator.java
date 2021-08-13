@@ -30,7 +30,7 @@ public class UserStructureIterator implements java.io.Serializable {
 		Method[] methods = structure.getClass().getMethods();
 		Method runMethod = methods[0];
 
-		BiogasUserControl.structureName = structure.getClass().getName();
+		//BiogasUserControl.structureName = structure.getClass().getName();
 		
 		BiogasUserControl.iteration = 0;    
 		BiogasUserControl.currentTime = starttime; 
@@ -47,7 +47,6 @@ public class UserStructureIterator implements java.io.Serializable {
 				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currentTime + 1));
 				runMethod.invoke(structure);  
 				endtime = (Integer) BiogasUserControl.settingsPanelObj.simEndtime.getValue();
-				System.out.println("endtime before: " + endtime);
 				
 				//Pause-Stop
 				new UserPause().run();
@@ -56,11 +55,10 @@ public class UserStructureIterator implements java.io.Serializable {
 					System.out.println("BREAK THE LOOP");
 					break;
 				}
-				System.out.println("endtime after: " + endtime);
+
 				++ BiogasUserControl.currentTime;
 				++ BiogasUserControl.iteration;
 			}
-		    System.out.println("Finished!");
 			//BiogasUserControl.running.setSelected(false); 
 		}
 		else {

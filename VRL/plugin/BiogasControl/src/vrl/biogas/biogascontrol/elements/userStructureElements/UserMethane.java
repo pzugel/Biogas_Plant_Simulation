@@ -40,7 +40,7 @@ public class UserMethane extends ElementHelperFunctions implements Serializable{
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
-		System.out.println("--> Methane");
+		System.out.println("--> UserMethane");
 		if(!BiogasUserControl.wasCancelled) {
 
 			BiogasUserControl.simulationPanelObj.activeElement.setText("Methane");
@@ -55,7 +55,7 @@ public class UserMethane extends ElementHelperFunctions implements Serializable{
 			final File methaneFile = new File(currentTimePath, "methane_checkpoint.lua");
 			
 			String cmd = getCMD(methaneFile);
-			System.out.println("cmd: " + cmd);
+			System.out.println("\t cmd: " + cmd);
 			Process proc = Runtime.getRuntime().exec(cmd, null, currentTimePath);
 	    	proc.waitFor(); 
 	    	

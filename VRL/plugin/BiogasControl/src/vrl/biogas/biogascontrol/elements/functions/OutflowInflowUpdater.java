@@ -124,7 +124,6 @@ public class OutflowInflowUpdater {
 		for(String val : outflow_input_header) {
 			ArrayList<String> colList = new ArrayList<String>();
 			if(val.contains("Time") || (val.contains("All") && val.contains("Liquid"))) {
-				System.out.println("\t Inflow val: " + val);
 				for(int k=0; k<outflow_input_values.size(); k++)
 				{
 					/*

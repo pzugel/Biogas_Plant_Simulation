@@ -21,7 +21,7 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
 		
-		System.out.println("Stop here!");
+		System.out.println("--> UserStop");
 		SimulationPanel simPanel = BiogasUserControl.simulationPanelObj;
 		
 		simPanel.activeElement.setText("Stop");
@@ -32,32 +32,33 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 		String structName = BiogasUserControl.structureName;
 		int numHydrolysis = BiogasUserControl.numHydrolysis;
 		int currentTime = BiogasUserControl.currentTime;
+		int flowValue = (Integer) BiogasUserControl.settingsPanelObj.flowValue.getValue();
 		
 		if(!BiogasUserControl.wasCancelled) {
 			if(BiogasUserControl.stopBtn.isSelected()) {
-				ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, currentTime);
-				System.out.println("Simulation stopped!");
+				ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
+				System.out.println("\tSimulation stopped!");
 				BiogasUserControl.running.setSelected(false); 
 				BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
-				System.out.println("UserStop Stopped!");
 				log("Stopped!\n");
 			}
 			else {
 				if(!(currentTime < endtime-1)) {
-					ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, currentTime);
+					ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
 					BiogasUserControl.setupPanelObj.mergePreexisting = true;
 					BiogasUserControl.running.setSelected(false);
 					BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
-					System.out.println("UserStop Simulation Finished!");
+					System.out.println("\tSimulation finished!");
 					log("Simulation finished!\n");					
 				}
 				else {
 					log("Continue!\n");
+					System.out.println("\tContinue.");
 				}
 			}
 		}
 		else {
-			ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, false, structName, numHydrolysis, currentTime);
+			ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, false, structName, numHydrolysis, flowValue, currentTime);
 			BiogasUserControl.running.setSelected(false);
 			BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
 			log("Cancelled!\n");

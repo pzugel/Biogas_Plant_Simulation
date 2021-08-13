@@ -18,7 +18,7 @@ public class UserPause extends ElementHelperFunctions implements Serializable{
 	
 	@MethodInfo(name="Main", hide=false, hideCloseIcon=false, interactive=false, num=1)
 	public void run() throws InterruptedException, IOException{
-		
+		System.out.println("--> UserPause");
 		if(!BiogasUserControl.wasCancelled) {
 			BiogasUserControl.simulationPanelObj.activeElement.setText("Pause");
 			log("** Pause ... ");

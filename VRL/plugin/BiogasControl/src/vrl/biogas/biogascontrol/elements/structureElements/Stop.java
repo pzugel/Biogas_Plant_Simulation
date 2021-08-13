@@ -45,10 +45,12 @@ public class Stop implements SimulationElement, Serializable{
 		String structName = structure.name();
 		int numHydrolysis = structure.numHydrolysis();
 		int currentTime = structure.currentTime();
+		int flowValue = (Integer) BiogasControl.settingsPanelObj.flowValue.getValue();
 		
 		if(!structure.wasCancelled()) {
+			System.out.println("Not cancelled");
 			if(BiogasControl.stopBtn.isSelected()) {
-				ElementFunctions.writeSummary(BiogasControl.workingDirectory, true, structName, numHydrolysis, currentTime);
+				ElementFunctions.writeSummary(BiogasControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
 				BiogasControl.running.setSelected(false);
 				BiogasControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
 				System.out.println("\t Simulation stopped!");
@@ -89,7 +91,9 @@ public class Stop implements SimulationElement, Serializable{
 					
 				}
 				else {
-					ElementFunctions.writeSummary(BiogasControl.workingDirectory, true, structName, numHydrolysis, currentTime);
+					System.out.println("Finisehd. Writing summary: ");
+					System.out.println("flowValue: " + flowValue);
+					ElementFunctions.writeSummary(BiogasControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
 					BiogasControl.setupPanelObj.mergePreexisting = true;
 					BiogasControl.running.setSelected(false);
 					BiogasControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
@@ -100,7 +104,7 @@ public class Stop implements SimulationElement, Serializable{
 			}
 		}
 		else {
-			ElementFunctions.writeSummary(BiogasControl.workingDirectory, false, structName, numHydrolysis, currentTime);
+			ElementFunctions.writeSummary(BiogasControl.workingDirectory, false, structName, numHydrolysis, flowValue, currentTime);
 			BiogasControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
 			String logEnd = simPanel.simulationLog.getText();
 			simPanel.simulationLog.setText(logEnd + "Cancelled!\n");

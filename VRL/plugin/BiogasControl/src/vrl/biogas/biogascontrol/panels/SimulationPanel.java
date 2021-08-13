@@ -15,6 +15,7 @@ import layout.TableLayout;
 import layout.TableLayoutConstants;
 import layout.TableLayoutConstraints;
 import vrl.biogas.biogascontrol.BiogasControlClass;
+import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.BiogasControl;
 
 /**
@@ -54,7 +55,7 @@ public class SimulationPanel {
 		plantStructure.setEditable(false);
 		plantStructure.setBackground(Color.WHITE);
 		if(userDefined) {
-			plantStructure.setText("User defined");
+			plantStructure.setText("USER_STRUCTURE_" + BiogasUserControl.numHydrolysis);
 		} else {
 			plantStructure.setText(BiogasControl.struct.name());
 		}

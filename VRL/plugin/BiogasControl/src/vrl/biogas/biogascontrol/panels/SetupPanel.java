@@ -161,6 +161,7 @@ public class SetupPanel {
 						create_environment(environment_path, userDefined);
 						environment_ready = true;
 						BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
+						BiogasControlClass.settingsPanelObj.flowValue.setEnabled(true);
 						BiogasControlClass.simulationPanelObj.iteration.setText("0");
 						BiogasControlClass.simulationPanelObj.activeElement.setText("");
 						BiogasControlClass.simulationPanelObj.simulationLog.setText("");
@@ -188,15 +189,18 @@ public class SetupPanel {
 			public void actionPerformed(ActionEvent arg0) {
 				clear_tree();
 				BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
+				BiogasControlClass.settingsPanelObj.flowValue.setEnabled(true);
 				BiogasControlClass.simulationPanelObj.iteration.setText("0");
 				BiogasControlClass.simulationPanelObj.activeElement.setText("");
 				BiogasControlClass.simulationPanelObj.simulationLog.setText("");
 				BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
+				/*
 				if(userDefined) {
-					BiogasControlClass.simulationPanelObj.plantStructure.setText("User defined");
+					BiogasControlClass.simulationPanelObj.plantStructure.setText("USER_STRUCTURE");
 				} else {
 					BiogasControlClass.simulationPanelObj.plantStructure.setText(BiogasControl.struct.name());	
-				}		
+				}	
+				*/	
 			}
 		});
 				
@@ -229,7 +233,6 @@ public class SetupPanel {
 		environment_ready = false;
 		dir.setText("");
 		BiogasControlClass.feedingPanelObj.setControls(false);
-		BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
 	}
 	
 	public void update_tree(File path) {
@@ -277,6 +280,7 @@ public class SetupPanel {
 		    boolean correctStructure = true;
 		    String loadStruct = "";
 		    String struct = "";
+		    String flow = "";
 			Scanner myReader = new Scanner(summary);			
 			while (myReader.hasNextLine()) {
 		        String data = myReader.nextLine();
@@ -290,6 +294,9 @@ public class SetupPanel {
 		        	}
 		        } else if(data.startsWith("ENDTIME")) {
 		        	endtime = data.substring(data.indexOf("=")+1, data.length());
+		        } else if(data.startsWith("FLOW_VALUE")) {
+		        	flow = data.substring(data.indexOf("=")+1, data.length());
+		        	System.out.println("flow");
 		        }
 			}
 			myReader.close();
@@ -306,28 +313,23 @@ public class SetupPanel {
 					BiogasControlClass.feedingPanelObj.setControls(true);
 					BiogasControlClass.feedingPanelObj.nextTimestep.setText(String.valueOf(endtime));
 					BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
+					BiogasControlClass.settingsPanelObj.flowValue.setValue(Double.valueOf(flow));
 		        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
+		        	BiogasControlClass.settingsPanelObj.flowValue.setValue(Double.valueOf(flow));
+		        	BiogasControlClass.settingsPanelObj.flowValue.setEnabled(false);
 				    this.environment_path = path;
 				    this.environment_ready = true;
 				    this.mergePreexisting = true;
 				    update_tree(path);
 				}
 				else {
-					if(userDefined) {
-						JOptionPane.showMessageDialog(setupPanel,
-							    "Please make sure the simulation you are trying to load uses the same plant structure.",
-							    "Information",
-							    JOptionPane.INFORMATION_MESSAGE);
-					}
-					else {
-						JOptionPane.showMessageDialog(setupPanel,
-							    "The simulation you are trying to load uses a different plant structure:\n -->" 
-							    		+ struct 
-							    		+ "\n-->"
-							    		+ loadStruct,
-							    "Incorrect Structure",
-							    JOptionPane.ERROR_MESSAGE);
-					}
+					JOptionPane.showMessageDialog(setupPanel,
+							"The simulation you are trying to load uses a different plant structure:\n -->" 
+						    		+ struct 
+						    		+ "\n -->"
+						    		+ loadStruct,
+						    "Incorrect Structure",
+						    JOptionPane.ERROR_MESSAGE);
 				}
 			}
 			else {
