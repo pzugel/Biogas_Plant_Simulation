@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.Serializable;
 
 import eu.mihosoft.vrl.annotation.MethodInfo;
+import vrl.biogas.biogascontrol.BiogasControlClass;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.elements.functions.ElementFunctions;
 import vrl.biogas.biogascontrol.elements.functions.ElementHelperFunctions;
@@ -31,12 +32,13 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 		
 		String structName = BiogasUserControl.structureName;
 		int numHydrolysis = BiogasUserControl.numHydrolysis;
-		int currentTime = BiogasUserControl.currentTime;
-		int flowValue = (Integer) BiogasUserControl.settingsPanelObj.flowValue.getValue();
+		int currentTime = BiogasUserControl.currentTime;		
+		double flowVal_double = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
+		int flowVal = (int) flowVal_double;
 		
 		if(!BiogasUserControl.wasCancelled) {
 			if(BiogasUserControl.stopBtn.isSelected()) {
-				ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
+				ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowVal, currentTime);
 				System.out.println("\tSimulation stopped!");
 				BiogasUserControl.running.setSelected(false); 
 				BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
@@ -44,7 +46,7 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 			}
 			else {
 				if(!(currentTime < endtime-1)) {
-					ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowValue, currentTime);
+					ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, true, structName, numHydrolysis, flowVal, currentTime);
 					BiogasUserControl.setupPanelObj.mergePreexisting = true;
 					BiogasUserControl.running.setSelected(false);
 					BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
@@ -58,7 +60,7 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 			}
 		}
 		else {
-			ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, false, structName, numHydrolysis, flowValue, currentTime);
+			ElementFunctions.writeSummary(BiogasUserControl.workingDirectory, false, structName, numHydrolysis, flowVal, currentTime);
 			BiogasUserControl.running.setSelected(false);
 			BiogasUserControl.settingsPanelObj.simStarttime.setValue(currentTime+1);
 			log("Cancelled!\n");

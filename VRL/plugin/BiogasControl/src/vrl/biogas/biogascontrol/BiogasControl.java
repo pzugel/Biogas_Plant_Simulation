@@ -179,7 +179,7 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 		
 	    JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.mainControl(new STRUCT_2_STAGE(), p);	    
+	    b.mainControl(new STRUCT_1_STAGE(), p);	    
 
 		frame.add(panel);
 		frame.setSize(600, 600);

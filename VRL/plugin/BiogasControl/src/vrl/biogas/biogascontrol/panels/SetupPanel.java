@@ -271,8 +271,7 @@ public class SetupPanel {
 		environment_tree_model.reload();
 	}
 	
-	//TODO Will the strucutre be correct (when loading from LabView project)? What if project was userDefined?
-	//TODO Should be private - Public only for testing
+	//TODO Could be private - Public only for testing/debugging
 	public void load_environment(File summary, File path, boolean userDefined) throws IOException {
 		String endtime = "";
 		try {
@@ -557,23 +556,10 @@ public class SetupPanel {
 		}
 		
 		//TODO Fix simulationSummary
-		
 		JOptionPane.showMessageDialog(setupPanel,
 			    "Repair precedure done, try to reload the environment!",
 			    "Done",
 			    JOptionPane.INFORMATION_MESSAGE);
 		
-	}
-	
-	void check_environment(File path) {
-		
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{
-		File path = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/2STAGE");
-		File summary = new File(path, "simulation_summary.txt");
-		SetupPanel p = new SetupPanel();
-		p.repair_environment(summary, path);
-
 	}
 }
