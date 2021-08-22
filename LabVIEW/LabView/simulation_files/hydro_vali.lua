@@ -102,7 +102,7 @@ problem = {
             type = "Integer",
             style = "default",
             timeTableContent = {
-                numberEntries = 5
+                numberEntries = 4
             }
         }
     },

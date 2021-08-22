@@ -39,6 +39,7 @@ void readLUATableInit()
  */
 bool readLUATable(const char* filename, const char* vali_or_spec)
 {
+	std::cout << "readLUATable here" << std::endl;
 	if(((std::string) vali_or_spec) == "Vali")
 		return biogasReader->init_Vali(filename);
 	else if(((std::string) vali_or_spec) == "Spec")

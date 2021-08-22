@@ -29,6 +29,7 @@ static int number_of_validation_entries;
 void BiogasSpecValiReader::
 transformValiInput()
 {
+	std::cout << "transformValiInput()" << std::endl;
 	std::regex range_value ("(range=\\{values=\\{[0-9\\.]+,[0-9\\.]+\\}\\})|(range=\\{[a-zA-Z0-9=\\.]+,[a-zA-Z0-9=\\.]+\\})");
 	std::regex table_content ("tableContent=\\{values=\\{[\"a-zA-Z0-9_,]+\\}\\}");
 	std::regex time_table_content ("timeTableContent=\\{numberEntries=[0-9]+\\}");
@@ -97,6 +98,9 @@ transformValiInput()
 bool BiogasSpecValiReader::
 generateValues()
 {	
+	std::cout << "generateValues()" << std::endl;
+	std::cout << "size: " << this->entries.size() << std::endl;
+	
 	number_of_validation_entries = 0;
 	for(int i=0; i<this->input_valiModified.size(); i++)
 	{
@@ -114,17 +118,22 @@ generateValues()
 	std::regex type_re ("^type=");
 	std::regex default_re ("^default=");
 	std::regex range_re ("^range=");
-		
+
 	int index = -1;
 	std::istringstream lineIter(line_input);
 	std::string last_type;
 	std::string last_default;
 	for (std::string line; std::getline(lineIter, line); )
 	{
+		std::cout << line << std::endl;
 		if(std::regex_search(line, names_re))
 		{
 			++index;
+			if(index >= this->entries.size())
+				return testValidationMatch();
+			
 			this->entries[index].leftCell = line.substr(0,line.size()-2);
+			std::cout << "got left cell " << std::endl;
 			if(std::regex_search(line, table_entry))
 			{
 				this->entries[index].type = last_type;	

@@ -30,6 +30,7 @@
 bool BiogasSpecValiReader::
 init_Vali(const char* filepath_vali)
 {
+	std::cout << "init_Vali()" << std::endl;
 	if(this->readInput((std::string) filepath_vali))
 	{
 		this->transformValiInput();
@@ -69,8 +70,9 @@ init_Spec(const char* filepath_spec)
 bool BiogasSpecValiReader::
 readInput(std::string filepath)
 {
+	std::cout << "readInput()" << std::endl;
+	
 	this->input = "";
-
 	std::ifstream LUATable(filepath);
 	if(!LUATable.good())
 	{
