@@ -142,7 +142,7 @@ void update_outputFiles_integration(const char* outputFiles_path)
 		outputFiles_string.replace(outflow_filename_ind, outflow_filename.length(),
 			"outflow_integrated.txt");
 		outputFiles_string.replace(outflow_title_ind, outflow_title.length(), 
-			"outflow_integrated");
+			"outflow_integrated=");
 	}
 	
 	//Replace dbg_reactionrates entry

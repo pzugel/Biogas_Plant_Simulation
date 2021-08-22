@@ -201,10 +201,12 @@ readOutputFiles()
 					this->entries[ind].indent = 1;
 					this->entries[ind].glyph = 37;
 					boost::replace_all(line, "={", "");
-					if(line.find("AllLiquid") != std::string::npos) 
+
+					if(line.find("[\"AllLiquid\"]") != std::string::npos) 
 					{
-						line = "All Liquid";
+						line = "All_Liquid";
 					}
+					
 					this->entries[ind].leftCell = line;
 					this->entries[ind].filename = lastFileName;
 				}
