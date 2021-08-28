@@ -78,7 +78,7 @@ public class SpecificationParser {
 		text = text.replaceAll("\\s","");
 		
 		String str_arr = "\\{(\"[a-zA-Z0-9_]+\"(,)?)*\\}";
-		String timestamp = "\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}";
+		String timestamp = "\\{([0-9Ee.\\-\\*]+,)*[0-9Ee.\\-\\*]+\\}";
 
 		Matcher strArrMatcher = Pattern.compile(str_arr).matcher(text); //Match types Str[]
 		while (strArrMatcher.find()) 
@@ -139,7 +139,7 @@ public class SpecificationParser {
 
 	//Should be expanded by testValidationMatch()
 	private void generateSpecs() {
-		String timestamp = "\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}";
+		String timestamp = "\\{([0-9Ee.\\-\\*]+,)*[0-9Ee.\\-\\*]+\\}";
 		
 		int index = 0;
 		Scanner scanner = new Scanner(text);

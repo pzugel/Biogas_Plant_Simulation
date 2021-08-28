@@ -15,7 +15,6 @@
 
 #include "biogas_vali_data_generate.cpp"
 #include "biogas_spec_data_generate.cpp"
-//#include "biogas_spec_writer.cpp" //ONLY FOR DEBUGGING (REMOVE)
 
 #include <iostream>
 
@@ -100,27 +99,3 @@ readInput(std::string filepath)
 	}
 	return true;
 }
-
-/**
- * Only for debugging
- */
- /*
-int main()
-{
-	BiogasSpecValiReader* testReader = new BiogasSpecValiReader();
-	std::string specfile = "/home/paul/Schreibtisch/smalltest/3_STAGE_PL_TEST/tmp/hydrolysis_1/0/hydrolysis_checkpoint.lua";
-	testReader->readInput(specfile);
-	testReader->transformSpecInput();
-	testReader->generateSpecs();
-
-	std::string specs = "";
-	for(int i=0; i<testReader->entries.size(); i++)
-		specs += testReader->entries[i].specVal + "\n";
-	std::cout << "SPECS -->" << std::endl;
-	std::cout << specs << std::endl;
-	std::cout << "--> SPECS END" << std::endl;
-	testReader->writeOutputSpecs(specs);
-	std::cout << testReader->outputSpecs << std::endl;
-	return 0;
-}
-*/

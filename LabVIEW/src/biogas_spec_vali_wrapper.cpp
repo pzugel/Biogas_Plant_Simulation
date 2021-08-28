@@ -39,7 +39,6 @@ void readLUATableInit()
  */
 bool readLUATable(const char* filename, const char* vali_or_spec)
 {
-	std::cout << "readLUATable here" << std::endl;
 	if(((std::string) vali_or_spec) == "Vali")
 		return biogasReader->init_Vali(filename);
 	else if(((std::string) vali_or_spec) == "Spec")
@@ -151,6 +150,15 @@ const char* getOutputString()
 int getNumberOfLines()
 {
 	return biogasReader->number_of_entries;
+}
+
+int main(){
+	const char* filename = "/home/paul/Schreibtisch/Simulations/LabVIEW/Demo/biogas_20210823_221646@STRUCT_1_STAGE/hydrolysis_0/6/hydrolysis_checkpoint.lua";
+	const char* vali_or_spec = "Spec";
+	
+	readLUATableInit();
+	readLUATable(filename, vali_or_spec);
+	return 0;
 }
 
 } //end extern "C" 

@@ -19,7 +19,6 @@
 
 void BiogasSpecValiReader::
 generateSpecIndents(std::string input){
-	std::cout << "generateSpecIndents()" << std::endl;
 	
 	std::regex param_open ("\\{");
 	std::regex param_close ("\\}$");
@@ -30,8 +29,6 @@ generateSpecIndents(std::string input){
 	input = std::regex_replace(input, param_open, "{\n");
 	input = std::regex_replace(input, comma, "\n");
 	
-	//std::cout << input << std::endl;
-	
 	this->entries = {};
 	std::istringstream lineIter(input);
 	int ind = 0;
@@ -39,7 +36,6 @@ generateSpecIndents(std::string input){
 	{
 		if (line.find('=') != std::string::npos || line.rfind("$", 0) == 0)
 		{
-			//std::cout << ind << std::endl;
 			TableEntry* newEntry = new TableEntry();
 			newEntry->indent = ind;
 			this->entries.push_back(*newEntry);
@@ -51,7 +47,7 @@ generateSpecIndents(std::string input){
 	}
 	
 	this->number_of_entries = this->entries.size();
-	std::cout << "INDENTS SPEC: " << this->entries.size() << std::endl;
+	std::cout << "Num entries: " << this->entries.size() << std::endl;
 }
 
 /**
@@ -64,14 +60,11 @@ generateSpecIndents(std::string input){
 void BiogasSpecValiReader::
 transformSpecInput()
 {
-	std::cout << "transformSpecInput()" << std::endl;
-	//std::cout << std::endl;
-	//std::cout << std::endl;
 	this->input_specModified= this->input;
 
 	this->input_specModified.erase(remove_if(this->input_specModified.begin(), this->input_specModified.end(), isspace), this->input_specModified.end());
 	std::regex str_arr ("\\{(\"[a-zA-Z0-9_]+\"(,)?)*\\}");
-	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)*[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9Ee.\\-\\*]+,)*[0-9Ee.\\-\\*]+\\}");
 
 	std::smatch match_strArr; //Match types Str[]
 	while (regex_search(this->input_specModified, match_strArr, str_arr)) 
@@ -84,14 +77,10 @@ transformSpecInput()
 	std::smatch match_timeStamps; //Match timestamps
 	while (regex_search(this->input_specModified, match_timeStamps, timestamp)) 
 	{
-		std::cout << "match_timeStamps.str(0): " << match_timeStamps.str(0) << std::endl;
 		std::string replacement = match_timeStamps.str(0);
 		boost::replace_all(replacement, "{", "$");
 		boost::replace_all(replacement, "}", "?");
 		boost::replace_all(replacement, ",", "#");
-		//std::string::size_type pos = match_timeStamps.str(0).find(",");
-		//std::string::size_type pos_end = match_timeStamps.str(0).find("}");
-		//std::string replacement = "$" + match_timeStamps.str(0).substr(1, pos-1) + "#" + match_timeStamps.str(0).substr(pos+1,pos_end-(pos+1)) + "?";
 		boost::replace_all(this->input_specModified, match_timeStamps.str(0), replacement);  
 	} 
 	
@@ -141,7 +130,7 @@ transformSpecInput()
 bool BiogasSpecValiReader::
 generateSpecs()
 {	
-	std::regex timestamp ("\\{([0-9E.\\-\\*]+,)+[0-9E.\\-\\*]+\\}");
+	std::regex timestamp ("\\{([0-9Ee.\\-\\*]+,)+[0-9Ee.\\-\\*]+\\}");
 	
 	std::istringstream lineIter(this->input_specModified);
 	int index = 0;
@@ -152,7 +141,6 @@ generateSpecs()
 		{
 			if(std::regex_search(line, timestamp))
 			{
-				std::cout << "timeStamp: " << line << std::endl;
 				this->entries[index].specVal = line;
 				this->entries[index].leftCell = "timeStamp";
 				this->entries[index].type = "NULL";
