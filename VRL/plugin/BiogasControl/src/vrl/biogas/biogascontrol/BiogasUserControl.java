@@ -1,6 +1,5 @@
 package vrl.biogas.biogascontrol;
 
-import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -9,13 +8,8 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.nio.file.Path;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComponent;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
@@ -154,48 +148,6 @@ public class BiogasUserControl extends BiogasControlClass implements Serializabl
 			}
 		});
 	    return panel;
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{ 
-		/*
-		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
-		Path p = Paths.get(f.getPath());
-		
-	    JFrame frame = new JFrame();
-	    BiogasUserControl userControl = new BiogasUserControl();
-	    userControl.control(p, 2);	    
-	    
-		frame.add(panel);
-		frame.setSize(500, 600);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setVisible(true);	
-		*/		
-		
-		JFrame frame = new JFrame();
-		File projectPath = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL");
-		File iconPath = new File(projectPath, "icons");
-		File hydroIcon_path = new File(iconPath, "hydrolysis_reactor.png");
-		ImageIcon hydroIcon = new ImageIcon(hydroIcon_path.toString());
-		System.out.println("hydroIcon_path: " + hydroIcon_path);
-		
-		JPanel returnPanel = new JPanel();
-		returnPanel.add(new JLabel(hydroIcon));
-		Dimension expectedDimension = new Dimension(50, 50);
-
-		returnPanel.setPreferredSize(expectedDimension);
-		returnPanel.setMaximumSize(expectedDimension);
-		returnPanel.setMinimumSize(expectedDimension);
-		
-		Box box = new Box(BoxLayout.Y_AXIS);
-
-        box.add(Box.createVerticalGlue());
-        box.add(returnPanel);     
-        box.add(Box.createVerticalGlue());
-		
-		
-		frame.add(box);
-		frame.setSize(100, 100);
-		frame.setVisible(true);	
 	}
 }
 

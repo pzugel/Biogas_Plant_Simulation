@@ -117,6 +117,7 @@
 					<Item Name="main_run.vi" Type="VI" URL="../subVI/main_run.vi"/>
 					<Item Name="main_runtime_display.vi" Type="VI" URL="../subVI/main_runtime_display.vi"/>
 					<Item Name="main_set_panel.vi" Type="VI" URL="../subVI/main_set_panel.vi"/>
+					<Item Name="main_set_simulation_file.vi" Type="VI" URL="../subVI/main_set_simulation_file.vi"/>
 					<Item Name="main_sim_log_uncoupled.vi" Type="VI" URL="../subVI/main_sim_log_uncoupled.vi"/>
 					<Item Name="main_time_control.vi" Type="VI" URL="../subVI/main_time_control.vi"/>
 					<Item Name="main_write_summary.vi" Type="VI" URL="../subVI/main_write_summary.vi"/>

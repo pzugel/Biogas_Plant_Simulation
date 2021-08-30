@@ -10,6 +10,7 @@ import java.nio.file.Paths;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -174,17 +175,31 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
 	}
 	
 	public static void main(String args[]) throws IOException, InterruptedException{
-		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
-		Path p = Paths.get(f.getPath());
-		
-	    JFrame frame = new JFrame();
+		JFrame frame = new JFrame();
 	    BiogasControl b = new BiogasControl();
-	    b.mainControl(new STRUCT_1_STAGE(), p);	    
+	    
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setDialogTitle("Select the project folder.");
+		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);	
+		
+		int result = fileChooser.showOpenDialog(panel);
+		if (result == JFileChooser.APPROVE_OPTION) {
+			File selectedPath = fileChooser.getSelectedFile();
+			File simFiles = new File(selectedPath, "simulation_files");
+			if(simFiles.isDirectory()) {
+				Path p = Paths.get(selectedPath.getPath());
+				b.mainControl(new STRUCT_1_STAGE(), p);	    
 
-		frame.add(panel);
-		frame.setSize(600, 600);
-		frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		frame.setVisible(true);	
+				frame.add(panel);
+				frame.setSize(600, 600);
+				frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+				frame.setVisible(true);	
+			} else {
+				System.out.println("Could not find \"simulation_files\" folder in the choosen directory.");
+			}		
+		} else {
+			System.out.println("Not a valid path!");
+		}
 	}
 	
 }
