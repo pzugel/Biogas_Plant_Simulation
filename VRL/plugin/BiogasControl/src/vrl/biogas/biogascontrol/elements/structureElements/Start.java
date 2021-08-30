@@ -37,7 +37,13 @@ public class Start implements SimulationElement, Serializable{
 		SimulationPanel simPanel = BiogasControl.simulationPanelObj;
 		BiogasControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasControl.struct.currentTime() + 1));
 		String log = simPanel.simulationLog.getText();
-		simPanel.simulationLog.setText(log + "Iteration " + BiogasControl.iteration + " (Time " + BiogasControl.struct.currentTime() + ")\n");
+		simPanel.simulationLog.setText(log 
+				+ "Iteration " 
+				+ BiogasControl.iteration 
+				+ " (Timestep " + BiogasControl.struct.currentTime() 
+				+ "-->" 
+				+ (Integer.valueOf(BiogasControl.struct.currentTime())+1) 
+				+ ")\n");
 		//CleanUp
 		boolean cleanUp = BiogasControl.settingsPanelObj.autoCleanup.isSelected();
 		if(cleanUp) {

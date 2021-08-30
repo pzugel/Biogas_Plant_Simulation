@@ -119,13 +119,17 @@ public class BiogasControlClass {
 					setupPanelObj.createBtn.setEnabled(true);
 					setupPanelObj.loadBtn.setEnabled(true);
 					setupPanelObj.openBtn.setEnabled(true);
-					setupPanelObj.clearBtn.setEnabled(true);	
+					setupPanelObj.clearBtn.setEnabled(true);
+					settingsPanelObj.open_simulation_edit.setEnabled(true);
 					startBtn.setEnabled(true);
 				} else {
 					timerStartTime = System.currentTimeMillis();
 					timer.start();					
 					settingsPanelObj.simStarttime.setEnabled(false);
 					settingsPanelObj.flowValue.setEnabled(false);
+					settingsPanelObj.open_hydrolysis_edit.setEnabled(false);
+					settingsPanelObj.open_methane_edit.setEnabled(false);
+					settingsPanelObj.open_simulation_edit.setEnabled(false);					
 					feedingPanelObj.nextTimestep.setEnabled(true);
 					setupPanelObj.createBtn.setEnabled(false);
 					setupPanelObj.loadBtn.setEnabled(false);

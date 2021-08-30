@@ -49,7 +49,13 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 					BiogasUserControl.iteration = 0;
 				}
 				BiogasUserControl.feedingPanelObj.nextTimestep.setText(String.valueOf(BiogasUserControl.currentTime + 1));
-				log("Iteration: " + BiogasUserControl.iteration + " (Time " + BiogasUserControl.currentTime + ")\n");
+				log("Iteration: " 
+						+ BiogasUserControl.iteration 
+						+ " (Timestep " 
+						+ BiogasUserControl.currentTime 
+						+ "-->" 
+						+ (Integer.valueOf(BiogasUserControl.currentTime)+1) 
+						+ ")\n");
 				//CleanUp
 				boolean cleanUp = BiogasControl.settingsPanelObj.autoCleanup.isSelected();
 				if(cleanUp) {

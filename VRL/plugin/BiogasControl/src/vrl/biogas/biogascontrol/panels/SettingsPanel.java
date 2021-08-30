@@ -51,6 +51,12 @@ public class SettingsPanel {
 	public JTextField methane_path;
 	public JTextField simulation_path;
 	
+	public JButton open_hydrolysis_edit;
+	public JButton open_methane_edit;
+	public JButton open_simulation_edit;
+	
+	public File simulationFilesPath;
+	
 	public SettingsPanel() {
 		settingsPanel = new JPanel();
 		createPanel(false);
@@ -141,14 +147,14 @@ public class SettingsPanel {
             	0.18, //Simulation
             	TableLayoutConstants.FILL}};
         elementsPanel.setLayout(new TableLayout(elements_size));
-        File simulationFilesPath = new File(BiogasControlClass.projectPath, "simulation_files");
+        simulationFilesPath = new File(BiogasControlClass.projectPath, "simulation_files");
         System.out.println("simulationFilesPath: " + simulationFilesPath);
         JButton methane_edit = new JButton("Edit");
         methane_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         methane_path = new JTextField(5);
         methane_path.setText(new File(simulationFilesPath, "methane.lua").toString());
         methane_path.setEditable(false);
-        JButton open_methane_edit = new JButton("...");
+        open_methane_edit = new JButton("...");
         open_methane_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         JButton hydrolysis_edit = new JButton("Edit");
@@ -156,13 +162,13 @@ public class SettingsPanel {
         hydrolysis_path = new JTextField(5);
         hydrolysis_path.setText(new File(simulationFilesPath, "hydrolysis.lua").toString());
         hydrolysis_path.setEditable(false);
-        JButton open_hydrolysis_edit = new JButton("...");
+        open_hydrolysis_edit = new JButton("...");
         open_hydrolysis_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         simulation_path = new JTextField(5);
         simulation_path.setText(new File(simulationFilesPath, "Biogas.lua").toString());
         simulation_path.setEditable(false);
-        JButton open_simulation_edit = new JButton("...");
+        open_simulation_edit = new JButton("...");
         open_simulation_edit.setBackground(BiogasControlClass.BUTTON_BLUE);
         
         //ICONS
@@ -244,10 +250,6 @@ public class SettingsPanel {
 							String reactor = (String) selector.reactorList.getSelectedItem();
 							System.out.println("Selected: " + reactor);
 							try {
-								JOptionPane.showMessageDialog(settingsPanel,
-									    "It is advised to pause the simulation before making changes.",
-									    "Warning",
-									    JOptionPane.WARNING_MESSAGE);
 								
 								File hydrolysisPath = new File(BiogasControlClass.workingDirectory, reactor);
 								
@@ -256,6 +258,11 @@ public class SettingsPanel {
 								 * If yes we edit the chkpoint, if not we edit the startfile.
 								 */
 								if(BiogasControlClass.running.isSelected()) {
+									JOptionPane.showMessageDialog(settingsPanel,
+										    "It is advised to pause the simulation before making changes.",
+										    "Warning",
+										    JOptionPane.WARNING_MESSAGE);
+									
 									File hydrolysisTimePath;
 									
 									if(userDefined) {
@@ -338,6 +345,11 @@ public class SettingsPanel {
 					 * If yes we edit the chkpoint, if not we edit the startfile.
 					 */
 					if(BiogasControlClass.running.isSelected()) {
+						JOptionPane.showMessageDialog(settingsPanel,
+							    "It is advised to pause the simulation before making changes.",
+							    "Warning",
+							    JOptionPane.WARNING_MESSAGE);
+						
 						File methaneTimePath;
 						
 						if(userDefined) {
@@ -406,18 +418,6 @@ public class SettingsPanel {
 		open_hydrolysis_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean envReady;
-				if(userDefined) {
-					envReady = BiogasUserControl.setupPanelObj.environment_ready;
-				} else {
-					envReady = BiogasControl.setupPanelObj.environment_ready;
-				}
-				if(envReady) {
-					JOptionPane.showMessageDialog(settingsPanel,
-							"Changing the base file now won't affect the simulation since the working environment was already created!",
-						    "Warning",
-						    JOptionPane.WARNING_MESSAGE);
-				}
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new hydrolysis base file");
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);	
@@ -446,18 +446,6 @@ public class SettingsPanel {
 		open_methane_edit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				boolean envReady;
-				if(userDefined) {
-					envReady = BiogasUserControl.setupPanelObj.environment_ready;
-				} else {
-					envReady = BiogasControl.setupPanelObj.environment_ready;
-				}
-				if(envReady) {
-					JOptionPane.showMessageDialog(settingsPanel,
-							"Changing the base file now won't affect the simulation since the working environment was already created!",
-						    "Warning",
-						    JOptionPane.WARNING_MESSAGE);
-				}
 				JFileChooser fileChooser = new JFileChooser();
 				fileChooser.setDialogTitle("Select new methane base file");
 				fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);

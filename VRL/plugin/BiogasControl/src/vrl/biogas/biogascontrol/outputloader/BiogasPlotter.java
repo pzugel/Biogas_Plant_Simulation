@@ -9,8 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -20,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -46,7 +43,6 @@ import vrl.biogas.biogascontrol.BiogasControl;
 import vrl.biogas.biogascontrol.BiogasUserControl;
 import vrl.biogas.biogascontrol.MainPanelContainerType;
 import vrl.biogas.biogascontrol.panels.HydrolysisSelector;
-import vrl.biogas.biogascontrol.structures.STRUCT_1_STAGE;
 
 /**
  * Main panel for the outputFiles tree in VRL
@@ -554,41 +550,4 @@ public class BiogasPlotter implements Serializable{
 		DefaultTreeModel model = (DefaultTreeModel)tree.getModel();
 		model.reload(node);		
 	}
-	 
-	
-	@SuppressWarnings("static-access")
-	public static void main(String args[]) throws IOException, InterruptedException{  
-		File f = new File("/home/paul/Schreibtisch/Biogas_plant_setup/VRL/Biogas_plant_setup.vrlp");
-		Path p = Paths.get(f.getPath());
-		
-	    JFrame frame = new JFrame();
-	    BiogasControl b = new BiogasControl();
-	    b.mainControl(new STRUCT_1_STAGE(), p);	 
-	    
-	    File envPath = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210708_150956");
-	    File summary = new File(envPath, "simulation_summary.txt");
-	    b.setupPanelObj.load_environment(summary, envPath, false);
-	    
-	    BiogasPlotter plotter = new BiogasPlotter();
-	    plotter.loadBiogas(b);
-	    JButton plotBtn = new JButton("Plot");
-	    mainPanel.add(plotBtn, new TableLayoutConstraints(0, 2, 0, 2, TableLayoutConstants.FULL, TableLayoutConstants.FULL));  
-	    plotBtn.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				try {
-					getValues();
-				} catch (IOException e) {
-					e.printStackTrace();
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}	    	
-	    });
-	    
-	    frame.add(mainPanel);	  
-	    frame.setSize(300, 500);
-	    frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-	    frame.setVisible(true);
-	  }
 }

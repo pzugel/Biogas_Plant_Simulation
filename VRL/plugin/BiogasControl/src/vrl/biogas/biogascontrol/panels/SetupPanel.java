@@ -162,6 +162,12 @@ public class SetupPanel {
 						environment_ready = true;
 						BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
 						BiogasControlClass.settingsPanelObj.flowValue.setEnabled(true);
+						
+						BiogasControlClass.settingsPanelObj.open_hydrolysis_edit.setEnabled(false);
+						BiogasControlClass.settingsPanelObj.open_methane_edit.setEnabled(false);
+						BiogasControlClass.settingsPanelObj.hydrolysis_path.setText("Defined in environment.");
+						BiogasControlClass.settingsPanelObj.methane_path.setText("Defined in environment.");						
+						
 						BiogasControlClass.simulationPanelObj.iteration.setText("0");
 						BiogasControlClass.simulationPanelObj.activeElement.setText("");
 						BiogasControlClass.simulationPanelObj.simulationLog.setText("");
@@ -190,17 +196,18 @@ public class SetupPanel {
 				clear_tree();
 				BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(true);
 				BiogasControlClass.settingsPanelObj.flowValue.setEnabled(true);
+				
+				BiogasControlClass.settingsPanelObj.open_hydrolysis_edit.setEnabled(true);
+				BiogasControlClass.settingsPanelObj.open_methane_edit.setEnabled(true);
+				
+				File simulationFilesPath = BiogasControlClass.settingsPanelObj.simulationFilesPath;
+				BiogasControlClass.settingsPanelObj.hydrolysis_path.setText(new File(simulationFilesPath, "hydrolysis.lua").toString());
+				BiogasControlClass.settingsPanelObj.methane_path.setText(new File(simulationFilesPath, "methane.lua").toString());
+				
 				BiogasControlClass.simulationPanelObj.iteration.setText("0");
 				BiogasControlClass.simulationPanelObj.activeElement.setText("");
 				BiogasControlClass.simulationPanelObj.simulationLog.setText("");
-				BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");
-				/*
-				if(userDefined) {
-					BiogasControlClass.simulationPanelObj.plantStructure.setText("USER_STRUCTURE");
-				} else {
-					BiogasControlClass.simulationPanelObj.plantStructure.setText(BiogasControl.struct.name());	
-				}	
-				*/	
+				BiogasControlClass.simulationPanelObj.runtime.setText("00:00:00");					
 			}
 		});
 				
@@ -226,6 +233,9 @@ public class SetupPanel {
 		});		
 	}
 	
+	/**
+	 * Reset the directory tree structure to an empty tree
+	 */
 	public void clear_tree() {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode("...");
 		environment_tree_model.setRoot(root);
@@ -235,6 +245,10 @@ public class SetupPanel {
 		BiogasControlClass.feedingPanelObj.setControls(false);
 	}
 	
+	/**
+	 * Update the directory tree structure with current folders
+	 * @param path
+	 */
 	public void update_tree(File path) {
 		DefaultMutableTreeNode root = new DefaultMutableTreeNode(path.getName());
 	    String[] elementDirs = path.list(new FilenameFilter() {
@@ -271,8 +285,15 @@ public class SetupPanel {
 		environment_tree_model.reload();
 	}
 	
-	//TODO Could be private - Public only for testing/debugging
-	public void load_environment(File summary, File path, boolean userDefined) throws IOException {
+
+	/**
+	 * Load an environment into the setup panel
+	 * @param summary Path to the simulation summary
+	 * @param path Directory of environment
+	 * @param userDefined Is UserStructure?
+	 * @throws IOException
+	 */
+	private void load_environment(File summary, File path, boolean userDefined) throws IOException {
 		String endtime = "";
 		try {
 		    boolean finished = false;
@@ -313,6 +334,12 @@ public class SetupPanel {
 					BiogasControlClass.feedingPanelObj.nextTimestep.setText(String.valueOf(endtime));
 					BiogasControlClass.settingsPanelObj.simStarttime.setValue(Integer.valueOf(endtime));
 					BiogasControlClass.settingsPanelObj.flowValue.setValue(Double.valueOf(flow));
+					
+					BiogasControlClass.settingsPanelObj.open_hydrolysis_edit.setEnabled(false);
+					BiogasControlClass.settingsPanelObj.open_methane_edit.setEnabled(false);
+					BiogasControlClass.settingsPanelObj.hydrolysis_path.setText("Loaded from environment.");
+					BiogasControlClass.settingsPanelObj.methane_path.setText("Loaded from environment.");
+					
 		        	BiogasControlClass.settingsPanelObj.simStarttime.setEnabled(false);
 		        	BiogasControlClass.settingsPanelObj.flowValue.setValue(Double.valueOf(flow));
 		        	BiogasControlClass.settingsPanelObj.flowValue.setEnabled(false);
@@ -351,6 +378,12 @@ public class SetupPanel {
 		}
 	}
 	
+	/**
+	 * Create a new environment folder
+	 * @param path Directory to new environment
+	 * @param userDefined Is UserStructure?
+	 * @throws IOException
+	 */
 	void create_environment(File path, boolean userDefined) throws IOException {
 		Timestamp timestamp = new Timestamp(System.currentTimeMillis());
 		File dir = new File(path, "biogasVRL_" + sdf.format(timestamp));
@@ -439,6 +472,12 @@ public class SetupPanel {
 		environment_tree_model.reload();
 	}
 	
+	/**
+	 * Experimental: Function trying to repair a broken environment.
+	 * @param summary Path to simulation summary
+	 * @param path Directory of environment
+	 * @throws IOException
+	 */
 	void repair_environment(File summary, File path) throws IOException {
 		String[] elements = path.list(new FilenameFilter() {
 			@Override
