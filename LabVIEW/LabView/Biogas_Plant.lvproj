@@ -128,9 +128,12 @@
 					<Item Name="plant_structure.vi" Type="VI" URL="../subVI/plant_structure.vi"/>
 				</Item>
 				<Item Name="Plot" Type="Folder">
+					<Property Name="NI.SortType" Type="Int">3</Property>
 					<Item Name="Tree Control" Type="Folder">
 						<Item Name="plot_tree_clear.vi" Type="VI" URL="../subVI/plot_tree_clear.vi"/>
+						<Item Name="plot_context_menu.vi" Type="VI" URL="../subVI/plot_context_menu.vi"/>
 						<Item Name="plot_tree_control.vi" Type="VI" URL="../subVI/plot_tree_control.vi"/>
+						<Item Name="getchildren.vi" Type="VI" URL="../subVI/getchildren.vi"/>
 					</Item>
 					<Item Name="plot_close.vi" Type="VI" URL="../subVI/plot_close.vi"/>
 					<Item Name="plot_display.vi" Type="VI" URL="../subVI/plot_display.vi"/>

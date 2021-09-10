@@ -45,8 +45,7 @@ public class Stop implements SimulationElement, Serializable{
 		String structName = structure.name();
 		int numHydrolysis = structure.numHydrolysis();
 		int currentTime = structure.currentTime();
-		double flowVal_double = (Double) BiogasControl.settingsPanelObj.flowValue.getValue();
-		int flowVal = (int) flowVal_double;
+		double flowVal = (Double) BiogasControl.settingsPanelObj.flowValue.getValue();
 		
 		if(!structure.wasCancelled()) {
 			System.out.println("Not cancelled");

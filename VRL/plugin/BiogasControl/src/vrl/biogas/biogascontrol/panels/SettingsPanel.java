@@ -74,7 +74,7 @@ public class SettingsPanel {
 	private void createPanel(final boolean userDefined) {
 		SpinnerModel startModel = new SpinnerNumberModel(0, 0, 1000, 1);
 		SpinnerModel endModel = new SpinnerNumberModel(1, 1, 1000, 1);
-		SpinnerModel flowModel = new SpinnerNumberModel(10, 5, 1000, 1); 
+		SpinnerModel flowModel = new SpinnerNumberModel(10, 5, 1000, 0.01); 
 		
 		simStarttime = new JSpinner(startModel);
 		simEndtime = new JSpinner(endModel);

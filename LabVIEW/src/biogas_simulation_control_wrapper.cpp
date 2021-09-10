@@ -227,10 +227,11 @@ void add_to_sim_log(const char* log)
 void set_interation_log(int iter, int time)
 {
 	iteration = iter;
-	sim_log += "Iteration: " 
+	sim_log += "Iteration " 
 			+ std::to_string(iter) 
-			+ " (Time " 
-			+ std::to_string(time) 
+			+ " (Timestep " + std::to_string(time)
+			+ "-->"
+			+ std::to_string(time+1)
 			+ ")\n";
 }
 

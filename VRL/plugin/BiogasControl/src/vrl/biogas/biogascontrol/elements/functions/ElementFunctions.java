@@ -93,8 +93,8 @@ public class ElementFunctions {
 		
 		//Update inflow in hydrolysis specification
 		File[] specDirsArr = new File[specDirs.size()];
-		double flowVal_double = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
-		int flowVal = (int) flowVal_double;
+		double flowVal = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
+
 		specDirs.toArray(specDirsArr);
 		final File methanePath = new File(workingDirectory, "methane");
 		File outflowFile = new File(methanePath, "outflow_integratedSum_Rates.txt");
@@ -146,8 +146,7 @@ public class ElementFunctions {
 			}
 			
 			File outflowFile = new File(storageDirectory, "outflow_integratedSum_Rates.txt");
-			double flowVal_double = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
-			int flowVal = (int) flowVal_double;
+			double flowVal = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
 			
 			//Update specification
 			SpecfileUpdater.update_starttime(methaneFile, currentTime);

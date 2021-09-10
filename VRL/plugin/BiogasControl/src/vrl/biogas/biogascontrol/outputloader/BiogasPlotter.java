@@ -259,6 +259,10 @@ public class BiogasPlotter implements Serializable{
 		return cont;
 	}
 	
+	/**
+	 * Load outputFiles.lua into the tree
+	 * @param outputFilesPath
+	 */
 	private void updateTree(File outputFilesPath) {
 		System.out.println("updateTree --> " + outputFilesPath);
 		
@@ -474,7 +478,6 @@ public class BiogasPlotter implements Serializable{
 			t2.add(x, (double) 3*x-4);
 			t3.add(x, (double) Math.sin(x));
 			t4.add(x, (double) Math.cos(x));
-			System.out.println("sin(" + x + ")=" + Math.sin(x));
 			t5.add(x, (double) Math.pow(x, 2));
 			t6.add(x, (double) Math.pow(x, 3));
 		}

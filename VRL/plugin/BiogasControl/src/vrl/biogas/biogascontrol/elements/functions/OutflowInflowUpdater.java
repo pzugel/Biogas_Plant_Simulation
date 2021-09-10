@@ -21,7 +21,7 @@ public class OutflowInflowUpdater {
 	private static ArrayList<ArrayList<String>> output_timetable;
 	private static String timetable_replacement;
 	private static int sim_starttime;
-	private static int flow;
+	private static double flow;
 	
 	/**
 	 * Parse a specfile and find the "inflow" entry. Write the inflow components to "spec_inflowData_vec"
@@ -145,7 +145,6 @@ public class OutflowInflowUpdater {
 						
 					} else {
 						//Fractional "all liquid"
-						//TODO This line sets the inflow to a constant value
 						double allLiquidFraction = flow*fraction;
 						
 						//Old version - Gets flow from previous "all liquid" outflow value
@@ -172,9 +171,17 @@ public class OutflowInflowUpdater {
 					for(int k=0; k<outflow_input_values.size(); k++)
 					{
 						double value = Double.valueOf(outflow_input_values.get(k).get(column));
+						/*
+						TODO Should we split here? Doesnt make sense because values are in [g/h].
+						If we only split the inflow amount (in [L/h]) it should suffice.
+						
+						See for alternative:
+						*/
+						/*
 						if(k == outflow_input_values.size() - 1) { //only split at last value
 							value = value*fraction;
 						}
+						*/
 						colList.add(String.valueOf(value));
 					}	
 					output_timetable.add(colList);		
@@ -245,7 +252,7 @@ public class OutflowInflowUpdater {
 	public static void write_methane_inflow(
 			File outflow_infile,
 			File methane_specfile,
-			int flowVal) throws IOException
+			double flowVal) throws IOException
 	{
 		System.out.println("\t Write Methane inflow");
 		flow = flowVal;
@@ -309,7 +316,7 @@ public class OutflowInflowUpdater {
 	 */
 	public static void write_inital_hydrolysis_inflow(
 			File[] hydrolysis_specfiles,
-			int flowVal) throws IOException 
+			double flowVal) throws IOException 
 	{
 		System.out.println("\t Write initial Hydrolysis inflow");
 		flow = flowVal;
@@ -344,7 +351,7 @@ public class OutflowInflowUpdater {
 			File outflow_infile,
 			File[] hydrolysis_specfiles,
 			double[] fractions,
-			int flowVal) throws IOException
+			double flowVal) throws IOException
 	{	
 		System.out.println("\t Write Hydrolysis inflow");
 		flow = flowVal;

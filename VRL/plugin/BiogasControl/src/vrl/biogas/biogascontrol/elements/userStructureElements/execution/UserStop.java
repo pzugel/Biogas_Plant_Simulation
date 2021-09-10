@@ -33,8 +33,7 @@ public class UserStop extends ElementHelperFunctions implements Serializable{
 		String structName = BiogasUserControl.structureName;
 		int numHydrolysis = BiogasUserControl.numHydrolysis;
 		int currentTime = BiogasUserControl.currentTime;		
-		double flowVal_double = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
-		int flowVal = (int) flowVal_double;
+		double flowVal = (Double) BiogasControlClass.settingsPanelObj.flowValue.getValue();
 		
 		if(!BiogasUserControl.wasCancelled) {
 			if(BiogasUserControl.stopBtn.isSelected()) {

@@ -202,8 +202,6 @@ void write_new_timetable(double fraction, bool isMethane)
 			for(int k=0; k<outflow_input_values.size(); k++)
 			{
 				double value = dot_conversion(outflow_input_values.at(k).at(column));
-				if(k == outflow_input_values.size() - 1) //only split at last value
-					value = value*fraction;
 				col_vector.push_back(conv_to_string(value));
 			}	
 			output_timetable.push_back(col_vector);		

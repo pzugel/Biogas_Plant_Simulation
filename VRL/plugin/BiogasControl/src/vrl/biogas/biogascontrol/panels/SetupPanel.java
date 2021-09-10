@@ -165,8 +165,8 @@ public class SetupPanel {
 						
 						BiogasControlClass.settingsPanelObj.open_hydrolysis_edit.setEnabled(false);
 						BiogasControlClass.settingsPanelObj.open_methane_edit.setEnabled(false);
-						BiogasControlClass.settingsPanelObj.hydrolysis_path.setText("Defined in environment.");
-						BiogasControlClass.settingsPanelObj.methane_path.setText("Defined in environment.");						
+						//BiogasControlClass.settingsPanelObj.hydrolysis_path.setText("Defined in environment.");
+						//BiogasControlClass.settingsPanelObj.methane_path.setText("Defined in environment.");						
 						
 						BiogasControlClass.simulationPanelObj.iteration.setText("0");
 						BiogasControlClass.simulationPanelObj.activeElement.setText("");

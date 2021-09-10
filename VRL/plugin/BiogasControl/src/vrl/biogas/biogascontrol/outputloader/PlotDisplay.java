@@ -1,6 +1,7 @@
 package vrl.biogas.biogascontrol.outputloader;
 
 import java.util.ArrayList;
+import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -64,8 +65,7 @@ public class PlotDisplay implements Serializable {
     for(final ArrayList<Trajectory> tList : list){
     	JPanel plotCheckerPanel = new JPanel();
     	final JPanel singlePlotPanel = new JPanel();
-    	//double singlePlotSize[][] = {{0.8, 0.2},{TableLayoutConstants.FILL}};
-    	double singlePlotSize[][] = {{0.8, 0.2},{TableLayoutConstants.FILL,0.1}};
+    	double singlePlotSize[][] = {{0.8, 0.2},{TableLayoutConstants.FILL, 0.1}};
     	singlePlotPanel.setLayout(new TableLayout(singlePlotSize));
     	plotCheckerPanel.setLayout(new GridLayout(tList.size(),0));
     	
@@ -75,6 +75,20 @@ public class PlotDisplay implements Serializable {
     	final TrajectoryPlotter plotter = new TrajectoryPlotter();
     	final JFreeChart chart = plotter.lineCharts(trajectoryArr);
     	final ChartPanel chartPanel = new ChartPanel(chart);
+    	
+    	// Define new plot Colors
+    	XYPlot xyPlot = (XYPlot) chart.getPlot();		
+		final XYItemRenderer renderer = xyPlot.getRenderer();
+		
+    	renderer.setSeriesPaint(0, new Color(0x00,0x00,0xFF)); //BLUE
+    	renderer.setSeriesPaint(1, new Color(0xFF,0x00,0x00)); //RED
+    	renderer.setSeriesPaint(2, new Color(0x40,0x40,0x40)); //DARK_GREY
+    	renderer.setSeriesPaint(3, new Color(0xFF,0x00,0xFF)); //MAGENTA
+    	renderer.setSeriesPaint(4, new Color(0x00,0xFF,0xFF)); //CYAN
+    	renderer.setSeriesPaint(5, new Color(0xC0,0x00,0xFF)); //PURPLE
+    	renderer.setSeriesPaint(6, new Color(0xFF,0x80,0x00)); //ORANGE
+    	renderer.setSeriesPaint(7, new Color(0x00,0xFF,0x00)); //GREEN
+    	renderer.setSeriesPaint(8, new Color(0xFF,0xFF,0x00)); //YELLOW
     	
     	int trajectoryIndex = 0;
     	for(Trajectory t : tList) {
@@ -86,16 +100,13 @@ public class PlotDisplay implements Serializable {
 
 				@Override
 				public void itemStateChanged(ItemEvent arg0) {
-					XYPlot plot = (XYPlot) chart.getPlot();					
-					XYItemRenderer renderer = plot.getRenderer();
 					int index = Integer.valueOf(plotChecker.getName());
-					if(plotChecker.isSelected()) { 
-						
+					if(plotChecker.isSelected()) { 	
 						renderer.setSeriesVisible(index, true);
 					}
 					else {
 						renderer.setSeriesVisible(index, false);
-					}				
+					}
 				} 			
     		});
     		
@@ -109,8 +120,7 @@ public class PlotDisplay implements Serializable {
     	
     	//Slider
     	final JSlider slider = new JSlider(JSlider.HORIZONTAL);
-    	final XYPlot plot = (XYPlot) chart.getPlot();	
-		final ValueAxis axis = plot.getDomainAxis();
+		final ValueAxis axis = xyPlot.getDomainAxis();
 		
     	final double min = axis.getRange().getLowerBound();
     	final double max = axis.getRange().getUpperBound();
