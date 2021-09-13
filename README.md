@@ -92,4 +92,4 @@ To start the application simply open the LabView project file
 
 > LabView/Biogas_Plant.lvproj
 
-From there select the *main.vi* and run it.  
+From there select the *main.vi* and run it. Alternatively, if you are working on Windows, you can use the [LabVIEW Runtime Engine](https://www.ni.com/de-de/support/downloads/software-products/download.labview-runtime.html#411217) to execute the *Biogas_Application.exe*. 
