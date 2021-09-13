@@ -52,5 +52,4 @@
 			<Item Name="set flow value.vi" Type="VI" URL="../VIs/set flow value.vi"/>
 		</Item>
 	</Item>
-	<Item Name="libSimulationControl.so" Type="Document" URL="../../libSimulationControl.so"/>
 </Library>

@@ -9,5 +9,4 @@
 		<Item Name="get Tree String.vi" Type="VI" URL="../VIs/get Tree String.vi"/>
 		<Item Name="read Output Files.vi" Type="VI" URL="../VIs/read Output Files.vi"/>
 	</Item>
-	<Item Name="libOutputReader.so" Type="Document" URL="../../libOutputReader.so"/>
 </Library>

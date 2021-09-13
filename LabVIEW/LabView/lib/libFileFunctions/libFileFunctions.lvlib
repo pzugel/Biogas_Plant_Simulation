@@ -19,5 +19,4 @@
 		<Item Name="update hydrolysis feeding.vi" Type="VI" URL="../VIs/update hydrolysis feeding.vi"/>
 		<Item Name="get hydrolysis PH.vi" Type="VI" URL="../VIs/get hydrolysis PH.vi"/>
 	</Item>
-	<Item Name="libFileFunctions.so" Type="Document" URL="../../libFileFunctions.so"/>
 </Library>
