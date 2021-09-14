@@ -1,0 +1,155 @@
+pSettings = {
+    numericalSetup={
+      sim_starttime=29,
+      sim_endtime=30
+    },
+    reactorSetup={
+      operatingTemperature=311.15,
+      realReactorVolume=32.12,
+      reactorType="Downflow"
+    },
+    inflow={
+      data={
+"MS",
+"Butyric",
+"AA",
+"Propionic",
+"Valeric",
+"LCFA",
+"Acetic"
+      },
+      timetable={
+{
+30,
+30,
+0.0026512374410938,
+0.00087650025626188,
+0.00054447507415491,
+0.0035753019362778,
+0.00015078348004864,
+0.0059736004818532,
+0.019308541813509
+        }
+      }
+    },
+    checkpoint={
+      doReadCheckpoint=true,
+      checkpointDir="/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210908_152831/methane/28/"
+    },
+    outputSpecs={
+      customSetting={
+        developer=true,
+        debug=true,
+        vtk=false,
+        cDigestate=true,
+        biogas=true
+      }
+    },
+    expert={
+      debugging={
+        toggleKinetics={
+          dbg_noMOdeath=false
+        }
+      },
+      timestep={
+        dtStart=0.2,
+        dtMax=1,
+        dtMin=1e-05
+      },
+      solverDesc={
+        type="bicgstab",
+        precond={
+          type="gmg",
+          baseSolver="lu",
+          preSmooth=3,
+          smoother={
+            type="sgs"
+          },
+          cycle="V",
+          baseLevel=2,
+          postSmooth=3,
+          adaptive=true,
+          rap=true
+        },
+        convCheck={
+          type="standard",
+          iterations=34,
+          verbose=true,
+          absolute=1e-12,
+          reduction=1e-08
+        }
+      },
+      geometry={
+        subsets={
+          reactorVolSubset="Inner",
+          reactorUpperBnd="Top",
+          reactorLowerBnd="Bot",
+          reactorLeftBnd="SideA",
+          gasPhaseSubset="Head",
+          reactorRightBnd="SideB"
+        },
+        numPreRefs=1,
+        setup_dim=2,
+        headHeight=0.1,
+        grid_name="TestGeom2D.ugx",
+        reactorHeight=1,
+        numRefs=3,
+        yTop=1,
+        reactorWidth=1
+      },
+      reactionSetup={
+        thermodynModell=false,
+        thermodynApproach="factor",
+        inhibitionTerms={
+          inhibitionPH=false,
+          competitiveAcidUptake=false,
+          inhibitionHydrogen={
+            Acetic_Degradation=false,
+            Propionic_Degradation=false,
+            Acidogenesis_LCFA=true,
+            Valeric_Degradation=false,
+            Butyric_Degradation=false
+          },
+          inhibitionAmmonia=false,
+          limitedTrace={
+            Nitrogen=true
+          },
+          limitedMOSpace=false
+        }
+      }
+    },
+    reactionSetup={
+      activeReactions={
+"Acidogenesis",
+"Acetogenesis",
+"Methanogenesis"
+      }
+    },
+    initialValues={
+      pH=8.06,
+      drymass=0.0906,
+      analysis={
+        MS=0.004,
+        AA=0.001,
+        Butyric=0.0025,
+        MO_ButyricValeric=1.9,
+        Acetic=1.5,
+        Lignin=113,
+        Valeric=0.0007,
+        MO_Propionic=1.1,
+        Nitrogen=2.90292,
+        Propionic=0.003,
+        zeroDefault=1e-07,
+        Carbondioxide=0.875,
+        MO_hydroM=3.1,
+        moDefault=1,
+        LCFA=0.003,
+        MO_AcidoMS=6.8,
+        Methane=0.062,
+        Hydrogen=4.23e-09,
+        MO_AcidoLCFA=1.33,
+        MO_AcidoAA=0.99,
+        MO_acetoM=0.05
+      }
+    }
+  }

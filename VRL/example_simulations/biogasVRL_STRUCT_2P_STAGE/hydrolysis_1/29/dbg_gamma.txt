@@ -1,0 +1,6 @@
+# Time [h]	hydro_Methanogenesis []	Disintegration_Initial []	Hydrolysis_Proteins []	aceto_Methanogenesis []	Valeric_Degradation []	Acetic_Degradation []	Acidogenesis_MS []	Disintegration_Substrate []	Propionic_Degradation []	Butyric_Degradation []	Hydrolysis_Lipids []	Hydrolysis_Carbohydrates []	Acidogenesis_AA []	Acidogenesis_LCFA []
+ # Keq	 -	 -	 -	 -	 -	 -	 -	 -	 -	 -	 -	 -	 -	 -
+29.2	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29.48	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+29.872	0	0	0	0	0	0	0	0	0	0	0	0	0	0
+30	0	0	0	0	0	0	0	0	0	0	0	0	0	0

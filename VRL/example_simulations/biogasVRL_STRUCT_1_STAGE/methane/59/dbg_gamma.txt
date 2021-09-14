@@ -1,0 +1,6 @@
+# Time [h]	hydro_Methanogenesis []	aceto_Methanogenesis []	Valeric_Degradation []	Acidogenesis_MS []	Acetic_Degradation []	Propionic_Degradation []	Acidogenesis_LCFA []	Acidogenesis_AA []	Butyric_Degradation []
+ # Keq	 -	 -	 -	 -	 -	 -	 -	 -	 -
+59.2	0	0	0	0	0	0	0	0	0
+59.48	0	0	0	0	0	0	0	0	0
+59.872	0	0	0	0	0	0	0	0	0
+60	0	0	0	0	0	0	0	0	0
