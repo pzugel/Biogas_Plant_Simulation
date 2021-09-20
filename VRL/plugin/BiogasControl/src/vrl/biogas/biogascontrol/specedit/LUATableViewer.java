@@ -44,7 +44,6 @@ public class LUATableViewer implements Serializable{
 	static JScrollPane scrollPane;
 	
 	public static void editor() throws FileNotFoundException {		
-		//parameters = (new ValidationParser(valFile, new ArrayList<ValiTableEntry>())).getOutput();
 		parameters = new ArrayList<ValiTableEntry>();
 		new SpecificationParser(specFile, parameters);
 		
@@ -56,8 +55,6 @@ public class LUATableViewer implements Serializable{
 		for(int i=0; i<render.getRowCount(); i++)
 			parameters.get(i).setPath(render.getPathForRow(i));	
 		updatePanel();
-		//LUATableType container = new LUATableType();
-		//container.setViewValue(panel);
 	}
 	
 	private static void updatePanel() {
@@ -211,7 +208,6 @@ public class LUATableViewer implements Serializable{
                 System.out.println("Old   : " + tcl.getOldValue());
                 System.out.println("New   : " + tcl.getNewValue());
                 
-                //TODO: Not nice but works
                 String pathString = p.toString();
                 for(ValiTableEntry entry : parameters) { 
                 	if(entry.getPath().toString().equals(pathString)) {

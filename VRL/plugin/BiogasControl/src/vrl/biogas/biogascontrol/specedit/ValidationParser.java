@@ -22,6 +22,11 @@ public class ValidationParser {
 		genereteValues();
 	}
 	
+	/**
+	 * Load file and remove all comments
+	 * @param path Path to specification file
+	 * @throws FileNotFoundException
+	 */
 	private void readFile(File path) throws FileNotFoundException{
 		text = "";
 		Scanner scanner = new Scanner(path);
@@ -40,6 +45,13 @@ public class ValidationParser {
 		scanner.close();
 	}
 	
+	/**
+	 * Transform the validation input
+	 *
+	 * Modifies the validation file it in such
+	 * a way that the "generateValues()" method can 
+	 * get easier access to the data.
+	 */
 	private void modifyInput() {
 		String range_value = "(range=\\{values=\\{[0-9\\.]+,[0-9\\.]+\\}\\})|(range=\\{[a-zA-Z0-9=\\.]+,[a-zA-Z0-9=\\.]+\\})";
 		String table_content = "tableContent=\\{values=\\{[\"a-zA-Z0-9_,]+\\}\\}";
@@ -93,14 +105,23 @@ public class ValidationParser {
 			text = text.replace(match, replacement);
 		}
 	}
-
+	
+	/**
+	 * Generate all validation data  
+	 *
+	 * Parses the validation file and searches for keywords
+	 * such as "type", "default" or "range" and their names. 
+	 * The values are then saved in the "parameters"
+	 * data structure. The input string "text" has 
+	 * been prepared by the "modifyInput()" method for 
+	 * easier parsing.
+	 */
 	private void genereteValues() {
 		text = text.replaceAll("\\{", "\\{\n");
 		text = text.replaceAll("\\}", "\n}\n");
 		text = text.replaceAll(",", "\n");
 		text = text.replaceAll(" ", "");
 
-		//System.out.println(text);
 		String names_re = "^[a-zA-Z0-9_\"]+=\\{";
 		String table_entry = "^((\")|(timeTableContent))";
 		String type_re = "^type=";
@@ -120,13 +141,11 @@ public class ValidationParser {
 			if(m.find())
 			{
 				++index;
-				//((ValiTableEntry) parameters.get(index)).setName(line.substring(0, line.length()-2));
 				Matcher m_table = Pattern.compile(table_entry).matcher(line);
 				if(m_table.find())
 				{
 					parameters.get(index).setType(last_type);	
 					parameters.get(index).setDefaultVal(last_default);
-					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -149,7 +168,6 @@ public class ValidationParser {
 				last_default = tmpline.substring(8);
 				if(parameters.get(index).isValueField()) {
 					parameters.get(index).setDefaultVal(last_default);
-					//((ValiTableEntry) parameters.get(index)).setSpecVal(last_default);
 				}
 			}
 			
@@ -166,9 +184,4 @@ public class ValidationParser {
 		}
 		scanner.close();
 	}
-	/*
-	public List<ValiTableEntry> getOutput(){
-		return parameters;
-	}
-	*/
 }

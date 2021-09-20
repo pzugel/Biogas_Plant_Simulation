@@ -74,6 +74,9 @@ public class UserStart extends ElementHelperFunctions implements Serializable{
 		}
 	}
 	
+	/**
+	 * If cleanUp is activated, remove folders that are no longer needed.
+	 */
 	private void cleanUp() {
 		int currentTime = BiogasUserControl.currentTime;
 		int previousTime = currentTime-2;

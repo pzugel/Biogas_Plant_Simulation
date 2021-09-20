@@ -24,7 +24,6 @@ public class LoadFileData extends JFrame implements Serializable{
 	public LoadFileData(ArrayList<ValiTableEntry> data) {
 		listData = data;
 		treeTableModel = new MyDataModel(generate(0, null));
-		//treeTableModel.listenerList.add(arg0, arg1);
 		myTreeTable = new MyTreeTable(treeTableModel, listData.size());
 	}
 	

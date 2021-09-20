@@ -23,6 +23,11 @@ public class SpecificationParser {
 		generateSpecs();
 	}
 	
+	/**
+	 * Load file and remove all comments
+	 * @param path Path to specification file
+	 * @throws FileNotFoundException
+	 */
 	private void readFile(File path) throws FileNotFoundException{
 		text = "";
 		Scanner scanner = new Scanner(path);
@@ -41,15 +46,17 @@ public class SpecificationParser {
 		scanner.close();
 	}
 	
+	/**
+	 * Count the number of entries and add as many 
+	 * "ValiTableEntries" to the "data" List.
+	 * @param input Specification file as string
+	 */
 	private void generateSpecIndents(String input) {	
 		String param_open = "\\{";
 		String comma = ",";
 
 		input = input.replaceAll(param_open, "{\n");
-		input = input.replaceAll(comma, "\n");
-		
-		//std::cout << input << std::endl;
-		
+		input = input.replaceAll(comma, "\n");		
 		  
 		Scanner lineIter = new Scanner(input);
 		int ind = 0;
@@ -74,6 +81,12 @@ public class SpecificationParser {
 		System.out.println("number_of_entries: " + number_of_entries);
 	}
 
+	/**
+	 * Modify the specification input
+	 *
+	 * Modifies the specification file it in such a way that the "generateSpecs()" 
+	 * method can get easier access to the data.
+	 */
 	private void modifyInput() {
 		text = text.replaceAll("\\s","");
 		
@@ -88,16 +101,12 @@ public class SpecificationParser {
 			matched_str_arr = matched_str_arr.replaceAll(",", "#");
 			text = text.replace(match, "$"+matched_str_arr+"?");
 		} 
-		System.out.println("*********** FIRST ***********\n" + text + "\n");
 		Matcher timestampMatcher = Pattern.compile(timestamp).matcher(text); //Match timestamps
 		while (timestampMatcher.find()) 
 		{
 			
 			String match = timestampMatcher.group();
 			String replacement = match;
-			//int pos = match.indexOf(',');
-			//int pos_end = match.indexOf('}');
-			//String replacement = "$" + match.substring(1, pos) + "#" + match.substring(pos+1,pos_end) + "?";
 			replacement = replacement.replaceAll("\\{", "\\$");
 			replacement = replacement.replaceAll("\\}", "?");
 			replacement = replacement.replaceAll(",", "#");
@@ -134,10 +143,19 @@ public class SpecificationParser {
 		text = text.replaceAll("\\$", "{");
 		text = text.replaceAll("\\?", "}");
 		text = text.replaceAll("#", ",");
-		System.out.println("*********** SECOND ***********\n" + text + "\n");
 	}
 
-	//Should be expanded by testValidationMatch()
+	
+	/**
+	 * Generate all specification data  
+	 *
+	 * Parses the specification file and save all data in the "entries"
+	 * data structure. The input string "input_specModified" has been
+	 * prepared by the "modifyInput()" method for easier parsing.
+	 * 
+	 * We run the "testValidationMatch()" method first to see if the 
+	 * specification we loaded matches the validation file.
+	 */
 	private void generateSpecs() {
 		String timestamp = "\\{([0-9Ee.\\-\\*]+,)*[0-9Ee.\\-\\*]+\\}";
 		

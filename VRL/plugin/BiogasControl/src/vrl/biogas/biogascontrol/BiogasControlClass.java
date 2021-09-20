@@ -113,8 +113,6 @@ public class BiogasControlClass {
 				
 				if(!isRunning) {					
 					timer.stop();
-					//int endtime = (Integer) settingsPanelObj.simEndtime.getValue();
-					//settingsPanelObj.simStarttime.setValue(endtime); //Moved into stop functions
 					feedingPanelObj.nextTimestep.setEnabled(false);
 					setupPanelObj.createBtn.setEnabled(true);
 					setupPanelObj.loadBtn.setEnabled(true);

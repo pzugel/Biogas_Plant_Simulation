@@ -17,6 +17,11 @@
 #include <stdexcept>
 #include <iostream>
 
+/**
+ * Count the number of entries and add as many 
+ * "TableEntries" to the "entries" List.
+ * @param input Specification file as string
+ */
 void BiogasSpecValiReader::
 generateSpecIndents(std::string input){
 	

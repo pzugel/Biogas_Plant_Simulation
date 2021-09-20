@@ -18,7 +18,6 @@ import javax.swing.JOptionPane;
  * @author Paul Zügel
  *
  */
-
 public class UserStructureIterator implements java.io.Serializable {
 	private static final long serialVersionUID=1L;
 
@@ -29,8 +28,6 @@ public class UserStructureIterator implements java.io.Serializable {
 		
 		Method[] methods = structure.getClass().getMethods();
 		Method runMethod = methods[0];
-
-		//BiogasUserControl.structureName = structure.getClass().getName();
 		
 		BiogasUserControl.iteration = 0;    
 		BiogasUserControl.currentTime = starttime; 
@@ -59,7 +56,6 @@ public class UserStructureIterator implements java.io.Serializable {
 				++ BiogasUserControl.currentTime;
 				++ BiogasUserControl.iteration;
 			}
-			//BiogasUserControl.running.setSelected(false); 
 		}
 		else {
 			JFrame frame = new JFrame();

@@ -13,7 +13,6 @@ import javax.swing.tree.TreePath;
 public class SpecValidation {
 	
 	private String validationMessage = "";
-	//private List<Integer> validationErrorParams;
 	private List<TreePath> validationErrorParams;
 	private boolean isValid = true;
 	

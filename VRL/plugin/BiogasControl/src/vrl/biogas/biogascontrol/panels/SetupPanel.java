@@ -393,7 +393,6 @@ public class SetupPanel {
 		this.mergePreexisting = false;
 		
 		DefaultMutableTreeNode newRoot = new DefaultMutableTreeNode("biogasVRL_" + sdf.format(timestamp));
-		//File simulationFiles = new File(BiogasControlClass.projectPath, "simulation_files");
 		
 		if(!userDefined) {
 			//Methane

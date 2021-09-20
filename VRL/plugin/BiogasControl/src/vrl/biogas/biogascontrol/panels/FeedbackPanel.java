@@ -40,7 +40,6 @@ public class FeedbackPanel {
 
 	public JPanel feedbackPanel;
 	public ArrayList<JSlider> sliderList;
-	//public ArrayList<DialPlot> dialList;
 	
 	public FeedbackPanel() {
 		feedbackPanel = new JPanel();
@@ -66,7 +65,6 @@ public class FeedbackPanel {
 		}
 		
 		sliderList = new ArrayList<JSlider>();
-		//dialList = new ArrayList<DialPlot>();
 		
 		final JPanel sliderPanel = new JPanel();
 		double[] sliderCols = new double[numHydrolysis+1];
@@ -77,7 +75,7 @@ public class FeedbackPanel {
 		sliderCols[numHydrolysis] = TableLayoutConstants.FILL;
 		double sliderPanelSize[][] ={sliderCols,{TableLayoutConstants.FILL}};
 		sliderPanel.setLayout(new TableLayout(sliderPanelSize));
-		//sliderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+;
 		for(int i=0; i<numHydrolysis; i++) {
 			final JPanel singleSlider = new JPanel();
 			
@@ -103,9 +101,6 @@ public class FeedbackPanel {
 			legend.setText(String.valueOf(slider.getValue()) + "%");
 			legend.setHorizontalAlignment(JTextField.CENTER);
 			legend.setEditable(false);
-			
-			//final DialPlot newDialPlot = newDial();
-			//dialList.add(newDialPlot);
 						
 			final JLabel label = new JLabel();
 			label.setText("Hydrolysis " + i);
@@ -133,9 +128,7 @@ public class FeedbackPanel {
 					}
 				}	
 			});	
-		}
-		
-		
+		}	
 		
 		JLabel text = new JLabel("<html><body>Splits the methane outflow when<br>feeding back into the simulation loop:</body></html>");
 		double size[][] =
@@ -158,6 +151,10 @@ public class FeedbackPanel {
 		}
 	}
 	
+	/**
+	 * Turn the percentages from the sliders to fractions.
+	 * @return ArrayList<Double> of the slider fractions.
+	 */
 	public ArrayList<Double> computeFractions() {
 		int sum = 0;
 		for(JSlider slider : sliderList) {
@@ -173,6 +170,10 @@ public class FeedbackPanel {
 		return fractions;
 	}
 	
+	/**
+	 * Check if all sliders are set to zero
+	 * @return All sliders are zero?
+	 */
 	private boolean allZero() {
 		boolean isZero = true;
 		for(JSlider slider : sliderList) {
@@ -182,29 +183,4 @@ public class FeedbackPanel {
 		}
 		return isZero;
 	}
-	
-	/*
-	private DialPlot newDial() {
-	    final int minPH = 0;
-	    final int maxPH = 14;
-	    
-	    final DefaultValueDataset dataset = new DefaultValueDataset(7);
-	    DialPlot plot = new DialPlot(dataset);
-	    plot.setDialFrame(new StandardDialFrame());
-	    plot.addLayer(new StandardDialRange(minPH, 6, Color.blue));
-	    plot.addLayer(new StandardDialRange(6, 10, Color.green));
-	    plot.addLayer(new StandardDialRange(10, maxPH, Color.red));
-	    plot.addLayer(new DialValueIndicator(0));     
-	    plot.addLayer(new DialPointer.Pointer());
-
-	    StandardDialScale scale = new StandardDialScale(minPH, maxPH, -120, -300, 2, 0);
-	    
-	    scale.setTickRadius(0.88);
-	    scale.setTickLabelOffset(0.20);
-	    plot.addScale(0, scale);
-	        
-		//ChartPanel chartPanel = new ChartPanel(new JFreeChart(plot));
-		return plot;
-	}
-	*/
 }

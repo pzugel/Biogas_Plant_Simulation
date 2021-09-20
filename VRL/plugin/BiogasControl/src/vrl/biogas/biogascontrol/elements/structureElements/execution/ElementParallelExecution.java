@@ -29,6 +29,12 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
 	private File timeDirectory;
 	private String reactorName;
 	
+	/**
+	 * Setup ElementParallelExecution
+	 * 
+	 * @param struct Structure object
+	 * @param num Number of parallel hydrolysis reactors
+	 */
 	public ElementParallelExecution(Structure struct, int num) {
 		String home = System.getProperty("user.home");
 		File ugpath = new File(home, "ug4");
@@ -49,6 +55,10 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
 		structure = struct;
 	}
 	
+	/**
+     * Execute ugshell in background (in a new thread). This is needed to ensure, that the GUI
+     * is not blocked by the ugshell execution.
+     */
     @Override
 	public String doInBackground() throws IOException, InterruptedException {		
 
@@ -76,6 +86,10 @@ public class ElementParallelExecution extends SwingWorker<String, String> implem
     	return "1";
     }
 
+    /**
+     * If the execution finished, update simulation panel and 
+     * run the next element in the queu.
+     */
     @Override
 	public void done() {
     	try {

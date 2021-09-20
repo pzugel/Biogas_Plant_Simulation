@@ -16,9 +16,7 @@ public class SpecificationFileWriter {
 	public SpecificationFileWriter(File path, List<ValiTableEntry> parameters) throws IOException {
 		
 		FileWriter fileWriter = new FileWriter(path);
-	    PrintWriter printWriter = new PrintWriter(fileWriter);    
-	    
-		//if(validateSpecs(specs)) TODO
+	    PrintWriter printWriter = new PrintWriter(fileWriter);
 	    
 	    int index = 0;
 		for(ValiTableEntry entry : parameters)

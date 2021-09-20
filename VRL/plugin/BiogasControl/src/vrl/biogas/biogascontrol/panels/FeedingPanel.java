@@ -222,6 +222,11 @@ public class FeedingPanel{
 		setControls(false);
 	}
 	
+	/**
+	 * Add a new row to the feeding times.
+	 * @param time
+	 * @param amount
+	 */
 	private void addFeeding(int time, double amount) {
 		DefaultTableModel model = (DefaultTableModel) feedingTable.getModel();
 		int row = feedingTable.getSelectedRow();
@@ -236,6 +241,10 @@ public class FeedingPanel{
 		System.out.println("amount: " + amount);
 	}
 	
+	/**
+	 * Activate controls once an environment is loaded.
+	 * @param isActive
+	 */
 	public void setControls(boolean isActive) {
 		addBtn.setEnabled(isActive);
 		delBtn.setEnabled(isActive);

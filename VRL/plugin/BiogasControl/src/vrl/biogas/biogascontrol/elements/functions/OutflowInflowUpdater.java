@@ -146,9 +146,6 @@ public class OutflowInflowUpdater {
 					} else {
 						//Fractional "all liquid"
 						double allLiquidFraction = flow*fraction;
-						
-						//Old version - Gets flow from previous "all liquid" outflow value
-						//double allLiquidFraction = Double.parseDouble(outflow_input_values.get(k).get(column))*fraction;
 						colList.add(String.valueOf(allLiquidFraction));
 					}
 				}
@@ -171,17 +168,6 @@ public class OutflowInflowUpdater {
 					for(int k=0; k<outflow_input_values.size(); k++)
 					{
 						double value = Double.valueOf(outflow_input_values.get(k).get(column));
-						/*
-						TODO Should we split here? Doesnt make sense because values are in [g/h].
-						If we only split the inflow amount (in [L/h]) it should suffice.
-						
-						See for alternative:
-						*/
-						/*
-						if(k == outflow_input_values.size() - 1) { //only split at last value
-							value = value*fraction;
-						}
-						*/
 						colList.add(String.valueOf(value));
 					}	
 					output_timetable.add(colList);		
@@ -380,19 +366,5 @@ public class OutflowInflowUpdater {
 			myWriter.close();
 			++specNum;
 		}
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{
-		/*
-		File outflow_infile = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_125847/methane/outflow_integratedSum_fullTimesteps.txt");
-		
-		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_125847/hydrolysis_0/2/hydrolysis_checkpoint.lua");
-		double[] fractions = {1.00};
-		File[] hydrolysis_specfiles = {spec0};
-		write_hydrolysis_inflow(outflow_infile, hydrolysis_specfiles, fractions);
-		*/
-		File spec0 = new File("/home/paul/Schreibtisch/Simulations/VRL/Full/biogasVRL_20210811_120506/hydrolysis_0/0/hydrolysis_checkpoint.lua");
-		File[] hydrolysis_specfiles = {spec0};
-		write_inital_hydrolysis_inflow(hydrolysis_specfiles, 15);
 	}
 }

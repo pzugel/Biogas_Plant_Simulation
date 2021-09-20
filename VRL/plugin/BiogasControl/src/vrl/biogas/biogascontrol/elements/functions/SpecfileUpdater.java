@@ -121,7 +121,6 @@ public class SpecfileUpdater {
 		Pattern checkpointRegex = Pattern.compile("doReadCheckpoint(\\s)*=(\\s)*(true|false)(\\s)*,?");
 		String output_spec = "";
 		Scanner lineIterSpec = new Scanner(input_no_dir);
-		//std::stringstream spec_string_stream(input_no_dir);
 		while (lineIterSpec.hasNextLine()) {
 			String line = lineIterSpec.nextLine();
 			Matcher m = checkpointRegex.matcher(line);

@@ -30,7 +30,6 @@ public class LUATableType extends TypeRepresentationBase implements java.io.Seri
 
         // Set layout
         this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
-        //this.setPreferredSize(new Dimension(300, 300));
         this.setMinimumSize(new Dimension(200, 120));
 
         // Get the panel from the xychart

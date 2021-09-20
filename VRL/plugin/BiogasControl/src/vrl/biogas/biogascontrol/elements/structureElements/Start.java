@@ -54,6 +54,9 @@ public class Start implements SimulationElement, Serializable{
 		t.start();	
 	}
 	
+	/**
+	 * If cleanUp is activated, remove folders that are no longer needed.
+	 */
 	private void cleanUp() {
 		System.out.println("cleanUp()");
 		int currentTime = structure.currentTime();

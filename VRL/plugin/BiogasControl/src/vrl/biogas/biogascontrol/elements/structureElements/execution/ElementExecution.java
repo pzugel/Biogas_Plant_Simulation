@@ -30,6 +30,14 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 	private File timeDirectory;
 	private SimulationElement element;
 	
+	/**
+	 * Setup ElementExecution
+	 * 
+	 * @param specification Path to specification file
+	 * @param currentTimePath Path to time folder
+	 * @param struct Structure object
+	 * @param elem SimulationElement object
+	 */
 	public ElementExecution(File specification, File currentTimePath, Structure struct, SimulationElement elem) {
 		String home = System.getProperty("user.home");
 		File ugpath = new File(home, "ug4");
@@ -46,6 +54,10 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
 		element = elem;
 	}
 	
+    /**
+     * Execute ugshell in background (in a new thread). This is needed to ensure, that the GUI
+     * is not blocked by the ugshell execution.
+     */
     @Override
 	public String doInBackground() throws IOException, InterruptedException {
     	
@@ -58,7 +70,6 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
     	}
     	s.close();
     	int exitVal = proc.waitFor(); 	
-    	//System.out.println(procText); //Prints ugshell output
     	
     	//Check if execution throws any errors
     	if(exitVal != 0 && !structure.wasCancelled()) {
@@ -75,6 +86,10 @@ public class ElementExecution extends SwingWorker<String, String> implements Ser
     	return proc.toString();
     }
 
+    /**
+     * If the execution finished, update simulation panel and 
+     * run the next element in the queu.
+     */
     @Override
 	public void done() {
     	SimulationPanel simPanel = BiogasControlClass.simulationPanelObj;

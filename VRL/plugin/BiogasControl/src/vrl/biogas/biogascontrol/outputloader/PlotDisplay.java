@@ -190,20 +190,4 @@ public class PlotDisplay implements Serializable {
     cont.setViewValue(mainPanel);
     return cont;
   }
-  
-  
-  public static void main(String args[]){  
-	  PlotDisplay plotter = new PlotDisplay();
-
-	  ArrayList<ArrayList<Trajectory>> trajectories = BiogasPlotter.samplePlot();
-	  plotter.plot(trajectories);
-	  
-	  javax.swing.JFrame frame = new javax.swing.JFrame(); 
-    
-	  frame.add(mainPanel);	  
-	  frame.setSize(300, 500);
-	  frame.setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-	  frame.setVisible(true);
-  }
-  
 }

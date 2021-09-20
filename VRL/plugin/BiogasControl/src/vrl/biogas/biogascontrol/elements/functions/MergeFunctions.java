@@ -417,7 +417,7 @@ public class MergeFunctions {
 			
 			double time = Double.valueOf(values.get(i).get(0)); //Time [h]
 			double stepsize = time-previous_time;
-			//TODO Negativ values are possible here!
+			
 			double all_liquid = Double.valueOf(values.get(i).get(1)); //All Liquid [L/h] 
 			double liquid_per_timestep = all_liquid * stepsize; //Liquid in [L]
 
@@ -612,9 +612,6 @@ public class MergeFunctions {
 		fileString = fileString.replace("outflow.txt", "outflow_integrated.txt");
 		fileString = fileString.replace("outflow=", "outflow_integrated=");
 		
-		//fileString = fileString.replace("dbg_reactionrates.txt", "dbg_reactionrates_integrated.txt");
-		//fileString = fileString.replace("reactionRates=", "reactionRates_integrated=");
-		
 		//Write file
 		FileWriter myWriter = new FileWriter(outputFiles);
 		myWriter.write(fileString);
@@ -640,7 +637,6 @@ public class MergeFunctions {
 		
 		String lastLine = "";
 		System.out.println("\t Updating: " + outputFiles_path);
-		//std::fstream stream(outputFiles_path);
 		if(outputFiles_path.exists())
 		{
 			Scanner myReader = new Scanner(outputFiles_path);
@@ -682,25 +678,5 @@ public class MergeFunctions {
 		FileWriter myWriter = new FileWriter(outputFiles_path);
 		myWriter.write(newOutputFiles);
 		myWriter.close();
-	}
-	
-	public static void main(String args[]) throws IOException, InterruptedException{ 
-		//File reactorDir = new File("/home/paul/Schreibtisch/MasterThesisTests/NEW_VTU_TEST/InflowAfter8h");
-		//String f = "outflow.txt";
-		//integrate_one_file(reactorDir, f);
-		
-		//File methane_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_144519/methane");
-		//File working_dir = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210708_144519");
-		//merge_all_methane(methane_dir, working_dir);
-		
-		/*
-		File storageDirectory = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_141226/storage_hydrolysis");
-		File directory = new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_141226");
-		String[] hydrolysisNames = {"hydrolysis_0", "hydrolysis_1"};
-		merge_all_hydrolysis(storageDirectory, directory, hydrolysisNames);
-		*/
-		
-		integrate_one_file(new File("/home/paul/Schreibtisch/Simulations/VRL/Demo/biogasVRL_20210714_154255/hydrolysis_0"), "outflow.txt");
-	}
-	
+	}	
 }

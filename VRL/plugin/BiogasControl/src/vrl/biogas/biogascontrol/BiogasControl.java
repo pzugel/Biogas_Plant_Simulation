@@ -79,7 +79,6 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
         JPanel simulationPanel = simulationPanelObj.getPanel();
         JPanel setupPanel = setupPanelObj.getPanel();
         JPanel settingsPanel = settingsPanelObj.getPanel();
-        //JPanel structurePanel = (new StructurePanel()).getPanel();
         JPanel feedbackPanel = feedbackPanelObj.getPanel();
         JPanel feedingPanel = feedingPanelObj.getPanel();
         JTabbedPane tab_panel = new JTabbedPane();	
@@ -87,7 +86,6 @@ public class BiogasControl extends BiogasControlClass implements Serializable{
         tab_panel.addTab("Simulation", simulationPanel);
         tab_panel.addTab("Setup", setupPanel);
         tab_panel.addTab("Settings", settingsPanel);
-        //tab_panel.addTab("Structure", structurePanel);
         tab_panel.addTab("Feedback", feedbackPanel);
         tab_panel.addTab("Feeding", feedingPanel);   
 
